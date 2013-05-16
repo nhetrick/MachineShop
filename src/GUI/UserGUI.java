@@ -1,37 +1,47 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 
 public class UserGUI extends JPanel {
 	
 	private JPanel centerPanel;
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
+	private JPanel machinePermissions;
+	private JPanel checkedOutTools;
 	
 	private Font buttonFont;
 	
 	public UserGUI() {
 		
 		setLayout(new BorderLayout());
+		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
-		buttonFont = new Font("SansSerif", Font.BOLD, 20);
+		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
 		centerPanel = new JPanel(new BorderLayout());
-		contentPanel = new JPanel();
+		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(4, 1));
+		machinePermissions = new JPanel();
+		checkedOutTools = new JPanel();
+				
+		machinePermissions.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "My Machines"));
+		checkedOutTools.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "Checked-out Tools"));
 		
-		JButton hello = new JButton();
-		hello.setText("hello");
+		contentPanel.add(machinePermissions);		
+		contentPanel.add(checkedOutTools);
 		
-		contentPanel.add(hello, BorderLayout.CENTER);
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
 		
@@ -41,9 +51,14 @@ public class UserGUI extends JPanel {
 		JButton returnTools = new JButton();
 		
 		logOut.setText("Log Out");
-		selectMachine.setText("Select machines");
-		checkOutTools.setText("Check out tools");
-		returnTools.setText("Return tools");
+		selectMachine.setText("Select Machines");
+		checkOutTools.setText("Check Out Tools");
+		returnTools.setText("Return Tools");
+		
+		logOut.setFont(buttonFont);
+		checkOutTools.setFont(buttonFont);
+		selectMachine.setFont(buttonFont);
+		returnTools.setFont(buttonFont);
 		
 		buttonPanel.add(selectMachine);
 		buttonPanel.add(checkOutTools);
