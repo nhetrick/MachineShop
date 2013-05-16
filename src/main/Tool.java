@@ -18,4 +18,8 @@ public class Tool {
 	public void returnTool() {
 		isCheckedOut = false;
 	}
+
+	public boolean isCheckedOut() {
+		return isCheckedOut;
+	}
 }
