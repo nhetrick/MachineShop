@@ -1,27 +1,44 @@
 package test;
 
 import static org.junit.Assert.*;
-
-
 import java.util.ArrayList;
-
+import main.*;
 import org.junit.Test;
 
 public class AdministratorTests {
 
 	@Test
 	public void addPermissionTest() {
-		fail("Not yet implemented");
+		Administrator testAdmin = new Administrator("", "", 1);
+		User testUser = new User ("", "", 2);
+		Machine testMachine = new Machine("TPDD", "T-1");
+		testAdmin.addPermission(testUser, testMachine);
+		
+		assertTrue(testUser.getCertifiedMachines().contains(testMachine));
 	}
 	
 	@Test
 	public void removeUsersTest() {
-		fail("Not yet implemented");
+		AccessTracker tracker = new AccessTracker();
+		Administrator testAdmin = new Administrator("", "", 1);
+		ArrayList<User> testUsers = new ArrayList<User>();
+		User testUser = new User ("", "", 2);
+		testUsers.add(testUser);
+		tracker.createUser("", "", 2);
+		testAdmin.removeUsers(testUsers);
+		
+		assertFalse(tracker.getCurrentUsers().contains(testUser));
 	}
 	
 	@Test
 	public void removePermissionTest() {
-		fail("Not yet implemented");
+		Administrator testAdmin = new Administrator("", "", 1);
+		User testUser = new User ("", "", 2);
+		Machine testMachine = new Machine("TPDD", "T-1");
+		testAdmin.addPermission(testUser, testMachine);
+		testAdmin.removePermission(testUser, testMachine);
+		
+		assertFalse(testUser.getCertifiedMachines().contains(testMachine));
 	}
 	
 	@Test
@@ -31,32 +48,63 @@ public class AdministratorTests {
 	
 	@Test
 	public void addToolTest() {
-		fail("Not yet implemented");
+		AccessTracker tracker = new AccessTracker();
+		Administrator testAdmin = new Administrator("", "", 1);
+		Tool testTool = new Tool("HITCOO", 15);
+		testAdmin.addTool(testTool);
+		
+		assertTrue(tracker.getTools().contains(testTool));
 	}
 	
 	@Test
 	public void addMachineTest() {
-		fail("Not yet implemented");
+		AccessTracker tracker = new AccessTracker();
+		Administrator testAdmin = new Administrator("", "", 1);
+		Machine testMachine = new Machine("TPDD", "T-1");
+		testAdmin.addMachine(testMachine);
+		
+		assertTrue(tracker.getMachines().contains(testMachine));
 	}
 	
 	@Test
 	public void removeToolTest() {
-		fail("Not yet implemented");
+		AccessTracker tracker = new AccessTracker();
+		Administrator testAdmin = new Administrator("", "", 1);
+		Tool testTool = new Tool("HITCOO", 15);
+		testAdmin.addTool(testTool);
+		testAdmin.removeTool(testTool);
+		
+		assertFalse(tracker.getTools().contains(testTool));
 	}
 	
 	@Test
 	public void removeMachineTest() {
-		fail("Not yet implemented");
+		AccessTracker tracker = new AccessTracker();
+		Administrator testAdmin = new Administrator("", "", 1);
+		Machine testMachine = new Machine("TPDD", "T-1");
+		testAdmin.addMachine(testMachine);
+		testAdmin.removeMachine(testMachine);
+		
+		assertFalse(tracker.getMachines().contains(testMachine));
 	}
 	
 	@Test
 	public void lockUserTest() {
-		fail("Not yet implemented");
+		Administrator testAdmin = new Administrator("", "", 1);
+		User testUser = new User ("", "", 2);
+		testAdmin.lockUser(testUser);
+		
+		assertTrue(testUser.isLocked());
 	}
 	
 	@Test
 	public void unlockUserTest() {
-		fail("Not yet implemented");
+		Administrator testAdmin = new Administrator("", "", 1);
+		User testUser = new User ("", "", 2);
+		testAdmin.lockUser(testUser);
+		testAdmin.unlockUser(testUser);
+		
+		assertFalse(testUser.isLocked());
 	}
 
 }

@@ -24,19 +24,19 @@ public class Administrator extends User {
 		
 	}
 	
-	public void addTool() {
+	public void addTool(Tool t) {
 		
 	}
 	
-	public void addMachine() {
+	public void addMachine(Machine m) {
 		
 	}
 	
-	public void removeTool(Tool tool) {
+	public void removeTool(Tool t) {
 		
 	}
 	
-	public void removeMachine(Machine machine) {
+	public void removeMachine(Machine m) {
 		
 	}
 	

@@ -3,8 +3,11 @@ import java.util.ArrayList;
 
 
 public class AccessTracker implements Blastercard {
+	private ArrayList<Machine> machines;
+	private ArrayList<Tool>	tools;
 	private ArrayList<User> currentUsers;
 	private InputReader inputReader;
+	private Log log;
 	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -18,8 +21,8 @@ public class AccessTracker implements Blastercard {
 	public void loadUser(int CWID) {
 		
 	}
-	
-	public void createUser(int CWID, String firstName, String lastName) {
+
+	public void createUser(String firstName, String lastName, int CWID) {
 		
 	}
 	
@@ -32,6 +35,10 @@ public class AccessTracker implements Blastercard {
 	}
 	
 	public void addLogEntry(int CWID) {
+		
+	}
+	
+	public void addLogEntry(int CWID, String ID) {
 		
 	}
 	
@@ -50,5 +57,29 @@ public class AccessTracker implements Blastercard {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public User getUser(int CWID) {
+		// cheating right now
+		// need to fix later
+		User returnUser = new User("", "", CWID);
+		return returnUser;
+	}
+	
+	public ArrayList<User> getCurrentUsers() {
+		return currentUsers;
+	}
+
+	public Log getLog() {
+		return log;
+	}
+
+	public ArrayList<Machine> getMachines() {
+		return machines;
+	}
+
+	public ArrayList<Tool> getTools() {
+		return tools;
+	}
+	
 }
 
