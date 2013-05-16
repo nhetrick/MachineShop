@@ -10,6 +10,7 @@ public class AccessTracker implements Blastercard {
 	private InputReader inputReader;
 	private Log log;
 	
+	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
 		inputReader = new InputReader();
