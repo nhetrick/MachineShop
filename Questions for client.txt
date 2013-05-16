@@ -1,0 +1,10 @@
+Do admins checkout tools/use machines? (Do admins have the same functionality as regular users)
+Are admins automatically certified on all machines?
+
+Security issues
+  -- Should really have a student employee there (our recommendation)
+What are the rules for tool checkout?
+  -- Can users have multiple tools out at one time?
+  -- Do they need to return current checked out tools before checking out new ones/same ones?
+  -- Is there a time limit on how long a user can have a tool?
+  -- Should we implement a waiting list for users/tools (time allowing)?
