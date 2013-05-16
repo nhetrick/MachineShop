@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import main.AccessTracker;
 import main.LogEntry;
+import main.Tool;
 import main.User;
 
 import org.junit.Test;
@@ -59,5 +60,26 @@ public class AccessTrackerTests {
 	public void loadNameTest(){
 		fail("Not yet implemented");
 	}
-
+	
+	@Test
+	public void updateToolsTest() {
+		AccessTracker tracker = new AccessTracker();
+		Tool testTool1 = new Tool("HITCOO", 15);
+		Tool testTool2 = new Tool("EVA", 01);
+		Tool testTool3 = new Tool("PROGKNIFE", 6);
+		Tool testTool5 = new Tool("4WASNEVERTHERE", 5);
+		
+		tracker.getTools().add(testTool1);
+		tracker.getTools().add(testTool2);
+		tracker.getTools().add(testTool3);
+		tracker.getTools().add(testTool5);
+		
+		testTool3.checkoutTool();
+		tracker.updateTools();
+		
+		assertTrue(tracker.getAvailableTools().contains(testTool1));
+		assertTrue(tracker.getAvailableTools().contains(testTool2));
+		assertFalse(tracker.getAvailableTools().contains(testTool3));
+		assertTrue(tracker.getAvailableTools().contains(testTool5));
+	}
 }

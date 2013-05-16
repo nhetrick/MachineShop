@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class AccessTracker implements Blastercard {
 	private ArrayList<Machine> machines;
 	private ArrayList<Tool>	tools;
+	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private InputReader inputReader;
 	private Log log;
@@ -12,6 +13,9 @@ public class AccessTracker implements Blastercard {
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
 		inputReader = new InputReader();
+		machines = new ArrayList<Machine>();
+		tools = new ArrayList<Tool>();
+		availableTools = new ArrayList<Tool>();
 	}
 	
 	public boolean userExistsInDataBase(int CWID) {
@@ -44,6 +48,15 @@ public class AccessTracker implements Blastercard {
 	
 	public void processLogOut(int CWID) {
 		
+	}
+	
+	// super bad. myLife.close()
+	public void updateTools() {
+		availableTools.clear();
+		for (Tool t: tools) {
+			if (!t.isCheckedOut())
+				availableTools.add(t);
+		}
 	}
 
 	@Override
@@ -79,6 +92,10 @@ public class AccessTracker implements Blastercard {
 
 	public ArrayList<Tool> getTools() {
 		return tools;
+	}
+
+	public ArrayList<Tool> getAvailableTools() {
+		return availableTools;
 	}
 	
 }
