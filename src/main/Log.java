@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Log {
 	private ArrayList<LogEntry> entries;
+	private ArrayList<LogEntry> result;
 	
 	public Log() {
 		entries = new ArrayList<LogEntry>();
@@ -28,4 +29,13 @@ public class Log {
 	public void extractLog(Machine machine) {
 		
 	}
+
+	public ArrayList<LogEntry> getEntries() {
+		return entries;
+	}
+
+	public ArrayList<LogEntry> getResult() {
+		return result;
+	}
+	
 }

@@ -8,4 +8,16 @@ public class Machine {
 		this.name = name;
 		this.ID = ID;
 	}
+	
+	public String getID() {
+		return ID;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Machine))
+			return false;
+		Machine obj = (Machine) o;
+		return (this.ID == obj.getID());
+	}
 }

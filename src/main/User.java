@@ -32,4 +32,20 @@ public class User {
 		return CWID;
 	}
 	
+	public boolean isLocked() {
+		return isLocked;
+	}
+
+	public ArrayList<Machine> getCertifiedMachines() {
+		return certifiedMachines;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof User))
+			return false;
+		
+		User obj = (User) o;
+		return (this.CWID == obj.getCWID());
+	}
 }
