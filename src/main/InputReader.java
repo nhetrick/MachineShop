@@ -11,21 +11,21 @@ public class InputReader {
 		CWID = "";
 	}
 
-	public void strip(String input) {
+	public void strip(String input) throws InputReaderException {
 		if (input.startsWith(start)) {
 			CWID = input.substring(10, 18);
 			System.out.println("Your CWID is " + CWID);
 		}
 		
 		else if (input.contains(error))
-			System.out.println("An error has occured. Please try again.");
+			throw new InputReaderException("An error has occured. Please try again.");
 		
 		else if (input.length() == 8) {
-			System.out.println("Your CWID is " + input);
+			throw new InputReaderException("Your CWID is " + input);
 		}
 		
 		else {
-			System.out.println("The card is not a blastercard.");
+			throw new InputReaderException("The card is not a blastercard.");
 		}
 	}
 	
