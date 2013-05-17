@@ -4,12 +4,15 @@ import java.awt.event.KeyListener;
 //import java.io.Console;
 import java.util.Scanner;
 
+import GUI.MainGUI;
+
 public class InputReader implements KeyListener {
 	
 	private String start = ";984000017";
 	private String error = "E?";
 	private String CWID = "";
 	private String input;
+	private MainGUI gui;
 	
 	public InputReader() {
 		input = "";
@@ -17,6 +20,11 @@ public class InputReader implements KeyListener {
 	
 	public InputReader(String input) {
 		this.input = input;
+	}
+	
+	public InputReader(MainGUI gui)	{
+		input = "";
+		this.gui = gui;
 	}
 	
 	public void strip() throws InputReaderException {
@@ -44,9 +52,14 @@ public class InputReader implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if ( e.getKeyChar() != '\n' ) {
+		if ( e.getKeyChar() != '\n') {
 			input += e.getKeyChar();
-			System.out.println(e.getKeyChar());
+			System.out.println(input);
+		}
+		
+		else {
+			gui.enterPressed();
+			input = "";
 		}
 	}
 

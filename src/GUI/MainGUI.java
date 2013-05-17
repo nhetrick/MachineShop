@@ -17,12 +17,10 @@ public class MainGUI{
 
 	private JFrame frame;
 	private Font messageFont;
-
+	private KeyListener reader = new InputReader(this);
 	public MainGUI() {
 
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
-
-		
 		
 		frame = new JFrame();
 		frame.setSize(800, 700);
@@ -42,16 +40,15 @@ public class MainGUI{
 		if ( bool ) {		
 			frame = new HomeScreen();
 		}
-	}
-
-	public void waitForInput() {
-		KeyListener reader = new InputReader();
+		
 		frame.addKeyListener(reader);
 		frame.setFocusable(true);
+	}
+
+	public void handleInput() {
+		
 		String input = ((InputReader) reader).getInput();
-		while ( input.equals("") || input.charAt(input.length() - 1) != '?') {
-			input = ((InputReader) reader).getInput();
-		}
+
 		try {
 			((InputReader) reader).strip();
 			if ( !((InputReader) reader).getCWID().equals("") ) {
@@ -61,14 +58,17 @@ public class MainGUI{
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
-			JOptionPane popup = new JOptionPane(message);
-			popup.setVisible(true);	
+			JOptionPane.showMessageDialog(frame, message);
 		}
+	}
+	
+	public void enterPressed() {
+		handleInput();
 	}
 
 	public static void main(String[] args) {
 		MainGUI m = new MainGUI();
-		m.waitForInput();
+		
 	}
 
 }
