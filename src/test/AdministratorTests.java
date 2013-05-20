@@ -2,7 +2,13 @@ package test;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import main.*;
+
+import main.AccessTracker;
+import main.Administrator;
+import main.Machine;
+import main.Tool;
+import main.User;
+
 import org.junit.Test;
 
 public class AdministratorTests {

@@ -40,6 +40,10 @@ public class User {
 	public ArrayList<Machine> getCertifiedMachines() {
 		return certifiedMachines;
 	}
+	
+	public ArrayList<Tool> getToolsCheckedOut() {
+		return toolsCheckedOut;
+	}
 
 	@Override
 	public boolean equals(Object o) {

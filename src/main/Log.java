@@ -4,45 +4,65 @@ import java.util.Date;
 
 
 public class Log {
-	private String ID;
-	private ArrayList<LogEntry> entries;
-	private ArrayList<LogEntry> result;
-	private Date lastUpdate;
+	private static ArrayList<LogEntry> entries;
+	private static ArrayList<LogEntry> result;
+	private static Date lastUpdate;
+	
+	private static int numEntries = 0;
 	
 	public Log() {
 		entries = new ArrayList<LogEntry>();
 	}
 	
-	public void printLog() {
+	public static void printLog() {
 		
 	}
 	
-	public void extractLog(Date startDate, Date endDate) {
+	public static void extractLog(Date startDate, Date endDate) {
 		
 	}
 	
-	public void extractLog(User user) {
+	public static void extractLog(User user) {
 		
 	}
 	
-	public void extractLogCheckedOutTool(Tool tool) {
+	public static void extractLogCheckedOutTool(Tool checkedOutTool) {
 		
 	}
 	
-	public void extractLogReturnedTool(Tool tool) {
+	public static void extractLogReturnedTool(Tool returnedTool) {
 		
 	}
 	
-	public void extractLog(Machine machine) {
+	public static void extractLog(Machine machine) {
 		
+	}
+	
+	public static void addEntry(LogEntry entry) {
+		entries.add(entry);
+	}
+	
+	public static void finishEntry(LogEntry entry) {
+		// The entry being updated just needs a time out. So we get
+		// the time out from "entry" and update the corresponding entry
+		// in the log with the correct time out.
+		entries.get(entry.getID()).setTimeOut(entry.getTimeOut());
 	}
 
-	public ArrayList<LogEntry> getEntries() {
+	public static ArrayList<LogEntry> getEntries() {
 		return entries;
 	}
 
-	public ArrayList<LogEntry> getResult() {
+	public static ArrayList<LogEntry> getResult() {
 		return result;
+	}
+	
+	public static int getNumEntries() {
+		return numEntries;
+	}
+	
+	public static void incrementNumEntries() {
+		numEntries++;
 	}
 	
 }

@@ -22,14 +22,23 @@ public class AccessTracker implements Blastercard {
 		return false;
 	}
 	
-	public void loadUser(int CWID) {
-		
+	// Loads an existing user from the database into RAM
+	// The user is found by querying by CWID
+	public User loadUser(int CWID) {
+		return new User("", "", 0);
 	}
-
+	
+	
+	// Creates a new user. Should be called by processLogIn()
 	public void createUser(String firstName, String lastName, int CWID) {
 		
 	}
 	
+	// Takes a CWID and attempts to load that user from the
+	// database and add them to the list of current users.
+	// If the CWID doesn't exist, a new user is created, added to the list
+	// of current users, and persisted to the database.
+	// Also adds data to the log for this user
 	public void processLogIn(int CWID) {
 		
 	}
@@ -38,14 +47,9 @@ public class AccessTracker implements Blastercard {
 		
 	}
 	
-	public void addLogEntry(int CWID) {
-		
-	}
-	
-	public void addLogEntry(int CWID, String ID) {
-		
-	}
-	
+	// Removes the user with this CWID from the list
+	// of current users.
+	// Also finishes the log entry for this user.
 	public void processLogOut(int CWID) {
 		
 	}

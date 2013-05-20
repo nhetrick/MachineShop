@@ -3,47 +3,71 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import main.AccessTracker;
+import main.Log;
 import main.LogEntry;
 import main.Tool;
 import main.User;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class AccessTrackerTests {
 	
+	Calendar calendar;
+	AccessTracker tracker;
+	User testUser;
+	
+	@BeforeClass
+	public void setup() {
+		tracker = new AccessTracker();
+		calendar = Calendar.getInstance();
+	}
+	
 	@Test
-	public void loadUserTest(){
-		AccessTracker tracker = new AccessTracker();
-		User testUser = new User("John", "Smith", 10539477);
-		tracker.loadUser(testUser.getCWID());
+	public void createAndLoadUserTest() {
 		
+		testUser = new User("", "", 10539477);
+		
+		// Query the database for a user with this CWID.
+		User loadedUser = tracker.loadUser(10539477);
+		
+		// Since there is no user in the database with this CWID,
+		// the query should return null.
+		assertEquals(null, loadedUser);
+		
+		// Add the user to the database
+		tracker.createUser("", "", 10539477);
+		
+		// Now the user is in the database, so the query does not
+		// return null.
+		loadedUser = tracker.loadUser(10539477);
+		assertEquals(testUser, loadedUser);
+	}
+	
+	@Test
+	public void processLogInTest() {
+		
+		Date currentTime = calendar.getTime();
+		
+		testUser = new User("", "", 10542318);
+		
+		tracker.processLogIn(10542318);
+		
+		// Ensure this user is now in the list of current users
 		assertTrue(tracker.getCurrentUsers().contains(testUser));
-	}
-	
-	@Test
-	public void createUserTest(){
-		AccessTracker tracker = new AccessTracker();
-		tracker.createUser("John", "Smith", 10539477);
-		User testUser = new User("", "", 10539477);
 		
-		assertTrue(tracker.getCurrentUsers().contains(testUser));
-	}
-	
-	@Test
-	public void processLogInTest(){
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void addLogEntryTest(){
-		AccessTracker tracker = new AccessTracker();
-		tracker.createUser("John", "Smith", 10539477);
-		tracker.addLogEntry(10539477, "KYON");
-		LogEntry testEntry = new LogEntry(tracker.getUser(10539477), "KYON");
+		// Ensures the entry was added to the log
+		Log.extractLog(testUser);
 		
-		assertTrue(tracker.getLog().getEntries().contains(testEntry));
+		// Must ensure that THAT particular log in was logged.
+		// Get the time from this log entry? Ensure that it is
+		// after the "currentTime" variable above
+		Log.getEntries()
+		
 	}
 	
 	@Test
@@ -63,7 +87,6 @@ public class AccessTrackerTests {
 	
 	@Test
 	public void updateToolsTest() {
-		AccessTracker tracker = new AccessTracker();
 		Tool testTool1 = new Tool("HITCOO", 15);
 		Tool testTool2 = new Tool("EVA", 01);
 		Tool testTool3 = new Tool("PROGKNIFE", 6);

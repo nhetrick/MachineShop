@@ -3,9 +3,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-
 public class LogEntry {
-	private String ID;
+	private int ID;
 	private User user;
 	private ArrayList<Machine> machinesUsed;
 	private ArrayList<Tool> toolsCheckedOut;
@@ -14,42 +13,42 @@ public class LogEntry {
 	private ArrayList<Tool> toolsReturned;
 	private Calendar calendar;
 	
-	public LogEntry(User user) {
+	public LogEntry() {
 		calendar = Calendar.getInstance();
-		this.user = user;
-		machinesUsed = new ArrayList<Machine>();
-		toolsCheckedOut = new ArrayList<Tool>();
 		timeOut = null;
-		timeIn = calendar.getTime();
-		toolsReturned = new ArrayList<Tool>();
-		ID = ""; // auto generate
 	}
 	
-	public LogEntry(User user, String ID) {
-		calendar = Calendar.getInstance();
-		this.user = user;
-		machinesUsed = new ArrayList<Machine>();
-		toolsCheckedOut = new ArrayList<Tool>();
-		timeOut = null;
-		timeIn = calendar.getTime();
-		toolsReturned = new ArrayList<Tool>();
-		this.ID = ID;
-	}
-	
-	// for test purpose
-	public LogEntry(User user, ArrayList<Machine> machinesUsed, ArrayList<Tool> toolsCheckedOut, Date timeIn, Date timeOut, ArrayList<Tool> toolsReturned, String ID) {
-		calendar = Calendar.getInstance();
+	public void startEntry(User user, ArrayList<Machine> machinesUsed, ArrayList<Tool> toolsCheckedOut, ArrayList<Tool> toolsReturned) {
+		// AUTO-GENERATE ID
+		this.ID = Log.getNumEntries();
+		this.timeIn = calendar.getTime();
 		this.user = user;
 		this.machinesUsed = machinesUsed;
 		this.toolsCheckedOut = toolsCheckedOut;
-		this.timeOut = timeOut;
-		this.timeIn = timeIn;
 		this.toolsReturned = toolsReturned;
-		this.ID = ID;
+		Log.incrementNumEntries();
+		Log.addEntry(this);
+	}
+	
+	public void finishEntry() {
+		this.timeOut = calendar.getTime();
+		Log.finishEntry(this);
 	}
 	
 	public void persistEntry() {
 		
+	}
+	
+	public Date getTimeIn() {
+		return timeIn;
+	}
+	
+	public Date getTimeOut() {
+		return timeOut;
+	}
+	
+	public void setTimeOut(Date timeOut) {
+		this.timeOut = timeOut;
 	}
 	
 	@Override
@@ -60,7 +59,7 @@ public class LogEntry {
 		return (this.ID == obj.getID());
 	}
 
-	public String getID() {
+	public int getID() {
 		return ID;
 	}
 }
