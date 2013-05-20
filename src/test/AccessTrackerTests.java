@@ -66,7 +66,7 @@ public class AccessTrackerTests {
 		// Must ensure that THAT particular log in was logged.
 		// Get the time from this log entry? Ensure that it is
 		// after the "currentTime" variable above
-		Log.getEntries()
+		// TO DO ------------------------- //
 		
 	}
 	
