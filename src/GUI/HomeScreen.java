@@ -16,6 +16,7 @@ import javax.swing.border.EtchedBorder;
 public class HomeScreen extends JFrame {
 	
 	private JPanel headerBar;
+	private JPanel centerPanel;
 	private Calendar calendar;
 	private Clock time;
 	private Font headerFont;
@@ -42,8 +43,14 @@ public class HomeScreen extends JFrame {
 		
 		add(headerBar, BorderLayout.NORTH);
 		
-		UserGUI g = new UserGUI();
-		add(g, BorderLayout.CENTER);
+		centerPanel = new JPanel(new BorderLayout());
+		
+		centerPanel = new SystemAdminGUI();
+		//AdminGUI g = new AdminGUI();
+		//DataEntryGUI g = new DataEntryGUI();
+		//SystemAdminGUI g = new SystemAdminGUI();
+		//UserGUI g = new UserGUI();
+		add(centerPanel, BorderLayout.CENTER);
 		
 		setVisible(true);
 	}
