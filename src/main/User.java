@@ -21,8 +21,7 @@ public class User {
 	}
 	
 	public void checkoutTool(Tool t) {
-		t.checkoutTool();
-		
+		t.checkoutTool();	
 	}
 	
 	public void returnTool(Tool t) {

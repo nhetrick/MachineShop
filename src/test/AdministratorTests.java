@@ -15,7 +15,7 @@ public class AdministratorTests {
 
 	@Test
 	public void addPermissionTest() {
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		User testUser = new User ("", "", 2);
 		Machine testMachine = new Machine("TPDD", "T-1");
 		testAdmin.addPermission(testUser, testMachine);
@@ -26,7 +26,7 @@ public class AdministratorTests {
 	@Test
 	public void removeUsersTest() {
 		AccessTracker tracker = new AccessTracker();
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		ArrayList<User> testUsers = new ArrayList<User>();
 		User testUser = new User ("", "", 2);
 		testUsers.add(testUser);
@@ -38,7 +38,7 @@ public class AdministratorTests {
 	
 	@Test
 	public void removePermissionTest() {
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		User testUser = new User ("", "", 2);
 		Machine testMachine = new Machine("TPDD", "T-1");
 		testAdmin.addPermission(testUser, testMachine);
@@ -55,7 +55,7 @@ public class AdministratorTests {
 	@Test
 	public void addToolTest() {
 		AccessTracker tracker = new AccessTracker();
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		Tool testTool = new Tool("HITCOO", 15);
 		testAdmin.addTool(testTool);
 		
@@ -65,7 +65,7 @@ public class AdministratorTests {
 	@Test
 	public void addMachineTest() {
 		AccessTracker tracker = new AccessTracker();
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		Machine testMachine = new Machine("TPDD", "T-1");
 		testAdmin.addMachine(testMachine);
 		
@@ -75,7 +75,7 @@ public class AdministratorTests {
 	@Test
 	public void removeToolTest() {
 		AccessTracker tracker = new AccessTracker();
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		Tool testTool = new Tool("HITCOO", 15);
 		testAdmin.addTool(testTool);
 		testAdmin.removeTool(testTool);
@@ -86,7 +86,7 @@ public class AdministratorTests {
 	@Test
 	public void removeMachineTest() {
 		AccessTracker tracker = new AccessTracker();
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		Machine testMachine = new Machine("TPDD", "T-1");
 		testAdmin.addMachine(testMachine);
 		testAdmin.removeMachine(testMachine);
@@ -96,7 +96,7 @@ public class AdministratorTests {
 	
 	@Test
 	public void lockUserTest() {
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		User testUser = new User ("", "", 2);
 		testAdmin.lockUser(testUser);
 		
@@ -105,7 +105,7 @@ public class AdministratorTests {
 	
 	@Test
 	public void unlockUserTest() {
-		Administrator testAdmin = new Administrator("", "", 1);
+		SystemAdministrator testAdmin = new SystemAdministrator("", "", 1);
 		User testUser = new User ("", "", 2);
 		testAdmin.lockUser(testUser);
 		testAdmin.unlockUser(testUser);
