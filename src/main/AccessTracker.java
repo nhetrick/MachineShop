@@ -1,5 +1,15 @@
 package main;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Set;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoURI;
 
 public class AccessTracker {
 	
@@ -9,6 +19,12 @@ public class AccessTracker {
 	private ArrayList<User> currentUsers;
 	private InputReader inputReader;
 	private Log log;
+	private DB database;
+	private final String hostName = "dharma.mongohq.com";
+	private final int port = 10096;
+	private final String dbName = "CSM_Machine_Shop";
+	private final String username = "tsallee";
+	private final String password = "machineshop";
 	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -16,8 +32,28 @@ public class AccessTracker {
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
-		// Do the initialization stuff for the log
-		Log.setup(); 
+		// Do the initialization stuff for the log and database
+		databaseSetup();
+		Log.setup();
+	}
+	
+	private void databaseSetup() {
+		try {
+			MongoClient client = new MongoClient(hostName, port);
+			database = client.getDB(dbName);
+			database.authenticate(username, password.toCharArray());			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void messAroundWithDatabase() {
+		DBCollection tools = database.getCollection("Tools");
+		DBCursor cursor = tools.find(new BasicDBObject("upc", 100));
+		while ( cursor.hasNext() ) {
+			DBObject result = cursor.next();
+			System.out.println((String) result.get("name"));
+		}
 	}
 	
 	public boolean userExistsInDataBase(int CWID) {

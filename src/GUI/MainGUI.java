@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import main.*;
 
-public class MainGUI{
+public class MainGUI {
 
 	private JFrame frame;
 	private Font messageFont;
@@ -41,6 +41,10 @@ public class MainGUI{
 		
 		frame.addKeyListener(reader);
 		frame.setFocusable(true);
+		
+		AccessTracker tracker = new AccessTracker();
+		tracker.messAroundWithDatabase();
+		
 	}
 
 	public void handleInput() {

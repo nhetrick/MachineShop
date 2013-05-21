@@ -30,13 +30,13 @@ public class InputReader implements KeyListener {
 	public void strip() throws InputReaderException {
 		if (input.startsWith(start)) {
 			CWID = input.substring(10, 18);
-			System.out.println("Your CWID is " + CWID);
+//			System.out.println("Your CWID is " + CWID);
 		}
 		else if (input.contains(error))
 			throw new InputReaderException("An error has occured. Please try again.");
 		else if (input.length() == 8) {
 			CWID = input;
-			System.out.println("Your CWID is " + input);
+//			System.out.println("Your CWID is " + input);
 		}
 		else
 			throw new InputReaderException("The card is not a blastercard.");
@@ -54,7 +54,7 @@ public class InputReader implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 		if ( e.getKeyChar() != '\n') {
 			input += e.getKeyChar();
-			System.out.println(input);
+//			System.out.println(input);
 		}
 		
 		else {
