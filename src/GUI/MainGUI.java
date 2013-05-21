@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyListener;
-import java.util.Scanner;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,8 +65,7 @@ public class MainGUI{
 	}
 
 	public static void main(String[] args) {
-		MainGUI m = new MainGUI();
-		
+		MainGUI m = new MainGUI();	
 	}
 
 }

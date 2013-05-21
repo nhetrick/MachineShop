@@ -1,11 +1,14 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 
 import main.AccessTracker;
-import main.Administrator;
 import main.Machine;
+import main.SystemAdministrator;
 import main.Tool;
 import main.User;
 

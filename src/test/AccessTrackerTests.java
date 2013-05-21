@@ -2,13 +2,11 @@ package test;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import main.AccessTracker;
 import main.Log;
-import main.LogEntry;
 import main.Tool;
 import main.User;
 
