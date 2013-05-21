@@ -2,16 +2,21 @@ package main;
 import java.util.ArrayList;
 import java.util.Date;
 
+// This class is a static class that only accesses the log entries
+// in the database and puts them in the "result" ArrayList for access
+// by other classes. It also persists new log entries to the database.
 
 public class Log {
-	private static ArrayList<LogEntry> entries;
 	private static ArrayList<LogEntry> result;
 	private static Date lastUpdate;
 	
-	private static int numEntries = 0;
+	private static int numEntries;
 	
-	public Log() {
-		entries = new ArrayList<LogEntry>();
+	public static void setup() {
+		result = new ArrayList<LogEntry>();
+		lastUpdate = new Date();
+		// set numEntries to the number of log entries in
+		// the database.
 	}
 	
 	public static void printLog() {
@@ -38,20 +43,20 @@ public class Log {
 		
 	}
 	
-	public static void addEntry(LogEntry entry) {
-		entries.add(entry);
-	}
-	
 	public static void finishEntry(LogEntry entry) {
 		// The entry being updated just needs a time out. So we get
 		// the time out from "entry" and update the corresponding entry
-		// in the log with the correct time out.
-		entries.get(entry.getID()).setTimeOut(entry.getTimeOut());
+		// in the database with the correct time out.
+		// Something like this
+		// db.get(LogEntries).get(entry.getID()).setTimeOut(entry.getTimeOut());
 	}
 
-	public static ArrayList<LogEntry> getEntries() {
-		return entries;
+	public static void incrementNumEntries() {
+		numEntries++;
 	}
+	
+	/******************************************* GETTERS AND SETTERS ******************************************/
+	
 
 	public static ArrayList<LogEntry> getResult() {
 		return result;
@@ -59,10 +64,6 @@ public class Log {
 	
 	public static int getNumEntries() {
 		return numEntries;
-	}
-	
-	public static void incrementNumEntries() {
-		numEntries++;
 	}
 	
 }

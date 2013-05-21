@@ -7,7 +7,19 @@ public class Administrator extends User {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void generateReport(){
+	public void generateReport() {
+		
+	}
+	
+	public void viewAllTools() {
+		
+	}
+	
+	public void viewAllMachines() {
+		
+	}
+	
+	public void viewAllUsers() {
 		
 	}
 

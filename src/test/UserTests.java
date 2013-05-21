@@ -2,9 +2,18 @@ package test;
 
 import static org.junit.Assert.*;
 import main.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class UserTests {
+	
+	AccessTracker tracker;
+	
+	@Before
+	public void setup() {
+		tracker = new AccessTracker();
+	}
 	
 	@Test
 	public void checkoutAndReturnToolTest() {
@@ -12,8 +21,10 @@ public class UserTests {
 		Tool testTool = new Tool("HITCOO", 15);
 		testUser.checkoutTool(testTool);
 		
-		// Ensures that once a tool has been checked out by a user, that tool
-		// recognizes that it has actually been checked out.
+		tracker.loadTools();
+		
+		// Ensures that once a tool has been checked out by a user, the database
+		// and the system recognize that it has actually been checked out.
 		assertTrue(testTool.isCheckedOut());
 		
 		// Ensures that the user actually has the tool
@@ -21,8 +32,10 @@ public class UserTests {
 		
 		testUser.returnTool(testTool);
 		
-		// Ensures that once a user has returned a tool, that tool
-		// recognizes that it has actually been returned.
+		tracker.loadTools();
+		
+		// Ensures that once a tool has been returned, the database
+		// and the system recognize that it has actually been returned.
 		assertFalse(testTool.isCheckedOut());
 		
 		// Ensures that the user no longer has the tool		
