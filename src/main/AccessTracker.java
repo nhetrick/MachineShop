@@ -1,8 +1,8 @@
 package main;
 import java.util.ArrayList;
 
-
-public class AccessTracker implements Blastercard {
+public class AccessTracker {
+	
 	private ArrayList<Machine> machines;
 	private ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
@@ -16,6 +16,8 @@ public class AccessTracker implements Blastercard {
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
+		// Do the initialization stuff for the log
+		Log.setup(); 
 	}
 	
 	public boolean userExistsInDataBase(int CWID) {
@@ -28,6 +30,15 @@ public class AccessTracker implements Blastercard {
 		return new User("", "", 0);
 	}
 	
+	// Loads all the tools from the database into RAM
+	public void loadTools() {
+		// tools = db.get(tools);
+	}
+	
+	// Loads all the machines from the database into RAM
+	public void loadMachines() {
+		// tools = db.get(machines);
+	}
 	
 	// Creates a new user. Should be called by processLogIn()
 	public void createUser(String firstName, String lastName, int CWID) {
@@ -40,7 +51,10 @@ public class AccessTracker implements Blastercard {
 	// of current users, and persisted to the database.
 	// Also adds data to the log for this user
 	public void processLogIn(int CWID) {
-		
+		// IF the user with this CWID is locked (boolean isLocked)
+		// THEN display some error message, and make a note somewhere
+		// (log this attempt for admin to view later)
+	
 	}
 	
 	public void displayUserMachines(int CWID) {
@@ -62,18 +76,14 @@ public class AccessTracker implements Blastercard {
 				availableTools.add(t);
 		}
 	}
-
-	@Override
+	
+	// Check that the CWID exists in the blastercard database
 	public boolean checkLegitimacy(int CWID) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public String loadName(int CWID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	/********************************** GETTERS AND SETTERS *******************************************/
 	
 	public User getUser(int CWID) {
 		// cheating right now

@@ -2,7 +2,8 @@ package test;
 
 import static org.junit.Assert.*;
 import java.util.*;
-import org.junit.BeforeClass;
+
+import org.junit.Before;
 import org.junit.Test;
 import main.*;
 
@@ -42,7 +43,7 @@ public class LogTests {
 	Date dateIn;
 	Date dateOut;
 
-	@BeforeClass
+	@Before
 	public void setup() {
 		
 		testUser1 = new User("", "", 2);
@@ -192,12 +193,5 @@ public class LogTests {
 		assertEquals(1, Log.getResult().size());
 		
 	}
-
-	@Test
-	public void persistEntryTest() {
-		
-		// TEST THAT LOG ENTRIES ARE BEING WRITTEN TO THE DATABASE
-		// TO BE IMPLEMENTED ONCE WE SET UP OUR DATABASE
-		
-	}
+	
 }

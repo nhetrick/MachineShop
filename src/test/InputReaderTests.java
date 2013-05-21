@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import main.InputReader;
 import main.InputReaderException;
-
 import org.junit.Test;
 
 public class InputReaderTests {
