@@ -1,7 +1,6 @@
 package main;
 import java.util.ArrayList;
 
-
 public class AccessTracker {
 	
 	private ArrayList<Machine> machines;
@@ -18,7 +17,7 @@ public class AccessTracker {
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
 		// Do the initialization stuff for the log
-		Log.setup();
+		Log.setup(); 
 	}
 	
 	public boolean userExistsInDataBase(int CWID) {
