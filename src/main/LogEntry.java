@@ -27,16 +27,11 @@ public class LogEntry {
 		this.toolsCheckedOut = toolsCheckedOut;
 		this.toolsReturned = toolsReturned;
 		Log.incrementNumEntries();
-		Log.addEntry(this);
 	}
 	
 	public void finishEntry() {
 		this.timeOut = calendar.getTime();
 		Log.finishEntry(this);
-	}
-	
-	public void persistEntry() {
-		
 	}
 	
 	public Date getTimeIn() {

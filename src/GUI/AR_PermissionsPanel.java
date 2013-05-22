@@ -11,12 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-public class PermissionsPanel extends JPanel {
+public class AR_PermissionsPanel extends JPanel {
 	
 	JPanel contentPanel;
 	JPanel buttonPanel;
 	
-	public PermissionsPanel() {
+	public AR_PermissionsPanel() {
 		setLayout(new BorderLayout());
 		
 		contentPanel = new JPanel();

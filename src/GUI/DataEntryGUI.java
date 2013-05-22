@@ -30,7 +30,7 @@ public class DataEntryGUI extends JPanel {
 		
 		centerPanel = new JPanel(new BorderLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
-		buttonPanel = new JPanel(new GridLayout(8, 1));
+		buttonPanel = new JPanel(new GridLayout(9, 1));
 
 		
 		
@@ -45,6 +45,7 @@ public class DataEntryGUI extends JPanel {
 		JButton administrators = new JButton();
 		JButton lockUser = new JButton();
 		JButton generateReport = new JButton();
+		JButton list = new JButton();
 		
 		logOut.setText("Log Out");
 		permissions.setText("Add/Remove Permissions");
@@ -54,6 +55,7 @@ public class DataEntryGUI extends JPanel {
 		administrators.setText("Add/Remove Administrators");
 		lockUser.setText("Lock/Unlock User");
 		generateReport.setText("Generate Report");
+		list.setText("List Tools/Machines");
 		
 		logOut.setFont(buttonFont);
 		permissions.setFont(buttonFont);
@@ -63,6 +65,7 @@ public class DataEntryGUI extends JPanel {
 		administrators.setFont(buttonFont);
 		lockUser.setFont(buttonFont);
 		generateReport.setFont(buttonFont);
+		list.setFont(buttonFont);		
 		
 		buttonPanel.add(permissions);
 		buttonPanel.add(tools);
@@ -71,19 +74,85 @@ public class DataEntryGUI extends JPanel {
 		buttonPanel.add(administrators);
 		buttonPanel.add(lockUser);
 		buttonPanel.add(generateReport);
+		buttonPanel.add(list);
 		buttonPanel.add(logOut);
 		
 		add(centerPanel, BorderLayout.CENTER);
 		permissions.addActionListener(new PermissionsButtonListener());
+		users.addActionListener(new UsersButtonListener());
+		tools.addActionListener(new ToolsButtonListener());
+		machines.addActionListener(new MachinesButtonListener());
+		administrators.addActionListener(new AdministratorsButtonListener());
+		lockUser.addActionListener(new LockUserButtonListener());
+		generateReport.addActionListener(new GenerateReportButtonListener());
+		list.addActionListener(new ListButtonListener());
+	}
+	
+	public void switchPanels(JPanel panel) {
+		contentPanel.removeAll();
+		contentPanel.add(panel);
 	}
 
 	private class PermissionsButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			contentPanel.removeAll();
-			//centerPanel.removeAll();
-			contentPanel.add(new PermissionsPanel());
-			//centerPanel.add(new DataEntryGUI());
+			switchPanels(new AR_PermissionsPanel());
+		}
+	}
+	
+	private class UsersButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new AR_UsersPanel());
+		}
+	}
+	
+	private class ToolsButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new AR_ToolsPanel());
+		}
+	}
+	
+	private class MachinesButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new AR_MachinesPanel());
+		}
+	}
+	
+	private class AdministratorsButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new AR_AdministratorsPanel());
+		}
+	}
+	
+	private class LockUserButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new LockUserPanel());
+		}
+	}
+	
+	private class GenerateReportButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new GenerateReportPanel());
+		}
+	}
+	
+	private class ListButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchPanels(new ListPanel());
+		}
+	}
+	
+	private class LogOutListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
 		}
 	}
 }

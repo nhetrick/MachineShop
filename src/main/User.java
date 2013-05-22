@@ -9,6 +9,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private boolean isLocked;
+	protected boolean isAdmin = false;
 	
 	public User(String firstName, String lastName, int CWID) {
 		// needs to be extracted from data base
@@ -42,6 +43,18 @@ public class User {
 	
 	public ArrayList<Tool> getToolsCheckedOut() {
 		return toolsCheckedOut;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public boolean isAdmin() {
+		return isAdmin;
 	}
 
 	@Override

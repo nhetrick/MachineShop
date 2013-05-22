@@ -2,7 +2,6 @@ package test;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,7 +11,7 @@ import main.LogEntry;
 import main.Tool;
 import main.User;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class AccessTrackerTests {
@@ -21,7 +20,7 @@ public class AccessTrackerTests {
 	AccessTracker tracker;
 	User testUser;
 	
-	@BeforeClass
+	@Before
 	public void setup() {
 		tracker = new AccessTracker();
 		calendar = Calendar.getInstance();
@@ -49,9 +48,9 @@ public class AccessTrackerTests {
 	}
 	
 	@Test
-	public void processLogInTest() {
+	public void processLogInAndLogOutTest() {
 		
-		Date currentTime = calendar.getTime();
+		Date startTime = calendar.getTime();
 		
 		testUser = new User("", "", 10542318);
 		
@@ -60,33 +59,58 @@ public class AccessTrackerTests {
 		// Ensure this user is now in the list of current users
 		assertTrue(tracker.getCurrentUsers().contains(testUser));
 		
+		
 		// Ensures the entry was added to the log
 		Log.extractLog(testUser);
 		
+		int latestEntryIndex = Log.getResult().size() - 1;
+		LogEntry entry = Log.getResult().get(latestEntryIndex);
+		
 		// Must ensure that THAT particular log in was logged.
 		// Get the time from this log entry? Ensure that it is
-		// after the "currentTime" variable above
-		// TO DO ------------------------- //
+		// after the "startTime" variable above
+		assertTrue(entry.getTimeIn().after(startTime));
+		
+		// ADD ANOTHER TEST HERE TO MAKE SURE THE USER WAS
+		// PERSISTED TO THE DATABASE -- TO DO --
+	
+	
+		Date currentTime = calendar.getTime();
+		
+		tracker.processLogOut(10542318);
+		
+		// Ensure the user has been removed from the list of current users
+		assertFalse(tracker.getCurrentUsers().contains(testUser));
+		
+		//Ensures the entry was added to the log
+		Log.extractLog(testUser);
+		
+		latestEntryIndex = Log.getResult().size() - 1;
+		
+		// Get the time from this log entry? Ensure that it is
+		// after the "currentTime" and after the log in time
+		assertTrue(entry.getTimeOut().after(currentTime));
+		assertTrue(entry.getTimeOut().after(entry.getTimeIn()));
 		
 	}
-	
+		
 	@Test
-	public void processLogOutTest(){
+	public void checkLegitimacyTest() {
+		// CAN'T DO YET BECAUSE WE DON'T HAVE ACCESS
+		// TO THE BLASTERCARD DATABASE
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void checkLegitimacyTest(){
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void loadNameTest(){
+	public void loadNameTest() {
+		// CAN'T DO YET BECAUSE WE DON'T HAVE ACCESS
+		// TO THE BLASTERCARD DATABASE
 		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void updateToolsTest() {
+		
 		Tool testTool1 = new Tool("HITCOO", 15);
 		Tool testTool2 = new Tool("EVA", 01);
 		Tool testTool3 = new Tool("PROGKNIFE", 6);

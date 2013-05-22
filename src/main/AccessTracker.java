@@ -1,14 +1,28 @@
 package main;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 
-public class AccessTracker implements Blastercard {
+public class AccessTracker {
+	
 	private ArrayList<Machine> machines;
 	private ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private InputReader inputReader;
 	private Log log;
+	private DB database;
+	private final String hostName = "dharma.mongohq.com";
+	private final int port = 10096;
+	private final String dbName = "CSM_Machine_Shop";
+	private final String username = "tsallee";
+	private final String password = "machineshop";
 	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -16,6 +30,28 @@ public class AccessTracker implements Blastercard {
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
+		// Do the initialization stuff for the log and database
+		databaseSetup();
+		Log.setup();
+	}
+	
+	private void databaseSetup() {
+		try {
+			MongoClient client = new MongoClient(hostName, port);
+			database = client.getDB(dbName);
+			database.authenticate(username, password.toCharArray());			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void messAroundWithDatabase() {
+		DBCollection tools = database.getCollection("Tools");
+		DBCursor cursor = tools.find(new BasicDBObject("upc", 100));
+		while ( cursor.hasNext() ) {
+			DBObject result = cursor.next();
+			System.out.println((String) result.get("name"));
+		}
 	}
 	
 	public boolean userExistsInDataBase(int CWID) {
@@ -28,10 +64,19 @@ public class AccessTracker implements Blastercard {
 		return new User("", "", 0);
 	}
 	
+	// Loads all the tools from the database into RAM
+	public void loadTools() {
+		// tools = db.get(tools);
+	}
+	
+	// Loads all the machines from the database into RAM
+	public void loadMachines() {
+		// tools = db.get(machines);
+	}
 	
 	// Creates a new user. Should be called by processLogIn()
 	public void createUser(String firstName, String lastName, int CWID) {
-		
+
 	}
 	
 	// Takes a CWID and attempts to load that user from the
@@ -39,7 +84,52 @@ public class AccessTracker implements Blastercard {
 	// If the CWID doesn't exist, a new user is created, added to the list
 	// of current users, and persisted to the database.
 	// Also adds data to the log for this user
-	public void processLogIn(int CWID) {
+	// Returns the name of the user with this CWID
+	public User processLogIn(int CWID) {
+		// IF the user with this CWID is locked (boolean isLocked)
+		// THEN display some error message, and make a note somewhere
+		// (log this attempt for admin to view later)
+		
+		User currentUser;
+		boolean isAdministrator;
+		boolean isSystemAdministrator;
+		
+		if ( !checkLegitimacy(CWID) ) {
+			// DO_SOMETHING
+		}
+		
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
+		DBObject result = cursor.next();
+		
+		if (result.get("isAdmin") == null) {
+			isAdministrator = false;
+		} else {
+			isAdministrator = (boolean) result.get("isAdmin");
+		}
+		
+		if ( result.get("isSystemAdmin") == null ) {
+			isSystemAdministrator = false;
+		} else {
+			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
+		}
+		
+		String firstName = (String) result.get("firstName");
+		String lastName = (String) result.get("lastName");
+		
+		if ( isAdministrator ) {
+			if ( isSystemAdministrator ) {
+				currentUser = new SystemAdministrator(firstName, lastName, CWID);
+			} else {
+				currentUser = new Administrator(firstName, lastName, CWID);
+			}
+		}  else {
+			currentUser = new User(firstName, lastName, CWID);
+		}
+		
+		currentUsers.add(currentUser);
+		
+		return currentUser;
 		
 	}
 	
@@ -62,18 +152,14 @@ public class AccessTracker implements Blastercard {
 				availableTools.add(t);
 		}
 	}
-
-	@Override
+	
+	// Check that the CWID exists in the blastercard database
 	public boolean checkLegitimacy(int CWID) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public String loadName(int CWID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	/********************************** GETTERS AND SETTERS *******************************************/
 	
 	public User getUser(int CWID) {
 		// cheating right now

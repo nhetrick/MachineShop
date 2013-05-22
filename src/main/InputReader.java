@@ -13,6 +13,7 @@ public class InputReader implements KeyListener {
 	private String CWID = "";
 	private String input;
 	private MainGUI gui;
+	private static int errorCount = 0;
 	
 	public InputReader() {
 		input = "";
@@ -30,13 +31,13 @@ public class InputReader implements KeyListener {
 	public void strip() throws InputReaderException {
 		if (input.startsWith(start)) {
 			CWID = input.substring(10, 18);
-			System.out.println("Your CWID is " + CWID);
+//			System.out.println("Your CWID is " + CWID);
 		}
-		else if (input.contains(error))
-			throw new InputReaderException("An error has occured. Please try again.");
-		else if (input.length() == 8) {
-			CWID = input;
-			System.out.println("Your CWID is " + input);
+		else if (input.contains(error)) {
+			++errorCount;
+			throw new InputReaderException("Card read error. Please try again.");
+		} else if ( input.length() < 10 ) {
+			throw new InputReaderException("Error. Please swipe your blastercard.");
 		}
 		else
 			throw new InputReaderException("The card is not a blastercard.");
@@ -54,7 +55,7 @@ public class InputReader implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 		if ( e.getKeyChar() != '\n') {
 			input += e.getKeyChar();
-			System.out.println(input);
+//			System.out.println(input);
 		}
 		
 		else {
@@ -71,6 +72,14 @@ public class InputReader implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
+	}
+	
+	public static int getErrorCount() {
+		return errorCount;
+	}
+	
+	public static void resetErrorCount() {
+		errorCount = 0;
 	}
 
 }
