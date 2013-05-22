@@ -13,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
+import main.Administrator;
+import main.User;
+
 public class HomeScreen extends JFrame {
 	
 	private JPanel headerBar;
@@ -21,7 +24,7 @@ public class HomeScreen extends JFrame {
 	private Clock time;
 	private Font headerFont;
 	
-	public HomeScreen(String userName) {
+	public HomeScreen(User currentUser) {
 		
 		setSize(800, 700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,6 +33,8 @@ public class HomeScreen extends JFrame {
 		calendar = Calendar.getInstance();
 		
 		headerBar = new JPanel(new GridLayout(1, 3));
+		
+		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
 		JLabel nameLabel = new JLabel(userName);
 		JLabel centerLabel = new JLabel("");
@@ -45,11 +50,15 @@ public class HomeScreen extends JFrame {
 		
 		centerPanel = new JPanel(new BorderLayout());
 		
-		centerPanel = new SystemAdminGUI();
-		//AdminGUI g = new AdminGUI();
-		//DataEntryGUI g = new DataEntryGUI();
-		//SystemAdminGUI g = new SystemAdminGUI();
-		//UserGUI g = new UserGUI();
+		if ( currentUser.isAdmin() ) {
+			if ( ((Administrator) currentUser).isSystemAdmin() ) {
+				centerPanel = new SystemAdminGUI();
+			} else {
+				centerPanel = new AdminGUI();
+			}
+		} else {
+			centerPanel = new UserGUI();
+		}
 		add(centerPanel, BorderLayout.CENTER);
 		
 		setVisible(true);

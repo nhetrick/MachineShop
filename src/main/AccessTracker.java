@@ -85,16 +85,52 @@ public class AccessTracker {
 	// of current users, and persisted to the database.
 	// Also adds data to the log for this user
 	// Returns the name of the user with this CWID
-	public String processLogIn(int CWID) {
+	public User processLogIn(int CWID) {
 		// IF the user with this CWID is locked (boolean isLocked)
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
-		System.out.println("inside processLogIn");
+		
+		User currentUser;
+		boolean isAdministrator;
+		boolean isSystemAdministrator;
+		
+		if ( !checkLegitimacy(CWID) ) {
+			// DO_SOMETHING
+		}
+		
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
 		DBObject result = cursor.next();
-		String userName = (String) result.get("firstName") + " " + (String) result.get("lastName");
-		return userName;
+		
+		if (result.get("isAdmin") == null) {
+			isAdministrator = false;
+		} else {
+			isAdministrator = (boolean) result.get("isAdmin");
+		}
+		
+		if ( result.get("isSystemAdmin") == null ) {
+			isSystemAdministrator = false;
+		} else {
+			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
+		}
+		
+		String firstName = (String) result.get("firstName");
+		String lastName = (String) result.get("lastName");
+		
+		if ( isAdministrator ) {
+			if ( isSystemAdministrator ) {
+				currentUser = new SystemAdministrator(firstName, lastName, CWID);
+			} else {
+				currentUser = new Administrator(firstName, lastName, CWID);
+			}
+		}  else {
+			currentUser = new User(firstName, lastName, CWID);
+		}
+		
+		currentUsers.add(currentUser);
+		
+		return currentUser;
+		
 	}
 	
 	public void displayUserMachines(int CWID) {
