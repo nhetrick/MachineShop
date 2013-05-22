@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
+import main.Administrator;
+import main.User;
+
 public class HomeScreen extends JFrame {
 	private Toolkit tk;
 	private JPanel headerBar;
@@ -25,10 +28,18 @@ public class HomeScreen extends JFrame {
 	private Clock time;
 	private Font headerFont;
 	
-	public HomeScreen(String userName) {
+//<<<<<<< HEAD
+//	public HomeScreen(String userName) {
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+//=======
+	public HomeScreen(User currentUser) {
 		tk = Toolkit.getDefaultToolkit();
 		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+
+//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
 		
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setUndecorated(true);
@@ -40,6 +51,8 @@ public class HomeScreen extends JFrame {
 		calendar = Calendar.getInstance();
 		
 		headerBar = new JPanel(new GridLayout(1, 3));
+		
+		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
 		JLabel nameLabel = new JLabel(userName);
 		JLabel centerLabel = new JLabel("");
@@ -55,11 +68,15 @@ public class HomeScreen extends JFrame {
 		
 		centerPanel = new JPanel(new BorderLayout());
 		
-		centerPanel = new SystemAdminGUI();
-		//AdminGUI g = new AdminGUI();
-		//DataEntryGUI g = new DataEntryGUI();
-		//SystemAdminGUI g = new SystemAdminGUI();
-		//UserGUI g = new UserGUI();
+		if ( currentUser.isAdmin() ) {
+			if ( ((Administrator) currentUser).isSystemAdmin() ) {
+				centerPanel = new SystemAdminGUI();
+			} else {
+				centerPanel = new AdminGUI();
+			}
+		} else {
+			centerPanel = new UserGUI();
+		}
 		add(centerPanel, BorderLayout.CENTER);
 		
 		setVisible(true);

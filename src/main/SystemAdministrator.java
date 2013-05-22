@@ -6,6 +6,7 @@ public class SystemAdministrator extends Administrator {
 	
 	public SystemAdministrator(String firstName, String lastName, int CWID) {
 		super(firstName, lastName, CWID);
+		isSystemAdmin = true;
 	}
 	
 	public void addAdministrator(User user) {
