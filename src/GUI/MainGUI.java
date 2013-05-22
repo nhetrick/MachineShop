@@ -1,11 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -33,17 +29,12 @@ public class MainGUI extends JFrame{
 	private Calendar calendar;
 	private Clock time;
 	private Font headerFont;
+	private JPanel currentPanel;
 
 	public MainGUI() {
-		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		reader = new InputReader(this);
-		messageFont = new Font("SansSerif", Font.BOLD, 42);
-		JLabel message = new JLabel("Please swipe your Blastercard");
-		message.setFont(messageFont);
-		centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(message);
+		centerPanel = new SwipeCardPanel();
 		setup();
-
 	}
 
 	public void setup() {
@@ -72,6 +63,12 @@ public class MainGUI extends JFrame{
 		tracker.messAroundWithDatabase();
 	}
 
+	
+	public void restart() {
+		add(centerPanel);
+		setVisible(true);
+	}
+	
 	public void handleInput() {
 
 		InputReader inReader = (InputReader) reader;
@@ -143,24 +140,27 @@ public class MainGUI extends JFrame{
 		
 		add(headerBar, BorderLayout.NORTH);
 		
-		homeCenterPanel = new JPanel(new BorderLayout());
+		homeCenterPanel = new JPanel();
 		
 		if ( currentUser.isAdmin() ) {
 			if ( ((Administrator) currentUser).isSystemAdmin() ) {
-				homeCenterPanel = new SystemAdminGUI();
+				homeCenterPanel = new SystemAdminGUI(this);
 			} else {
 				homeCenterPanel = new AdminGUI();
-			}
-		} else {
-			homeCenterPanel = new UserGUI();
 		}
+		} 	else {
+			homeCenterPanel = new UserGUI(this);
+		}
+		currentPanel = homeCenterPanel;
 		add(homeCenterPanel, BorderLayout.CENTER);
 		
 		setVisible(true);
 	}
-
+	
 	public static void main(String[] args) {
-		MainGUI m = new MainGUI();
+		MainGUI m = new MainGUI();	
 	}
+
+
 
 }

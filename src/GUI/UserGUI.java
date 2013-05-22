@@ -22,11 +22,11 @@ public class UserGUI extends JPanel {
 	private JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
-	
+	private MainGUI mainGui;
 	private Font buttonFont;
 	
-	public UserGUI() {
-		
+	public UserGUI(MainGUI mainGui) {
+		this.mainGui = mainGui;
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
@@ -73,11 +73,9 @@ public class UserGUI extends JPanel {
 	}
 
 	public class LogOutListner implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			mainGui = new MainGUI();
 		}
-		
 	}
 }
