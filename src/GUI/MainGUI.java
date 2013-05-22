@@ -47,18 +47,20 @@ public class MainGUI extends JFrame{
 	}
 
 	public void setup() {
-		//set the cursor to invisible
+		//sets the cursor to invisible
 		tk = Toolkit.getDefaultToolkit();
 		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
-		//set the screen to full screen
+		//sets the screen to full screen
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 		setResizable(false);
-
+		
 		setLayout(new GridBagLayout());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//disables Alt+F4
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		add(centerPanel);
 		setVisible(true);

@@ -29,8 +29,8 @@ public class InputReader implements KeyListener {
 	}
 	
 	public void strip() throws InputReaderException {
-		if (input.startsWith(start)) {
-			CWID = input.substring(10, 18);
+		if (input.contains(start)) {
+			CWID = input.split(start)[1].substring(0, 8);
 //			System.out.println("Your CWID is " + CWID);
 		}
 		else if (input.contains(error)) {

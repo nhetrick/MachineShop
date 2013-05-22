@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -67,6 +69,15 @@ public class UserGUI extends JPanel {
 		
 		add(centerPanel, BorderLayout.CENTER);
 		
+		logOut.addActionListener(new LogOutListner());
 	}
-	
+
+	public class LogOutListner implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+		
+	}
 }
