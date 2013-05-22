@@ -2,8 +2,15 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -11,21 +18,26 @@ import javax.swing.JPanel;
 
 import main.*;
 
-public class MainGUI {
-
+public class MainGUI extends JFrame{
+	private Toolkit tk;
 	private JFrame frame;
 	private Font messageFont;
 	private KeyListener reader = new InputReader(this);
 	private AccessTracker tracker;
 	
 	public MainGUI() {
-
+		tk = Toolkit.getDefaultToolkit();
+		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		
-		frame = new JFrame();
-		frame.setSize(800, 700);
-		frame.setLayout(new GridBagLayout());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame = new JFrame();
+		setExtendedState(MAXIMIZED_BOTH);
+		setLayout(new GridBagLayout());
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		setUndecorated(true);
+		setResizable(false);
 		
 		JLabel message = new JLabel("Please swipe your Blastercard");
 		message.setFont(messageFont);
@@ -33,11 +45,11 @@ public class MainGUI {
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(message);
 
-		frame.add(centerPanel);
-		frame.setVisible(true);
+		add(centerPanel);
+		setVisible(true);
 		
-		frame.addKeyListener(reader);
-		frame.setFocusable(true);
+		addKeyListener(reader);
+		setFocusable(true);
 		
 		tracker = new AccessTracker();
 		tracker.messAroundWithDatabase();
@@ -54,9 +66,10 @@ public class MainGUI {
 				int CWID = Integer.parseInt(inReader.getCWID());
 				System.out.println("Parsed the int");
 				String userName = tracker.processLogIn(CWID);
-				//frame.setVisible(false);
-				frame = new HomeScreen(userName);
-				//frame.setVisible(true);
+				//setVisible(false);
+				//frame = new HomeScreen(userName);
+				add(new HomeScreen(userName));
+				//setVisible(true);
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
