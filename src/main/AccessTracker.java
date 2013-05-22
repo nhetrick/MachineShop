@@ -2,6 +2,8 @@ package main;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -93,13 +95,24 @@ public class AccessTracker {
 		User currentUser;
 		boolean isAdministrator;
 		boolean isSystemAdministrator;
-		
-		if ( !checkLegitimacy(CWID) ) {
-			// DO_SOMETHING
-		}
+		String firstName = "";
+		String lastName = "";
 		
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
+		
+		if ( !cursor.hasNext() ) {
+			if ( !checkLegitimacy(CWID) ) {
+				// DO_SOMETHING
+			} else {
+				
+				// FOR NOW (UNTIL WE GET BLASTERCARD DATABASE ACCESS)
+				firstName = JOptionPane.showInputDialog("Enter your first name.");
+				lastName = JOptionPane.showInputDialog("Enter your last name.");
+				createUser(firstName, lastName, CWID);
+			}			
+		}
+				
 		DBObject result = cursor.next();
 		
 		if (result.get("isAdmin") == null) {
@@ -114,8 +127,8 @@ public class AccessTracker {
 			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
 		}
 		
-		String firstName = (String) result.get("firstName");
-		String lastName = (String) result.get("lastName");
+		firstName = (String) result.get("firstName");
+		lastName = (String) result.get("lastName");
 		
 		if ( isAdministrator ) {
 			if ( isSystemAdministrator ) {
