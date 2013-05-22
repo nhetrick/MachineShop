@@ -19,7 +19,6 @@ import main.*;
 
 public class MainGUI extends JFrame{
 	private Toolkit tk;
-	private Font messageFont;
 	private KeyListener reader; 
 	private AccessTracker tracker;
 	private User currentUser;

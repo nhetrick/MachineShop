@@ -75,6 +75,7 @@ public class UserGUI extends JPanel {
 	public class LogOutListner implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// TODO create new for now, needs to just restart
 			mainGui = new MainGUI();
 		}
 	}
