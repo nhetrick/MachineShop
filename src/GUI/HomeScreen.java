@@ -28,23 +28,15 @@ public class HomeScreen extends JFrame {
 	private Clock time;
 	private Font headerFont;
 	
-//<<<<<<< HEAD
-//	public HomeScreen(String userName) {
-//		tk = Toolkit.getDefaultToolkit();
-//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
-//=======
 	public HomeScreen(User currentUser) {
 		tk = Toolkit.getDefaultToolkit();
 		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
-//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
-		
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		setResizable(false);
-//		setSize(800, 700);
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		headerFont = new Font("SansSerif", Font.BOLD, 32);
 		
