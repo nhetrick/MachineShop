@@ -2,8 +2,15 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -11,8 +18,8 @@ import javax.swing.JPanel;
 
 import main.*;
 
-public class MainGUI {
-
+public class MainGUI extends JFrame{
+	private Toolkit tk;
 	private JFrame frame;
 	private Font messageFont;
 	private KeyListener reader; 
@@ -21,7 +28,34 @@ public class MainGUI {
 	private JPanel centerPanel;
 
 	public MainGUI() {
-
+//<<<<<<< HEAD
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+//		messageFont = new Font("SansSerif", Font.BOLD, 42);
+//		
+//		//frame = new JFrame();
+//		setExtendedState(MAXIMIZED_BOTH);
+//		setLayout(new GridBagLayout());
+//		setDefaultCloseOperation(EXIT_ON_CLOSE);
+//		
+//		setUndecorated(true);
+//		setResizable(false);
+//		
+//		JLabel message = new JLabel("Please swipe your Blastercard");
+//		message.setFont(messageFont);
+//
+//		JPanel centerPanel = new JPanel(new BorderLayout());
+//		centerPanel.add(message);
+//
+//		add(centerPanel);
+//		setVisible(true);
+//		
+//		addKeyListener(reader);
+//		setFocusable(true);
+//		
+//=======
+		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		reader = new InputReader(this);
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		JLabel message = new JLabel("Please swipe your Blastercard");
@@ -33,9 +67,18 @@ public class MainGUI {
 	}
 
 	public void setup() {
+		
+		tk = Toolkit.getDefaultToolkit();
+		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		frame = new JFrame();
-		frame.setSize(800, 700);
+//		frame.setSize(800, 700);
+		
+		frame.setExtendedState(MAXIMIZED_BOTH);
+		frame.setUndecorated(true);
+		frame.setResizable(false);
+		
 		frame.setLayout(new GridBagLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -45,6 +88,7 @@ public class MainGUI {
 		frame.addKeyListener(reader);
 		frame.setFocusable(true);
 
+//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
 		tracker = new AccessTracker();
 		tracker.messAroundWithDatabase();
 	}
@@ -58,11 +102,21 @@ public class MainGUI {
 		try {
 			inReader.strip();
 			if ( !inReader.getCWID().equals("") ) {
+//<<<<<<< HEAD
+//				int CWID = Integer.parseInt(inReader.getCWID());
+//				System.out.println("Parsed the int");
+//				String userName = tracker.processLogIn(CWID);
+//				//setVisible(false);
+//				//frame = new HomeScreen(userName);
+//				add(new HomeScreen(userName));
+//				//setVisible(true);
+//=======
 				CWID = Integer.parseInt(inReader.getCWID());
 				currentUser = tracker.processLogIn(CWID);
 				frame.dispose();
 				frame = new HomeScreen(currentUser);
 				InputReader.resetErrorCount();
+//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
