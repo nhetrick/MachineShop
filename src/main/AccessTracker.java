@@ -1,7 +1,6 @@
 package main;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Set;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -9,7 +8,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoURI;
 
 public class AccessTracker {
 	
@@ -78,7 +76,7 @@ public class AccessTracker {
 	
 	// Creates a new user. Should be called by processLogIn()
 	public void createUser(String firstName, String lastName, int CWID) {
-		
+
 	}
 	
 	// Takes a CWID and attempts to load that user from the
@@ -86,11 +84,17 @@ public class AccessTracker {
 	// If the CWID doesn't exist, a new user is created, added to the list
 	// of current users, and persisted to the database.
 	// Also adds data to the log for this user
-	public void processLogIn(int CWID) {
+	// Returns the name of the user with this CWID
+	public String processLogIn(int CWID) {
 		// IF the user with this CWID is locked (boolean isLocked)
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
-	
+		System.out.println("inside processLogIn");
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
+		DBObject result = cursor.next();
+		String userName = (String) result.get("firstName") + " " + (String) result.get("lastName");
+		return userName;
 	}
 	
 	public void displayUserMachines(int CWID) {

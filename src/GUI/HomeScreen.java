@@ -21,7 +21,7 @@ public class HomeScreen extends JFrame {
 	private Clock time;
 	private Font headerFont;
 	
-	public HomeScreen() {
+	public HomeScreen(String userName) {
 		
 		setSize(800, 700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +31,7 @@ public class HomeScreen extends JFrame {
 		
 		headerBar = new JPanel(new GridLayout(1, 3));
 		
-		JLabel nameLabel = new JLabel("Taylor Sallee");
+		JLabel nameLabel = new JLabel(userName);
 		JLabel centerLabel = new JLabel("");
 		time = new Clock(headerFont);
 		

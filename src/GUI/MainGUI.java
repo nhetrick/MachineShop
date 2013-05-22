@@ -16,6 +16,8 @@ public class MainGUI {
 	private JFrame frame;
 	private Font messageFont;
 	private KeyListener reader = new InputReader(this);
+	private AccessTracker tracker;
+	
 	public MainGUI() {
 
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
@@ -33,30 +35,28 @@ public class MainGUI {
 
 		frame.add(centerPanel);
 		frame.setVisible(true);
-
-		boolean bool = false;
-		if ( bool ) {		
-			frame = new HomeScreen();
-		}
 		
 		frame.addKeyListener(reader);
 		frame.setFocusable(true);
 		
-		AccessTracker tracker = new AccessTracker();
+		tracker = new AccessTracker();
 		tracker.messAroundWithDatabase();
 		
 	}
 
 	public void handleInput() {
 		
-		String input = ((InputReader) reader).getInput();
-
+		InputReader inReader = (InputReader) reader;
+		
 		try {
-			((InputReader) reader).strip();
-			if ( !((InputReader) reader).getCWID().equals("") ) {
-				frame.setVisible(false);
-				frame = new HomeScreen();
-				frame.setVisible(true);
+			inReader.strip();
+			if ( !inReader.getCWID().equals("") ) {
+				int CWID = Integer.parseInt(inReader.getCWID());
+				System.out.println("Parsed the int");
+				String userName = tracker.processLogIn(CWID);
+				//frame.setVisible(false);
+				frame = new HomeScreen(userName);
+				//frame.setVisible(true);
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
