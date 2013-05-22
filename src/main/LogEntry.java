@@ -3,6 +3,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 public class LogEntry {
 	private int ID;
 	private User user;
@@ -12,12 +18,15 @@ public class LogEntry {
 	private Date timeIn;
 	private ArrayList<Tool> toolsReturned;
 	private Calendar calendar;
+	private DB database;
 	
-	public LogEntry() {
+	public LogEntry(DB database) {
 		calendar = Calendar.getInstance();
 		timeOut = null;
+		this.database = database;
 	}
 	
+	// FOR TESTING PURPOSES ONLY
 	public void startEntry(User user, ArrayList<Machine> machinesUsed, ArrayList<Tool> toolsCheckedOut, ArrayList<Tool> toolsReturned) {
 		// AUTO-GENERATE ID
 		this.ID = Log.getNumEntries();
@@ -29,9 +38,77 @@ public class LogEntry {
 		Log.incrementNumEntries();
 	}
 	
+	public void startEntry(User user) {
+		// AUTO-GENERATE ID
+		this.ID = Log.getNumEntries();
+		this.timeIn = calendar.getTime();
+		this.user = user;
+		this.machinesUsed = new ArrayList<Machine>();
+		this.toolsCheckedOut = new ArrayList<Tool>();
+		this.toolsReturned = new ArrayList<Tool>();
+		Log.incrementNumEntries();
+		
+		BasicDBObject logEntry = new BasicDBObject();
+		logEntry.put("ID", ID);
+		logEntry.put("timeIn", timeIn);
+		logEntry.put("userCWID", user.getCWID());
+		
+		DBCollection logEntries = database.getCollection("LogEntries"); 
+		logEntries.insert(logEntry);
+	}
+	
+	public void addMachinesUsed(ArrayList<Machine> machinesUsed) {
+		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
+		DBObject result = cursor.next();
+		
+		BasicDBObject machines = new BasicDBObject();
+		for(Machine m : machinesUsed) {
+			machines.put(String.valueOf(machinesUsed.indexOf(m)), m.getID());
+		}
+		result.put("machinesUsed", machines);
+		
+		logEntries.update(new BasicDBObject("ID", ID), result);
+	}
+	
+	public void addToolsCheckedOut(ArrayList<Tool> toolsCheckedOut) {
+		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
+		DBObject result = cursor.next();
+		
+		BasicDBObject tools = new BasicDBObject();
+		for(Tool t : toolsCheckedOut) {
+			tools.put(String.valueOf(toolsCheckedOut.indexOf(t)), t.getUPC());
+		}
+		result.put("toolsCheckedOut", tools);
+		
+		logEntries.update(new BasicDBObject("ID", ID), result);
+	}
+	
+	public void addToolsReturned( ArrayList<Tool> toolsReturned) {
+		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
+		DBObject result = cursor.next();
+		
+		BasicDBObject tools = new BasicDBObject();
+		for(Tool t : toolsReturned) {
+			tools.put(String.valueOf(toolsReturned.indexOf(t)), t.getUPC());
+		}
+		result.put("toolsReturned", tools);
+		
+		logEntries.update(new BasicDBObject("ID", ID), result);
+	}
+	
 	public void finishEntry() {
 		this.timeOut = calendar.getTime();
-		Log.finishEntry(this);
+		
+		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
+		DBObject result = cursor.next();
+		
+		result.put("timeOut", timeOut);
+		
+		logEntries.update(new BasicDBObject("ID", ID), result);
 	}
 	
 	public Date getTimeIn() {

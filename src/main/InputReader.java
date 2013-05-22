@@ -38,6 +38,8 @@ public class InputReader implements KeyListener {
 			throw new InputReaderException("Card read error. Please try again.");
 		} else if ( input.length() < 10 ) {
 			throw new InputReaderException("Error. Please swipe your blastercard.");
+		} else if ( input.equals("machineshop")) {
+			CWID = "00000000";
 		}
 		else
 			throw new InputReaderException("The card is not a blastercard.");

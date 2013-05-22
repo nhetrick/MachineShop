@@ -12,6 +12,10 @@ public class Machine {
 	public String getID() {
 		return ID;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public boolean equals(Object o) {

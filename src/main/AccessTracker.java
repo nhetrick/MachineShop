@@ -18,12 +18,11 @@ public class AccessTracker {
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private InputReader inputReader;
-	private Log log;
-	private DB database;
+	private static DB database;
 	private final String hostName = "dharma.mongohq.com";
 	private final int port = 10096;
 	private final String dbName = "CSM_Machine_Shop";
-	private final String username = "tsallee";
+	private final String username = "csm";
 	private final String password = "machineshop";
 	
 	public AccessTracker() {
@@ -32,9 +31,13 @@ public class AccessTracker {
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
+		
 		// Do the initialization stuff for the log and database
 		databaseSetup();
 		Log.setup();
+		
+		loadMachines();
+		System.out.println(machines.get(0).getName());
 	}
 	
 	private void databaseSetup() {
@@ -46,53 +49,13 @@ public class AccessTracker {
 			e.printStackTrace();
 		}
 	}
-	
-	public void messAroundWithDatabase() {
-		DBCollection tools = database.getCollection("Tools");
-		DBCursor cursor = tools.find(new BasicDBObject("upc", 100));
-		while ( cursor.hasNext() ) {
-			DBObject result = cursor.next();
-			System.out.println((String) result.get("name"));
-		}
-	}
-	
-	public boolean userExistsInDataBase(int CWID) {
-		return false;
-	}
-	
-	// Loads an existing user from the database into RAM
-	// The user is found by querying by CWID
-	public User loadUser(int CWID) {
-		return new User("", "", 0);
-	}
-	
-	// Loads all the tools from the database into RAM
-	public void loadTools() {
-		// tools = db.get(tools);
-	}
-	
-	// Loads all the machines from the database into RAM
-	public void loadMachines() {
-		// tools = db.get(machines);
-	}
-	
-	// Creates a new user. Should be called by processLogIn()
-	public void createUser(String firstName, String lastName, int CWID) {
-
-	}
-	
+		
 	// Takes a CWID and attempts to load that user from the
 	// database and add them to the list of current users.
-	// If the CWID doesn't exist, a new user is created, added to the list
-	// of current users, and persisted to the database.
-	// Also adds data to the log for this user
+	// If the CWID doesn't exist, create new user.
 	// Returns the name of the user with this CWID
-	public User processLogIn(int CWID) {
-		// IF the user with this CWID is locked (boolean isLocked)
-		// THEN display some error message, and make a note somewhere
-		// (log this attempt for admin to view later)
-		
-		User currentUser;
+	public User loadUser(int CWID) {
+		User currentUser = new User("", "", 0);
 		boolean isAdministrator;
 		boolean isSystemAdministrator;
 		String firstName = "";
@@ -105,48 +68,120 @@ public class AccessTracker {
 			if ( !checkLegitimacy(CWID) ) {
 				// DO_SOMETHING
 			} else {
-				
 				// FOR NOW (UNTIL WE GET BLASTERCARD DATABASE ACCESS)
 				firstName = JOptionPane.showInputDialog("Enter your first name.");
 				lastName = JOptionPane.showInputDialog("Enter your last name.");
-				createUser(firstName, lastName, CWID);
+				currentUser = createUser(firstName, lastName, CWID);
 			}			
-		}
-				
-		DBObject result = cursor.next();
-		
-		if (result.get("isAdmin") == null) {
-			isAdministrator = false;
 		} else {
-			isAdministrator = (boolean) result.get("isAdmin");
-		}
-		
-		if ( result.get("isSystemAdmin") == null ) {
-			isSystemAdministrator = false;
-		} else {
-			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
-		}
-		
-		firstName = (String) result.get("firstName");
-		lastName = (String) result.get("lastName");
-		
-		if ( isAdministrator ) {
-			if ( isSystemAdministrator ) {
-				currentUser = new SystemAdministrator(firstName, lastName, CWID);
+			DBObject result = cursor.next();
+
+			if (result.get("isAdmin") == null) {
+				isAdministrator = false;
 			} else {
-				currentUser = new Administrator(firstName, lastName, CWID);
+				isAdministrator = (boolean) result.get("isAdmin");
 			}
-		}  else {
-			currentUser = new User(firstName, lastName, CWID);
+
+			if ( result.get("isSystemAdmin") == null ) {
+				isSystemAdministrator = false;
+			} else {
+				isSystemAdministrator = (boolean) result.get("isSystemAdmin");
+			}
+
+			firstName = (String) result.get("firstName");
+			lastName = (String) result.get("lastName");
+
+			if ( isAdministrator ) {
+				if ( isSystemAdministrator ) {
+					currentUser = new SystemAdministrator(firstName, lastName, CWID);
+				} else {
+					currentUser = new Administrator(firstName, lastName, CWID);
+				}
+			}  else {
+				currentUser = new User(firstName, lastName, CWID);
+			}
+			
+//			ArrayList<String> machineIDs = new ArrayList<String>();
+//			
+//			DBCollection ids = (DBCollection) result.get("certifiedMachines");
+//			cursor = ids.find();
+//			while ( cursor.hasNext() ) {
+//				String id = (String) cursor.next().get(SOMETHING);
+//			}
+//			
+//			loadUserMachines(currentUser);
+//			loadUserTools(currentUser);
+			
 		}
 		
+		return currentUser;
+	}
+	
+	private void loadUserTools(User user) {
+		
+	}
+
+	private void loadUserMachines(User user) {
+		
+	}
+
+	// Loads all the tools from the database into RAM
+	public void loadTools() {
+		DBCollection allTools = database.getCollection("Tools");
+		DBCursor cursor = allTools.find();
+		while(cursor.hasNext()) {
+			DBObject tool = cursor.next();
+			Tool t = new Tool((String) tool.get("name"), (int) tool.get("upc"));
+			tools.add(t);
+		}
+	}
+	
+	// Loads all the machines from the database into RAM
+	public void loadMachines() {
+		DBCollection allMachines = database.getCollection("Machines");
+		DBCursor cursor = allMachines.find();
+		while(cursor.hasNext()) {
+			DBObject machine = cursor.next();
+			Machine m = new Machine((String) machine.get("name"), (String) machine.get("ID"));
+			machines.add(m);
+		}
+	}
+	
+	// Creates a new user. Should be called by loadUser()
+	// Persists new user to database
+	public User createUser(String firstName, String lastName, int CWID) {
+		User newUser = new User(firstName, lastName, CWID);
+		
+		BasicDBObject document = new BasicDBObject();
+		document.put("firstName", firstName);
+		document.put("lastName", lastName);
+		document.put("CWID", CWID);
+		
+		DBCollection users = database.getCollection("Users");
+		
+		users.insert(document);
+		
+		return newUser;
+	}
+	
+	// Loads the user with this CWID to list of current users
+	// Adds entry to log
+	public User processLogIn(int CWID) {
+		// IF the user with this CWID is locked (boolean isLocked)
+		// THEN display some error message, and make a note somewhere
+		// (log this attempt for admin to view later)
+		User currentUser = loadUser(CWID);
 		currentUsers.add(currentUser);
+		
+		//Log.startEntry(currentUser);
+		
+		displayUserMachines(currentUser);
 		
 		return currentUser;
 		
 	}
 	
-	public void displayUserMachines(int CWID) {
+	public void displayUserMachines(User user) {
 		
 	}
 	
@@ -168,7 +203,7 @@ public class AccessTracker {
 	
 	// Check that the CWID exists in the blastercard database
 	public boolean checkLegitimacy(int CWID) {
-		return false;
+		return true;
 	}
 
 	
@@ -185,10 +220,6 @@ public class AccessTracker {
 		return currentUsers;
 	}
 
-	public Log getLog() {
-		return log;
-	}
-
 	public ArrayList<Machine> getMachines() {
 		return machines;
 	}
@@ -199,6 +230,10 @@ public class AccessTracker {
 
 	public ArrayList<Tool> getAvailableTools() {
 		return availableTools;
+	}
+	
+	public static DB getDatabase() {
+		return database;
 	}
 	
 }

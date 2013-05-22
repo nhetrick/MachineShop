@@ -22,4 +22,13 @@ public class Tool {
 	public boolean isCheckedOut() {
 		return isCheckedOut;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getUPC() {
+		return UPC;
+	}
+
 }

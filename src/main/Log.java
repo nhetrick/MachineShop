@@ -2,6 +2,8 @@ package main;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.mongodb.DB;
+
 // This class is a static class that only accesses the log entries
 // in the database and puts them in the "result" ArrayList for access
 // by other classes. It also persists new log entries to the database.
@@ -9,6 +11,7 @@ import java.util.Date;
 public class Log {
 	private static ArrayList<LogEntry> result;
 	private static Date lastUpdate;
+	private static DB database;
 	
 	private static int numEntries;
 	
@@ -17,6 +20,8 @@ public class Log {
 		lastUpdate = new Date();
 		// set numEntries to the number of log entries in
 		// the database.
+		database = AccessTracker.getDatabase();
+		numEntries = (int) database.getCollection("LogEntries").count();
 	}
 	
 	public static void printLog() {
@@ -43,12 +48,13 @@ public class Log {
 		
 	}
 	
+	public static void startEntry(User user) {
+		LogEntry entry = new LogEntry(database);
+		entry.startEntry(user);
+	}
+	
 	public static void finishEntry(LogEntry entry) {
-		// The entry being updated just needs a time out. So we get
-		// the time out from "entry" and update the corresponding entry
-		// in the database with the correct time out.
-		// Something like this
-		// db.get(LogEntries).get(entry.getID()).setTimeOut(entry.getTimeOut());
+		entry.finishEntry();
 	}
 
 	public static void incrementNumEntries() {
