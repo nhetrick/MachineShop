@@ -40,13 +40,14 @@ public class MainGUI extends JFrame{
 	}
 
 	public void setup() {
-		
-		tk = Toolkit.getDefaultToolkit();
-		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+		//invisible mouse
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		frame = new JFrame();
 		
+		//full screen
 		frame.setExtendedState(MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
 		frame.setResizable(false);

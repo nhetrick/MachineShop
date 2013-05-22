@@ -37,7 +37,7 @@ public class HomeScreen extends JFrame {
 		setUndecorated(true);
 		setResizable(false);
 		
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		headerFont = new Font("SansSerif", Font.BOLD, 32);
 		
 		calendar = Calendar.getInstance();
