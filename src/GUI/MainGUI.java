@@ -28,33 +28,6 @@ public class MainGUI extends JFrame{
 	private JPanel centerPanel;
 
 	public MainGUI() {
-//<<<<<<< HEAD
-//		tk = Toolkit.getDefaultToolkit();
-//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
-//		messageFont = new Font("SansSerif", Font.BOLD, 42);
-//		
-//		//frame = new JFrame();
-//		setExtendedState(MAXIMIZED_BOTH);
-//		setLayout(new GridBagLayout());
-//		setDefaultCloseOperation(EXIT_ON_CLOSE);
-//		
-//		setUndecorated(true);
-//		setResizable(false);
-//		
-//		JLabel message = new JLabel("Please swipe your Blastercard");
-//		message.setFont(messageFont);
-//
-//		JPanel centerPanel = new JPanel(new BorderLayout());
-//		centerPanel.add(message);
-//
-//		add(centerPanel);
-//		setVisible(true);
-//		
-//		addKeyListener(reader);
-//		setFocusable(true);
-//		
-//=======
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		reader = new InputReader(this);
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
@@ -73,7 +46,6 @@ public class MainGUI extends JFrame{
 		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		frame = new JFrame();
-//		frame.setSize(800, 700);
 		
 		frame.setExtendedState(MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
@@ -88,7 +60,6 @@ public class MainGUI extends JFrame{
 		frame.addKeyListener(reader);
 		frame.setFocusable(true);
 
-//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
 		tracker = new AccessTracker();
 		tracker.messAroundWithDatabase();
 	}
@@ -102,21 +73,11 @@ public class MainGUI extends JFrame{
 		try {
 			inReader.strip();
 			if ( !inReader.getCWID().equals("") ) {
-//<<<<<<< HEAD
-//				int CWID = Integer.parseInt(inReader.getCWID());
-//				System.out.println("Parsed the int");
-//				String userName = tracker.processLogIn(CWID);
-//				//setVisible(false);
-//				//frame = new HomeScreen(userName);
-//				add(new HomeScreen(userName));
-//				//setVisible(true);
-//=======
 				CWID = Integer.parseInt(inReader.getCWID());
 				currentUser = tracker.processLogIn(CWID);
 				frame.dispose();
 				frame = new HomeScreen(currentUser);
 				InputReader.resetErrorCount();
-//>>>>>>> 4c76383272b3b7c9bb0fe027ba29ce640034da92
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
