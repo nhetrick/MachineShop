@@ -158,7 +158,7 @@ public class MainGUI extends JFrame{
 	}
 
 	public static void main(String[] args) {
-		MainGUI m = new MainGUI();	
+		MainGUI m = new MainGUI();
 	}
 
 }
