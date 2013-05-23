@@ -95,7 +95,7 @@ public class AccessTracker {
 		boolean isSystemAdministrator;
 		
 		if ( !checkLegitimacy(CWID) ) {
-			// DO_SOMETHING
+			// TODO DO_SOMETHING
 		}
 		
 		DBCollection users = database.getCollection("Users");
@@ -127,7 +127,8 @@ public class AccessTracker {
 			currentUser = new User(firstName, lastName, CWID);
 		}
 		
-		currentUsers.add(currentUser);
+		if (!currentUsers.contains(currentUser)) 
+			currentUsers.add(currentUser);
 		
 		return currentUser;
 		

@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -50,7 +51,7 @@ public class MainGUI extends JFrame{
 		setLayout(new GridBagLayout());
 		
 		//disables Alt+F4
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		add(centerPanel);
 		setVisible(true);
@@ -64,8 +65,13 @@ public class MainGUI extends JFrame{
 
 	
 	public void restart() {
+		remove(headerBar);
+		remove(homeCenterPanel);
+		setLayout(new GridBagLayout());
 		add(centerPanel);
 		setVisible(true);
+		repaint();
+		System.out.println(tracker.getCurrentUsers());
 	}
 	
 	public void handleInput() {
@@ -155,11 +161,4 @@ public class MainGUI extends JFrame{
 		
 		setVisible(true);
 	}
-	
-	public static void main(String[] args) {
-		MainGUI m = new MainGUI();	
-	}
-
-
-
 }

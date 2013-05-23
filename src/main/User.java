@@ -65,4 +65,8 @@ public class User {
 		User obj = (User) o;
 		return (this.CWID == obj.getCWID());
 	}
+	
+	public String toString() {
+		return firstName + lastName;
+	}
 }
