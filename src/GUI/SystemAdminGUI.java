@@ -16,10 +16,10 @@ public class SystemAdminGUI extends JPanel {
 	private User currentUser;
 	
 	private Font buttonFont;
+
 	
 	public SystemAdminGUI(User user) {
 		currentUser = user;
-		
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
@@ -50,6 +50,7 @@ public class SystemAdminGUI extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
+		basicUser.addActionListener(new ListenerHelpers.LogOutListner());
 		
 	}
 	
@@ -68,5 +69,4 @@ public class SystemAdminGUI extends JPanel {
 			centerPanel.add(new UserGUI(currentUser));
 		}
 	}
-
 }

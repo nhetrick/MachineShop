@@ -77,6 +77,7 @@ public class UserGUI extends JPanel {
 		
 		add(centerPanel, BorderLayout.CENTER);
 		
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 	}
 	
 	private void displayUserMachinePermissions() {

@@ -1,63 +1,89 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import main.*;
 
 public class MainGUI extends JFrame{
 	private Toolkit tk;
-	private JFrame frame;
-	private Font messageFont;
 	private KeyListener reader; 
 	private AccessTracker tracker;
 	private User currentUser;
 	private JPanel centerPanel;
+	private JPanel headerBar;
+	private JPanel homeCenterPanel;
+	private Calendar calendar;
+	private Clock time;
+	private Font headerFont;
+	private JPanel currentPanel;
+	private GridBagConstraints c = new GridBagConstraints();
 
 	public MainGUI() {
-		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		reader = new InputReader(this);
-		messageFont = new Font("SansSerif", Font.BOLD, 42);
-		JLabel message = new JLabel("Please swipe your Blastercard");
-		message.setFont(messageFont);
-		centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(message);
+		centerPanel = new SwipeCardPanel();
 		setup();
-
+		
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+			// use default
+		}
 	}
 
 	public void setup() {
-		//invisible mouse
-//		tk = Toolkit.getDefaultToolkit();
-//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+		//sets the cursor to invisible
+		tk = Toolkit.getDefaultToolkit();
+		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
-		frame = new JFrame();
+		//sets the screen to full screen
+		setExtendedState(MAXIMIZED_BOTH);
+		setUndecorated(true);
+		setResizable(false);
 		
-		//full screen
-		frame.setExtendedState(MAXIMIZED_BOTH);
-		frame.setUndecorated(true);
-		frame.setResizable(false);
+		setLayout(new GridBagLayout());
 		
-		frame.setLayout(new GridBagLayout());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//disables Alt+F4
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		frame.add(centerPanel);
-		frame.setVisible(true);
+		add(centerPanel);
+		setVisible(true);
 
-		frame.addKeyListener(reader);
-		frame.setFocusable(true);
+		addKeyListener(reader);
+		setFocusable(true);
 
 		tracker = new AccessTracker();
 	}
 
+	
+	public void restart() {
+		remove(headerBar);
+		remove(homeCenterPanel);
+		add(centerPanel);
+		setVisible(true);
+		repaint();
+		System.out.println(tracker.getCurrentUsers());
+	}
+	
 	public void handleInput() {
 
 		InputReader inReader = (InputReader) reader;
@@ -69,14 +95,15 @@ public class MainGUI extends JFrame{
 			if ( !inReader.getCWID().equals("") ) {
 				CWID = Integer.parseInt(inReader.getCWID());
 				currentUser = tracker.processLogIn(CWID);
-				frame.dispose();
-				frame = new HomeScreen(currentUser);
+				remove(centerPanel);
+				ProcessHomeScreen(currentUser);
+				repaint();
 				InputReader.resetErrorCount();
 			}
 		} catch (InputReaderException e) {
 			String message = e.getMessage();
 			if ( InputReader.getErrorCount() < 3 ) {
-				JOptionPane.showMessageDialog(frame, message);
+				JOptionPane.showMessageDialog(this, message);
 			} else {
 				String input = JOptionPane.showInputDialog("An Error has occurred. Please enter your CWID.");
 				if ( input == null ) {
@@ -94,8 +121,9 @@ public class MainGUI extends JFrame{
 					if ( !returnToStart ) {
 						CWID = Integer.parseInt(input);
 						currentUser = tracker.processLogIn(CWID);
-						frame.dispose();
-						frame = new HomeScreen(currentUser);
+						remove(centerPanel);
+						ProcessHomeScreen(currentUser);
+						repaint();
 						InputReader.resetErrorCount();
 					}
 				}
@@ -111,8 +139,52 @@ public class MainGUI extends JFrame{
 		return currentUser;
 	}
 
-	public static void main(String[] args) {
-		MainGUI m = new MainGUI();	
-	}
+	
+	public void ProcessHomeScreen(User currentUser) {
+		headerFont = new Font("SansSerif", Font.BOLD, 32);
+		
+		calendar = Calendar.getInstance();
+		
+		headerBar = new JPanel(new GridLayout(1, 3));
+		
+		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
+		
+		JLabel nameLabel = new JLabel(userName);
+		JLabel centerLabel = new JLabel("");
+		time = new Clock(headerFont);
+		
+		nameLabel.setFont(headerFont);
+		centerLabel.setFont(headerFont);
+		
+		headerBar.add(nameLabel);
+		headerBar.add(time);
 
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(headerBar, c);
+		
+		homeCenterPanel = new JPanel();
+		
+		if ( currentUser.isAdmin() ) {
+			if ( ((Administrator) currentUser).isSystemAdmin() ) {
+				homeCenterPanel = new SystemAdminGUI(currentUser);
+			} else {
+				homeCenterPanel = new AdminGUI(currentUser);
+		}
+		} 	else {
+			homeCenterPanel = new UserGUI(currentUser);
+		}
+		currentPanel = homeCenterPanel;
+		
+		c.gridy = 1;
+		c.gridx = 0;
+		c.weighty = 0.9;
+		c.fill = GridBagConstraints.BOTH;
+		add(homeCenterPanel, c);
+		
+		setVisible(true);
+	}
 }

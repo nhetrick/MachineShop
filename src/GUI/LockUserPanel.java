@@ -2,6 +2,8 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -13,9 +15,10 @@ public class LockUserPanel extends JPanel {
 	
 	JPanel contentPanel;
 	JPanel buttonPanel;
+	GridBagConstraints c = new GridBagConstraints();
 	
 	public LockUserPanel() {
-		setLayout(new BorderLayout());
+		setLayout(new GridBagLayout());
 		
 		contentPanel = new JPanel();
 		buttonPanel = new JPanel();
@@ -38,8 +41,14 @@ public class LockUserPanel extends JPanel {
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		
-		add(contentPanel, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.SOUTH);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		add(contentPanel, c);
 		
+		c.gridy = 3;
+		c.weightx = 0.5;
+		c.weighty = 0.5;
+		add(buttonPanel, c);
 	}
 }

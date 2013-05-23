@@ -1,7 +1,8 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,22 +14,34 @@ public class DataEntryGUI extends JPanel {
 	private JPanel centerPanel;
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
-	
+	private JPanel machinePermissions;
+	private JPanel checkedOutTools;
+	private GridBagConstraints c = new GridBagConstraints();
 	private Font buttonFont;
 	
 	public DataEntryGUI() {
 		
-		setLayout(new BorderLayout());
-		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+		setLayout(new GridBagLayout());
 		
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
-		centerPanel = new JPanel(new BorderLayout());
+		centerPanel = new JPanel();
 		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(9, 1));
 		
-		centerPanel.add(contentPanel, BorderLayout.CENTER);
-		centerPanel.add(buttonPanel, BorderLayout.EAST);
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 2;
+		c.anchor = GridBagConstraints.LINE_START;
+		
+		add(contentPanel, c);
+		
+		c.anchor = GridBagConstraints.LINE_END;
+		c.gridx = 1;
+		
+		add(buttonPanel, c);
 		
 		JButton logOut = new JButton();
 		JButton permissions = new JButton();
@@ -70,7 +83,6 @@ public class DataEntryGUI extends JPanel {
 		buttonPanel.add(list);
 		buttonPanel.add(logOut);
 		
-		add(centerPanel, BorderLayout.CENTER);
 		permissions.addActionListener(new PermissionsButtonListener());
 		users.addActionListener(new UsersButtonListener());
 		tools.addActionListener(new ToolsButtonListener());
@@ -79,6 +91,7 @@ public class DataEntryGUI extends JPanel {
 		lockUser.addActionListener(new LockUserButtonListener());
 		generateReport.addActionListener(new GenerateReportButtonListener());
 		list.addActionListener(new ListButtonListener());
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 	}
 	
 	public void switchPanels(JPanel panel) {
@@ -141,11 +154,5 @@ public class DataEntryGUI extends JPanel {
 			switchPanels(new ListPanel());
 		}
 	}
-	
-	private class LogOutListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	}
+
 }
