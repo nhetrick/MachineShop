@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,8 +74,9 @@ public class SystemAdminGUI extends JPanel {
 	public class LogOutListner implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO create new for now, needs to just restart
-			mainGui = new MainGUI();
+			// TODO returns to the main screen for now
+			// TODO needs to actually log out later.
+			mainGui.restart();
 		}
 	}
 
