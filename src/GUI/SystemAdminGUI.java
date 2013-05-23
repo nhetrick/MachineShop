@@ -16,10 +16,10 @@ public class SystemAdminGUI extends JPanel {
 	private JPanel buttonPanel;
 	
 	private Font buttonFont;
-	private MainGUI mainGui;
+	private static MainGUI mainGui;
 	
 	public SystemAdminGUI(MainGUI mainGui) {
-		this.mainGui = mainGui;
+		this.mainGui = Driver.getMainGui();
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
