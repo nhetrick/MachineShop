@@ -3,20 +3,14 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
-import java.util.Date;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
-
 import main.Administrator;
 import main.User;
 
@@ -44,7 +38,7 @@ public class HomeScreen extends JFrame {
 		
 		headerBar = new JPanel(new GridLayout(1, 3));
 		
-		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
+		String userName = " " + currentUser.getFirstName() + " " + currentUser.getLastName();
 		
 		JLabel nameLabel = new JLabel(userName);
 		JLabel centerLabel = new JLabel("");

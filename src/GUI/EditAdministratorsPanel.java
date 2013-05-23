@@ -3,18 +3,20 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AR_AdministratorsPanel extends JPanel {
+public class EditAdministratorsPanel extends JPanel {
 
 	JPanel contentPanel;
 	JPanel buttonPanel;
 	
-	public AR_AdministratorsPanel() {
+	public EditAdministratorsPanel() {
 		setLayout(new BorderLayout());
 		
 		contentPanel = new JPanel();
@@ -35,11 +37,28 @@ public class AR_AdministratorsPanel extends JPanel {
 		JButton addButton = new JButton("Add Administrator");
 		JButton removeButton = new JButton("Remove Administrator");
 		
+		addButton.addActionListener(new AddButtonListener());
+		removeButton.addActionListener(new RemoveButtonListener());
+		
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		
 		add(contentPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
+	}
+	
+	private class AddButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+		}
+	}
+	
+	private class RemoveButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+		}
 	}
 }

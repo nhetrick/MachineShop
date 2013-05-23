@@ -3,19 +3,20 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AR_ToolsPanel extends JPanel {
+public class EditToolsPanel extends JPanel {
 	
 	JPanel contentPanel;
 	JPanel buttonPanel;
 	
-	public AR_ToolsPanel() {
+	public EditToolsPanel() {
 		setLayout(new BorderLayout());
 		
 		contentPanel = new JPanel();
@@ -45,11 +46,28 @@ public class AR_ToolsPanel extends JPanel {
 		JButton addButton = new JButton("Add Tool");
 		JButton removeButton = new JButton("Remove Tool");
 		
+		addButton.addActionListener(new AddButtonListener());
+		removeButton.addActionListener(new RemoveButtonListener());
+		
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		
 		add(contentPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
+	}
+	
+	private class AddButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+		}
+	}
+	
+	private class RemoveButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+		}
 	}
 }

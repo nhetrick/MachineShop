@@ -6,18 +6,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
-
 
 public class DataEntryGUI extends JPanel {
 	private JPanel centerPanel;
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
-	private JPanel machinePermissions;
-	private JPanel checkedOutTools;
 	
 	private Font buttonFont;
 	
@@ -31,8 +26,6 @@ public class DataEntryGUI extends JPanel {
 		centerPanel = new JPanel(new BorderLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(9, 1));
-
-		
 		
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
@@ -48,11 +41,11 @@ public class DataEntryGUI extends JPanel {
 		JButton list = new JButton();
 		
 		logOut.setText("Log Out");
-		permissions.setText("Add/Remove Permissions");
-		users.setText("Add/Remove Users");
-		tools.setText("Add/Remove Tools");
-		machines.setText("Add/Remove Machines");
-		administrators.setText("Add/Remove Administrators");
+		permissions.setText("Edit Permissions");
+		users.setText("Edit Users");
+		tools.setText("Edit Tools");
+		machines.setText("Edit Machines");
+		administrators.setText("Edit Administrators");
 		lockUser.setText("Lock/Unlock User");
 		generateReport.setText("Generate Report");
 		list.setText("List Tools/Machines");
@@ -96,35 +89,35 @@ public class DataEntryGUI extends JPanel {
 	private class PermissionsButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new AR_PermissionsPanel());
+			switchPanels(new EditPermissionsPanel());
 		}
 	}
 	
 	private class UsersButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new AR_UsersPanel());
+			switchPanels(new EditUsersPanel());
 		}
 	}
 	
 	private class ToolsButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new AR_ToolsPanel());
+			switchPanels(new EditToolsPanel());
 		}
 	}
 	
 	private class MachinesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new AR_MachinesPanel());
+			switchPanels(new EditMachinesPanel());
 		}
 	}
 	
 	private class AdministratorsButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new AR_AdministratorsPanel());
+			switchPanels(new EditAdministratorsPanel());
 		}
 	}
 	

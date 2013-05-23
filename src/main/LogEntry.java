@@ -62,42 +62,42 @@ public class LogEntry {
 		//addMachinesUsed(machinesUsed);
 	}
 	
-	public void addMachinesUsed(ArrayList<Machine> machinesUsed) {
+	public void addMachinesUsed(ArrayList<Machine> used) {
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
 		BasicDBObject machines = new BasicDBObject();
-		for(Machine m : machinesUsed) {
-			machines.put(String.valueOf(machinesUsed.indexOf(m)), m.getID());
+		for(Machine m : used) {
+			machines.put(String.valueOf(used.indexOf(m)), m.getID());
 		}
 		result.put("machinesUsed", machines);
 		
 		logEntries.update(new BasicDBObject("ID", ID), result);
 	}
 	
-	public void addToolsCheckedOut(ArrayList<Tool> toolsCheckedOut) {
+	public void addToolsCheckedOut(ArrayList<Tool> checkedOut) {
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
 		BasicDBObject tools = new BasicDBObject();
-		for(Tool t : toolsCheckedOut) {
-			tools.put(String.valueOf(toolsCheckedOut.indexOf(t)), t.getUPC());
+		for(Tool t : checkedOut) {
+			tools.put(String.valueOf(checkedOut.indexOf(t)), t.getUPC());
 		}
 		result.put("toolsCheckedOut", tools);
 		
 		logEntries.update(new BasicDBObject("ID", ID), result);
 	}
 	
-	public void addToolsReturned( ArrayList<Tool> toolsReturned) {
+	public void addToolsReturned( ArrayList<Tool> returned) {
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
 		BasicDBObject tools = new BasicDBObject();
-		for(Tool t : toolsReturned) {
-			tools.put(String.valueOf(toolsReturned.indexOf(t)), t.getUPC());
+		for(Tool t : returned) {
+			tools.put(String.valueOf(returned.indexOf(t)), t.getUPC());
 		}
 		result.put("toolsReturned", tools);
 		

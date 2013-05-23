@@ -1,9 +1,6 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-//import java.io.Console;
-import java.util.Scanner;
-
 import GUI.MainGUI;
 
 public class InputReader implements KeyListener {
@@ -39,7 +36,7 @@ public class InputReader implements KeyListener {
 		} else if ( input.length() < 10 ) {
 			throw new InputReaderException("Error. Please swipe your blastercard.");
 		} else if ( input.equals("machineshop")) {
-			CWID = "00000000";
+			CWID = "22222222";
 		}
 		else
 			throw new InputReaderException("The card is not a blastercard.");

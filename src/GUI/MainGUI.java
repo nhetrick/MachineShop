@@ -2,15 +2,9 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 public class Clock extends JPanel implements Runnable {
 	
@@ -16,6 +15,7 @@ public class Clock extends JPanel implements Runnable {
 		
 		timeLabel = new JLabel("");
 		timeLabel.setFont(f);
+		timeLabel.setHorizontalAlignment(JLabel.RIGHT);
 		clockThread = new Thread(this);
 		clockThread.start();
 		add(timeLabel);
