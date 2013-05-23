@@ -51,9 +51,9 @@ public class MainGUI extends JFrame{
 
 	public void setup() {
 		//sets the cursor to invisible
-		tk = Toolkit.getDefaultToolkit();
-		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		//sets the screen to full screen
 		setExtendedState(MAXIMIZED_BOTH);
@@ -71,7 +71,7 @@ public class MainGUI extends JFrame{
 		addKeyListener(reader);
 		setFocusable(true);
 
-		tracker = new AccessTracker();
+		tracker = Driver.getAccessTracker();
 	}
 
 	

@@ -16,6 +16,11 @@ public class Machine {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	@Override
 	public boolean equals(Object o) {

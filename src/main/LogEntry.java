@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import GUI.Driver;
+
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -20,12 +23,31 @@ public class LogEntry {
 	private Calendar calendar;
 	private DB database;
 	
-	public LogEntry(DB database) {
+	public LogEntry() {
 		calendar = Calendar.getInstance();
 		timeOut = null;
-		this.database = database;
+		database = Driver.getAccessTracker().getDatabase();
 	}
 	
+	
+	
+	public LogEntry(int iD, User user, ArrayList<Machine> machinesUsed,
+			ArrayList<Tool> toolsCheckedOut, Date timeOut, Date timeIn,
+			ArrayList<Tool> toolsReturned) {
+		super();
+		ID = iD;
+		this.user = user;
+		this.machinesUsed = machinesUsed;
+		this.toolsCheckedOut = toolsCheckedOut;
+		this.timeOut = timeOut;
+		this.timeIn = timeIn;
+		this.toolsReturned = toolsReturned;
+		calendar = Calendar.getInstance();
+		database = Driver.getAccessTracker().getDatabase();
+	}
+
+
+
 	// FOR TESTING PURPOSES ONLY
 	public void startEntry(User user, ArrayList<Machine> machinesUsed, ArrayList<Tool> toolsCheckedOut, ArrayList<Tool> toolsReturned) {
 		// AUTO-GENERATE ID
@@ -56,10 +78,17 @@ public class LogEntry {
 		DBCollection logEntries = database.getCollection("LogEntries"); 
 		logEntries.insert(logEntry);
 		
-		//machinesUsed.add(new Machine("Table Saw", "1PLZ4"));
-		//machinesUsed.add(new Machine("3D Printer", "W33V4"));
-		
-		//addMachinesUsed(machinesUsed);
+//		machinesUsed.add(new Machine("Table Saw", "1PLZ4"));
+//		machinesUsed.add(new Machine("3D Printer", "W33V4"));
+//		machinesUsed.add(new Machine("Chain Saw", "44MAK"));
+//		
+//		addMachinesUsed(machinesUsed);
+//		
+//		toolsCheckedOut.add(new Tool("Table Saw", 123));
+//		toolsCheckedOut.add(new Tool("3D Printer", 345));
+//		toolsCheckedOut.add(new Tool("Chain Saw", 967));
+//				
+//		addToolsCheckedOut(toolsCheckedOut);
 	}
 	
 	public void addMachinesUsed(ArrayList<Machine> used) {
@@ -67,9 +96,9 @@ public class LogEntry {
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
-		BasicDBObject machines = new BasicDBObject();
+		BasicDBList machines = new BasicDBList();
 		for(Machine m : used) {
-			machines.put(String.valueOf(used.indexOf(m)), m.getID());
+			machines.add(new BasicDBObject("id", m.getID()));
 		}
 		result.put("machinesUsed", machines);
 		
@@ -81,9 +110,9 @@ public class LogEntry {
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
-		BasicDBObject tools = new BasicDBObject();
+		BasicDBList tools = new BasicDBList();
 		for(Tool t : checkedOut) {
-			tools.put(String.valueOf(checkedOut.indexOf(t)), t.getUPC());
+			tools.add(new BasicDBObject("upc", t.getUPC()));
 		}
 		result.put("toolsCheckedOut", tools);
 		

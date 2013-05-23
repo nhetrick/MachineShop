@@ -37,6 +37,9 @@ public class AccessTracker {
 		databaseSetup();
 		Log.setup();
 		
+		loadMachines();
+		loadTools();
+		
 	}
 	
 	private void databaseSetup() {
@@ -189,7 +192,7 @@ public class AccessTracker {
 		
 		//Log.startEntry(currentUser);
 		
-		displayUserMachines(currentUser);
+		//displayUserMachines(currentUser);
 		
 		return currentUser;
 		
@@ -236,6 +239,15 @@ public class AccessTracker {
 
 	public ArrayList<Machine> getMachines() {
 		return machines;
+	}
+	
+	public Machine getMachineByName(String name) {
+		for (Machine m:machines) {
+			if (m.getName() == name) {
+				return m;
+			}
+		}
+		return null;
 	}
 
 	public ArrayList<Tool> getTools() {

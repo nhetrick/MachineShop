@@ -21,23 +21,38 @@ public class AdministratorTests {
 
 	@Before
 	public void setup() {
-		testAdmin = new SystemAdministrator("", "", 1);
 		tracker = new AccessTracker();
+		testAdmin = new SystemAdministrator("", "", 1);
 		testUser = new User("", "", 2);
 	}
 
 	@Test
-	public void addAndRemovePermissionTest() {
-		Machine testMachine = new Machine("TPDD", "T-1");
-		testAdmin.addPermission(testUser, testMachine);
+	public void updatePermissionTest() {
+		ArrayList<Machine> machines = new ArrayList<Machine>();
+		Machine machine1 = new Machine("Table Saw", "1PLZ4");
+		Machine machine2 = new Machine("3D Printer", "W33V4");
+		machines.add(machine1);
+		machines.add(machine2);
+		
+		testAdmin.updatePermission(testUser, machines);
 
-		// Ensures that the user is now certified to use the machine
-		assertTrue(testUser.getCertifiedMachines().contains(testMachine));
+		// Ensures that the user is now certified to use the machines
+		assertTrue(testUser.getCertifiedMachines().size() == 2);
+		assertTrue(testUser.getCertifiedMachines().contains(machine1));
+		assertTrue(testUser.getCertifiedMachines().contains(machine2));
 
-		testAdmin.removePermission(testUser, testMachine);
-
-		// Ensures that the user is no longer certified on the machine
-		assertFalse(testUser.getCertifiedMachines().contains(testMachine));
+		machines = new ArrayList<Machine>();
+		Machine machine3 = new Machine("Chain Saw", "44MAK");
+		machines.add(machine3);
+		
+		testAdmin.updatePermission(testUser, machines);
+		
+		//ensure that the user is now unable to user the previous and 
+		//certified on the new machine
+		assertTrue(testUser.getCertifiedMachines().size() == 1);
+		assertFalse(testUser.getCertifiedMachines().contains(machine1));
+		assertFalse(testUser.getCertifiedMachines().contains(machine2));
+		assertTrue(testUser.getCertifiedMachines().contains(machine3));
 	}
 
 	@Test

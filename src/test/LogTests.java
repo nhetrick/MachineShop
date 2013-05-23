@@ -47,61 +47,61 @@ public class LogTests {
 	Date dateOut;
 
 	@Before
-//	public void setup() {		
-//		testUser1 = new User("", "", 2);
-//		testUser2 = new User("", "", 3);
-//		
-//		testEntry1 = new LogEntry();
-//		testEntry2 = new LogEntry();
-//		testEntry3 = new LogEntry();
-//		testEntry4 = new LogEntry();
-//		testEntry5 = new LogEntry();
-//		testEntry6 = new LogEntry();		
-//
-//		testMachine = new Machine("TPDD", "T-1");
-//		testMachines = new ArrayList<Machine>();
-//		testMachines.add(testMachine);
-//
-//		notAMachine = new Machine("This it not a machine", "WINE");
-//		notTestMachines = new ArrayList<Machine>();
-//		notTestMachines.add(notAMachine);
-//
-//		testTool1 = new Tool("HITCOO", 15);
-//		testTools1 = new ArrayList<Tool>();
-//		testTools1.add(testTool1);
-//
-//		testTool2 = new Tool("Crowbar", 1);
-//		testTools2 = new ArrayList<Tool>();
-//		testTools2.add(testTool2);
-//		
-//		testTool3 = new Tool("Hammer", 103);
-//		testTools3 = new ArrayList<Tool>();
-//		testTools3.add(testTool3);
-//
-//		testTool4 = new Tool("Driver", 56);
-//		testTool5 = new Tool("Handsaw", 40);
-//		testTools4 = new ArrayList<Tool>();
-//		testTools4.add(testTool4);
-//		testTools4.add(testTool5);
-//		
-//		testTool6 = new Tool("NotCheckedOutByAnyone", 0);
-//
-//		testEntry1.startEntry(testUser1, notTestMachines, testTools1, testTools2);
-//		testEntry2.startEntry(testUser2, notTestMachines, testTools1, testTools2);
-//		testEntry3.startEntry(testUser1, notTestMachines, testTools3, testTools2);
-//		testEntry4.startEntry(testUser1, notTestMachines, testTools2, testTools4);
-//		testEntry5.startEntry(testUser1, testMachines, testTools2, testTools1);
-//		
-//		testEntry1.finishEntry();
-//		testEntry2.finishEntry();
-//		testEntry3.finishEntry();
-//		testEntry4.finishEntry();
-//		testEntry5.finishEntry();
-//		
-//		testEntry6.startEntry(testUser2, testMachines, testTools4, testTools3);
-//		testEntry6.finishEntry();
-//		
-//	}
+	public void setup() {		
+		testUser1 = new User("", "", 2);
+		testUser2 = new User("", "", 3);
+		
+		testEntry1 = new LogEntry();
+		testEntry2 = new LogEntry();
+		testEntry3 = new LogEntry();
+		testEntry4 = new LogEntry();
+		testEntry5 = new LogEntry();
+		testEntry6 = new LogEntry();		
+
+		testMachine = new Machine("TPDD", "T-1");
+		testMachines = new ArrayList<Machine>();
+		testMachines.add(testMachine);
+
+		notAMachine = new Machine("This it not a machine", "WINE");
+		notTestMachines = new ArrayList<Machine>();
+		notTestMachines.add(notAMachine);
+
+		testTool1 = new Tool("HITCOO", 15);
+		testTools1 = new ArrayList<Tool>();
+		testTools1.add(testTool1);
+
+		testTool2 = new Tool("Crowbar", 1);
+		testTools2 = new ArrayList<Tool>();
+		testTools2.add(testTool2);
+		
+		testTool3 = new Tool("Hammer", 103);
+		testTools3 = new ArrayList<Tool>();
+		testTools3.add(testTool3);
+
+		testTool4 = new Tool("Driver", 56);
+		testTool5 = new Tool("Handsaw", 40);
+		testTools4 = new ArrayList<Tool>();
+		testTools4.add(testTool4);
+		testTools4.add(testTool5);
+		
+		testTool6 = new Tool("NotCheckedOutByAnyone", 0);
+
+		testEntry1.startEntry(testUser1, notTestMachines, testTools1, testTools2);
+		testEntry2.startEntry(testUser2, notTestMachines, testTools1, testTools2);
+		testEntry3.startEntry(testUser1, notTestMachines, testTools3, testTools2);
+		testEntry4.startEntry(testUser1, notTestMachines, testTools2, testTools4);
+		testEntry5.startEntry(testUser1, testMachines, testTools2, testTools1);
+		
+		testEntry1.finishEntry();
+		testEntry2.finishEntry();
+		testEntry3.finishEntry();
+		testEntry4.finishEntry();
+		testEntry5.finishEntry();
+		
+		testEntry6.startEntry(testUser2, testMachines, testTools4, testTools3);
+		testEntry6.finishEntry();
+		
+	}
 	
 	@Test
 	public void extractLogByDateTest() {
