@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import main.*;
 
@@ -35,6 +37,17 @@ public class MainGUI extends JFrame{
 		reader = new InputReader(this);
 		centerPanel = new SwipeCardPanel();
 		setup();
+		
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+			// use default
+		}
 	}
 
 	public void setup() {
@@ -149,12 +162,12 @@ public class MainGUI extends JFrame{
 		
 		if ( currentUser.isAdmin() ) {
 			if ( ((Administrator) currentUser).isSystemAdmin() ) {
-				homeCenterPanel = new SystemAdminGUI(this);
+				homeCenterPanel = new SystemAdminGUI();
 			} else {
 				homeCenterPanel = new AdminGUI();
 		}
 		} 	else {
-			homeCenterPanel = new UserGUI(this);
+			homeCenterPanel = new UserGUI();
 		}
 		currentPanel = homeCenterPanel;
 		add(homeCenterPanel, BorderLayout.CENTER);
