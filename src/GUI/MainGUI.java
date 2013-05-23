@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -141,7 +142,7 @@ public class MainGUI extends JFrame{
 
 	
 	public void ProcessHomeScreen(User currentUser) {
-		headerFont = new Font("SansSerif", Font.BOLD, 32);
+		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		
 		calendar = Calendar.getInstance();
 		

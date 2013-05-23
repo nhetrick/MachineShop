@@ -1,18 +1,15 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import main.Machine;
 
@@ -24,50 +21,81 @@ public class EditPermissionsPanel extends JPanel {
 	JTextField cwidText;
 	int CWID = 0;
 	Machine permission;
+	GridBagConstraints c;
 	
 	public EditPermissionsPanel() {
-		setLayout(new BorderLayout());
+				
+		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
+		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 		
-		contentPanel = new JPanel();
-		buttonPanel = new JPanel();
+		setLayout(new GridBagLayout());
 		
-		//contentPanel.setLayout(new GridLayout(6,4));
-		buttonPanel.setLayout(new GridLayout(1,2));
+		c = new GridBagConstraints();
 		
-		cwidText = new JTextField();
-		JLabel cwidLabel = new JLabel("CWID:");
+		JLabel title = new JLabel("Edit User Permissions");
+		title.setFont(titleFont);
 		
-		cwidText.setPreferredSize(new Dimension(200, 50));
-		cwidLabel.setPreferredSize(new Dimension(200, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.2;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		contentPanel.add(cwidLabel);
-		contentPanel.add(cwidText);
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.0;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(title, c);
 		
-		machineNames = new JComboBox<String>();
-		JLabel machineLabel = new JLabel("Machine:");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.2;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		//addMachineOptions();
+		JPanel cwidPanel = new JPanel(new GridLayout(1, 3));
+		JLabel cwidLabel = new JLabel("Enter user CWID:");
+		JTextField cwidField = new JTextField();
+		JButton go = new JButton("Go");
+		go.setFont(buttonFont);
+		cwidLabel.setFont(buttonFont);
 		
-		machineNames.setPreferredSize(new Dimension(200, 50));
-		machineLabel.setPreferredSize(new Dimension(200, 50));
+		cwidPanel.add(cwidLabel);
+		cwidPanel.add(cwidField);
+		cwidPanel.add(go);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.6;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 1;
+		add(cwidPanel, c);
+
+		JPanel machinePanel = new JPanel(new GridLayout(1, 1));
+		machinePanel.setBorder(new TitledBorder("User machines"));
 		
-		//machineNames.addActionListener(new ComboBoxListener());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0.0;
+		c.weighty = 0.5;
+		c.gridwidth = 1;
+		c.gridx = 1;
+		c.gridy = 2;
+		add(machinePanel, c);
 		
-		contentPanel.add(machineLabel);
-		contentPanel.add(machineNames);
+		JButton saveButton = new JButton("Save");
+		saveButton.setFont(buttonFont);
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0.0;
+		c.weighty = 0.1;
+		c.gridwidth = 1;
+		c.gridx = 1;
+		c.gridy = 3;
+		add(saveButton, c);
 		
-		JButton addButton = new JButton("Add Permissions");
-		JButton removeButton = new JButton("Remove Permissions");
-		
-		//addButton.addActionListener(new AddButtonListener());
-		//removeButton.addActionListener(new RemoveButtonListener());
-		
-		buttonPanel.add(addButton);
-		buttonPanel.add(removeButton);
-		
-		add(contentPanel, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.SOUTH);
-		
+		c.weighty = 0.1;
+		c.gridy = 4;
+		add(new JPanel(), c);
 	}
 	
 //	private void addMachineOptions() {

@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,41 +8,48 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class DataEntryGUI extends JPanel {
-	private JPanel centerPanel;
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
-	private GridBagConstraints c = new GridBagConstraints();
+	private GridBagConstraints constraints = new GridBagConstraints();
 	private Font buttonFont;
 	
 	public DataEntryGUI() {
 		
-		setLayout(new GridBagLayout());
-		
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
-		centerPanel = new JPanel();
-		contentPanel = new JPanel(new GridLayout(2, 1));
+		contentPanel = new JPanel(new BorderLayout());
+		contentPanel.setBorder(BorderFactory.createEtchedBorder());
 		buttonPanel = new JPanel(new GridLayout(9, 1));
+		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weighty = 1;
-		c.weightx = 2;
-		c.anchor = GridBagConstraints.LINE_START;
+		setLayout(new GridBagLayout());
 		
-		add(contentPanel, c);
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.weighty = 1;
+		constraints.weightx = 0.5;
+		constraints.anchor = GridBagConstraints.LINE_START;
 		
-		c.anchor = GridBagConstraints.LINE_END;
-		c.gridx = 1;
+		add(contentPanel, constraints);
 		
-		add(buttonPanel, c);
+		constraints.anchor = GridBagConstraints.LINE_END;
+		constraints.weightx = 0;
+		constraints.gridx = 1;
+		
+		add(buttonPanel, constraints);
+		
+//		setLayout(new GridLayout(1, 3));
+//		add(contentPanel);
+//		add(new JPanel());
+//		add(buttonPanel);
 		
 		JButton logOut = new JButton();
 		JButton permissions = new JButton();
@@ -97,6 +105,7 @@ public class DataEntryGUI extends JPanel {
 	public void switchPanels(JPanel panel) {
 		contentPanel.removeAll();
 		contentPanel.add(panel);
+		repaint();
 	}
 
 	private class PermissionsButtonListener implements ActionListener {
