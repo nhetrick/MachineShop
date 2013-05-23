@@ -113,6 +113,10 @@ public class MainGUI extends JFrame{
 		handleInput();
 	}
 
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
 	public static void main(String[] args) {
 		MainGUI m = new MainGUI();	
 	}

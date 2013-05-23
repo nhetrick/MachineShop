@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import main.User;
+
 public class AdminGUI extends JPanel {
 	
 	private JPanel centerPanel;
@@ -19,7 +21,7 @@ public class AdminGUI extends JPanel {
 	
 	private Font buttonFont;
 	
-	public AdminGUI() {
+	public AdminGUI(User user) {
 		
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));

@@ -62,12 +62,12 @@ public class HomeScreen extends JFrame {
 		
 		if ( currentUser.isAdmin() ) {
 			if ( ((Administrator) currentUser).isSystemAdmin() ) {
-				centerPanel = new SystemAdminGUI();
+				centerPanel = new SystemAdminGUI(currentUser);
 			} else {
-				centerPanel = new AdminGUI();
+				centerPanel = new AdminGUI(currentUser);
 			}
 		} else {
-			centerPanel = new UserGUI();
+			centerPanel = new UserGUI(currentUser);
 		}
 		add(centerPanel, BorderLayout.CENTER);
 		

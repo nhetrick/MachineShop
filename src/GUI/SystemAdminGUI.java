@@ -11,13 +11,17 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import main.User;
+
 public class SystemAdminGUI extends JPanel {
 	private JPanel centerPanel;
 	private JPanel buttonPanel;
+	private User currentUser;
 	
 	private Font buttonFont;
 	
-	public SystemAdminGUI() {
+	public SystemAdminGUI(User user) {
+		currentUser = user;
 		
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
@@ -64,7 +68,7 @@ public class SystemAdminGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			centerPanel.removeAll();
-			centerPanel.add(new UserGUI());
+			centerPanel.add(new UserGUI(currentUser));
 		}
 	}
 

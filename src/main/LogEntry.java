@@ -55,6 +55,11 @@ public class LogEntry {
 		
 		DBCollection logEntries = database.getCollection("LogEntries"); 
 		logEntries.insert(logEntry);
+		
+		//machinesUsed.add(new Machine("Table Saw", "1PLZ4"));
+		//machinesUsed.add(new Machine("3D Printer", "W33V4"));
+		
+		//addMachinesUsed(machinesUsed);
 	}
 	
 	public void addMachinesUsed(ArrayList<Machine> machinesUsed) {

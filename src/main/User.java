@@ -1,7 +1,6 @@
 package main;
 import java.util.ArrayList;
 
-
 public class User {
 	private ArrayList<Machine> certifiedMachines;
 	private ArrayList<Tool>	toolsCheckedOut;
@@ -41,8 +40,16 @@ public class User {
 		return certifiedMachines;
 	}
 	
+	public void loadCertifiedMachines(ArrayList<Machine> machines) {
+		certifiedMachines = machines;
+	}
+	
 	public ArrayList<Tool> getToolsCheckedOut() {
 		return toolsCheckedOut;
+	}
+	
+	public void loadCheckedOutTools(ArrayList<Tool> tools) {
+		toolsCheckedOut = tools;
 	}
 	
 	public String getFirstName() {

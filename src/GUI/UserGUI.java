@@ -4,14 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+
+import main.Machine;
+import main.Tool;
+import main.User;
 
 public class UserGUI extends JPanel {
 	
@@ -20,10 +26,12 @@ public class UserGUI extends JPanel {
 	private JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
+	private User currentUser;
 	
 	private Font buttonFont;
 	
-	public UserGUI() {
+	public UserGUI(User user) {
+		currentUser = user;
 		
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
@@ -37,7 +45,13 @@ public class UserGUI extends JPanel {
 		checkedOutTools = new JPanel();
 				
 		machinePermissions.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "My Machines"));
+		machinePermissions.setLayout(new GridLayout(10, 5));
+		
 		checkedOutTools.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "Checked-out Tools"));
+		checkedOutTools.setLayout(new GridLayout(10, 5));
+	
+		displayUserMachinePermissions();
+		displayUserCheckedOutTools();
 		
 		contentPanel.add(machinePermissions);		
 		contentPanel.add(checkedOutTools);
@@ -67,6 +81,24 @@ public class UserGUI extends JPanel {
 		
 		add(centerPanel, BorderLayout.CENTER);
 		
+	}
+	
+	private void displayUserMachinePermissions() {
+		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
+		for (Machine m:machines) {
+			JCheckBox machine = new JCheckBox(m.getName());
+			machine.setFont(new Font("SansSerif", Font.BOLD, 20));
+			machinePermissions.add(machine);
+		}
+	}
+	
+	private void displayUserCheckedOutTools() {
+		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
+		for (Tool t:tools) {
+			JCheckBox tool = new JCheckBox(t.getName());
+			tool.setFont(new Font("SansSerif", Font.BOLD, 20));
+			checkedOutTools.add(tool);
+		}
 	}
 	
 }

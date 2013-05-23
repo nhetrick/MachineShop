@@ -1,6 +1,7 @@
 package main;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -36,8 +37,6 @@ public class AccessTracker {
 		databaseSetup();
 		Log.setup();
 		
-		loadMachines();
-		System.out.println(machines.get(0).getName());
 	}
 	
 	private void databaseSetup() {
@@ -74,7 +73,7 @@ public class AccessTracker {
 				currentUser = createUser(firstName, lastName, CWID);
 			}			
 		} else {
-			DBObject result = cursor.next();
+			BasicDBObject result = (BasicDBObject) cursor.next();
 
 			if (result.get("isAdmin") == null) {
 				isAdministrator = false;
@@ -101,28 +100,43 @@ public class AccessTracker {
 				currentUser = new User(firstName, lastName, CWID);
 			}
 			
-//			ArrayList<String> machineIDs = new ArrayList<String>();
-//			
-//			DBCollection ids = (DBCollection) result.get("certifiedMachines");
-//			cursor = ids.find();
-//			while ( cursor.hasNext() ) {
-//				String id = (String) cursor.next().get(SOMETHING);
-//			}
-//			
-//			loadUserMachines(currentUser);
-//			loadUserTools(currentUser);
+			//Retrieve user's certified machines
+			ArrayList<Machine> machinesList = new ArrayList<Machine>();
+			DBCollection machinesColl = database.getCollection("Machines");
 			
-		}
+			ArrayList<BasicDBObject> certMachines = (ArrayList<BasicDBObject>)result.get("certifiedMachines");
+			if (certMachines == null) {
+				currentUser.loadCertifiedMachines(new ArrayList<Machine>());
+			} else {
+				for(BasicDBObject embedded : certMachines){ 
+					String id = (String)embedded.get("id"); 
+					DBCursor machine = machinesColl.find(new BasicDBObject("ID", id));
+					if (machine.hasNext()) {
+						machinesList.add(new Machine((String) machine.next().get("name"), id));
+					}
+				} 
+				currentUser.loadCertifiedMachines(machinesList);
+			}
+			
+			//Retrieve user's checkedOutTools
+			ArrayList<Tool> checkedOutToolsList = new ArrayList<Tool>();
+			DBCollection toolsColl = database.getCollection("Tools");
+		
+			ArrayList<BasicDBObject> COTools = (ArrayList<BasicDBObject>)result.get("checkedOutTools");
+			if(COTools == null) {
+				currentUser.loadCheckedOutTools(new ArrayList<Tool>());
+			} else 
+				for(BasicDBObject embedded : COTools){ 
+					int upc = (int) embedded.get("upc"); 
+					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
+					if (tool.hasNext()) {
+						checkedOutToolsList.add(new Tool((String) tool.next().get("name"), (int) upc));
+					}
+				} 
+				currentUser.loadCheckedOutTools(checkedOutToolsList);
+			}
 		
 		return currentUser;
-	}
-	
-	private void loadUserTools(User user) {
-		
-	}
-
-	private void loadUserMachines(User user) {
-		
 	}
 
 	// Loads all the tools from the database into RAM
