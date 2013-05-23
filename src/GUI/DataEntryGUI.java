@@ -2,6 +2,8 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,21 +20,18 @@ public class DataEntryGUI extends JPanel {
 	private JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
-	
+	private GridBagConstraints c = new GridBagConstraints();
 	private Font buttonFont;
 	
 	public DataEntryGUI() {
 		
-		setLayout(new BorderLayout());
-		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+		setLayout(new GridBagLayout());
 		
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
 		centerPanel = new JPanel(new BorderLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(9, 1));
-
-		
 		
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
@@ -77,7 +76,11 @@ public class DataEntryGUI extends JPanel {
 		buttonPanel.add(list);
 		buttonPanel.add(logOut);
 		
-		add(centerPanel, BorderLayout.CENTER);
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		add(centerPanel, c);
 		permissions.addActionListener(new PermissionsButtonListener());
 		users.addActionListener(new UsersButtonListener());
 		tools.addActionListener(new ToolsButtonListener());

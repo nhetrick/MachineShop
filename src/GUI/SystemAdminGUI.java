@@ -19,7 +19,7 @@ public class SystemAdminGUI extends JPanel {
 	private Font buttonFont;
 	private static MainGUI mainGui;
 	
-	public SystemAdminGUI(MainGUI mainGui) {
+	public SystemAdminGUI() {
 		this.mainGui = Driver.getMainGui();
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
@@ -51,7 +51,7 @@ public class SystemAdminGUI extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
-		basicUser.addActionListener(new LogOutListner());
+		basicUser.addActionListener(new ListenerHelpers.LogOutListner());
 		
 	}
 	
@@ -67,17 +67,7 @@ public class SystemAdminGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			centerPanel.removeAll();
-			centerPanel.add(new UserGUI(mainGui));
+			centerPanel.add(new UserGUI());
 		}
 	}
-	
-	public class LogOutListner implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO returns to the main screen for now
-			// TODO needs to actually log out later.
-			mainGui.restart();
-		}
-	}
-
 }

@@ -25,7 +25,7 @@ public class UserGUI extends JPanel {
 	private static MainGUI mainGui;
 	private Font buttonFont;
 	
-	public UserGUI(MainGUI mainGui) {
+	public UserGUI() {
 		this.mainGui = Driver.getMainGui();
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
@@ -69,14 +69,6 @@ public class UserGUI extends JPanel {
 		
 		add(centerPanel, BorderLayout.CENTER);
 		
-		logOut.addActionListener(new LogOutListner());
-	}
-
-	public class LogOutListner implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO restarts now, but needs to log out later
-			mainGui.restart();
-		}
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 	}
 }

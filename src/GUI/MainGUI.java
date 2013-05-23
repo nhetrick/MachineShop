@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import main.*;
 
@@ -30,11 +32,23 @@ public class MainGUI extends JFrame{
 	private Clock time;
 	private Font headerFont;
 	private JPanel currentPanel;
+	private GridBagConstraints c = new GridBagConstraints();
 
 	public MainGUI() {
 		reader = new InputReader(this);
 		centerPanel = new SwipeCardPanel();
 		setup();
+		
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+			// use default
+		}
 	}
 
 	public void setup() {
@@ -67,7 +81,6 @@ public class MainGUI extends JFrame{
 	public void restart() {
 		remove(headerBar);
 		remove(homeCenterPanel);
-		setLayout(new GridBagLayout());
 		add(centerPanel);
 		setVisible(true);
 		repaint();
@@ -87,6 +100,7 @@ public class MainGUI extends JFrame{
 				currentUser = tracker.processLogIn(CWID);
 				remove(centerPanel);
 				ProcessHomeScreen(currentUser);
+				repaint();
 				InputReader.resetErrorCount();
 			}
 		} catch (InputReaderException e) {
@@ -112,6 +126,7 @@ public class MainGUI extends JFrame{
 						currentUser = tracker.processLogIn(CWID);
 						remove(centerPanel);
 						ProcessHomeScreen(currentUser);
+						repaint();
 						InputReader.resetErrorCount();
 					}
 				}
@@ -124,7 +139,6 @@ public class MainGUI extends JFrame{
 	}
 	
 	public void ProcessHomeScreen(User currentUser) {
-		setLayout(new BorderLayout());
 		headerFont = new Font("SansSerif", Font.BOLD, 32);
 		
 		calendar = Calendar.getInstance();
@@ -142,22 +156,32 @@ public class MainGUI extends JFrame{
 		
 		headerBar.add(nameLabel);
 		headerBar.add(time);
-		
-		add(headerBar, BorderLayout.NORTH);
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(headerBar, c);
 		
 		homeCenterPanel = new JPanel();
 		
 		if ( currentUser.isAdmin() ) {
 			if ( ((Administrator) currentUser).isSystemAdmin() ) {
-				homeCenterPanel = new SystemAdminGUI(this);
+				homeCenterPanel = new SystemAdminGUI();
 			} else {
 				homeCenterPanel = new AdminGUI();
 		}
 		} 	else {
-			homeCenterPanel = new UserGUI(this);
+			homeCenterPanel = new UserGUI();
 		}
 		currentPanel = homeCenterPanel;
-		add(homeCenterPanel, BorderLayout.CENTER);
+		
+		c.gridy = 1;
+		c.gridx = 0;
+		c.weighty = 0.9;
+		c.fill = GridBagConstraints.BOTH;
+		add(homeCenterPanel, c);
 		
 		setVisible(true);
 	}
