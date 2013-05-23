@@ -1,18 +1,12 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 public class UserGUI extends JPanel {
@@ -22,11 +16,9 @@ public class UserGUI extends JPanel {
 	private JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
-	private static MainGUI mainGui;
 	private Font buttonFont;
 	
 	public UserGUI() {
-		this.mainGui = Driver.getMainGui();
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		

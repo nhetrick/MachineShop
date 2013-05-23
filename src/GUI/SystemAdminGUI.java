@@ -2,25 +2,20 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
 
 public class SystemAdminGUI extends JPanel {
 	private JPanel centerPanel;
 	private JPanel buttonPanel;
 	
 	private Font buttonFont;
-	private static MainGUI mainGui;
 	
 	public SystemAdminGUI() {
-		this.mainGui = Driver.getMainGui();
 		setLayout(new BorderLayout());
 		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
