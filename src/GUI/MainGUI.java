@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -51,9 +52,9 @@ public class MainGUI extends JFrame{
 
 	public void setup() {
 		//sets the cursor to invisible
-		tk = Toolkit.getDefaultToolkit();
-		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		//sets the screen to full screen
 		setExtendedState(MAXIMIZED_BOTH);
@@ -141,7 +142,7 @@ public class MainGUI extends JFrame{
 
 	
 	public void ProcessHomeScreen(User currentUser) {
-		headerFont = new Font("SansSerif", Font.BOLD, 32);
+		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		
 		calendar = Calendar.getInstance();
 		

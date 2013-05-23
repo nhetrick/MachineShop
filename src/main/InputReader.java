@@ -29,6 +29,9 @@ public class InputReader implements KeyListener {
 		if (input.contains(start)) {
 			CWID = input.split(start)[1].substring(0, 8);
 //			System.out.println("Your CWID is " + CWID);
+		} else if ( input.equals(" ") ) {
+			// TODO FOR NOW DELETE BEFORE THE RELEASE!!!!
+			CWID = "22222222";
 		}
 		else if (input.contains(error)) {
 			++errorCount;
