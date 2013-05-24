@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,9 +20,20 @@ public class DataEntryGUI extends JPanel {
 	private JPanel checkedOutTools;
 	private GridBagConstraints constraints = new GridBagConstraints();
 	private Font buttonFont;
+	JButton logOut;
+	JButton permissions;
+	JButton users;
+	JButton tools;
+	JButton machines;
+	JButton administrators;
+	JButton lockUser;
+	JButton generateReport;
+	JButton list;
+	Color buttonHighlight;
 	
 	public DataEntryGUI() {
 		
+		buttonHighlight = new Color(63, 146, 176);
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
 		contentPanel = new JPanel(new BorderLayout());
@@ -51,15 +63,15 @@ public class DataEntryGUI extends JPanel {
 //		add(new JPanel());
 //		add(buttonPanel);
 		
-		JButton logOut = new JButton();
-		JButton permissions = new JButton();
-		JButton users = new JButton();
-		JButton tools = new JButton();
-		JButton machines = new JButton();
-		JButton administrators = new JButton();
-		JButton lockUser = new JButton();
-		JButton generateReport = new JButton();
-		JButton list = new JButton();
+		logOut = new JButton();
+		permissions = new JButton();
+		users = new JButton();
+		tools = new JButton();
+		machines = new JButton();
+		administrators = new JButton();
+		lockUser = new JButton();
+		generateReport = new JButton();
+		list = new JButton();
 		
 		logOut.setText("Log Out");
 		permissions.setText("Edit Permissions");
@@ -102,8 +114,20 @@ public class DataEntryGUI extends JPanel {
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 	}
 	
+	public void resetButtonBackgrounds(){
+		permissions.setBackground(null);
+		users.setBackground(null);
+		tools.setBackground(null);
+		machines.setBackground(null);
+		administrators.setBackground(null);
+		lockUser.setBackground(null);
+		generateReport.setBackground(null);
+		list.setBackground(null);	
+	}
+	
 	public void switchPanels(JPanel panel) {
 		contentPanel.removeAll();
+		resetButtonBackgrounds();
 		contentPanel.add(panel);
 		repaint();
 	}
@@ -112,6 +136,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new EditPermissionsPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -119,6 +145,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new EditUsersPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -126,6 +154,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new EditToolsPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -133,6 +163,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new EditMachinesPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -140,6 +172,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new EditAdministratorsPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -147,6 +181,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new LockUserPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -154,6 +190,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new GenerateReportPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 	
@@ -161,6 +199,8 @@ public class DataEntryGUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			switchPanels(new ListPanel());
+			JButton current = (JButton) arg0.getSource();
+			current.setBackground(buttonHighlight);
 		}
 	}
 
