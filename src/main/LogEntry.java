@@ -168,4 +168,18 @@ public class LogEntry {
 	public int getID() {
 		return ID;
 	}
+	
+	public void print() {
+		System.out.println("Log Entry: " + ID);
+		System.out.println("User: " + user);
+		System.out.println("Time In: " + timeIn);
+		System.out.println("Time Out: " + timeOut);
+		System.out.println("Machines Used: " + machinesUsed);
+		System.out.println("Tools Checked Out: " + toolsCheckedOut);
+		System.out.println("Tools Returned: " + toolsReturned);
+	}
+	
+	public void printTable() {
+		System.out.format("%5d%20s%30s%30s%30s%30s%30s", ID, user, timeIn, timeOut, machinesUsed, toolsCheckedOut, toolsReturned);
+	}
 }

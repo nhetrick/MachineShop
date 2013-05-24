@@ -30,5 +30,9 @@ public class Tool {
 	public int getUPC() {
 		return UPC;
 	}
+	
+	public String toString() {
+		return name;
+	}
 
 }

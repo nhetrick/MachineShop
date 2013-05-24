@@ -194,6 +194,9 @@ public class AccessTracker {
 		
 		//displayUserMachines(currentUser);
 		
+		Log.extractLogCheckedOutTool(new Tool("Hammer", 309));
+		Log.printLog();
+		
 		return currentUser;
 		
 	}

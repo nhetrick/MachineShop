@@ -63,8 +63,8 @@ public class AccessTrackerTests {
 		// Ensures the entry was added to the log
 		Log.extractLog(testUser);
 		
-		int latestEntryIndex = Log.getResult().size() - 1;
-		LogEntry entry = Log.getResult().get(latestEntryIndex);
+		int latestEntryIndex = Log.getResults().size() - 1;
+		LogEntry entry = Log.getResults().get(latestEntryIndex);
 		
 		// Must ensure that THAT particular log in was logged.
 		// Get the time from this log entry? Ensure that it is
@@ -85,7 +85,7 @@ public class AccessTrackerTests {
 		//Ensures the entry was added to the log
 		Log.extractLog(testUser);
 		
-		latestEntryIndex = Log.getResult().size() - 1;
+		latestEntryIndex = Log.getResults().size() - 1;
 		
 		// Get the time from this log entry? Ensure that it is
 		// after the "currentTime" and after the log in time

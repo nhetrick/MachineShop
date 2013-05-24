@@ -74,6 +74,6 @@ public class User {
 	}
 	
 	public String toString() {
-		return firstName + lastName;
+		return firstName + " " + lastName;
 	}
 }

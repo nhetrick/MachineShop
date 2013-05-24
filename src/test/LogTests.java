@@ -113,11 +113,11 @@ public class LogTests {
 		
 		// Ensure the results of the extraction are correct
 		// All 5 entries should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry1));
-		assertTrue(Log.getResult().contains(testEntry2));
-		assertTrue(Log.getResult().contains(testEntry3));
-		assertTrue(Log.getResult().contains(testEntry4));
-		assertTrue(Log.getResult().contains(testEntry5));
+		assertTrue(Log.getResults().contains(testEntry1));
+		assertTrue(Log.getResults().contains(testEntry2));
+		assertTrue(Log.getResults().contains(testEntry3));
+		assertTrue(Log.getResults().contains(testEntry4));
+		assertTrue(Log.getResults().contains(testEntry5));
 		
 	}
 
@@ -127,10 +127,10 @@ public class LogTests {
 		
 		// Ensure that this query returns 2 log entries, and
 		// that they are both for testUser2
-		assertTrue(Log.getResult().get(0).equals(testEntry2));
-		assertTrue(Log.getResult().get(1).equals(testEntry6));
-		assertFalse(Log.getResult().contains(testEntry1));
-		assertEquals(2, Log.getResult().size());
+		assertTrue(Log.getResults().get(0).equals(testEntry2));
+		assertTrue(Log.getResults().get(1).equals(testEntry6));
+		assertFalse(Log.getResults().contains(testEntry1));
+		assertEquals(2, Log.getResults().size());
 		
 	}
 
@@ -141,22 +141,22 @@ public class LogTests {
 		// log entry 3 is the only one with testTool3
 		// as a checked-out tool, so it is the only one
 		// that should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry3));
-		assertEquals(1, Log.getResult().size());
+		assertTrue(Log.getResults().contains(testEntry3));
+		assertEquals(1, Log.getResults().size());
 		
 		Log.extractLogCheckedOutTool(testTool5);
 		
 		// log entry 6 is the only one with testTool5
 		// as a checked-out tool, so it is the only one
 		// that should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry6));
-		assertEquals(1, Log.getResult().size());
+		assertTrue(Log.getResults().contains(testEntry6));
+		assertEquals(1, Log.getResults().size());
 		
 		Log.extractLogCheckedOutTool(testTool6);
 		
 		// No one checked out testTool6, so this query should
 		// return no results (An empty List)
-		assertEquals(0, Log.getResult().size());
+		assertEquals(0, Log.getResults().size());
 	}
 
 	@Test public void extractLogByReturnedTool() {
@@ -165,22 +165,22 @@ public class LogTests {
 		// log entry 4 is the only one with testTool4
 		// as a returned tool, so it is the only one
 		// that should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry4));
-		assertEquals(1, Log.getResult().size());
+		assertTrue(Log.getResults().contains(testEntry4));
+		assertEquals(1, Log.getResults().size());
 		
 		Log.extractLogReturnedTool(testTool5);
 		
 		// log entry 4 is the only one with testTool5
 		// as a returned tool, so it is the only one
 		// that should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry4));
-		assertEquals(1, Log.getResult().size());
+		assertTrue(Log.getResults().contains(testEntry4));
+		assertEquals(1, Log.getResults().size());
 		
 		Log.extractLogReturnedTool(testTool6);
 		
 		// No one returned testTool6, so this query should
 		// return no results (An empty List)
-		assertEquals(0, Log.getResult().size());
+		assertEquals(0, Log.getResults().size());
 		
 	}
 
@@ -191,8 +191,8 @@ public class LogTests {
 		// log entry 5 is the only one with testMachine
 		// as a machine they used, so it is the only one
 		// that should be returned by this query.
-		assertTrue(Log.getResult().contains(testEntry5));
-		assertEquals(1, Log.getResult().size());
+		assertTrue(Log.getResults().contains(testEntry5));
+		assertEquals(1, Log.getResults().size());
 		
 	}
 	
