@@ -60,9 +60,6 @@ public class Log {
 			//get ID
 			int id = (int) result.get("ID");
 			
-			//get CWID
-			User u = Driver.getAccessTracker().loadUser((int) result.get("userCWID"));
-			
 			//get timeIn
 			Date timeIn = (Date) result.get("timeIn");
 			
@@ -101,7 +98,7 @@ public class Log {
 			ArrayList<Tool> toolsReturned = new ArrayList<Tool>();
 			ArrayList<BasicDBObject> toolsBack = (ArrayList<BasicDBObject>) result.get("toolsReturned");
 			if (!(toolsBack == null)) {
-				for(BasicDBObject embedded : toolsBack){ 
+				for(BasicDBObject embedded : toolsBack){
 					int upc = (int) embedded.get("upc"); 
 					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
 					if (tool.hasNext()) {
@@ -110,7 +107,7 @@ public class Log {
 				} 
 			}
 			
-			LogEntry entry = new LogEntry(id, u, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
+			LogEntry entry = new LogEntry(id, user, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
 			results.add(entry);
 		}
 	}

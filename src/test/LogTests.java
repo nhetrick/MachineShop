@@ -6,11 +6,15 @@ import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import GUI.Driver;
+
 import com.mongodb.DB;
 
 import main.*;
 
 public class LogTests {
+	
+	Driver driver;
 	
 	User testUser1;
 	User testUser2;
@@ -47,7 +51,10 @@ public class LogTests {
 	Date dateOut;
 
 	@Before
-	public void setup() {		
+	public void setup() {
+		
+		driver = new Driver();
+		
 		testUser1 = new User("", "", 2);
 		testUser2 = new User("", "", 3);
 		

@@ -190,12 +190,12 @@ public class AccessTracker {
 		User currentUser = loadUser(CWID);
 		currentUsers.add(currentUser);
 		
-		//Log.startEntry(currentUser);
+		Log.startEntry(currentUser);
 		
 		//displayUserMachines(currentUser);
 		
-		Log.extractLogCheckedOutTool(new Tool("Hammer", 309));
-		Log.printLog();
+		Log.extractLog(currentUser);
+		Log.printLogTable();
 		
 		return currentUser;
 		

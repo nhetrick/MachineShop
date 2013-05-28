@@ -59,7 +59,6 @@ public class AccessTrackerTests {
 		// Ensure this user is now in the list of current users
 		assertTrue(tracker.getCurrentUsers().contains(testUser));
 		
-		
 		// Ensures the entry was added to the log
 		Log.extractLog(testUser);
 		

@@ -58,6 +58,19 @@ public class LogEntry {
 		this.toolsCheckedOut = toolsCheckedOut;
 		this.toolsReturned = toolsReturned;
 		Log.incrementNumEntries();
+		
+		BasicDBObject logEntry = new BasicDBObject();
+		logEntry.put("ID", ID);
+		logEntry.put("timeIn", timeIn);
+		logEntry.put("userCWID", user.getCWID());
+		
+		DBCollection logEntries = database.getCollection("LogEntries");
+		logEntries.insert(logEntry);
+		
+		addMachinesUsed(machinesUsed);
+		addToolsCheckedOut(toolsCheckedOut);
+		addToolsReturned(toolsReturned);
+		
 	}
 	
 	public void startEntry(User user) {
@@ -124,9 +137,9 @@ public class LogEntry {
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
 		DBObject result = cursor.next();
 		
-		BasicDBObject tools = new BasicDBObject();
+		BasicDBList tools = new BasicDBList();
 		for(Tool t : returned) {
-			tools.put(String.valueOf(returned.indexOf(t)), t.getUPC());
+			tools.add(new BasicDBObject("upc", t.getUPC()));
 		}
 		result.put("toolsReturned", tools);
 		
