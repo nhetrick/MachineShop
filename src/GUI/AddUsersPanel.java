@@ -19,6 +19,7 @@ public class AddUsersPanel extends JPanel {
 		
 		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
+		Font textFont = new Font("SansSerif", Font.BOLD, 28);
 		
 		JLabel title = new JLabel("Add New User");
 		title.setFont(titleFont);
@@ -34,6 +35,10 @@ public class AddUsersPanel extends JPanel {
 		JTextField firstNameField = new JTextField();
 		JTextField lastNameField = new JTextField();
 		JTextField cwidField = new JTextField();
+		
+		firstNameField.setFont(textFont);
+		lastNameField.setFont(textFont);
+		cwidField.setFont(textFont);
 		
 		JPanel firstNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel lastNamePanel = new JPanel(new GridLayout(1, 2));

@@ -27,6 +27,7 @@ public class EditPermissionsPanel extends JPanel {
 				
 		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
+		Font textFont = new Font("SansSerif", Font.BOLD, 28);
 		
 		setLayout(new GridBagLayout());
 		
@@ -57,6 +58,7 @@ public class EditPermissionsPanel extends JPanel {
 		JPanel cwidPanel = new JPanel(new GridLayout(1, 3));
 		JLabel cwidLabel = new JLabel("Enter user CWID:");
 		JTextField cwidField = new JTextField();
+		cwidField.setFont(textFont);
 		JButton go = new JButton("Go");
 		go.setFont(buttonFont);
 		cwidLabel.setFont(buttonFont);
