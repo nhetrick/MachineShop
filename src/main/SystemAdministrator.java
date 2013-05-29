@@ -92,19 +92,56 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void addTool(Tool t) {
-		
+		DBCollection tools = database.getCollection("Tools");
+		DBCursor cursor = tools.find(new BasicDBObject("upc", t.getUPC()));
+		if (!cursor.hasNext()) {
+			BasicDBObject tool = new BasicDBObject();
+			tool.put("name", t.getName());
+			tool.put("upc", t.getUPC());
+			tools.insert(tool);
+		} else {
+			System.out.println("Tool already in system...");
+		}
 	}
 	
 	public void addMachine(Machine m) {
-		
+		DBCollection machines = database.getCollection("Machines");
+		DBCursor cursor = machines.find(new BasicDBObject("ID", m.getID()));
+		if (!cursor.hasNext()) {
+			BasicDBObject machine = new BasicDBObject();
+			machine.put("name", m.getName());
+			machine.put("ID", m.getID());
+			machines.insert(machine);
+		} else {
+			System.out.println("Machine already in system...");
+		}
 	}
 	
-	public void removeTool(Tool t) {
+	public void removeTool(int upc) {
+		DBCollection tools = database.getCollection("Tools");
+		DBCursor cursor = tools.find(new BasicDBObject("upc", upc));
+		if (!(cursor == null)) {
+			tools.remove(cursor.next());
+		} else {
+			System.out.println("Machine not in system...");
+		}
 		
+		
+//		DBCollection logEntries = database.getCollection("LogEntries");
+//		DBCursor result = logEntries.find(new BasicDBObject("ID", id));
+//		if (!(result == null)) {
+//			logEntries.remove(result.next());
+//		}
 	}
 	
-	public void removeMachine(Machine m) {
-		
+	public void removeMachine(String id) {
+		DBCollection machines = database.getCollection("Machines");
+		DBCursor cursor = machines.find(new BasicDBObject("ID", id));
+		if (!(cursor == null)) {
+			machines.remove(cursor.next());
+		} else {
+			System.out.println("Tool not in system...");
+		}
 	}
 	
 	public void lockUser(User user) {

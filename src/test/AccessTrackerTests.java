@@ -14,15 +14,19 @@ import main.User;
 import org.junit.Before;
 import org.junit.Test;
 
+import GUI.Driver;
+
 public class AccessTrackerTests {
 	
 	Calendar calendar;
+	Driver driver;
 	AccessTracker tracker;
 	User testUser;
 	
 	@Before
 	public void setup() {
-		tracker = new AccessTracker();
+		driver = new Driver();
+		tracker = Driver.getAccessTracker();
 		calendar = Calendar.getInstance();
 	}
 	
@@ -52,7 +56,7 @@ public class AccessTrackerTests {
 		
 		Date startTime = calendar.getTime();
 		
-		testUser = new User("", "", 10542318);
+		testUser = new User(" ", " ", 10542318);
 		
 		tracker.processLogIn(10542318);
 		

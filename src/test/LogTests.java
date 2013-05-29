@@ -3,7 +3,11 @@ package test;
 import static org.junit.Assert.*;
 import java.util.*;
 
+import junit.framework.Assert;
+
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import GUI.Driver;
@@ -14,46 +18,52 @@ import main.*;
 
 public class LogTests {
 	
-	Driver driver;
+	static Driver driver;
+	static SystemAdministrator admin;
 	
-	User testUser1;
-	User testUser2;
+	static User testUser1;
+	static User testUser2;
 
-	LogEntry testEntry1;
-	LogEntry testEntry2;
-	LogEntry testEntry3;
-	LogEntry testEntry4;
-	LogEntry testEntry5;
-	LogEntry testEntry6;
+	static LogEntry testEntry1;
+	static LogEntry testEntry2;
+	static LogEntry testEntry3;
+	static LogEntry testEntry4;
+	static LogEntry testEntry5;
+	static LogEntry testEntry6;
 
-	Machine testMachine;
-	ArrayList<Machine> testMachines;
+	static Machine testMachine;
+	static ArrayList<Machine> testMachines;
 
-	Machine notAMachine;
-	ArrayList<Machine> notTestMachines;
+	static Machine testMachine2;
+	static ArrayList<Machine> testMachines2;
 
-	Tool testTool1;
-	ArrayList<Tool> testTools1;
+	static Tool testTool1;
+	static ArrayList<Tool> testTools1;
 
-	Tool testTool2;
-	ArrayList<Tool> testTools2;
+	static Tool testTool2;
+	static ArrayList<Tool> testTools2;
 	
-	Tool testTool3;
-	ArrayList<Tool> testTools3;
+	static Tool testTool3;
+	static ArrayList<Tool> testTools3;
 
-	Tool testTool4;
-	Tool testTool5;
-	ArrayList<Tool> testTools4;
+	static Tool testTool4;
+	static Tool testTool5;
+	static ArrayList<Tool> testTools4;
 	
-	Tool testTool6;
+	static Tool testTool6;
 	
-	Date dateIn;
-	Date dateOut;
+	static Date dateIn;
+	static Date dateOut;
+	
+	static ArrayList<Integer> entryIds;
+	static ArrayList<String> machineIds;
+	static ArrayList<Integer> toolIds;
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		
 		driver = new Driver();
+		admin = new SystemAdministrator("", "", 0);
 		
 		testUser1 = new User("", "", 2);
 		testUser2 = new User("", "", 3);
@@ -65,38 +75,46 @@ public class LogTests {
 		testEntry5 = new LogEntry();
 		testEntry6 = new LogEntry();		
 
-		testMachine = new Machine("TPDD", "T-1");
+		testMachine = new Machine("TEST Lathe", "11A11");
+		admin.addMachine(testMachine);
 		testMachines = new ArrayList<Machine>();
 		testMachines.add(testMachine);
 
-		notAMachine = new Machine("This it not a machine", "WINE");
-		notTestMachines = new ArrayList<Machine>();
-		notTestMachines.add(notAMachine);
+		testMachine2 = new Machine("TEST Metal Press", "22A22");
+		admin.addMachine(testMachine2);
+		testMachines2 = new ArrayList<Machine>();
+		testMachines2.add(testMachine2);
 
-		testTool1 = new Tool("HITCOO", 15);
+		testTool1 = new Tool("TEST Hammer", 111);
+		admin.addTool(testTool1);
 		testTools1 = new ArrayList<Tool>();
 		testTools1.add(testTool1);
 
-		testTool2 = new Tool("Crowbar", 1);
+		testTool2 = new Tool("TEST Crowbar", 222);
+		admin.addTool(testTool2);
 		testTools2 = new ArrayList<Tool>();
 		testTools2.add(testTool2);
 		
-		testTool3 = new Tool("Hammer", 103);
+		testTool3 = new Tool("TEST Sponge", 333);
+		admin.addTool(testTool3);
 		testTools3 = new ArrayList<Tool>();
 		testTools3.add(testTool3);
 
-		testTool4 = new Tool("Driver", 56);
-		testTool5 = new Tool("Handsaw", 40);
+		testTool4 = new Tool("TEST Driver", 444);
+		admin.addTool(testTool4);
+		testTool5 = new Tool("TEST Handsaw", 555);
+		admin.addTool(testTool5);
 		testTools4 = new ArrayList<Tool>();
 		testTools4.add(testTool4);
 		testTools4.add(testTool5);
 		
-		testTool6 = new Tool("NotCheckedOutByAnyone", 0);
+		testTool6 = new Tool("TEST NotCheckedOutByAnyone", 777);
+		admin.addTool(testTool6);
 
-		testEntry1.startEntry(testUser1, notTestMachines, testTools1, testTools2);
-		testEntry2.startEntry(testUser2, notTestMachines, testTools1, testTools2);
-		testEntry3.startEntry(testUser1, notTestMachines, testTools3, testTools2);
-		testEntry4.startEntry(testUser1, notTestMachines, testTools2, testTools4);
+		testEntry1.startEntry(testUser1, testMachines2, testTools1, testTools2);
+		testEntry2.startEntry(testUser2, testMachines2, testTools1, testTools2);
+		testEntry3.startEntry(testUser1, testMachines2, testTools3, testTools2);
+		testEntry4.startEntry(testUser1, testMachines2, testTools2, testTools4);
 		testEntry5.startEntry(testUser1, testMachines, testTools2, testTools1);
 		
 		testEntry1.finishEntry();
@@ -108,23 +126,47 @@ public class LogTests {
 		testEntry6.startEntry(testUser2, testMachines, testTools4, testTools3);
 		testEntry6.finishEntry();
 		
+		entryIds = new ArrayList<Integer>();
+		entryIds.add(testEntry1.getID());
+		entryIds.add(testEntry2.getID());
+		entryIds.add(testEntry3.getID());
+		entryIds.add(testEntry4.getID());
+		entryIds.add(testEntry5.getID());
+		entryIds.add(testEntry6.getID());
+		
+		machineIds = new ArrayList<String>();
+		machineIds.add(testMachine.getID());
+		machineIds.add(testMachine2.getID());
+		
+		toolIds = new ArrayList<Integer>();
+		toolIds.add(testTool1.getUPC());
+		toolIds.add(testTool2.getUPC());
+		toolIds.add(testTool3.getUPC());
+		toolIds.add(testTool4.getUPC());
+		toolIds.add(testTool5.getUPC());
+		toolIds.add(testTool6.getUPC());
+		
 	}
 	
 	@Test
 	public void extractLogByDateTest() {
 		
 		dateIn = testEntry1.getTimeIn();
-		dateOut = testEntry5.getTimeOut();
+		dateOut = testEntry6.getTimeOut();
 		
 		Log.extractLog(dateIn, dateOut);
+		Log.printLogTable();
 		
 		// Ensure the results of the extraction are correct
 		// All 5 entries should be returned by this query.
+		
+		assertEquals(6, Log.getResults().size());
 		assertTrue(Log.getResults().contains(testEntry1));
 		assertTrue(Log.getResults().contains(testEntry2));
 		assertTrue(Log.getResults().contains(testEntry3));
 		assertTrue(Log.getResults().contains(testEntry4));
 		assertTrue(Log.getResults().contains(testEntry5));
+		assertTrue(Log.getResults().contains(testEntry6));
 		
 	}
 
@@ -199,8 +241,21 @@ public class LogTests {
 		// as a machine they used, so it is the only one
 		// that should be returned by this query.
 		assertTrue(Log.getResults().contains(testEntry5));
-		assertEquals(1, Log.getResults().size());
+		assertEquals(2, Log.getResults().size());
 		
+	}
+	
+	@AfterClass
+	public static void cleanup() {
+		for (int i : entryIds) {
+			Log.deleteEntry(i);
+		}
+		for (String i : machineIds) {
+			admin.removeMachine(i);
+		}
+		for (int i : toolIds) {
+			admin.removeTool(i);
+		}
 	}
 	
 }
