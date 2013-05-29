@@ -6,19 +6,15 @@ import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Clock extends JPanel implements Runnable {
+public class Clock extends JLabel implements Runnable {
 	
 	private volatile Thread clockThread = null;
-	private JLabel timeLabel;
 	
 	public Clock(Font f) {
 		
-		timeLabel = new JLabel("");
-		timeLabel.setFont(f);
-		timeLabel.setHorizontalAlignment(JLabel.RIGHT);
+		setFont(f);
 		clockThread = new Thread(this);
 		clockThread.start();
-		add(timeLabel);
 		setVisible(true);
 		updateTime();
 	}
@@ -39,7 +35,7 @@ public class Clock extends JPanel implements Runnable {
 		
 		Calendar calendar = Calendar.getInstance();
 		String time = calendar.getTime().toLocaleString();
-		timeLabel.setText(time);
+		setText(time);
 		repaint();
 		
 	}

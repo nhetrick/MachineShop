@@ -2,49 +2,63 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class EditMachinesPanel extends JPanel {
-
-	JPanel contentPanel;
+	
 	JPanel buttonPanel;
+	GridBagConstraints c;
 	
 	public EditMachinesPanel() {
-		setLayout(new BorderLayout());
 		
-		contentPanel = new JPanel();
-		buttonPanel = new JPanel();
+		c = new GridBagConstraints();
 		
-		//contentPanel.setLayout(new GridLayout(6,4));
-		buttonPanel.setLayout(new GridLayout(1,2));
+		setLayout(new GridBagLayout());
 		
-		JTextField machineID = new JTextField();
-		JLabel machineIDLabel = new JLabel("Machine ID:");
+		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
+		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 		
-		machineID.setPreferredSize(new Dimension(200, 50));
-		machineIDLabel.setPreferredSize(new Dimension(200, 50));
+		buttonPanel = new JPanel(new GridLayout(1, 2));
 		
-		contentPanel.add(machineIDLabel);
-		contentPanel.add(machineID);
+		JLabel title = new JLabel("Edit Machines", JLabel.CENTER);
+		title.setAlignmentX(CENTER_ALIGNMENT);
+		title.setFont(titleFont);
 		
-		JTextField machineName = new JTextField();
-		JLabel machineNameLabel = new JLabel("Machine Name:");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		machineName.setPreferredSize(new Dimension(200, 50));
-		machineNameLabel.setPreferredSize(new Dimension(200, 50));
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.8;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(title, c);
 		
-		contentPanel.add(machineNameLabel);
-		contentPanel.add(machineName);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		JButton addButton = new JButton("Add Machine");
-		JButton removeButton = new JButton("Remove Machine");
+		JButton addButton = new JButton("Add Machines");
+		JButton removeButton = new JButton("Remove Machines");
+		
+		addButton.setFont(buttonFont);
+		removeButton.setFont(buttonFont);
 		
 		addButton.addActionListener(new AddButtonListener());
 		removeButton.addActionListener(new RemoveButtonListener());
@@ -52,23 +66,36 @@ public class EditMachinesPanel extends JPanel {
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		
-		add(contentPanel, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.SOUTH);
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2; 
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		add(buttonPanel, c);
+		
+		c.gridy = 2;
+		c.weighty = 0.7;
+		add(new JPanel(), c);
 		
 	}
 	
 	private class AddButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			removeAll();
+			setLayout(new BorderLayout());
+			add(new AddMachinesPanel(), BorderLayout.CENTER);
+			repaint();
 		}
 	}
 	
 	private class RemoveButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			removeAll();
+			setLayout(new BorderLayout());
+			add(new RemoveMachinesPanel(), BorderLayout.CENTER);
+			repaint();
 		}
 	}
 }
-

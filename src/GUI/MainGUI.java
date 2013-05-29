@@ -20,17 +20,14 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import main.*;
 
 public class MainGUI extends JFrame{
-	private Toolkit tk;
 	private KeyListener reader; 
 	private AccessTracker tracker;
 	private User currentUser;
 	private JPanel centerPanel;
 	private JPanel headerBar;
 	private JPanel homeCenterPanel;
-	private Calendar calendar;
 	private Clock time;
 	private Font headerFont;
-	private JPanel currentPanel;
 	private GridBagConstraints c = new GridBagConstraints();
 
 	public MainGUI() {
@@ -144,18 +141,17 @@ public class MainGUI extends JFrame{
 	public void ProcessHomeScreen(User currentUser) {
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		
-		calendar = Calendar.getInstance();
-		
-		headerBar = new JPanel(new GridLayout(1, 3));
+		headerBar = new JPanel(new GridLayout(1, 2));
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
 		JLabel nameLabel = new JLabel(userName);
-		JLabel centerLabel = new JLabel("");
 		time = new Clock(headerFont);
 		
+		nameLabel.setHorizontalAlignment(JLabel.LEFT);
+		time.setHorizontalAlignment(JLabel.RIGHT);
+		
 		nameLabel.setFont(headerFont);
-		centerLabel.setFont(headerFont);
 		
 		headerBar.add(nameLabel);
 		headerBar.add(time);
@@ -178,7 +174,6 @@ public class MainGUI extends JFrame{
 		} 	else {
 			homeCenterPanel = new UserGUI(currentUser);
 		}
-		currentPanel = homeCenterPanel;
 		
 		c.gridy = 1;
 		c.gridx = 0;

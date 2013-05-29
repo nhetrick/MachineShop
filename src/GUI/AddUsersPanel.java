@@ -21,7 +21,7 @@ public class AddUsersPanel extends JPanel {
 		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 		Font textFont = new Font("SansSerif", Font.BOLD, 28);
 		
-		JLabel title = new JLabel("Add New User");
+		JLabel title = new JLabel("Add a New User");
 		title.setFont(titleFont);
 		
 		JLabel firstNameLabel = new JLabel("First Name:");

@@ -2,49 +2,63 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class EditToolsPanel extends JPanel {
 	
-	JPanel contentPanel;
 	JPanel buttonPanel;
+	GridBagConstraints c;
 	
 	public EditToolsPanel() {
-		setLayout(new BorderLayout());
 		
-		contentPanel = new JPanel();
-		buttonPanel = new JPanel();
+		c = new GridBagConstraints();
 		
-		//contentPanel.setLayout(new GridLayout(6,4));
-		buttonPanel.setLayout(new GridLayout(1,2));
+		setLayout(new GridBagLayout());
 		
-		JTextField toolID = new JTextField();
-		JLabel toolIDLabel = new JLabel("Tool ID:");
+		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
+		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 		
-		toolID.setPreferredSize(new Dimension(200, 50));
-		toolIDLabel.setPreferredSize(new Dimension(200, 50));
+		buttonPanel = new JPanel(new GridLayout(1, 2));
 		
-		contentPanel.add(toolIDLabel);
-		contentPanel.add(toolID);
+		JLabel title = new JLabel("Edit Tools", JLabel.CENTER);
+		title.setAlignmentX(CENTER_ALIGNMENT);
+		title.setFont(titleFont);
 		
-		JTextField toolName = new JTextField();
-		JLabel toolNameLabel = new JLabel("Tool Name:");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		toolName.setPreferredSize(new Dimension(200, 50));
-		toolNameLabel.setPreferredSize(new Dimension(200, 50));
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.8;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(title, c);
 		
-		contentPanel.add(toolNameLabel);
-		contentPanel.add(toolName);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(new JPanel(), c);
 		
-		JButton addButton = new JButton("Add Tool");
-		JButton removeButton = new JButton("Remove Tool");
+		JButton addButton = new JButton("Add Tools");
+		JButton removeButton = new JButton("Remove Tools");
+		
+		addButton.setFont(buttonFont);
+		removeButton.setFont(buttonFont);
 		
 		addButton.addActionListener(new AddButtonListener());
 		removeButton.addActionListener(new RemoveButtonListener());
@@ -52,22 +66,36 @@ public class EditToolsPanel extends JPanel {
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		
-		add(contentPanel, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.SOUTH);
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2; 
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		add(buttonPanel, c);
+		
+		c.gridy = 2;
+		c.weighty = 0.7;
+		add(new JPanel(), c);
 		
 	}
 	
 	private class AddButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			removeAll();
+			setLayout(new BorderLayout());
+			add(new AddToolsPanel(), BorderLayout.CENTER);
+			repaint();
 		}
 	}
 	
 	private class RemoveButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			removeAll();
+			setLayout(new BorderLayout());
+			add(new RemoveToolsPanel(), BorderLayout.CENTER);
+			repaint();
 		}
 	}
 }
