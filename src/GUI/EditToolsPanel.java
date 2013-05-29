@@ -15,25 +15,30 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class EditToolsPanel extends JPanel {
+public class EditToolsPanel extends ContentPanel {
 	
-	JPanel buttonPanel;
-	GridBagConstraints c;
+	private JButton addButton;
+	private JButton removeButton;
+	private ButtonListener buttonListener;
 	
 	public EditToolsPanel() {
+				
+		super("Edit Tools");
+		buttonListener = new ButtonListener();
 		
-		c = new GridBagConstraints();
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 		
-		setLayout(new GridBagLayout());
+		addButton = new JButton("Add Tools");
+		removeButton = new JButton("Remove Tools");
 		
-		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
+		addButton.setFont(buttonFont);
+		removeButton.setFont(buttonFont);
 		
-		buttonPanel = new JPanel(new GridLayout(1, 2));
+		addButton.addActionListener(buttonListener);
+		removeButton.addActionListener(buttonListener);
 		
-		JLabel title = new JLabel("Edit Tools", JLabel.CENTER);
-		title.setAlignmentX(CENTER_ALIGNMENT);
-		title.setFont(titleFont);
+		buttonPanel.add(addButton);
+		buttonPanel.add(removeButton);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -54,18 +59,6 @@ public class EditToolsPanel extends JPanel {
 		c.gridy = 0;
 		add(new JPanel(), c);
 		
-		JButton addButton = new JButton("Add Tools");
-		JButton removeButton = new JButton("Remove Tools");
-		
-		addButton.setFont(buttonFont);
-		removeButton.setFont(buttonFont);
-		
-		addButton.addActionListener(new AddButtonListener());
-		removeButton.addActionListener(new RemoveButtonListener());
-		
-		buttonPanel.add(addButton);
-		buttonPanel.add(removeButton);
-		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.2; 
 		
@@ -79,23 +72,21 @@ public class EditToolsPanel extends JPanel {
 		
 	}
 	
-	private class AddButtonListener implements ActionListener {
+	private class ButtonListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new AddToolsPanel(), BorderLayout.CENTER);
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == addButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new AddToolsPanel(), BorderLayout.CENTER);
+			} else if ( e.getSource() == removeButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new RemoveToolsPanel(), BorderLayout.CENTER);
+				repaint();
+			}
 			repaint();
 		}
 	}
 	
-	private class RemoveButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new RemoveToolsPanel(), BorderLayout.CENTER);
-			repaint();
-		}
-	}
 }

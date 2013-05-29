@@ -14,112 +14,112 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class DataEntryGUI extends JPanel {
+	
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
-	private JPanel machinePermissions;
-	private JPanel checkedOutTools;
-	private GridBagConstraints constraints = new GridBagConstraints();
 	private Font buttonFont;
-	JButton logOut;
-	JButton permissions;
-	JButton users;
-	JButton tools;
-	JButton machines;
-	JButton administrators;
-	JButton lockUser;
-	JButton generateReport;
-	JButton list;
-	Color buttonHighlight;
+	
+	private JButton logOut;
+	private JButton certifications;
+	private JButton users;
+	private JButton tools;
+	private JButton machines;
+	private JButton privileges;
+	private JButton lockUser;
+	private JButton generateReport;
+	private JButton list;
+	
+	private ButtonListener buttonListener;
+	private Color buttonBackground;
 	
 	public DataEntryGUI() {
 		
-		buttonHighlight = new Color(63, 146, 176);
-		buttonFont = new Font("SansSerif", Font.BOLD, 24);
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		buttonListener = new ButtonListener();
+		
+		buttonBackground = new Color(63, 146, 176);
+		
+		buttonFont = new Font("SansSerif", Font.BOLD, 30);
 		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEtchedBorder());
 		buttonPanel = new JPanel(new GridLayout(9, 1));
 		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
-		setLayout(new GridBagLayout());
-		
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.weighty = 1;
-		constraints.weightx = 0.5;
-		constraints.anchor = GridBagConstraints.LINE_START;
-		
-		add(contentPanel, constraints);
-		
-		constraints.anchor = GridBagConstraints.LINE_END;
-		constraints.weightx = 0;
-		constraints.gridx = 1;
-		
-		add(buttonPanel, constraints);
-		
-//		setLayout(new GridLayout(1, 3));
-//		add(contentPanel);
-//		add(new JPanel());
-//		add(buttonPanel);
-		
 		logOut = new JButton();
-		permissions = new JButton();
+		certifications = new JButton();
 		users = new JButton();
 		tools = new JButton();
 		machines = new JButton();
-		administrators = new JButton();
+		privileges = new JButton();
 		lockUser = new JButton();
 		generateReport = new JButton();
 		list = new JButton();
 		
+		logOut.setFont(buttonFont);
+		certifications.setFont(buttonFont);
+		users.setFont(buttonFont);
+		tools.setFont(buttonFont);
+		machines.setFont(buttonFont);
+		privileges.setFont(buttonFont);
+		lockUser.setFont(buttonFont);
+		generateReport.setFont(buttonFont);
+		list.setFont(buttonFont);
+		
 		logOut.setText("Log Out");
-		permissions.setText("Edit Permissions");
+		certifications.setText("Machine Certifications");
 		users.setText("Edit Users");
 		tools.setText("Edit Tools");
 		machines.setText("Edit Machines");
-		administrators.setText("Edit Administrators");
+		privileges.setText("User Privileges");
 		lockUser.setText("Lock/Unlock User");
 		generateReport.setText("Generate Report");
 		list.setText("List Tools/Machines");
 		
-		logOut.setFont(buttonFont);
-		permissions.setFont(buttonFont);
-		users.setFont(buttonFont);
-		tools.setFont(buttonFont);
-		machines.setFont(buttonFont);
-		administrators.setFont(buttonFont);
-		lockUser.setFont(buttonFont);
-		generateReport.setFont(buttonFont);
-		list.setFont(buttonFont);		
+		certifications.addActionListener(buttonListener);
+		users.addActionListener(buttonListener);
+		tools.addActionListener(buttonListener);
+		machines.addActionListener(buttonListener);
+		privileges.addActionListener(buttonListener);
+		lockUser.addActionListener(buttonListener);
+		generateReport.addActionListener(buttonListener);
+		list.addActionListener(buttonListener);
+		logOut.addActionListener(buttonListener);
 		
-		buttonPanel.add(permissions);
+		buttonPanel.add(certifications);
 		buttonPanel.add(tools);
 		buttonPanel.add(machines);
 		buttonPanel.add(users);
-		buttonPanel.add(administrators);
+		buttonPanel.add(privileges);
 		buttonPanel.add(lockUser);
 		buttonPanel.add(generateReport);
 		buttonPanel.add(list);
 		buttonPanel.add(logOut);
 		
-		permissions.addActionListener(new PermissionsButtonListener());
-		users.addActionListener(new UsersButtonListener());
-		tools.addActionListener(new ToolsButtonListener());
-		machines.addActionListener(new MachinesButtonListener());
-		administrators.addActionListener(new AdministratorsButtonListener());
-		lockUser.addActionListener(new LockUserButtonListener());
-		generateReport.addActionListener(new GenerateReportButtonListener());
-		list.addActionListener(new ListButtonListener());
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 0.5;
+		c.anchor = GridBagConstraints.LINE_START;
+		
+		add(contentPanel, c);
+		
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		c.gridx = 1;
+		
+		add(buttonPanel, c);
+		
 	}
 	
 	public void resetButtonBackgrounds(){
-		permissions.setBackground(null);
+		certifications.setBackground(null);
 		users.setBackground(null);
 		tools.setBackground(null);
 		machines.setBackground(null);
-		administrators.setBackground(null);
+		privileges.setBackground(null);
 		lockUser.setBackground(null);
 		generateReport.setBackground(null);
 		list.setBackground(null);	
@@ -131,76 +131,31 @@ public class DataEntryGUI extends JPanel {
 		contentPanel.add(panel);
 		repaint();
 	}
-
-	private class PermissionsButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new EditPermissionsPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
 	
-	private class UsersButtonListener implements ActionListener {
+	private class ButtonListener implements ActionListener {
+		
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new EditUsersPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class ToolsButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new EditToolsPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class MachinesButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new EditMachinesPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class AdministratorsButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new EditAdministratorsPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class LockUserButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new LockUserPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class GenerateReportButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new GenerateReportPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
-		}
-	}
-	
-	private class ListButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			switchPanels(new ListPanel());
-			JButton current = (JButton) arg0.getSource();
-			current.setBackground(buttonHighlight);
+		public void actionPerformed(ActionEvent e) {
+			
+			if ( e.getSource() == certifications ) {
+				switchPanels(new EditCertificationsPanel());
+			} else if ( e.getSource() == users ) {
+				switchPanels(new EditUsersPanel());
+			} else if ( e.getSource() == tools ) {
+				switchPanels(new EditToolsPanel());
+			} else if ( e.getSource() == machines ) {
+				switchPanels(new EditMachinesPanel());
+			} else if ( e.getSource() == privileges ) {
+				switchPanels(new EditPrivilegesPanel());
+			} else if ( e.getSource() == lockUser ) {
+				switchPanels(new LockUserPanel());
+			} else if ( e.getSource() == generateReport ) {
+				switchPanels(new GenerateReportPanel());
+			} else if ( e.getSource() == list ) {
+				switchPanels(new ListPanel());
+			}
+			JButton current = (JButton) e.getSource();
+			current.setBackground(buttonBackground);
 		}
 	}
 
