@@ -15,25 +15,30 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class EditMachinesPanel extends JPanel {
+public class EditMachinesPanel extends ContentPanel {
 	
-	JPanel buttonPanel;
-	GridBagConstraints c;
+	private JButton addButton;
+	private JButton removeButton;
+	private ButtonListener buttonListener;
 	
 	public EditMachinesPanel() {
 		
-		c = new GridBagConstraints();
+		super("Edit Machines");
+		buttonListener = new ButtonListener();
 		
-		setLayout(new GridBagLayout());
+		addButton = new JButton("Add Machines");
+		removeButton = new JButton("Remove Machines");
 		
-		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
+		addButton.setFont(buttonFont);
+		removeButton.setFont(buttonFont);
 		
-		buttonPanel = new JPanel(new GridLayout(1, 2));
+		addButton.addActionListener(buttonListener);
+		removeButton.addActionListener(buttonListener);
 		
-		JLabel title = new JLabel("Edit Machines", JLabel.CENTER);
-		title.setAlignmentX(CENTER_ALIGNMENT);
-		title.setFont(titleFont);
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+		
+		buttonPanel.add(addButton);
+		buttonPanel.add(removeButton);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -54,18 +59,6 @@ public class EditMachinesPanel extends JPanel {
 		c.gridy = 0;
 		add(new JPanel(), c);
 		
-		JButton addButton = new JButton("Add Machines");
-		JButton removeButton = new JButton("Remove Machines");
-		
-		addButton.setFont(buttonFont);
-		removeButton.setFont(buttonFont);
-		
-		addButton.addActionListener(new AddButtonListener());
-		removeButton.addActionListener(new RemoveButtonListener());
-		
-		buttonPanel.add(addButton);
-		buttonPanel.add(removeButton);
-		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.2; 
 		
@@ -79,22 +72,18 @@ public class EditMachinesPanel extends JPanel {
 		
 	}
 	
-	private class AddButtonListener implements ActionListener {
+	private class ButtonListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new AddMachinesPanel(), BorderLayout.CENTER);
-			repaint();
-		}
-	}
-	
-	private class RemoveButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new RemoveMachinesPanel(), BorderLayout.CENTER);
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == addButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new AddMachinesPanel(), BorderLayout.CENTER);
+			} else if (e.getSource() == removeButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new RemoveMachinesPanel(), BorderLayout.CENTER);
+			}
 			repaint();
 		}
 	}

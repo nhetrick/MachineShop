@@ -1,39 +1,26 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-public class EditUsersPanel extends JPanel {
+public class EditUsersPanel extends ContentPanel {
 	
-	JPanel buttonPanel;
-	GridBagConstraints c;
+	private JButton addButton;
+	private JButton removeButton;
+	private ButtonListener buttonListener;
 	
 	public EditUsersPanel() {
 		
-		c = new GridBagConstraints();
+		super("Edit Users");
+		buttonListener = new ButtonListener();
 		
-		setLayout(new GridBagLayout());
-		
-		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-		
-		buttonPanel = new JPanel(new GridLayout(1, 2));
-		
-		JLabel title = new JLabel("Edit Users", JLabel.CENTER);
-		title.setAlignmentX(CENTER_ALIGNMENT);
-		title.setFont(titleFont);
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -54,14 +41,14 @@ public class EditUsersPanel extends JPanel {
 		c.gridy = 0;
 		add(new JPanel(), c);
 		
-		JButton addButton = new JButton("Add Users");
-		JButton removeButton = new JButton("Remove Users");
+		addButton = new JButton("Add Users");
+		removeButton = new JButton("Remove Users");
 		
 		addButton.setFont(buttonFont);
 		removeButton.setFont(buttonFont);
 		
-		addButton.addActionListener(new AddButtonListener());
-		removeButton.addActionListener(new RemoveButtonListener());
+		addButton.addActionListener(buttonListener);
+		removeButton.addActionListener(buttonListener);
 		
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
@@ -79,22 +66,19 @@ public class EditUsersPanel extends JPanel {
 		
 	}
 	
-	private class AddButtonListener implements ActionListener {
+	private class ButtonListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new AddUsersPanel(), BorderLayout.CENTER);
-			repaint();
-		}
-	}
-	
-	private class RemoveButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			removeAll();
-			setLayout(new BorderLayout());
-			add(new RemoveUsersPanel(), BorderLayout.CENTER);
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == addButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new AddUsersPanel(), BorderLayout.CENTER);
+			} else if ( e.getSource() == removeButton ) {
+				removeAll();
+				setLayout(new BorderLayout());
+				add(new RemoveUsersPanel(), BorderLayout.CENTER);
+				repaint();
+			}
 			repaint();
 		}
 	}

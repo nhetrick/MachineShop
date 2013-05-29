@@ -15,23 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-public class RemoveUsersPanel extends JPanel {
+public class RemoveUsersPanel extends ContentPanel {
 	
-	GridBagConstraints c;
-	JComboBox<String> searchParameter;
-	JLabel enterLabel;
-	JButton removeButton;
+	private JComboBox<String> searchParameter;
+	private JLabel enterLabel;
+	private JButton removeButton;
+	private JButton goButton;
+	private ButtonListener buttonListener;
+	private ComboBoxListener comboBoxListener;
 	
 	public RemoveUsersPanel() {
 		
-		c = new GridBagConstraints();
-		
-		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-		Font textFont = new Font("SansSerif", Font.BOLD, 28);
-		
-		JLabel title = new JLabel("Remove Users");
-		title.setFont(titleFont);
+		super("Remove Users");
+		buttonListener = new ButtonListener();
+		comboBoxListener = new ComboBoxListener();
 		
 		JLabel searchLabel = new JLabel("Search By:");
 		
@@ -40,14 +37,16 @@ public class RemoveUsersPanel extends JPanel {
 		searchParameter = new JComboBox<String>();
 		searchParameter.setFont(textFont);
 		
-		searchParameter.addItem("User Name");
+		searchParameter.addItem("Name");
 		searchParameter.addItem("CWID");
 		
-		searchParameter.addActionListener(new ComboBoxListener());
+		searchParameter.addActionListener(comboBoxListener);
 		
 		enterLabel = new JLabel("Enter name:");
 		JTextField searchField = new JTextField();
-		JButton goButton = new JButton("Go");
+		goButton = new JButton("Go");
+		
+		goButton.addActionListener(buttonListener);
 		
 		enterLabel.setFont(buttonFont);
 		searchField.setFont(textFont);
@@ -55,18 +54,6 @@ public class RemoveUsersPanel extends JPanel {
 		
 		JPanel parameterPanel = new JPanel(new GridBagLayout());
 		JPanel searchPanel = new JPanel(new GridLayout(1, 3));
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.27;
-		c.gridx = 0;
-		c.gridy = 0;
-		parameterPanel.add(searchLabel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.73;
-		c.gridx = 1;
-		c.gridy = 0;
-		parameterPanel.add(searchParameter, c);
 		
 		searchPanel.add(enterLabel);
 		searchPanel.add(searchField);
@@ -79,7 +66,17 @@ public class RemoveUsersPanel extends JPanel {
 		removeButton.setFont(buttonFont);
 		removeButton.addActionListener(new ButtonListener());
 		
-		setLayout(new GridBagLayout());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.27;
+		c.gridx = 0;
+		c.gridy = 0;
+		parameterPanel.add(searchLabel, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.73;
+		c.gridx = 1;
+		c.gridy = 0;
+		parameterPanel.add(searchParameter, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -160,6 +157,8 @@ public class RemoveUsersPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
+			} else if ( e.getSource() == goButton ) {
+				// TO DO
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 package GUI;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,18 +11,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-public class AddUsersPanel extends JPanel {
+public class AddUsersPanel extends ContentPanel {
 	
-	GridBagConstraints c;
+	private JButton saveButton;
+	private ButtonListener buttonListener;
 	
 	public AddUsersPanel() {
 		
-		Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-		Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-		Font textFont = new Font("SansSerif", Font.BOLD, 28);
-		
-		JLabel title = new JLabel("Add a New User");
-		title.setFont(titleFont);
+		super("Add a New User");
+		buttonListener = new ButtonListener();
 		
 		JLabel firstNameLabel = new JLabel("First Name:");
 		JLabel lastNameLabel = new JLabel("Last Name:");
@@ -56,12 +53,9 @@ public class AddUsersPanel extends JPanel {
 		JPanel permissionsPanel = new JPanel();
 		permissionsPanel.setBorder(new TitledBorder("Add User Permissions"));
 		
-		JButton saveButton = new JButton("Save");
+		saveButton = new JButton("Save");
 		saveButton.setFont(buttonFont);
-		
-		setLayout(new GridBagLayout());
-
-		c = new GridBagConstraints();
+		saveButton.addActionListener(buttonListener);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -118,6 +112,15 @@ public class AddUsersPanel extends JPanel {
 		c.gridy = 6;
 		add(new JPanel(), c);
 		
+	}
+	
+	private class ButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == saveButton ) {
+				// TO DO
+			}
+		}
 	}
 
 }
