@@ -139,16 +139,11 @@ public class RemoveUsersPanel extends ContentPanel {
 			if (e.getSource() == searchParameter) {
 				String parameter = searchParameter.getSelectedItem().toString();
 				if (parameter == "CWID") {
-					enterLabel.setVisible(false);
 					enterLabel.setText("Enter CWID:");
-					enterLabel.setVisible(true);
-				} else if (parameter == "User Name") {
-					enterLabel.setVisible(false);
+				} else if (parameter == "Name") {
 					enterLabel.setText("Enter Name:");
-					enterLabel.setVisible(true);
 				}
 			}
-			repaint();
 		}
 	}
 	
