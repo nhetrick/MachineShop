@@ -1,7 +1,10 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,107 +13,207 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
-public class GenerateReportPanel extends JPanel {
+public class GenerateReportPanel extends ContentPanel {
 
-	JPanel contentPanel;
-	JPanel buttonPanel;
-	JPanel parametersPanel;
-	
-	JComboBox<String> parameters;
-	
-	JTextField text1;
-	JLabel label1;
-	
-	JTextField text2;
-	JLabel label2;
+	private JComboBox<String> parameters;
+	private ButtonListener buttonListener;
+	private ComboBoxListener comboBoxListener;
+	private JButton generateButton;
+	private JPanel dataEntryPanel;
+	private JPanel resultsPanel;
 	
 	public GenerateReportPanel() {
-		setLayout(new BorderLayout());
 		
-		contentPanel = new JPanel();
-		buttonPanel = new JPanel();
-		parametersPanel = new JPanel();
+		super("Generate a Report");
+		buttonListener = new ButtonListener();
+		comboBoxListener = new ComboBoxListener();
 		
 		parameters = new JComboBox<String>();
-		JLabel parametersLabel = new JLabel("Select Report Parameter:");
+		JLabel parameterLabel = new JLabel("Report Parameter:");
 		
-		parameters.addItem(" ");
+		parameters.addItem("Date");
 		parameters.addItem("User");
 		parameters.addItem("Tool");
 		parameters.addItem("Machine");
-		parameters.addItem("Date");
-		parameters.addItem("All");
+		parameters.addActionListener(comboBoxListener);
 		
-		parameters.setPreferredSize(new Dimension(200, 50));
-		parametersLabel.setPreferredSize(new Dimension(200, 50));
+		parameterLabel.setFont(buttonFont);
+		parameters.setFont(textFont);
 		
-		parametersPanel.add(parametersLabel);
-		parametersPanel.add(parameters);
-		parameters.addActionListener(new ComboBoxListener());
+		generateButton = new JButton("Generate");
+		generateButton.setFont(buttonFont);
+		generateButton.addActionListener(buttonListener);
 		
-		//contentPanel.setLayout(new GridLayout(6,4));
-		//buttonPanel.setLayout(new GridLayout(1,2));
+		JPanel parameterPanel = new JPanel(new GridLayout(1, 2));
 		
-		JButton generateButton = new JButton("Generate Report");
+		parameterPanel.add(parameterLabel);
+		parameterPanel.add(parameters);
 		
-		buttonPanel.add(generateButton);
+		dataEntryPanel = new JPanel(new GridBagLayout());
+		dataEntryPanel.setBorder(new TitledBorder("Parameters"));
 		
-		text1 = new JTextField();
-		label1 = new JLabel(" ");
-		text1.setPreferredSize(new Dimension(200, 50));
-		label1.setPreferredSize(new Dimension(200, 50));
-		text2 = new JTextField();
-		label2 = new JLabel(" ");
-		text2.setPreferredSize(new Dimension(200, 50));
-		label2.setPreferredSize(new Dimension(200, 50));
-		text1.setVisible(false);
-		text2.setVisible(false);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		dataEntryPanel.add(new DatePanel(), c);
 		
-		contentPanel.add(label1);
-		contentPanel.add(text1);
-		contentPanel.add(label2);
-		contentPanel.add(text2);
-	
-		add(parametersPanel, BorderLayout.NORTH);
-		add(contentPanel, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.SOUTH);
+		resultsPanel = new JPanel();
+		resultsPanel.setBorder(new TitledBorder("Results"));
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(new JPanel(), c);
+		
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.8;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(title, c);
+		
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.1;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(new JPanel(), c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 1;
+		add(parameterPanel, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 2;
+		add(dataEntryPanel, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 3;
+		add(generateButton, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.5;
+		c.gridx = 1;
+		c.gridy = 4;
+		add(resultsPanel, c);
+		
+		c.weighty = 0.1;
+		c.gridy = 5;
+		add(new JPanel(), c);
 		
 	}
 	
 	private class ComboBoxListener implements ActionListener {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == parameters) {
 				String parameter = parameters.getSelectedItem().toString();
-				if (parameter == "User") {
-					label1.setText("CWID:");
-					text1.setVisible(true);
-					label2.setText(" ");
-					text2.setVisible(false);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.weightx = 1;
+				if (parameter == "Date") {
+					dataEntryPanel.removeAll();
+					dataEntryPanel.add(new DatePanel(), c);
+				} else if (parameter == "User") {
+					dataEntryPanel.removeAll();
+					dataEntryPanel.add(new UserPanel(), c);
 				} else if (parameter == "Tool") {
-					label1.setText("Tool ID:");
-					text1.setVisible(true);
-					label2.setText(" ");
-					text2.setVisible(false);
+					dataEntryPanel.removeAll();
+					dataEntryPanel.add(new ToolPanel(), c);
 				} else if (parameter == "Machine") {
-					label1.setText("Machine ID:");
-					text1.setVisible(true);
-					label2.setText(" ");
-					text2.setVisible(false);
-				} else if (parameter == "Date") {
-					label1.setText("Start Date:");
-					text1.setVisible(true);
-					label2.setText("End Date:");
-					text2.setVisible(true);
-				} else {
-					label1.setText(" ");
-					text1.setVisible(false);
-					label2.setText(" ");
-					text2.setVisible(false);
+					dataEntryPanel.removeAll();
+					dataEntryPanel.add(new MachinePanel(), c);
 				}
 			}
+		}
+	}
+	
+	private class ButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == generateButton) {
+				// GENERATE REPORT
+			}
+		}
+	}
+	
+	private class DatePanel extends JPanel {
+		
+		DatePanel() {
+			
+			Font smallFont = new Font("SansSerif", Font.BOLD, 18);
+			
+			setLayout(new GridLayout(2, 2));
+			
+			JLabel startLabel = new JLabel("Enter Start Date (MM/DD/YYYY):");
+			JLabel endLabel = new JLabel("Enter End Date (MM/DD/YYYY):");
+			JTextField startField = new JTextField();
+			JTextField endField = new JTextField();
+			
+			startLabel.setFont(smallFont);
+			endLabel.setFont(smallFont);
+			startField.setFont(smallFont);
+			endField.setFont(smallFont);
+			
+			add(startLabel);
+			add(startField);
+			add(endLabel);
+			add(endField);
+		}
+		
+	}
+	
+	private class UserPanel extends JPanel {
+		
+		UserPanel() {
+			setLayout(new GridLayout(1, 2));
+			
+			JLabel cwidLabel = new JLabel("Enter User's CWID:");
+			JTextField cwidField = new JTextField();
+			
+			cwidLabel.setFont(buttonFont);
+			cwidField.setFont(textFont);
+			
+			add(cwidLabel);
+			add(cwidField);
+		}
+		
+	}
+
+	private class ToolPanel extends JPanel {
+		ToolPanel() {
+			setLayout(new GridLayout(1, 2));
+			
+			JLabel toolNameLabel = new JLabel("Enter Name of Tool:");
+			JTextField toolNameField = new JTextField();
+			
+			toolNameLabel.setFont(buttonFont);
+			toolNameField.setFont(textFont);
+			
+			add(toolNameLabel);
+			add(toolNameField);
+		}
+	}
+	
+	private class MachinePanel extends JPanel {
+		MachinePanel() {
+			setLayout(new GridLayout(1, 2));
+			
+			JLabel machineNameLabel = new JLabel("Enter Name of Machine:");
+			JTextField machineNameField = new JTextField();
+			
+			machineNameLabel.setFont(buttonFont);
+			machineNameField.setFont(textFont);
+			
+			add(machineNameLabel);
+			add(machineNameField);
 		}
 	}
 	
