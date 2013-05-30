@@ -181,8 +181,8 @@ public class LogTests {
 		
 		// Ensure that this query returns 2 log entries, and
 		// that they are both for testUser2
-		assertTrue(Log.getResults().get(0).equals(testEntry2));
-		assertTrue(Log.getResults().get(1).equals(testEntry6));
+		assertTrue(Log.getResults().contains(testEntry2));
+		assertTrue(Log.getResults().contains(testEntry6));
 		assertFalse(Log.getResults().contains(testEntry1));
 		assertEquals(2, Log.getResults().size());
 		
