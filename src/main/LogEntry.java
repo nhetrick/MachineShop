@@ -83,6 +83,8 @@ public class LogEntry {
 		this.toolsReturned = new ArrayList<Tool>();
 		Log.incrementNumEntries();
 		
+		user.setCurrentEntry(this);
+		
 		BasicDBObject logEntry = new BasicDBObject();
 		logEntry.put("ID", ID);
 		logEntry.put("timeIn", timeIn);

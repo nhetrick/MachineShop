@@ -27,6 +27,6 @@ public class Machine {
 		if (!(o instanceof Machine))
 			return false;
 		Machine obj = (Machine) o;
-		return (this.ID == obj.getID());
+		return (this.ID.equals(obj.getID()));
 	}
 }

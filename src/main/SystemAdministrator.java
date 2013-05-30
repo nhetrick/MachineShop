@@ -22,14 +22,6 @@ public class SystemAdministrator extends Administrator {
 		tracker = Driver.getAccessTracker();
 		database = tracker.getDatabase();
 		users = database.getCollection("Users");
-		
-		//ArrayList<Machine> machines = new ArrayList<Machine>();
-		
-		//machines.add(new Machine("Table Saw", "1PLZ4"));
-		//machines.add(new Machine("3D Printer", "W33V4"));
-		//machines.add(new Machine("Chain Saw", "44MAK"));
-	
-		//addPermission(new User("Kevin", "Moore", 11111111), machines);
 	}
 	
 	public void addAdministrator(User user) {
@@ -84,7 +76,16 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void removeUsers(ArrayList<User> users) {
-		
+		DBCollection userColl = database.getCollection("Users");
+		for (User u : users) {
+			DBCursor cursor = userColl.find(new BasicDBObject("CWID", u.getCWID()));
+			if (!(cursor == null)) {
+				userColl.remove(cursor.next());
+				tracker.removeUser(u);
+			} else {
+				System.out.println("User not found...Unable to remove");
+			}
+		}
 	}
 	
 	public void generateReport() {
@@ -99,8 +100,9 @@ public class SystemAdministrator extends Administrator {
 			tool.put("name", t.getName());
 			tool.put("upc", t.getUPC());
 			tools.insert(tool);
+			tracker.addTool(t);
 		} else {
-			System.out.println("Tool already in system...");
+			System.out.println("Tool already in system...Unable to add");
 		}
 	}
 	
@@ -112,8 +114,9 @@ public class SystemAdministrator extends Administrator {
 			machine.put("name", m.getName());
 			machine.put("ID", m.getID());
 			machines.insert(machine);
+			tracker.addMachine(m);
 		} else {
-			System.out.println("Machine already in system...");
+			System.out.println("Machine already in system...Unable to add");
 		}
 	}
 	
@@ -121,34 +124,49 @@ public class SystemAdministrator extends Administrator {
 		DBCollection tools = database.getCollection("Tools");
 		DBCursor cursor = tools.find(new BasicDBObject("upc", upc));
 		if (!(cursor == null)) {
-			tools.remove(cursor.next());
+			DBObject obj = cursor.next();
+			tools.remove(obj);
+			tracker.removeTool(new Tool((String) obj.get("name"), (int) obj.get("upc")));
 		} else {
-			System.out.println("Machine not in system...");
+			System.out.println("Tool not in system...Unable to remove");
 		}
-		
-		
-//		DBCollection logEntries = database.getCollection("LogEntries");
-//		DBCursor result = logEntries.find(new BasicDBObject("ID", id));
-//		if (!(result == null)) {
-//			logEntries.remove(result.next());
-//		}
 	}
 	
 	public void removeMachine(String id) {
 		DBCollection machines = database.getCollection("Machines");
 		DBCursor cursor = machines.find(new BasicDBObject("ID", id));
 		if (!(cursor == null)) {
-			machines.remove(cursor.next());
+			DBObject obj = cursor.next();
+			machines.remove(obj);
+			tracker.removeMachine(new Machine((String) obj.get("name"), (String) obj.get("ID")));
 		} else {
-			System.out.println("Tool not in system...");
+			System.out.println("Machine not in system...Unable to remove");
 		}
 	}
 	
 	public void lockUser(User user) {
-		
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
+		if (!(cursor == null)) {
+			DBObject obj = cursor.next();
+			obj.put("locked", true);
+			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
+			tracker.lockUser(user);
+		} else {
+			System.out.println("User not found...Unable to Lock");
+		}
 	}
 	
 	public void unlockUser(User user) {
-		
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
+		if (!(cursor == null)) {
+			BasicDBObject obj = (BasicDBObject) cursor.next();
+			obj.append("locked", false);
+			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
+			tracker.unlockUser(user);
+		} else {
+			System.out.println("User not found...Unable to Unlock");
+		}
 	}
 }

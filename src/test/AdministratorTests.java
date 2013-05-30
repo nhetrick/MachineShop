@@ -13,15 +13,19 @@ import main.User;
 import org.junit.Before;
 import org.junit.Test;
 
+import GUI.Driver;
+
 public class AdministratorTests {
 
+	Driver driver;
 	AccessTracker tracker;
 	SystemAdministrator testAdmin;
 	User testUser;
 
 	@Before
 	public void setup() {
-		tracker = new AccessTracker();
+		driver = new Driver();
+		tracker = driver.getAccessTracker();
 		testAdmin = new SystemAdministrator("", "", 1);
 		testUser = new User("", "", 2);
 	}
@@ -72,17 +76,11 @@ public class AdministratorTests {
 
 		// Ensure the testUser was removed from the list of current users
 		assertFalse(tracker.getCurrentUsers().contains(testUser));
-
-		testUser = tracker.loadUser(2);
-		// Try to load the user. They should be gone now, so the query
-		// should return null.
-		assertNull(testUser);
-
 	}
 
 	@Test
 	public void addAndRemoveToolTest() {
-		Tool testTool = new Tool("HITCOO", 15);
+		Tool testTool = new Tool("Test Tool", 1500);
 		testAdmin.addTool(testTool);
 
 		// Ensure the tool was added to the list of tools
@@ -107,8 +105,8 @@ public class AdministratorTests {
 	}
 
 	@Test
-	public void addAndRemoveMachineTest() {
-		Machine testMachine = new Machine("TPDD", "T-1");
+	public void addAndRemoveMachineTest() {		
+		Machine testMachine = new Machine("Test Machine", "1600");
 		testAdmin.addMachine(testMachine);
 
 		// Ensure the machine was added to the list of machine
