@@ -29,6 +29,7 @@ public class MainGUI extends JFrame{
 	private Clock time;
 	private Font headerFont;
 	private GridBagConstraints c = new GridBagConstraints();
+	private static int MAX_ERROR_COUNT = 3;
 
 	public MainGUI() {
 		reader = new InputReader(this);
@@ -86,49 +87,49 @@ public class MainGUI extends JFrame{
 
 		InputReader inReader = (InputReader) reader;
 		int CWID;
-		boolean returnToStart = false;
 
 		try {
 			inReader.strip();
-			if ( !inReader.getCWID().equals("") ) {
+			if (InputReader.isValidCWID(inReader.getCWID())){
 				CWID = Integer.parseInt(inReader.getCWID());
-				currentUser = tracker.processLogIn(CWID);
-				remove(centerPanel);
-				ProcessHomeScreen(currentUser);
-				repaint();
-				InputReader.resetErrorCount();
+				login(CWID);
 			}
 		} catch (InputReaderException e) {
-			String message = e.getMessage();
-			if ( InputReader.getErrorCount() < 3 ) {
-				JOptionPane.showMessageDialog(this, message);
-			} else {
-				String input = JOptionPane.showInputDialog("An Error has occurred. Please enter your CWID.");
-				if ( input == null ) {
+			if (InputReader.getErrorCount() < MAX_ERROR_COUNT) {
+				JOptionPane.showMessageDialog(this, e.getMessage());
+				return;
+			}
+			
+			String input = JOptionPane.showInputDialog("An Error has occurred. Please enter your CWID.");
+			if (input == null){
+				InputReader.resetErrorCount();
+				return;
+			}
+			
+			int tries = 0;
+			while (!InputReader.isValidCWID(input) && tries < MAX_ERROR_COUNT) {
+				input = JOptionPane.showInputDialog("Not a valid CWID. Please try again. ");
+				if (input == null){
 					InputReader.resetErrorCount();
-				} else {
-					int tries = 0;
-					while ( input.length() != 8 && tries < 3) {
-						input = JOptionPane.showInputDialog("Not a valid CWID. Please try again. ");
-						++tries;
-						if ( tries == 3 ) {
-							returnToStart = true;
-							InputReader.resetErrorCount();
-						}
-					}
-					if ( !returnToStart ) {
-						CWID = Integer.parseInt(input);
-						currentUser = tracker.processLogIn(CWID);
-						remove(centerPanel);
-						ProcessHomeScreen(currentUser);
-						repaint();
-						InputReader.resetErrorCount();
-					}
+					return;
 				}
+				++tries;
+			}
+			
+			InputReader.resetErrorCount();
+			if (InputReader.isValidCWID(input)){
+				CWID = Integer.parseInt(input);
+				login(CWID);
 			}
 		}
 	}
-
+	
+	public void login(int CWID){
+		currentUser = tracker.processLogIn(CWID);
+		remove(centerPanel);
+		ProcessHomeScreen(currentUser);
+	}
+	
 	public void enterPressed() {
 		handleInput();
 	}

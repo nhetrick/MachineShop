@@ -11,6 +11,7 @@ public class InputReader implements KeyListener {
 	private String input;
 	private MainGUI gui;
 	private static int errorCount = 0;
+	private static int CWID_LENGTH = 8;
 	
 	public InputReader() {
 		input = "";
@@ -43,6 +44,19 @@ public class InputReader implements KeyListener {
 		}
 		else
 			throw new InputReaderException("The card is not a blastercard.");
+	}
+	
+	public static boolean isValidCWID(String input){
+		//TODO maybe some more checks
+		if (input.length() == CWID_LENGTH){
+			try {
+				int cwid = Integer.parseInt(input);
+				return true;
+			}catch(Exception e){
+				return false;
+			}
+		}
+		return false;
 	}
 	
 	public String getCWID(){
