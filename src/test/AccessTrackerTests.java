@@ -69,17 +69,17 @@ public class AccessTrackerTests {
 		users.add(testUser2);
 		tracker.processLogIn(testUser2.getCWID());
 		
-		entryIds.add(testUser2.getCurrentEntry().getID());
+		//entryIds.add(testUser2.getCurrentEntry().getID());
 		
 		// Ensure this user is now in the list of current users
 		assertTrue(tracker.getCurrentUsers().contains(testUser2));
 		
 		// Ensures the entry was added to the log
 		Log.extractLog(testUser2);
-		System.out.println(Log.getResults());
 		
 		int latestEntryIndex = Log.getResults().size() - 1;
 		LogEntry entry = Log.getResults().get(latestEntryIndex);
+		entryIds.add(entry.getID());
 		
 		// Must ensure that THAT particular log in was logged.
 		// Get the time from this log entry? Ensure that it is
@@ -155,7 +155,7 @@ public class AccessTrackerTests {
 	
 	@AfterClass
 	public static void cleanup() {
-		tracker.clearAllUsers();
+		tracker.clearUsers(users);
 		admin.removeUsers(users);
 		for (int i : entryIds) {
 			Log.deleteEntry(i);

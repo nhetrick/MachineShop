@@ -220,8 +220,10 @@ public class AccessTracker {
 		currentUsers.remove(u);
 	}
 	
-	public void clearAllUsers() {
-		currentUsers.clear();
+	public void clearUsers(ArrayList<User> users) {
+		for (User u:users) {
+			currentUsers.remove(u);
+		}
 	}
 	
 	public void lockUser(User u) {

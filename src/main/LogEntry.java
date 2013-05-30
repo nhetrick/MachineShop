@@ -59,6 +59,8 @@ public class LogEntry {
 		this.toolsReturned = toolsReturned;
 		Log.incrementNumEntries();
 		
+		user.setCurrentEntry(this);
+		
 		BasicDBObject logEntry = new BasicDBObject();
 		logEntry.put("ID", ID);
 		logEntry.put("timeIn", timeIn);
@@ -83,7 +85,7 @@ public class LogEntry {
 		this.toolsReturned = new ArrayList<Tool>();
 		Log.incrementNumEntries();
 		
-		user.setCurrentEntry(this);
+		this.user.setCurrentEntry(this);
 		
 		BasicDBObject logEntry = new BasicDBObject();
 		logEntry.put("ID", ID);
@@ -92,18 +94,6 @@ public class LogEntry {
 		
 		DBCollection logEntries = database.getCollection("LogEntries"); 
 		logEntries.insert(logEntry);
-		
-//		machinesUsed.add(new Machine("Table Saw", "1PLZ4"));
-//		machinesUsed.add(new Machine("3D Printer", "W33V4"));
-//		machinesUsed.add(new Machine("Chain Saw", "44MAK"));
-//		
-//		addMachinesUsed(machinesUsed);
-//		
-//		toolsCheckedOut.add(new Tool("Table Saw", 123));
-//		toolsCheckedOut.add(new Tool("3D Printer", 345));
-//		toolsCheckedOut.add(new Tool("Chain Saw", 967));
-//				
-//		addToolsCheckedOut(toolsCheckedOut);
 	}
 	
 	public void addMachinesUsed(ArrayList<Machine> used) {

@@ -262,6 +262,7 @@ public class LogTests {
 			admin.removeTool(i);
 		}
 		admin.removeUsers(users);
+		Driver.getAccessTracker().clearUsers(users);
 	}
 	
 }
