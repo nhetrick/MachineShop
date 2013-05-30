@@ -92,8 +92,10 @@ public class AdministratorTests {
 	@Test
 	public void addAndRemoveToolTest() {
 		Tool testTool = new Tool("Test Tool", "1500");
+		testAdmin.addTool(testTool);
 
 		// Ensure the tool was added to the list of tools
+		System.out.println(tracker.getTools());
 		assertTrue(tracker.getTools().contains(testTool));
 
 		// Get the list of tools from the databse
@@ -117,6 +119,7 @@ public class AdministratorTests {
 	@Test
 	public void addAndRemoveMachineTest() {		
 		Machine testMachine = new Machine("Test Machine4", "ZZZZ4");
+		testAdmin.addMachine(testMachine);
 
 		// Ensure the machine was added to the list of machine
 		assertTrue(tracker.getMachines().contains(testMachine));
