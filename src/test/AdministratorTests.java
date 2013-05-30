@@ -25,6 +25,8 @@ public class AdministratorTests {
 	static User testUser;
 	
 	static ArrayList<User> users;
+	static ArrayList<String> machineIds;
+	static ArrayList<Integer> toolIds;
 
 	@BeforeClass
 	public static void setup() {
@@ -42,11 +44,11 @@ public class AdministratorTests {
 	@Test
 	public void updatePermissionTest() {
 		ArrayList<Machine> machines = new ArrayList<Machine>();
-		Machine machine1 = new Machine("Table Saw", "1PLZ4");
-		Machine machine2 = new Machine("3D Printer", "W33V4");
+		Machine machine1 = new Machine("TEST Machine1", "ZZZZ1");
+		Machine machine2 = new Machine("TEST Machine2", "ZZZZ2");
 		machines.add(machine1);
 		machines.add(machine2);
-		
+
 		testAdmin.updatePermission(testUser, machines);
 
 		// Ensures that the user is now certified to use the machines
@@ -55,7 +57,7 @@ public class AdministratorTests {
 		assertTrue(testUser.getCertifiedMachines().contains(machine2));
 
 		machines = new ArrayList<Machine>();
-		Machine machine3 = new Machine("Chain Saw", "44MAK");
+		Machine machine3 = new Machine("TEST Machine3", "ZZZZ3");
 		machines.add(machine3);
 		
 		testAdmin.updatePermission(testUser, machines);
@@ -89,8 +91,7 @@ public class AdministratorTests {
 
 	@Test
 	public void addAndRemoveToolTest() {
-		Tool testTool = new Tool("Test Tool", 1500);
-		testAdmin.addTool(testTool);
+		Tool testTool = new Tool("Test Tool", "1500");
 
 		// Ensure the tool was added to the list of tools
 		assertTrue(tracker.getTools().contains(testTool));
@@ -115,8 +116,7 @@ public class AdministratorTests {
 
 	@Test
 	public void addAndRemoveMachineTest() {		
-		Machine testMachine = new Machine("Test Machine", "1600");
-		testAdmin.addMachine(testMachine);
+		Machine testMachine = new Machine("Test Machine4", "ZZZZ4");
 
 		// Ensure the machine was added to the list of machine
 		assertTrue(tracker.getMachines().contains(testMachine));

@@ -51,7 +51,7 @@ public class LogTests {
 	
 	static ArrayList<Integer> entryIds;
 	static ArrayList<String> machineIds;
-	static ArrayList<Integer> toolIds;
+	static ArrayList<String> toolIds;
 	static ArrayList<User> users;
 
 	@BeforeClass
@@ -85,30 +85,30 @@ public class LogTests {
 		testMachines2 = new ArrayList<Machine>();
 		testMachines2.add(testMachine2);
 
-		testTool1 = new Tool("TEST Hammer", 111);
+		testTool1 = new Tool("TEST Hammer", "111");
 		admin.addTool(testTool1);
 		testTools1 = new ArrayList<Tool>();
 		testTools1.add(testTool1);
 
-		testTool2 = new Tool("TEST Crowbar", 222);
+		testTool2 = new Tool("TEST Crowbar", "222");
 		admin.addTool(testTool2);
 		testTools2 = new ArrayList<Tool>();
 		testTools2.add(testTool2);
 		
-		testTool3 = new Tool("TEST Sponge", 333);
+		testTool3 = new Tool("TEST Sponge", "333");
 		admin.addTool(testTool3);
 		testTools3 = new ArrayList<Tool>();
 		testTools3.add(testTool3);
 
-		testTool4 = new Tool("TEST Driver", 444);
+		testTool4 = new Tool("TEST Driver", "444");
 		admin.addTool(testTool4);
-		testTool5 = new Tool("TEST Handsaw", 555);
+		testTool5 = new Tool("TEST Handsaw", "555");
 		admin.addTool(testTool5);
 		testTools4 = new ArrayList<Tool>();
 		testTools4.add(testTool4);
 		testTools4.add(testTool5);
 		
-		testTool6 = new Tool("TEST NotCheckedOutByAnyone", 777);
+		testTool6 = new Tool("TEST NotCheckedOutByAnyone", "777");
 		admin.addTool(testTool6);
 
 		testEntry1.startEntry(testUser1, testMachines2, testTools1, testTools2);
@@ -138,7 +138,7 @@ public class LogTests {
 		machineIds.add(testMachine.getID());
 		machineIds.add(testMachine2.getID());
 		
-		toolIds = new ArrayList<Integer>();
+		toolIds = new ArrayList<String>();
 		toolIds.add(testTool1.getUPC());
 		toolIds.add(testTool2.getUPC());
 		toolIds.add(testTool3.getUPC());
@@ -252,7 +252,7 @@ public class LogTests {
 		for (String i : machineIds) {
 			admin.removeMachine(i);
 		}
-		for (int i : toolIds) {
+		for (String i : toolIds) {
 			admin.removeTool(i);
 		}
 		admin.removeUsers(users);

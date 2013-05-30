@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.Machine;
+
 public class EditCertificationsPanel extends ContentPanel {
 	
 	private JButton saveButton;
@@ -101,48 +103,4 @@ public class EditCertificationsPanel extends ContentPanel {
 			}
 		}
 	}
-	
-//	private void addMachineOptions() {
-//		machineNames.addItem("");
-//		ArrayList<Machine> machines = Driver.getAccessTracker().getMachines();
-//		for (Machine m:machines) {
-//			machineNames.addItem(m.getName());
-//		}
-//	}
-//	
-//	private void getDataEntered() {
-//		String id = cwidText.getText();
-//		CWID = Integer.parseInt(id);
-//	}
-//	
-//	private class ComboListener implements ActionListener {
-//		public void actionPerformed(ActionEvent e) {
-//			String machine = "";
-//			if (e.getSource() == machineNames) {
-//				machine = machineNames.getSelectedItem().toString();
-//			} 
-//			permission = Driver.getAccessTracker().getMachineByName(machine);
-//		}
-//		
-//	}
-//	
-//	private class AddButtonListener implements ActionListener {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			getDataEntered();
-//			if (!(CWID == 0 || permission == null)) {
-//				System.out.println("Add: " + CWID + permission.getName());
-//			}
-//		}
-//	}
-//	
-//	private class RemoveButtonListener implements ActionListener {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			getDataEntered();
-//			if (!(CWID == 0 || permission == null)) {
-//				System.out.println("Remove: " + CWID + permission.getName());
-//			}
-//		}
-//	}
 }

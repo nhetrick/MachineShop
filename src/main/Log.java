@@ -121,7 +121,7 @@ public class Log {
 			ArrayList<BasicDBObject> toolsOut = (ArrayList<BasicDBObject>) result.get("toolsCheckedOut");
 			if (!(toolsOut == null)) {
 				for(BasicDBObject embedded : toolsOut){ 
-					int upc = (int) embedded.get("upc"); 
+					String upc = (String) embedded.get("upc"); 
 					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
 					if (tool.hasNext()) {
 						toolsCheckedOut.add(new Tool((String) tool.next().get("name"), upc));
@@ -138,7 +138,7 @@ public class Log {
 			ArrayList<BasicDBObject> toolsBack = (ArrayList<BasicDBObject>) result.get("toolsReturned");
 			if (!(toolsBack == null)) {
 				for(BasicDBObject embedded : toolsBack){ 
-					int upc = (int) embedded.get("upc"); 
+					String upc = (String) embedded.get("upc"); 
 					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
 					if (tool.hasNext()) {
 						toolsReturned.add(new Tool((String) tool.next().get("name"), upc));
