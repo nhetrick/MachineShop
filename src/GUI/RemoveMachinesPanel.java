@@ -17,52 +17,66 @@ import javax.swing.border.TitledBorder;
 
 public class RemoveMachinesPanel extends ContentPanel {
 	
+	private JComboBox<String> searchParameter;
+	private JLabel enterLabel;
 	private JButton removeButton;
+	private JButton goButton;
 	private ButtonListener buttonListener;
-	private JButton nameSearchGoButton;
-	private JButton idSearchGoButton;
+	private ComboBoxListener comboBoxListener;
 	
 	public RemoveMachinesPanel() {
 		
 		super("Remove Machines");
 		buttonListener = new ButtonListener();
+		comboBoxListener = new ComboBoxListener();
 		
-		JLabel nameSearchLabel = new JLabel("Search By Name:");
-		JLabel idSearchLabel = new JLabel("Search By ID:");
+		JLabel searchLabel = new JLabel("Search By:");
 		
-		JTextField nameSearchField = new JTextField();
-		JTextField idSearchField = new JTextField();
+		searchLabel.setFont(buttonFont);
 		
-		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
-		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
+		searchParameter = new JComboBox<String>();
+		searchParameter.setFont(textFont);
 		
-		nameSearchGoButton = new JButton("Go");
-		idSearchGoButton = new JButton("Go");
+		searchParameter.addItem("Name");
+		searchParameter.addItem("ID");
 		
-		nameSearchGoButton.addActionListener(buttonListener);
-		idSearchGoButton.addActionListener(buttonListener);
+		searchParameter.addActionListener(comboBoxListener);
 		
-		nameSearchLabel.setFont(buttonFont);
-		idSearchLabel.setFont(buttonFont);
-		nameSearchField.setFont(textFont);
-		idSearchField.setFont(textFont);
-		nameSearchGoButton.setFont(buttonFont);
-		idSearchGoButton.setFont(buttonFont);
+		enterLabel = new JLabel("Enter name:");
+		JTextField searchField = new JTextField();
+		goButton = new JButton("Go");
 		
-		nameSearchPanel.add(nameSearchLabel);
-		nameSearchPanel.add(nameSearchField);
-		nameSearchPanel.add(nameSearchGoButton);
+		goButton.addActionListener(buttonListener);
 		
-		idSearchPanel.add(idSearchLabel);
-		idSearchPanel.add(idSearchField);
-		idSearchPanel.add(idSearchGoButton);
+		enterLabel.setFont(buttonFont);
+		searchField.setFont(textFont);
+		goButton.setFont(buttonFont);
+		
+		JPanel parameterPanel = new JPanel(new GridBagLayout());
+		JPanel searchPanel = new JPanel(new GridLayout(1, 3));
+		
+		searchPanel.add(enterLabel);
+		searchPanel.add(searchField);
+		searchPanel.add(goButton);
 		
 		JPanel resultsPanel = new JPanel();
 		resultsPanel.setBorder(new TitledBorder("Search Results"));
 		
 		removeButton = new JButton("Remove Machines");
 		removeButton.setFont(buttonFont);
-		removeButton.addActionListener(buttonListener);
+		removeButton.addActionListener(new ButtonListener());
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.27;
+		c.gridx = 0;
+		c.gridy = 0;
+		parameterPanel.add(searchLabel, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.73;
+		c.gridx = 1;
+		c.gridy = 0;
+		parameterPanel.add(searchParameter, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -87,13 +101,13 @@ public class RemoveMachinesPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(nameSearchPanel, c);
+		add(parameterPanel, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.1;
 		c.gridx = 1;
 		c.gridy = 2;
-		add(idSearchPanel, c);
+		add(searchPanel, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.5;
@@ -115,7 +129,22 @@ public class RemoveMachinesPanel extends ContentPanel {
 	}
 	
 	public void showConfirmPopup() {
-		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these machines?");
+		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these Machines?");
+	}
+	
+	private class ComboBoxListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == searchParameter) {
+				String parameter = searchParameter.getSelectedItem().toString();
+				if (parameter == "ID") {
+					enterLabel.setText("Enter ID:");
+				} else if (parameter == "Name") {
+					enterLabel.setText("Enter Name:");
+				}
+			}
+		}
 	}
 	
 	private class ButtonListener implements ActionListener {
@@ -123,10 +152,8 @@ public class RemoveMachinesPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
-			} else if (e.getSource() == nameSearchGoButton ) {
-				// display results
-			} else if (e.getSource() == idSearchGoButton) {
-				// display results
+			} else if ( e.getSource() == goButton ) {
+				// TO DO
 			}
 		}
 	}

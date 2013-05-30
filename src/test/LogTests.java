@@ -2,17 +2,11 @@ package test;
 
 import static org.junit.Assert.*;
 import java.util.*;
-
-import junit.framework.Assert;
-
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import GUI.Driver;
 
-import com.mongodb.DB;
 
 import main.*;
 
