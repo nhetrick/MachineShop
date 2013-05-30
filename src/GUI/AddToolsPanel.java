@@ -9,14 +9,21 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import main.SystemAdministrator;
+import main.Tool;
 
 public class AddToolsPanel extends ContentPanel {
 	
 	private JButton saveButton;
 	private ButtonListener buttonListener;
+	
+	JTextField toolNameField;
+	JTextField toolIDField;
 	
 	public AddToolsPanel() {
 		
@@ -29,8 +36,8 @@ public class AddToolsPanel extends ContentPanel {
 		toolNameLabel.setFont(buttonFont);
 		toolIDLabel.setFont(buttonFont);
 		
-		JTextField toolNameField = new JTextField();
-		JTextField toolIDField = new JTextField();
+		toolNameField = new JTextField();
+		toolIDField = new JTextField();
 		
 		toolNameField.setFont(textFont);
 		toolIDField.setFont(textFont);
@@ -91,12 +98,28 @@ public class AddToolsPanel extends ContentPanel {
 		add(new JPanel(), c);
 		
 	}
+	
+	private void saveTool() {
+		String name = toolNameField.getText();
+		String upc = toolIDField.getText();
+		
+		if (name != null && upc != null) {
+			Tool t = new Tool(name, upc);
+			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addTool(t);
+		}
+	}
+	
+	private void clearFields() {
+		toolNameField.setText("");
+		toolIDField.setText("");
+	}
 
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton ) {
-				// TO DO
+				saveTool();
+				clearFields();
 			}
 		}
 	}

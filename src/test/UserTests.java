@@ -17,7 +17,7 @@ public class UserTests {
 	@Test
 	public void checkoutAndReturnToolTest() {
 		User testUser = new User("", "", 12345678);
-		Tool testTool = new Tool("HITCOO", 15);
+		Tool testTool = new Tool("HITCOO", "15");
 		testUser.checkoutTool(testTool);
 		
 		tracker.loadTools();

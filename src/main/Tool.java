@@ -3,9 +3,9 @@ package main;
 public class Tool {
 	private boolean isCheckedOut;
 	private String name;
-	private int UPC;
+	private String UPC;
 	
-	public Tool(String name, int UPC) {
+	public Tool(String name, String UPC) {
 		isCheckedOut = false;
 		this.name = name;
 		this.UPC = UPC;
@@ -27,7 +27,7 @@ public class Tool {
 		return name;
 	}
 
-	public int getUPC() {
+	public String getUPC() {
 		return UPC;
 	}
 	
