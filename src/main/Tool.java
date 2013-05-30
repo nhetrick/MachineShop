@@ -40,7 +40,7 @@ public class Tool {
 		if (!(o instanceof Tool))
 			return false;
 		Tool obj = (Tool) o;
-		return (this.UPC == obj.getUPC());
+		return (this.UPC.equals(obj.getUPC()));
 	}
 
 }
