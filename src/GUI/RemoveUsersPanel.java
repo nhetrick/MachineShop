@@ -1,19 +1,21 @@
 package GUI;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import main.AccessTracker;
+import main.InputReader;
+import main.User;
 
 public class RemoveUsersPanel extends ContentPanel {
 	
@@ -23,13 +25,17 @@ public class RemoveUsersPanel extends ContentPanel {
 	private JButton goButton;
 	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
+	private JTextField searchField;
+	private JPanel resultsPanel;
+	private enum SearchBy {CWID, NAME};
+	private SearchBy searchBy;
 	
 	public RemoveUsersPanel() {
 		
 		super("Remove Users");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
-		
+		searchField = new JTextField();
 		JLabel searchLabel = new JLabel("Search By:");
 		
 		searchLabel.setFont(buttonFont);
@@ -43,7 +49,6 @@ public class RemoveUsersPanel extends ContentPanel {
 		searchParameter.addActionListener(comboBoxListener);
 		
 		enterLabel = new JLabel("Enter name:");
-		JTextField searchField = new JTextField();
 		goButton = new JButton("Go");
 		
 		goButton.addActionListener(buttonListener);
@@ -59,7 +64,7 @@ public class RemoveUsersPanel extends ContentPanel {
 		searchPanel.add(searchField);
 		searchPanel.add(goButton);
 		
-		JPanel resultsPanel = new JPanel();
+		resultsPanel = new JPanel();
 		resultsPanel.setBorder(new TitledBorder("Search Results"));
 		
 		removeButton = new JButton("Remove Users");
@@ -139,8 +144,10 @@ public class RemoveUsersPanel extends ContentPanel {
 			if (e.getSource() == searchParameter) {
 				String parameter = searchParameter.getSelectedItem().toString();
 				if (parameter == "CWID") {
+					searchBy = SearchBy.CWID;
 					enterLabel.setText("Enter CWID:");
 				} else if (parameter == "Name") {
+					searchBy = SearchBy.NAME;
 					enterLabel.setText("Enter Name:");
 				}
 			}
@@ -152,8 +159,36 @@ public class RemoveUsersPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
+				//TODO remove users. Even if logged in (in local memory). 
+				//TODO checkBoxListener
 			} else if ( e.getSource() == goButton ) {
-				// TO DO
+				resultsPanel.removeAll();
+				switch (searchBy){
+				case CWID:
+					String input = searchField.getText();
+					if (InputReader.isValidCWID(input)){
+						//TODO refactor
+						int CWID = Integer.parseInt(input);
+						
+						User user = AccessTracker.findUserByCWID(CWID);
+						String show = user.getCWID() +
+								" " + user.getFirstName() +
+								" " + user.getLastName();
+						
+						JCheckBox cb = new JCheckBox(show); 
+						cb.setFont(textFont);
+						
+						resultsPanel.add(cb);
+						searchField.setText("");
+					} else {
+						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
+					}
+					break;
+				case NAME:
+
+					break;
+				}
+
 			}
 		}
 	}
