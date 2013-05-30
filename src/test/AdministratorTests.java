@@ -94,7 +94,7 @@ public class AdministratorTests {
 		// Ensure the tool was added to the database
 		assertTrue(tracker.getTools().contains(testTool));
 
-		testAdmin.removeTool(testTool);
+		testAdmin.removeTool(testTool.getUPC());
 
 		// Ensure the tool was removed from the list of tools
 		assertFalse(tracker.getTools().contains(testTool));
@@ -120,7 +120,7 @@ public class AdministratorTests {
 		// Ensure the machine was added to the database
 		assertTrue(tracker.getMachines().contains(testMachine));
 
-		testAdmin.removeMachine(testMachine);
+		testAdmin.removeMachine(testMachine.getID());
 
 		// Ensure the machine was removed from the list of machine
 		assertFalse(tracker.getMachines().contains(testMachine));
