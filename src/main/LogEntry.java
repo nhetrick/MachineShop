@@ -184,6 +184,10 @@ public class LogEntry {
 		System.out.println("Tools Returned: " + toolsReturned);
 	}
 	
+	public String toString() {
+		return String.format("%5d%20s%30s%30s%30s%30s%30s", ID, user, timeIn, timeOut, machinesUsed, toolsCheckedOut, toolsReturned);
+	}
+	
 	public void printTable() {
 		System.out.format("%5d%20s%30s%30s%30s%30s%30s", ID, user, timeIn, timeOut, machinesUsed, toolsCheckedOut, toolsReturned);
 	}

@@ -10,10 +10,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.Machine;
+import main.SystemAdministrator;
+import main.Tool;
+
 public class AddMachinesPanel extends ContentPanel {
 	
 	private JButton saveButton;
 	private ButtonListener buttonListener;
+	
+	JTextField machineNameField;
+	JTextField machineIDField;
+	
 	
 	public AddMachinesPanel() {
 		
@@ -26,8 +34,8 @@ public class AddMachinesPanel extends ContentPanel {
 		machineNameLabel.setFont(buttonFont);
 		machineIDLabel.setFont(buttonFont);
 		
-		JTextField machineNameField = new JTextField();
-		JTextField machineIDField = new JTextField();
+		machineNameField = new JTextField();
+		machineIDField = new JTextField();
 		
 		machineNameField.setFont(textFont);
 		machineIDField.setFont(textFont);
@@ -89,11 +97,27 @@ public class AddMachinesPanel extends ContentPanel {
 		
 	}
 	
+	private void saveMachine() {
+		String name = machineNameField.getText();
+		String id = machineIDField.getText();
+		
+		if (name != null && id != null) {
+			Machine m = new Machine(name, id);
+			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addMachine(m);
+		}
+	}
+	
+	private void clearFields() {
+		machineNameField.setText("");
+		machineIDField.setText("");
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton ) {
-				// TO DO
+				saveMachine();
+				clearFields();
 			}
 		}
 	}
