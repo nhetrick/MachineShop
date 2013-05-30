@@ -75,6 +75,18 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	public void addUser(User u) {
+		DBCollection userColl = database.getCollection("Users");
+		BasicDBObject document = new BasicDBObject();
+		document.put("firstName", u.getFirstName());
+		document.put("lastName", u.getLastName());
+		document.put("CWID", u.getCWID());
+		
+		DBCollection users = database.getCollection("Users");
+		
+		users.insert(document);
+	}
+	
 	public void removeUsers(ArrayList<User> users) {
 		DBCollection userColl = database.getCollection("Users");
 		for (User u : users) {

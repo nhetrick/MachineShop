@@ -1,6 +1,7 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -10,24 +11,32 @@ import main.SystemAdministrator;
 import main.Tool;
 import main.User;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import GUI.Driver;
 
 public class AdministratorTests {
 
-	Driver driver;
-	AccessTracker tracker;
-	SystemAdministrator testAdmin;
-	User testUser;
+	static Driver driver;
+	static AccessTracker tracker;
+	static SystemAdministrator testAdmin;
+	static User testUser;
+	
+	static ArrayList<User> users;
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		driver = new Driver();
 		tracker = driver.getAccessTracker();
 		testAdmin = new SystemAdministrator("", "", 1);
 		testUser = new User("", "", 2);
+		users = new ArrayList<User>();
+	
+		users.add(testUser);
+		
+		testAdmin.addUser(testUser);
 	}
 
 	@Test
@@ -146,6 +155,11 @@ public class AdministratorTests {
 		
 		// Ensure that the user is unlocked in RAM and in database
 		assertFalse(testUser.isLocked());
+	}
+	
+	@AfterClass
+	public static void cleanup() {
+		testAdmin.removeUsers(users);
 	}
 
 }

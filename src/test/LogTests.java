@@ -58,6 +58,7 @@ public class LogTests {
 	static ArrayList<Integer> entryIds;
 	static ArrayList<String> machineIds;
 	static ArrayList<Integer> toolIds;
+	static ArrayList<User> users;
 
 	@BeforeClass
 	public static void setup() {
@@ -67,6 +68,11 @@ public class LogTests {
 		
 		testUser1 = new User("", "", 2);
 		testUser2 = new User("", "", 3);
+		admin.addUser(testUser1);
+		admin.addUser(testUser2);
+		users = new ArrayList<User>();
+		users.add(testUser1);
+		users.add(testUser2);
 		
 		testEntry1 = new LogEntry();
 		testEntry2 = new LogEntry();
@@ -255,6 +261,7 @@ public class LogTests {
 		for (int i : toolIds) {
 			admin.removeTool(i);
 		}
+		admin.removeUsers(users);
 	}
 	
 }

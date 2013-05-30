@@ -12,6 +12,7 @@ import main.AccessTracker;
 import main.Log;
 import main.LogEntry;
 import main.Machine;
+import main.SystemAdministrator;
 import main.Tool;
 import main.User;
 
@@ -25,34 +26,38 @@ public class AccessTrackerTests {
 	
 	static Calendar calendar;
 	static Driver driver;
+	static SystemAdministrator admin;
 	static AccessTracker tracker;
-	static User testUser;
+	static User testUser1;
+	static User testUser2;
+	static ArrayList<User> users;
+	static ArrayList<Integer> entryIds;
 	
 	@BeforeClass
 	public static void setup() {
 		driver = new Driver();
 		tracker = Driver.getAccessTracker();
+		admin = new SystemAdministrator("", "", 12);
 		calendar = Calendar.getInstance();
-	}
-	
-	@AfterClass
-	public static void cleanup() {
-		tracker.clearAllUsers();
+		users = new ArrayList<User>();
+		entryIds = new ArrayList<Integer>();
+		
+		testUser1 = new User("Test1", "User1", 88888888);
+		testUser2 = new User("Test2", "User2", 99999999);
 	}
 	
 	@Test
 	public void createAndLoadUserTest() {
 		
-		testUser = new User("Test", "User", 88888888);
-		
 		//user not in system
-		assertFalse(tracker.getCurrentUsers().contains(testUser));
+		assertFalse(tracker.getCurrentUsers().contains(testUser1));
 		
 		// Query the database for a user with this CWID.
-		tracker.createUser("Test", "User", 88888888);
+		tracker.createUser("Test1", "User1", 88888888);
+		users.add(testUser1);
 		
 		//user now in system
-		assertTrue(tracker.getCurrentUsers().contains(testUser));
+		assertTrue(tracker.getCurrentUsers().contains(testUser1));
 	}
 	
 	@Test
@@ -60,15 +65,18 @@ public class AccessTrackerTests {
 		
 		Date startTime = calendar.getTime();
 		
-		testUser = new User(" ", " ", 10542318);
+		admin.addUser(testUser2);
+		users.add(testUser2);
+		tracker.processLogIn(testUser2.getCWID());
 		
-		tracker.processLogIn(10542318);
+		entryIds.add(testUser2.getCurrentEntry().getID());
 		
 		// Ensure this user is now in the list of current users
-		assertTrue(tracker.getCurrentUsers().contains(testUser));
+		assertTrue(tracker.getCurrentUsers().contains(testUser2));
 		
 		// Ensures the entry was added to the log
-		Log.extractLog(testUser);
+		Log.extractLog(testUser2);
+		System.out.println(Log.getResults());
 		
 		int latestEntryIndex = Log.getResults().size() - 1;
 		LogEntry entry = Log.getResults().get(latestEntryIndex);
@@ -93,17 +101,15 @@ public class AccessTrackerTests {
 		entry.addToolsCheckedOut(tools);
 		entry.addToolsReturned(tools);
 		
-		tracker.processLogOut(10542318);
+		tracker.processLogOut(testUser2.getCWID());
 		
 		// Ensure the user has been removed from the list of current users
-		assertFalse(tracker.getCurrentUsers().contains(testUser));
+		assertFalse(tracker.getCurrentUsers().contains(testUser2));
 		
 		//Ensures the entry was added to the log
-		Log.extractLog(testUser);
-		
-		latestEntryIndex = Log.getResults().size() - 1;
+		Log.extractLog(testUser2);
 		entry = Log.getResults().get(latestEntryIndex);
-		
+			
 		// Get the time from this log entry? Ensure that it is
 		// after the "currentTime" and after the log in time
 	
@@ -145,5 +151,14 @@ public class AccessTrackerTests {
 		assertTrue(tracker.getAvailableTools().contains(testTool2));
 		assertFalse(tracker.getAvailableTools().contains(testTool3));
 		assertTrue(tracker.getAvailableTools().contains(testTool5));
+	}
+	
+	@AfterClass
+	public static void cleanup() {
+		tracker.clearAllUsers();
+		admin.removeUsers(users);
+		for (int i : entryIds) {
+			Log.deleteEntry(i);
+		}
 	}
 }
