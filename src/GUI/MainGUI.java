@@ -90,6 +90,9 @@ public class MainGUI extends JFrame{
 
 		try {
 			inReader.strip();
+			if (inReader.getCWID() == null){
+				return;
+			}
 			if (InputReader.isValidCWID(inReader.getCWID())){
 				CWID = Integer.parseInt(inReader.getCWID());
 				login(CWID);
