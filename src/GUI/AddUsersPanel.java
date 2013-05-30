@@ -11,10 +11,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.Machine;
+import main.SystemAdministrator;
+import main.User;
+
 public class AddUsersPanel extends ContentPanel {
 	
 	private JButton saveButton;
 	private ButtonListener buttonListener;
+	
+	JTextField firstNameField;
+	JTextField lastNameField;
+	JTextField cwidField;
 	
 	public AddUsersPanel() {
 		
@@ -29,9 +37,9 @@ public class AddUsersPanel extends ContentPanel {
 		lastNameLabel.setFont(buttonFont);
 		cwidLabel.setFont(buttonFont);
 		
-		JTextField firstNameField = new JTextField();
-		JTextField lastNameField = new JTextField();
-		JTextField cwidField = new JTextField();
+		firstNameField = new JTextField();
+		lastNameField = new JTextField();
+		cwidField = new JTextField();
 		
 		firstNameField.setFont(textFont);
 		lastNameField.setFont(textFont);
@@ -114,11 +122,35 @@ public class AddUsersPanel extends ContentPanel {
 		
 	}
 	
+	private void saveUser() {
+		String first = firstNameField.getText();
+		String last = lastNameField.getText();
+		String id = cwidField.getText();
+		
+		try {
+			int cwid = Integer.parseInt(id);
+			if (first != null && last != null && id != null) {
+				User u = new User(first, last, cwid);
+				((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addUser(u);
+			}
+		} catch (Exception e) {
+			System.out.println("Invalid CWID");
+		}
+	
+	}
+	
+	private void clearFields() {
+		firstNameField.setText("");
+		lastNameField.setText("");
+		cwidField.setText("");
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton ) {
-				// TO DO
+				saveUser();
+				clearFields();
 			}
 		}
 	}

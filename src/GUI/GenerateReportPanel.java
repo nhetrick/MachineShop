@@ -7,6 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,6 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import main.Log;
+import main.LogEntry;
+import main.SystemAdministrator;
 
 public class GenerateReportPanel extends ContentPanel {
 
@@ -23,6 +30,12 @@ public class GenerateReportPanel extends ContentPanel {
 	private JButton generateButton;
 	private JPanel dataEntryPanel;
 	private JPanel resultsPanel;
+	
+	JTextField startField;
+	JTextField endField;
+	JTextField cwidField;
+	JTextField toolNameField;
+	JTextField machineNameField;
 	
 	public GenerateReportPanel() {
 		
@@ -60,6 +73,7 @@ public class GenerateReportPanel extends ContentPanel {
 		
 		resultsPanel = new JPanel();
 		resultsPanel.setBorder(new TitledBorder("Results"));
+		resultsPanel.setLayout(new GridLayout(0, 1));
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -139,7 +153,14 @@ public class GenerateReportPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == generateButton) {
-				// GENERATE REPORT
+				//NEED TO IMPLEMENT. defaults to user 22222222
+				
+				Log.extractLog(Driver.getAccessTracker().getUser(22222222));
+				for (LogEntry entry : Log.getResults()) {
+					JLabel label = new JLabel(entry.toString());
+					System.out.println(entry.toString());
+					resultsPanel.add(label);
+				}
 			}
 		}
 	}
@@ -154,8 +175,8 @@ public class GenerateReportPanel extends ContentPanel {
 			
 			JLabel startLabel = new JLabel("Enter Start Date (MM/DD/YYYY):");
 			JLabel endLabel = new JLabel("Enter End Date (MM/DD/YYYY):");
-			JTextField startField = new JTextField();
-			JTextField endField = new JTextField();
+			startField = new JTextField();
+			endField = new JTextField();
 			
 			startLabel.setFont(smallFont);
 			endLabel.setFont(smallFont);
@@ -176,7 +197,7 @@ public class GenerateReportPanel extends ContentPanel {
 			setLayout(new GridLayout(1, 2));
 			
 			JLabel cwidLabel = new JLabel("Enter User's CWID:");
-			JTextField cwidField = new JTextField();
+			cwidField = new JTextField();
 			
 			cwidLabel.setFont(buttonFont);
 			cwidField.setFont(textFont);
@@ -192,7 +213,7 @@ public class GenerateReportPanel extends ContentPanel {
 			setLayout(new GridLayout(1, 2));
 			
 			JLabel toolNameLabel = new JLabel("Enter Name of Tool:");
-			JTextField toolNameField = new JTextField();
+			toolNameField = new JTextField();
 			
 			toolNameLabel.setFont(buttonFont);
 			toolNameField.setFont(textFont);
@@ -207,7 +228,7 @@ public class GenerateReportPanel extends ContentPanel {
 			setLayout(new GridLayout(1, 2));
 			
 			JLabel machineNameLabel = new JLabel("Enter Name of Machine:");
-			JTextField machineNameField = new JTextField();
+			machineNameField = new JTextField();
 			
 			machineNameLabel.setFont(buttonFont);
 			machineNameField.setFont(textFont);

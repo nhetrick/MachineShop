@@ -95,7 +95,6 @@ public class AdministratorTests {
 		testAdmin.addTool(testTool);
 
 		// Ensure the tool was added to the list of tools
-		System.out.println(tracker.getTools());
 		assertTrue(tracker.getTools().contains(testTool));
 
 		// Get the list of tools from the databse
