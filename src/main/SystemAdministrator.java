@@ -22,14 +22,6 @@ public class SystemAdministrator extends Administrator {
 		tracker = Driver.getAccessTracker();
 		database = tracker.getDatabase();
 		users = database.getCollection("Users");
-		
-		//ArrayList<Machine> machines = new ArrayList<Machine>();
-		
-		//machines.add(new Machine("Table Saw", "1PLZ4"));
-		//machines.add(new Machine("3D Printer", "W33V4"));
-		//machines.add(new Machine("Chain Saw", "44MAK"));
-	
-		//addPermission(new User("Kevin", "Moore", 11111111), machines);
 	}
 	
 	public void addAdministrator(User user) {
@@ -91,7 +83,7 @@ public class SystemAdministrator extends Administrator {
 				userColl.remove(cursor.next());
 				tracker.removeUser(u);
 			} else {
-				System.out.println("User not found...");
+				System.out.println("User not found...Unable to remove");
 			}
 		}
 	}
@@ -110,7 +102,7 @@ public class SystemAdministrator extends Administrator {
 			tools.insert(tool);
 			tracker.addTool(t);
 		} else {
-			System.out.println("Tool already in system...");
+			System.out.println("Tool already in system...Unable to add");
 		}
 	}
 	
@@ -124,7 +116,7 @@ public class SystemAdministrator extends Administrator {
 			machines.insert(machine);
 			tracker.addMachine(m);
 		} else {
-			System.out.println("Machine already in system...");
+			System.out.println("Machine already in system...Unable to add");
 		}
 	}
 	
@@ -136,7 +128,7 @@ public class SystemAdministrator extends Administrator {
 			tools.remove(obj);
 			tracker.removeTool(new Tool((String) obj.get("name"), (int) obj.get("upc")));
 		} else {
-			System.out.println("Tool not in system...");
+			System.out.println("Tool not in system...Unable to remove");
 		}
 	}
 	
@@ -148,7 +140,7 @@ public class SystemAdministrator extends Administrator {
 			machines.remove(obj);
 			tracker.removeMachine(new Machine((String) obj.get("name"), (String) obj.get("ID")));
 		} else {
-			System.out.println("Machine not in system...");
+			System.out.println("Machine not in system...Unable to remove");
 		}
 	}
 	
@@ -160,7 +152,9 @@ public class SystemAdministrator extends Administrator {
 			obj.put("locked", true);
 			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
 			tracker.lockUser(user);
-		} 
+		} else {
+			System.out.println("User not found...Unable to Lock");
+		}
 	}
 	
 	public void unlockUser(User user) {
@@ -171,6 +165,8 @@ public class SystemAdministrator extends Administrator {
 			obj.append("locked", false);
 			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
 			tracker.unlockUser(user);
-		} 
+		} else {
+			System.out.println("User not found...Unable to Unlock");
+		}
 	}
 }

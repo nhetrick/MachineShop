@@ -7,8 +7,10 @@ public class User {
 	private int CWID;
 	private String firstName;
 	private String lastName;
+	private LogEntry currentEntry;
 	private boolean isLocked;
 	protected boolean isAdmin = false;
+	
 	
 	public User(String firstName, String lastName, int CWID) {
 		// needs to be extracted from data base
@@ -22,10 +24,12 @@ public class User {
 	
 	public void checkoutTool(Tool t) {
 		t.checkoutTool();	
+		toolsCheckedOut.add(t);
 	}
 	
 	public void returnTool(Tool t) {
 		t.returnTool();
+		toolsCheckedOut.remove(t);
 	}
 
 	public int getCWID() {
@@ -80,4 +84,15 @@ public class User {
 	public String toString() {
 		return firstName + " " + lastName;
 	}
+	
+	public LogEntry getCurrentEntry() {
+		return currentEntry;
+	}
+
+	public void setCurrentEntry(LogEntry currentEntry) {
+		this.currentEntry = currentEntry;
+	}
+	
+	
+
 }
