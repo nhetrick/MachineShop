@@ -1,13 +1,10 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -15,17 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
 import main.AccessTracker;
 import main.InputReader;
+import main.User;
 
 public class RemoveUsersPanel extends ContentPanel {
 	
@@ -35,10 +25,11 @@ public class RemoveUsersPanel extends ContentPanel {
 	private JButton goButton;
 	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
-	JTextField searchField;
-	public enum SearchBy {CWID, NAME};
-	public SearchBy searchBy;
-	JPanel resultsPanel;
+	private JTextField searchField;
+	private JPanel resultsPanel;
+	private enum SearchBy {CWID, NAME};
+	private SearchBy searchBy;
+	
 	public RemoveUsersPanel() {
 		
 		super("Remove Users");
@@ -168,35 +159,33 @@ public class RemoveUsersPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
+				//TODO remove users. Even if logged in (in local memory). 
+				//TODO checkBoxListener
 			} else if ( e.getSource() == goButton ) {
+				resultsPanel.removeAll();
 				switch (searchBy){
 				case CWID:
 					String input = searchField.getText();
 					if (InputReader.isValidCWID(input)){
+						//TODO refactor
 						int CWID = Integer.parseInt(input);
-						Driver.getAccessTracker();
-						DBCollection users = AccessTracker.getDatabase().getCollection("Users");
-						DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
-						resultsPanel.removeAll();
-						while (cursor.hasNext()){
-							BasicDBObject result = (BasicDBObject) cursor.next();
-							String show = result.getString("CWID") +
-									" " + result.getString("firstName") +
-									" " + result.getString("lastName");
-							JCheckBox cb = new JCheckBox(show); 
-							cb.setFont(textFont);
-							resultsPanel.add(cb);
-						}
+						
+						User user = AccessTracker.findUserByCWID(CWID);
+						String show = user.getCWID() +
+								" " + user.getFirstName() +
+								" " + user.getLastName();
+						
+						JCheckBox cb = new JCheckBox(show); 
+						cb.setFont(textFont);
+						
+						resultsPanel.add(cb);
+						searchField.setText("");
 					} else {
 						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
 					}
 					break;
 				case NAME:
-					final DBObject textSearchCommand = new BasicDBObject();
-					textSearchCommand.put("text", "Users");
-					textSearchCommand.put("search", searchField.getText());
-					final CommandResult commandResult = AccessTracker.getDatabase().command(textSearchCommand);
-					System.out.println(commandResult.toString());
+
 					break;
 				}
 
