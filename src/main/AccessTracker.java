@@ -25,6 +25,7 @@ public class AccessTracker {
 	private final String dbName = "CSM_Machine_Shop";
 	private final String username = "csm";
 	private final String password = "machineshop";
+	private User currentUser = new User("", "", 0);
 	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -57,7 +58,6 @@ public class AccessTracker {
 	// If the CWID doesn't exist, create new user.
 	// Returns the name of the user with this CWID
 	public User loadUser(int CWID) {
-		User currentUser = new User("", "", 0);
 		boolean isAdministrator;
 		boolean isSystemAdministrator;
 		boolean isLocked;
@@ -142,10 +142,10 @@ public class AccessTracker {
 					currentUser.loadCheckedOutTools(new ArrayList<Tool>());
 				} else 
 					for(BasicDBObject embedded : COTools){ 
-						int upc = (int) embedded.get("upc"); 
+						String upc = (String) embedded.get("upc"); 
 						DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
 						if (tool.hasNext()) {
-							checkedOutToolsList.add(new Tool((String) tool.next().get("name"), (int) upc));
+							checkedOutToolsList.add(new Tool((String) tool.next().get("name"), upc));
 						}
 					} 
 				currentUser.loadCheckedOutTools(checkedOutToolsList);
@@ -164,7 +164,7 @@ public class AccessTracker {
 		DBCursor cursor = allTools.find();
 		while(cursor.hasNext()) {
 			DBObject tool = cursor.next();
-			Tool t = new Tool((String) tool.get("name"), (int) tool.get("upc"));
+			Tool t = new Tool((String) tool.get("name"), (String) tool.get("upc"));
 			tools.add(t);
 		}
 	}
@@ -246,7 +246,7 @@ public class AccessTracker {
 		// IF the user with this CWID is locked (boolean isLocked)
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
-		User currentUser = loadUser(CWID);
+		currentUser = loadUser(CWID);
 		
 		Log.startEntry(currentUser);
 	
@@ -314,6 +314,15 @@ public class AccessTracker {
 	public static DB getDatabase() {
 		return database;
 	}
+	
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
 	
 }
 

@@ -95,7 +95,7 @@ public class AccessTrackerTests {
 		machines.add(new Machine("TEST MACHINE", "1KD01"));
 		
 		ArrayList<Tool> tools = new ArrayList<Tool>();
-		tools.add(new Tool("TEST TOOL", 3333));
+		tools.add(new Tool("TEST TOOL", "3333"));
 		
 		entry.addMachinesUsed(machines);
 		entry.addToolsCheckedOut(tools);
@@ -134,10 +134,10 @@ public class AccessTrackerTests {
 	@Test
 	public void updateToolsTest() {
 		
-		Tool testTool1 = new Tool("Test Tool 1", 818);
-		Tool testTool2 = new Tool("Test Tool 2", 828);
-		Tool testTool3 = new Tool("Test Tool 3", 838);
-		Tool testTool5 = new Tool("Test Tool 4", 848);
+		Tool testTool1 = new Tool("Test Tool 1", "818");
+		Tool testTool2 = new Tool("Test Tool 2", "828");
+		Tool testTool3 = new Tool("Test Tool 3", "838");
+		Tool testTool5 = new Tool("Test Tool 4", "848");
 		
 		tracker.getTools().add(testTool1);
 		tracker.getTools().add(testTool2);
