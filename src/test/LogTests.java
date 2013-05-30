@@ -155,7 +155,6 @@ public class LogTests {
 		dateOut = testEntry6.getTimeOut();
 		
 		Log.extractLog(dateIn, dateOut);
-		Log.printLogTable();
 		
 		// Ensure the results of the extraction are correct
 		// All 5 entries should be returned by this query.

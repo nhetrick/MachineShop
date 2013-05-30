@@ -33,7 +33,6 @@ public class AccessTrackerTests {
 		driver = new Driver();
 		tracker = Driver.getAccessTracker();
 		calendar = Calendar.getInstance();
-		System.out.println(tracker.getCurrentUsers());
 	}
 	
 	@AfterClass
@@ -97,7 +96,6 @@ public class AccessTrackerTests {
 		tracker.processLogOut(10542318);
 		
 		// Ensure the user has been removed from the list of current users
-		System.out.println(tracker.getCurrentUsers());
 		assertFalse(tracker.getCurrentUsers().contains(testUser));
 		
 		//Ensures the entry was added to the log
@@ -108,11 +106,6 @@ public class AccessTrackerTests {
 		
 		// Get the time from this log entry? Ensure that it is
 		// after the "currentTime" and after the log in time
-		
-		System.out.println(startTime);
-		System.out.println(currentTime);
-		System.out.println(entry.getTimeIn());
-		System.out.println(entry.getTimeOut());
 	
 		assertTrue(entry.getTimeOut().after(currentTime));
 		assertTrue(entry.getTimeOut().compareTo(entry.getTimeIn())>=0);
