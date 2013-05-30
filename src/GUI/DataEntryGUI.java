@@ -25,9 +25,8 @@ public class DataEntryGUI extends JPanel {
 	private JButton tools;
 	private JButton machines;
 	private JButton privileges;
-	private JButton lockUser;
 	private JButton generateReport;
-	private JButton list;
+	private JButton view;
 	
 	private ButtonListener buttonListener;
 	private Color buttonBackground;
@@ -39,12 +38,11 @@ public class DataEntryGUI extends JPanel {
 		buttonListener = new ButtonListener();
 		
 		buttonBackground = new Color(63, 146, 176);
-		
 		buttonFont = new Font("SansSerif", Font.BOLD, 30);
 		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEtchedBorder());
-		buttonPanel = new JPanel(new GridLayout(9, 1));
+		buttonPanel = new JPanel(new GridLayout(8, 1));
 		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
 		logOut = new JButton();
@@ -53,9 +51,8 @@ public class DataEntryGUI extends JPanel {
 		tools = new JButton();
 		machines = new JButton();
 		privileges = new JButton();
-		lockUser = new JButton();
 		generateReport = new JButton();
-		list = new JButton();
+		view = new JButton();
 		
 		logOut.setFont(buttonFont);
 		certifications.setFont(buttonFont);
@@ -63,9 +60,8 @@ public class DataEntryGUI extends JPanel {
 		tools.setFont(buttonFont);
 		machines.setFont(buttonFont);
 		privileges.setFont(buttonFont);
-		lockUser.setFont(buttonFont);
 		generateReport.setFont(buttonFont);
-		list.setFont(buttonFont);
+		view.setFont(buttonFont);
 		
 		logOut.setText("Log Out");
 		certifications.setText("Machine Certifications");
@@ -73,18 +69,16 @@ public class DataEntryGUI extends JPanel {
 		tools.setText("Edit Tools");
 		machines.setText("Edit Machines");
 		privileges.setText("User Privileges");
-		lockUser.setText("Lock/Unlock User");
 		generateReport.setText("Generate Report");
-		list.setText("List Tools/Machines");
+		view.setText("View Tools/Machines");
 		
 		certifications.addActionListener(buttonListener);
 		users.addActionListener(buttonListener);
 		tools.addActionListener(buttonListener);
 		machines.addActionListener(buttonListener);
 		privileges.addActionListener(buttonListener);
-		lockUser.addActionListener(buttonListener);
 		generateReport.addActionListener(buttonListener);
-		list.addActionListener(buttonListener);
+		view.addActionListener(buttonListener);
 		logOut.addActionListener(buttonListener);
 		
 		buttonPanel.add(certifications);
@@ -92,9 +86,8 @@ public class DataEntryGUI extends JPanel {
 		buttonPanel.add(machines);
 		buttonPanel.add(users);
 		buttonPanel.add(privileges);
-		buttonPanel.add(lockUser);
 		buttonPanel.add(generateReport);
-		buttonPanel.add(list);
+		buttonPanel.add(view);
 		buttonPanel.add(logOut);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -120,9 +113,8 @@ public class DataEntryGUI extends JPanel {
 		tools.setBackground(null);
 		machines.setBackground(null);
 		privileges.setBackground(null);
-		lockUser.setBackground(null);
 		generateReport.setBackground(null);
-		list.setBackground(null);	
+		view.setBackground(null);	
 	}
 	
 	public void switchPanels(JPanel panel) {
@@ -147,12 +139,10 @@ public class DataEntryGUI extends JPanel {
 				switchPanels(new EditMachinesPanel());
 			} else if ( e.getSource() == privileges ) {
 				switchPanels(new EditPrivilegesPanel());
-			} else if ( e.getSource() == lockUser ) {
-				switchPanels(new LockUserPanel());
 			} else if ( e.getSource() == generateReport ) {
 				switchPanels(new GenerateReportPanel());
-			} else if ( e.getSource() == list ) {
-				switchPanels(new ListPanel());
+			} else if ( e.getSource() == view ) {
+				switchPanels(new ViewToolsAndMachinesPanel());
 			}
 			JButton current = (JButton) e.getSource();
 			current.setBackground(buttonBackground);

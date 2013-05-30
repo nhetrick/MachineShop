@@ -25,6 +25,25 @@ public class ContentPanel extends JPanel {
 		this.title.setFont(titleFont);
 		setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.1;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(new JPanel(), c);
+		
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.8;
+		c.weighty = 0.1;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(this.title, c);
+		
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.1;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(new JPanel(), c);
 	}
 	
 }
