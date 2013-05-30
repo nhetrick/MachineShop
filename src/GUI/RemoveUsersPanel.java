@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -66,6 +67,7 @@ public class RemoveUsersPanel extends ContentPanel {
 		
 		resultsPanel = new JPanel();
 		resultsPanel.setBorder(new TitledBorder("Search Results"));
+		resultsPanel.setLayout(new BorderLayout());
 		
 		removeButton = new JButton("Remove Users");
 		removeButton.setFont(buttonFont);
@@ -171,6 +173,7 @@ public class RemoveUsersPanel extends ContentPanel {
 						int CWID = Integer.parseInt(input);
 						
 						User user = AccessTracker.findUserByCWID(CWID);
+						//TODO show CWID and name?
 						String show = user.getCWID() +
 								" " + user.getFirstName() +
 								" " + user.getLastName();
@@ -178,7 +181,7 @@ public class RemoveUsersPanel extends ContentPanel {
 						JCheckBox cb = new JCheckBox(show); 
 						cb.setFont(textFont);
 						
-						resultsPanel.add(cb);
+						resultsPanel.add(cb, BorderLayout.WEST);
 						searchField.setText("");
 					} else {
 						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");

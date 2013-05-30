@@ -276,11 +276,11 @@ public class AccessTracker {
 	}
 	
 	public static User findUserByCWID(int CWID){
-		//TODO do what loadUser does without adding to currentUsers
-		DBCollection users = AccessTracker.getDatabase().getCollection("Users");
+		//TODO do what loadUser does and have loadUser call this
+		DBCollection users = database.getCollection("Users");
 		DBObject result = users.findOne(new BasicDBObject("CWID", CWID));
-		User u = new User(result.get("firstName").toString(), result.get("lastName").toString(), CWID);
-		return u;
+		User user = new User(result.get("firstName").toString(), result.get("lastName").toString(), CWID);
+		return user;
 	}
 
 	/********************************** GETTERS AND SETTERS *******************************************/
