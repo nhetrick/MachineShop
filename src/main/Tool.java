@@ -34,5 +34,13 @@ public class Tool {
 	public String toString() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Tool))
+			return false;
+		Tool obj = (Tool) o;
+		return (this.UPC == obj.getUPC());
+	}
 
 }

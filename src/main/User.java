@@ -35,6 +35,10 @@ public class User {
 	public boolean isLocked() {
 		return isLocked;
 	}
+	
+	public void setLockedStatus(boolean lock) {
+		isLocked = lock;
+	}
 
 	public ArrayList<Machine> getCertifiedMachines() {
 		return certifiedMachines;

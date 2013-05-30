@@ -60,12 +60,13 @@ public class AccessTracker {
 		User currentUser = new User("", "", 0);
 		boolean isAdministrator;
 		boolean isSystemAdministrator;
+		boolean isLocked;
 		String firstName = "";
 		String lastName = "";
 		
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
-		
+
 		if ( !cursor.hasNext() ) {
 			if ( !checkLegitimacy(CWID) ) {
 				// DO_SOMETHING
@@ -77,6 +78,12 @@ public class AccessTracker {
 			}			
 		} else {
 			BasicDBObject result = (BasicDBObject) cursor.next();
+
+			if (result.get("locked") == null) {
+				isLocked = false;
+			} else {
+				isLocked = (boolean) result.get("locked");
+			}
 
 			if (result.get("isAdmin") == null) {
 				isAdministrator = false;
@@ -102,11 +109,13 @@ public class AccessTracker {
 			}  else {
 				currentUser = new User(firstName, lastName, CWID);
 			}
-			
+
+			currentUser.setLockedStatus(isLocked);
+
 			//Retrieve user's certified machines
 			ArrayList<Machine> machinesList = new ArrayList<Machine>();
 			DBCollection machinesColl = database.getCollection("Machines");
-			
+
 			ArrayList<BasicDBObject> certMachines = (ArrayList<BasicDBObject>)result.get("certifiedMachines");
 			if (certMachines == null) {
 				currentUser.loadCertifiedMachines(new ArrayList<Machine>());
@@ -120,11 +129,11 @@ public class AccessTracker {
 				} 
 				currentUser.loadCertifiedMachines(machinesList);
 			}
-			
+
 			//Retrieve user's checkedOutTools
 			ArrayList<Tool> checkedOutToolsList = new ArrayList<Tool>();
 			DBCollection toolsColl = database.getCollection("Tools");
-		
+
 			ArrayList<BasicDBObject> COTools = (ArrayList<BasicDBObject>)result.get("checkedOutTools");
 			if(COTools == null) {
 				currentUser.loadCheckedOutTools(new ArrayList<Tool>());
@@ -136,14 +145,17 @@ public class AccessTracker {
 						checkedOutToolsList.add(new Tool((String) tool.next().get("name"), (int) upc));
 					}
 				} 
-				currentUser.loadCheckedOutTools(checkedOutToolsList);
-			}
-		
+			currentUser.loadCheckedOutTools(checkedOutToolsList);
+			
+			currentUsers.add(currentUser);
+		}
+
 		return currentUser;
 	}
 
 	// Loads all the tools from the database into RAM
 	public void loadTools() {
+		tools.clear();
 		DBCollection allTools = database.getCollection("Tools");
 		DBCursor cursor = allTools.find();
 		while(cursor.hasNext()) {
@@ -153,8 +165,17 @@ public class AccessTracker {
 		}
 	}
 	
+	public void addTool(Tool t) {
+		tools.add(t);
+	}
+	
+	public void removeTool(Tool t) {
+		tools.remove(t);
+	}
+	
 	// Loads all the machines from the database into RAM
 	public void loadMachines() {
+		machines.clear();
 		DBCollection allMachines = database.getCollection("Machines");
 		DBCursor cursor = allMachines.find();
 		while(cursor.hasNext()) {
@@ -162,6 +183,14 @@ public class AccessTracker {
 			Machine m = new Machine((String) machine.get("name"), (String) machine.get("ID"));
 			machines.add(m);
 		}
+	}
+	
+	public void addMachine(Machine m) {
+		machines.add(m);
+	}
+	
+	public void removeMachine(Machine m) {
+		machines.remove(m);
 	}
 	
 	// Creates a new user. Should be called by loadUser()
@@ -178,7 +207,27 @@ public class AccessTracker {
 		
 		users.insert(document);
 		
+		currentUsers.add(newUser);
+		
 		return newUser;
+	}
+	
+	public void removeUser(User u) {
+		currentUsers.remove(u);
+	}
+	
+	public void lockUser(User u) {
+		currentUsers.remove(u);
+		u.setLockedStatus(true);
+		currentUsers.add(u);
+		
+	}
+	
+	public void unlockUser(User u) {
+		currentUsers.remove(u);
+		u.setLockedStatus(false);
+		currentUsers.add(u);
+		
 	}
 	
 	// Loads the user with this CWID to list of current users
@@ -188,7 +237,6 @@ public class AccessTracker {
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
 		User currentUser = loadUser(CWID);
-		currentUsers.add(currentUser);
 		
 		Log.startEntry(currentUser);
 		
