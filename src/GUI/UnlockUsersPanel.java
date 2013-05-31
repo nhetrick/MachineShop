@@ -158,7 +158,7 @@ public class UnlockUsersPanel extends ContentPanel {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
 			} else if ( e.getSource() == goButton ) {
-				// TO DO
+				// TODO
 			}
 		}
 	}

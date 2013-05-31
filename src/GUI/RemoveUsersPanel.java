@@ -163,6 +163,7 @@ public class RemoveUsersPanel extends ContentPanel {
 		switch (searchBy){
 		case CWID:
 			String input = searchField.getText();
+			clear();
 			if (InputReader.isValidCWID(input)){
 				int CWID = Integer.parseInt(input);
 				

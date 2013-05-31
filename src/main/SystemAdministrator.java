@@ -25,39 +25,31 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void addAdministrator(User user) {
-		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
-		if (cursor.hasNext()) {
-			BasicDBObject result = (BasicDBObject) cursor.next();
-			result.put("isAdmin", true);
-			result.put("isSystemAdmin", false);
-		}
+		BasicDBObject newAdmin = new BasicDBObject();
+		newAdmin.append("$set", new BasicDBObject().append("isAdmin", true));
+		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
+		users.update(searchQuery, newAdmin);
 	}
 	
 	public void removeAdministrator(User user) {
-		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
-		if (cursor.hasNext()) {
-			BasicDBObject result = (BasicDBObject) cursor.next();
-			result.put("isAdmin", false);
-			result.put("isSystemAdmin", false);
-		}
+		BasicDBObject newAdmin = new BasicDBObject();
+		newAdmin.append("$set", new BasicDBObject().append("isAdmin", false));
+		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
+		users.update(searchQuery, newAdmin);
 	}
 	
 	public void addSystemAdministrator(User user) {
-		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
-		if (cursor.hasNext()) {
-			BasicDBObject result = (BasicDBObject) cursor.next();
-			result.put("isAdmin", true);
-			result.put("isSystemAdmin", true);
-		}
+		BasicDBObject newSystemAdmin = new BasicDBObject();
+		newSystemAdmin.append("$set", new BasicDBObject().append("isSystemAdmin", true));
+		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
+		users.update(searchQuery, newSystemAdmin);
 	}
 	
 	public void removeSystemAdministrator(User user) {
-		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
-		if (cursor.hasNext()) {
-			BasicDBObject result = (BasicDBObject) cursor.next();
-			result.put("isAdmin", false);
-			result.put("isSystemAdmin", false);
-		}
+		BasicDBObject newSystemAdmin = new BasicDBObject();
+		newSystemAdmin.append("$set", new BasicDBObject().append("isSystemAdmin", false));
+		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
+		users.update(searchQuery, newSystemAdmin);
 	}
 	
 	public void updatePermission(User user, ArrayList<Machine> machines) {

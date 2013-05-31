@@ -1,11 +1,14 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,6 +24,7 @@ import GUI.MainGUI.SearchBy;
 import main.AccessTracker;
 import main.Administrator;
 import main.InputReader;
+import main.SystemAdministrator;
 import main.User;
 
 
@@ -33,14 +37,21 @@ public class EditPrivilegesPanel extends ContentPanel {
 	private JButton goButton;
 	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
+	private AdminCheckBoxListener adminCheckBoxListner;
+	private SystemCheckBoxListener systemCheckBoxListner;
 	private JTextField searchField;
 	private JPanel resultsPanel;
+	private User userInQuestion;
+	private boolean newAdmin;
+	private boolean newSystemAdmin;
 	
 	public EditPrivilegesPanel() {
 				
 		super("Edit User's Privileges");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
+		adminCheckBoxListner = new AdminCheckBoxListener();
+		systemCheckBoxListner = new SystemCheckBoxListener();
 		searchField = new JTextField();
 		JLabel searchLabel = new JLabel("Search By:");
 		
@@ -72,7 +83,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 		
 		resultsPanel = new JPanel();
 		resultsPanel.setBorder(new TitledBorder("Search Results"));
-		resultsPanel.setLayout(new GridLayout(2, 3));
+		resultsPanel.setLayout(new GridLayout(1, 3));
 		
 		saveButton = new JButton("Save");
 		saveButton.setFont(buttonFont);
@@ -146,53 +157,50 @@ public class EditPrivilegesPanel extends ContentPanel {
 	}
 	
 	public void findUsers(){
+		Font labelFont = new Font("SansSerif", Font.BOLD, 22);
 		switch (searchBy){
 		case CWID:
 			String input = searchField.getText();
+			clear();
 			if (InputReader.isValidCWID(input)){
 				//TODO refactor
 				int CWID = Integer.parseInt(input);
 				
 				User user = AccessTracker.findUserByCWID(CWID);
-				
-				System.out.println(user);
-				System.out.println(user.isAdmin());
+				userInQuestion = user;
 				
 				JCheckBox cb1 = new JCheckBox();
 				cb1.setSelected(user.isAdmin());
-				cb1.setFont(textFont);
 				
 				JCheckBox cb2 = new JCheckBox();
 				
 				if (user.isAdmin()) {
 					Administrator adminUser = (Administrator) user;
 					cb2.setSelected(adminUser.isSystemAdmin());
-					cb2.setFont(textFont);
 				}
 				
 				else
 					cb2.setSelected(false);
 					
-				
 				//TODO show CWID and name?
 				String show = user.getCWID() +
 						" " + user.getFirstName() +
 						" " + user.getLastName();
 				
-				JPanel adminPanel = new JPanel(new GridLayout());
-				JPanel systemPanel = new JPanel(new GridLayout());
-				JPanel namePanel = new JPanel(new GridLayout());
+				JPanel adminPanel = new JPanel(new GridLayout(3, 1));
+				JPanel systemPanel = new JPanel(new GridLayout(3, 1));
+				JPanel namePanel = new JPanel(new GridLayout(3, 1));
 				
 				JLabel name = new JLabel(show);
-				name.setFont(textFont);
+				name.setFont(labelFont);
 				
 				JLabel adminLabel = new JLabel("Admin");
 				JLabel systemLabel = new JLabel("System Admin");
 				JLabel nameLabel = new JLabel("Name and CWID");
 				
-				adminLabel.setFont(textFont);
-				systemLabel.setFont(textFont);
-				nameLabel.setFont(textFont);
+				adminLabel.setFont(labelFont);
+				systemLabel.setFont(labelFont);
+				nameLabel.setFont(labelFont);
 				
 				adminPanel.add(adminLabel);
 				systemPanel.add(systemLabel);
@@ -202,9 +210,16 @@ public class EditPrivilegesPanel extends ContentPanel {
 				systemPanel.add(cb2);
 				namePanel.add(name);
 				
+				adminPanel.add(new JPanel());
+				systemPanel.add(new JPanel());
+				namePanel.add(new JPanel ());
+				
+				cb1.addItemListener(adminCheckBoxListner);
+				cb2.addItemListener(systemCheckBoxListner);
+				
+				resultsPanel.add(namePanel);
 				resultsPanel.add(adminPanel);
 				resultsPanel.add(systemPanel);
-				resultsPanel.add(namePanel);
 				
 				searchField.setText("");
 			} else {
@@ -243,12 +258,69 @@ public class EditPrivilegesPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton ) {
 				// TODO
+				if (newSystemAdmin) {
+					((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addAdministrator(userInQuestion);
+					((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addSystemAdministrator(userInQuestion);
+				}
+				else {
+					if (newAdmin) {
+						((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addAdministrator(userInQuestion);
+						((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).removeSystemAdministrator(userInQuestion);
+					}
+					else {
+						((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).removeAdministrator(userInQuestion);
+						((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).removeSystemAdministrator(userInQuestion);
+					}
+				}
 			} else if ( e.getSource() == goButton ) {
 				findUsers();
 			}
 		}
 	}
 	
+	private class AdminCheckBoxListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+//			JCheckBox check = (JCheckBox) e.getSource();
+//			String name = check.getName();
+//			System.out.println(name);
+//			String cwid = name.substring(0,InputReader.CWID_LENGTH);
+//			
+//			userInQuestion = AccessTracker.findUserByCWID(Integer.parseInt(cwid));
+
+			switch (e.getStateChange()){
+			case ItemEvent.SELECTED:
+				newAdmin = true;
+				break;
+			case ItemEvent.DESELECTED:
+				newAdmin = false;
+				break;
+			}
+		}
+		
+	}
+	
+
+	private class SystemCheckBoxListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+//			JCheckBox check = (JCheckBox) e.getSource();
+//			String name = check.getName();
+//			String cwid = name.substring(0,InputReader.CWID_LENGTH);
+//			
+//			userInQuestion = AccessTracker.findUserByCWID(Integer.parseInt(cwid));
+
+			switch (e.getStateChange()){
+			case ItemEvent.SELECTED:
+				newSystemAdmin = true;
+				break;
+			case ItemEvent.DESELECTED:
+				newSystemAdmin = false;
+				break;
+			}
+		}
+		
+	}
 //	private void addMachineOptions() {
 //		machineNames.addItem("");
 //		ArrayList<Machine> machines = Driver.getAccessTracker().getMachines();
