@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
@@ -30,6 +31,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private JButton generateButton;
 	private JPanel dataEntryPanel;
 	private JPanel resultsPanel;
+	private JScrollPane scroller;
 	
 	JTextField startField;
 	JTextField endField;
@@ -72,6 +74,8 @@ public class GenerateReportPanel extends ContentPanel {
 		dataEntryPanel.add(new DatePanel(), c);
 		
 		resultsPanel = new JPanel();
+		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
 		resultsPanel.setBorder(new TitledBorder("Results"));
 		resultsPanel.setLayout(new GridLayout(0, 1));
 		
@@ -116,7 +120,7 @@ public class GenerateReportPanel extends ContentPanel {
 		c.weighty = 0.5;
 		c.gridx = 1;
 		c.gridy = 4;
-		add(resultsPanel, c);
+		add(scroller, c);
 		
 		c.weighty = 0.1;
 		c.gridy = 5;

@@ -31,6 +31,14 @@ public class User {
 		t.returnTool();
 		toolsCheckedOut.remove(t);
 	}
+	
+	public void useMachine(Machine m) {
+		m.use();
+	}
+	
+	public void stopUsingMachine(Machine m) {
+		m.stopUsing();
+	}
 
 	public int getCWID() {
 		return CWID;

@@ -1,9 +1,11 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import main.Machine;
+import main.Tool;
 
 public class ViewToolsAndMachinesPanel extends ContentPanel {
 	
@@ -23,6 +27,9 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 	private JCheckBox checkedOutBox;
 	private JCheckBox notCheckedOutBox;
 	private CheckBoxListener checkBoxListener;
+	
+	JPanel mainMachinesPanel;
+	JPanel mainToolsPanel;
 	
 	public ViewToolsAndMachinesPanel() {
 		
@@ -34,6 +41,11 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		checkedOutBox = new JCheckBox("Checked Out");
 		notCheckedOutBox = new JCheckBox("Not Checked Out");
 		
+		inUseBox.setFont(textFont);
+		notInUseBox.setFont(textFont);
+		checkedOutBox.setFont(textFont);
+		notCheckedOutBox.setFont(textFont);
+		
 		inUseBox.addActionListener(checkBoxListener);
 		notInUseBox.addActionListener(checkBoxListener);
 		checkedOutBox.addActionListener(checkBoxListener);
@@ -44,8 +56,11 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		checkedOutBox.setHorizontalAlignment(JCheckBox.CENTER);
 		notCheckedOutBox.setHorizontalAlignment(JCheckBox.CENTER);
 		
-		JPanel mainMachinesPanel = new JPanel();
-		JPanel mainToolsPanel = new JPanel();
+		mainMachinesPanel = new JPanel();
+		mainToolsPanel = new JPanel();
+		
+		mainMachinesPanel.setLayout(new GridLayout(0, 4));
+		mainToolsPanel.setLayout(new GridLayout(0, 4));
 		
 		JPanel machinesPanel = new JPanel(new GridBagLayout());
 		machinesPanel.setBorder(new TitledBorder("Machines"));
@@ -111,24 +126,70 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.gridy = 5;
 		add(new JPanel(), c);
 		
+		displayInUseMachines(false);
+		displayInUseMachines(true);
+		displayCheckedOutTools(false);
+		displayCheckedOutTools(true);
 	}
 	
 	public void showConfirmPopup() {
 		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users?");
 	}
 	
+	public void displayInUseMachines(boolean use) {
+		for (Machine m : Driver.getAccessTracker().getMachines()) {
+			if (use == m.isInUse()) {
+				JLabel label = new JLabel(m.getName());
+				label.setFont(resultsFont);
+				if (m.isInUse()) {
+					label.setForeground(Color.GRAY);
+				} 
+				mainMachinesPanel.add(label);
+			}
+		}
+	}
+	
+	public void displayCheckedOutTools(boolean status) {
+		for (Tool t : Driver.getAccessTracker().getTools()) {
+			if (status == t.isCheckedOut()) {
+				JLabel label = new JLabel(t.getName());
+				label.setFont(resultsFont);
+				if (t.isCheckedOut()) {
+					label.setForeground(Color.GRAY);
+				} 
+				mainToolsPanel.add(label);
+			}
+		}
+	}
+	
 	private class CheckBoxListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == inUseBox) {
-				// TODO
-			} else if ( e.getSource() == notInUseBox ) {
-				// TODO
-			} else if ( e.getSource() == checkedOutBox ) {
-				// TODO
-			} else if ( e.getSource() == notCheckedOutBox ) {
-				// TODO
-			}
+			if (e.getSource() == inUseBox || e.getSource() == notInUseBox ) {
+				if (inUseBox.isSelected() && !notInUseBox.isSelected()) {
+					mainMachinesPanel.removeAll();
+					displayInUseMachines(true);
+				} else if (!inUseBox.isSelected() && notInUseBox.isSelected()) {
+					mainMachinesPanel.removeAll();
+					displayInUseMachines(false);
+				} else {
+					mainMachinesPanel.removeAll();
+					displayInUseMachines(false);
+					displayInUseMachines(true);
+				} 
+			} else if ( e.getSource() == checkedOutBox || e.getSource() == notCheckedOutBox ) {
+				if (checkedOutBox.isSelected() && !notCheckedOutBox.isSelected()) {
+					mainToolsPanel.removeAll();
+					displayCheckedOutTools(true);
+				} else if (!checkedOutBox.isSelected() && notCheckedOutBox.isSelected()) {
+					mainToolsPanel.removeAll();
+					displayCheckedOutTools(false);
+				} else {
+					mainToolsPanel.removeAll();
+					displayCheckedOutTools(false);
+					displayCheckedOutTools(true);
+				}
+			} 
 		}
 	}
 
