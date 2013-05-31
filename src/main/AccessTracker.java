@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import GUI.Driver;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -58,102 +60,12 @@ public class AccessTracker {
 	// If the CWID doesn't exist, create new user.
 	// Returns the name of the user with this CWID
 	public User loadUser(int CWID) {
-		boolean isAdministrator;
-		boolean isSystemAdministrator;
-		boolean isLocked;
-		String firstName = "";
-		String lastName = "";
-		
 		if (currentUsers.contains(new User("", "", CWID))) {
 			currentUser = getUser(CWID);
 		} else {
-			DBCollection users = database.getCollection("Users");
-			DBCursor cursor = users.find(new BasicDBObject("CWID", CWID));
-	
-			if ( !cursor.hasNext() ) {
-				if ( !checkLegitimacy(CWID) ) {
-					// DO_SOMETHING
-				} else {
-					// FOR NOW (UNTIL WE GET BLASTERCARD DATABASE ACCESS)
-					firstName = JOptionPane.showInputDialog("Enter your first name.");
-					lastName = JOptionPane.showInputDialog("Enter your last name.");
-					currentUser = createUser(firstName, lastName, CWID);
-				}			
-			} else {
-				BasicDBObject result = (BasicDBObject) cursor.next();
-	
-				if (result.get("locked") == null) {
-					isLocked = false;
-				} else {
-					isLocked = (boolean) result.get("locked");
-				}
-	
-				if (result.get("isAdmin") == null) {
-					isAdministrator = false;
-				} else {
-					isAdministrator = (boolean) result.get("isAdmin");
-				}
-	
-				if ( result.get("isSystemAdmin") == null ) {
-					isSystemAdministrator = false;
-				} else {
-					isSystemAdministrator = (boolean) result.get("isSystemAdmin");
-				}
-	
-				firstName = (String) result.get("firstName");
-				lastName = (String) result.get("lastName");
-	
-				if ( isAdministrator ) {
-					if ( isSystemAdministrator ) {
-						currentUser = new SystemAdministrator(firstName, lastName, CWID);
-					} else {
-						currentUser = new Administrator(firstName, lastName, CWID);
-					}
-				}  else {
-					currentUser = new User(firstName, lastName, CWID);
-				}
-	
-				currentUser.setLockedStatus(isLocked);
-	
-				//Retrieve user's certified machines
-				ArrayList<Machine> machinesList = new ArrayList<Machine>();
-				DBCollection machinesColl = database.getCollection("Machines");
-	
-				ArrayList<BasicDBObject> certMachines = (ArrayList<BasicDBObject>)result.get("certifiedMachines");
-				if (certMachines == null) {
-					currentUser.loadCertifiedMachines(new ArrayList<Machine>());
-				} else {
-					for(BasicDBObject embedded : certMachines){ 
-						String id = (String)embedded.get("id"); 
-						DBCursor machine = machinesColl.find(new BasicDBObject("ID", id));
-						if (machine.hasNext()) {
-							machinesList.add(new Machine((String) machine.next().get("name"), id));
-						}
-					} 
-					currentUser.loadCertifiedMachines(machinesList);
-				}
-	
-				//Retrieve user's checkedOutTools
-				ArrayList<Tool> checkedOutToolsList = new ArrayList<Tool>();
-				DBCollection toolsColl = database.getCollection("Tools");
-	
-				ArrayList<BasicDBObject> COTools = (ArrayList<BasicDBObject>)result.get("checkedOutTools");
-				if(COTools == null) {
-					currentUser.loadCheckedOutTools(new ArrayList<Tool>());
-				} else 
-					for(BasicDBObject embedded : COTools){ 
-						String upc = (String) embedded.get("upc"); 
-						DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
-						if (tool.hasNext()) {
-							checkedOutToolsList.add(new Tool((String) tool.next().get("name"), upc));
-						}
-					} 
-				currentUser.loadCheckedOutTools(checkedOutToolsList);
-				
-				currentUsers.add(currentUser);
-			}
+			currentUser = findUserByCWID(CWID);
+			currentUsers.add(currentUser);
 		}
-
 		return currentUser;
 	}
 
@@ -249,7 +161,6 @@ public class AccessTracker {
 		currentUser = loadUser(CWID);
 		
 		Log.startEntry(currentUser);
-	
 		return currentUser;
 		
 	}
@@ -276,10 +187,84 @@ public class AccessTracker {
 	}
 	
 	public static User findUserByCWID(int CWID){
-		//TODO do what loadUser does and have loadUser call this
 		DBCollection users = database.getCollection("Users");
 		DBObject result = users.findOne(new BasicDBObject("CWID", CWID));
-		User user = new User(result.get("firstName").toString(), result.get("lastName").toString(), CWID);
+		boolean isAdministrator;
+		boolean isSystemAdministrator;
+		boolean isLocked;
+		String firstName = "";
+		String lastName = "";
+		User user;
+
+		if (result.get("locked") == null) {
+			isLocked = false;
+		} else {
+			isLocked = (boolean) result.get("locked");
+		}
+
+		if (result.get("isAdmin") == null) {
+			isAdministrator = false;
+		} else {
+			isAdministrator = (boolean) result.get("isAdmin");
+		}
+
+		if ( result.get("isSystemAdmin") == null ) {
+			isSystemAdministrator = false;
+		} else {
+			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
+		}
+
+		firstName = (String) result.get("firstName");
+		lastName = (String) result.get("lastName");
+
+		if ( isAdministrator ) {
+			if ( isSystemAdministrator ) {
+				user = new SystemAdministrator(firstName, lastName, CWID);
+			} else {
+				user = new Administrator(firstName, lastName, CWID);
+			}
+		}  else {
+			user = new User(firstName, lastName, CWID);
+		}
+
+		user.setLockedStatus(isLocked);
+
+		//Retrieve user's certified machines
+		ArrayList<Machine> machinesList = new ArrayList<Machine>();
+		DBCollection machinesColl = database.getCollection("Machines");
+
+		ArrayList<BasicDBObject> certMachines = (ArrayList<BasicDBObject>)result.get("certifiedMachines");
+		if (certMachines == null) {
+			user.loadCertifiedMachines(new ArrayList<Machine>());
+		} else {
+			for(BasicDBObject embedded : certMachines){ 
+				String id = (String)embedded.get("id"); 
+				DBCursor machine = machinesColl.find(new BasicDBObject("ID", id));
+				if (machine.hasNext()) {
+					machinesList.add(new Machine((String) machine.next().get("name"), id));
+				}
+			} 
+			user.loadCertifiedMachines(machinesList);
+		}
+
+		//Retrieve user's checkedOutTools
+		ArrayList<Tool> checkedOutToolsList = new ArrayList<Tool>();
+		DBCollection toolsColl = database.getCollection("Tools");
+
+		ArrayList<BasicDBObject> COTools = (ArrayList<BasicDBObject>)result.get("checkedOutTools");
+		if(COTools == null) {
+			user.loadCheckedOutTools(new ArrayList<Tool>());
+		} else {
+			for(BasicDBObject embedded : COTools){ 
+				String upc = (String) embedded.get("upc"); 
+				DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
+				if (tool.hasNext()) {
+					checkedOutToolsList.add(new Tool((String) tool.next().get("name"), upc));
+				}
+			} 
+		}
+		user.loadCheckedOutTools(checkedOutToolsList);
+
 		return user;
 	}
 

@@ -6,6 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -14,38 +18,44 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import GUI.MainGUI.SearchBy;
 import main.AccessTracker;
 import main.InputReader;
 import main.User;
 
 public class RemoveUsersPanel extends ContentPanel {
 	
-	private JComboBox<String> searchParameter;
+	private JComboBox<SearchBy> searchParameter;
 	private JLabel enterLabel;
 	private JButton removeButton;
 	private JButton goButton;
 	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
+	private CheckBoxListener checkBoxListener;
 	private JTextField searchField;
 	private JPanel resultsPanel;
-	private enum SearchBy {CWID, NAME};
 	private SearchBy searchBy;
+	private ArrayList<String> cwidsToRemove;
 	
 	public RemoveUsersPanel() {
 		
 		super("Remove Users");
+		cwidsToRemove = new ArrayList<String>();
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
+		checkBoxListener = new CheckBoxListener();
+		
 		searchField = new JTextField();
 		JLabel searchLabel = new JLabel("Search By:");
 		
 		searchLabel.setFont(buttonFont);
 		
-		searchParameter = new JComboBox<String>();
+		searchParameter = new JComboBox<SearchBy>();
 		searchParameter.setFont(textFont);
 		
-		searchParameter.addItem("Name");
-		searchParameter.addItem("CWID");
+		searchParameter.addItem(SearchBy.NAME);
+		searchParameter.addItem(SearchBy.CWID);
 		
 		searchParameter.addActionListener(comboBoxListener);
 		
@@ -136,21 +146,67 @@ public class RemoveUsersPanel extends ContentPanel {
 	}
 	
 	public void showConfirmPopup() {
-		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users?");
+		if (cwidsToRemove.size() == 0){
+			JOptionPane.showConfirmDialog(this, "No users are selected.");
+			return;
+		}
+		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users?\n" + cwidsToRemove);
+	}
+	
+	public void clear(){
+		resultsPanel.removeAll();
+		cwidsToRemove.clear();
+		searchField.setText("");
+	}
+	
+	public void findUsers(){
+		switch (searchBy){
+		case CWID:
+			String input = searchField.getText();
+			if (InputReader.isValidCWID(input)){
+				int CWID = Integer.parseInt(input);
+				
+				User user = AccessTracker.findUserByCWID(CWID);
+				String show = user.getCWID() +
+						" " + user.getFirstName() +
+						" " + user.getLastName();
+				
+				JCheckBox cb = new JCheckBox(show); 
+				cb.setName(show);
+				cb.setFont(textFont);
+				cb.addItemListener(checkBoxListener);
+				
+				//TODO layout 
+				resultsPanel.add(cb, BorderLayout.WEST);
+			} else {
+				JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
+			}
+			break;
+		case NAME:
+			//TODO find by name
+
+			break;
+		default:
+			// do nothing
+		}
 	}
 	
 	private class ComboBoxListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == searchParameter) {
-				String parameter = searchParameter.getSelectedItem().toString();
-				if (parameter == "CWID") {
+				SearchBy parameter = (SearchBy) searchParameter.getSelectedItem();
+				switch (parameter){
+				case CWID:
 					searchBy = SearchBy.CWID;
 					enterLabel.setText("Enter CWID:");
-				} else if (parameter == "Name") {
+					break;
+				case NAME:
 					searchBy = SearchBy.NAME;
 					enterLabel.setText("Enter Name:");
+					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -162,39 +218,30 @@ public class RemoveUsersPanel extends ContentPanel {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
 				//TODO remove users. Even if logged in (in local memory). 
-				//TODO checkBoxListener
 			} else if ( e.getSource() == goButton ) {
-				resultsPanel.removeAll();
-				switch (searchBy){
-				case CWID:
-					String input = searchField.getText();
-					if (InputReader.isValidCWID(input)){
-						//TODO refactor
-						int CWID = Integer.parseInt(input);
-						
-						User user = AccessTracker.findUserByCWID(CWID);
-						//TODO show CWID and name?
-						String show = user.getCWID() +
-								" " + user.getFirstName() +
-								" " + user.getLastName();
-						
-						JCheckBox cb = new JCheckBox(show); 
-						cb.setFont(textFont);
-						
-						resultsPanel.add(cb, BorderLayout.WEST);
-						searchField.setText("");
-					} else {
-						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
-					}
-					break;
-				case NAME:
-
-					break;
-				}
-
+				findUsers();
 			}
 		}
 	}
 
+	private class CheckBoxListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			JCheckBox check = (JCheckBox) e.getSource();
+			String name = check.getName();
+			String cwid = name.substring(0,InputReader.CWID_LENGTH);
+
+			switch (e.getStateChange()){
+			case ItemEvent.SELECTED:
+				cwidsToRemove.add(cwid);
+				break;
+			case ItemEvent.DESELECTED:
+				if (cwidsToRemove.contains(cwid)){
+					cwidsToRemove.remove(cwid);
+				}
+				break;
+			}
+		}
+	}
 }
 

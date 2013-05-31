@@ -31,6 +31,17 @@ public class MainGUI extends JFrame{
 	private GridBagConstraints c = new GridBagConstraints();
 	private static int MAX_ERROR_COUNT = 3;
 
+	public enum SearchBy {
+		CWID("CWID"), NAME("Name");
+		private final String name;
+		private SearchBy(String name){
+			this.name = name;
+		}
+		public String toString(){
+			return name;
+		}
+	};
+	
 	public MainGUI() {
 		reader = new InputReader(this);
 		centerPanel = new SwipeCardPanel();

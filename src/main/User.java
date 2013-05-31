@@ -100,7 +100,5 @@ public class User {
 	public void setCurrentEntry(LogEntry currentEntry) {
 		this.currentEntry = currentEntry;
 	}
-	
-	
 
 }

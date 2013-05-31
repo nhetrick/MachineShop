@@ -8,7 +8,7 @@ public class ListenerHelpers {
 	public static class LogOutListner implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO restarts now, but needs to log out later
+			Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
 			Driver.getMainGui().restart();
 		}
 	}
