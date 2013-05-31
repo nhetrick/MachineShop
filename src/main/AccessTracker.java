@@ -187,7 +187,6 @@ public class AccessTracker {
 	}
 	
 	public static User findUserByCWID(int CWID){
-		//TODO do what loadUser does and have loadUser call this
 		DBCollection users = database.getCollection("Users");
 		DBObject result = users.findOne(new BasicDBObject("CWID", CWID));
 		boolean isAdministrator;

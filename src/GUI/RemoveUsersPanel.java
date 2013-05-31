@@ -228,37 +228,10 @@ public class RemoveUsersPanel extends ContentPanel {
 				showConfirmPopup();
 				//TODO remove users. Even if logged in (in local memory). 
 			} else if ( e.getSource() == goButton ) {
-//<<<<<<< HEAD
-//				resultsPanel.removeAll();
-//				switch (searchBy){
-//				case CWID:
-//					String input = searchField.getText();
-//					if (InputReader.isValidCWID(input)){
-//						//TODO refactor
-//						int CWID = Integer.parseInt(input);
-//						
-//						User user = AccessTracker.findUserByCWID(CWID);
-//						//TODO show CWID and name?
-//						String show = user.getCWID() +
-//								" " + user.getFirstName() +
-//								" " + user.getLastName();
-//						
-//						JCheckBox cb = new JCheckBox(show);
-//						cb.setFont(textFont);
-//						
-//						resultsPanel.add(cb, BorderLayout.WEST);
-//						searchField.setText("");
-//					} else {
-//						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
-//					}
-//					break;
-//				case NAME:
-//=======
 				findUsers();
 			}
 		}
 	}
-//>>>>>>> 36b8e862a74cc98fe80dbc61bace5fadc16ae582
 
 	private class CheckBoxListener implements ItemListener {
 		@Override
