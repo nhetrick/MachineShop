@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import GUI.MainGUI.SearchBy;
 import main.AccessTracker;
 import main.InputReader;
 import main.User;
@@ -35,17 +37,6 @@ public class RemoveUsersPanel extends ContentPanel {
 	private JPanel resultsPanel;
 	private SearchBy searchBy;
 	private ArrayList<String> cwidsToRemove;
-	
-	private enum SearchBy {
-		CWID("CWID"), NAME("Name");
-		private final String name;
-		private SearchBy(String name){
-			this.name = name;
-		}
-		public String toString(){
-			return name;
-		}
-	};
 	
 	public RemoveUsersPanel() {
 		

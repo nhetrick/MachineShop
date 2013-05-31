@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import GUI.MainGUI.SearchBy;
+
 import main.AccessTracker;
 import main.Administrator;
 import main.InputReader;
@@ -24,9 +26,8 @@ import main.User;
 
 public class EditPrivilegesPanel extends ContentPanel {
 	
-	private JComboBox<String> searchParameter;
+	private JComboBox<SearchBy> searchParameter;
 	private SearchBy searchBy;
-	private enum SearchBy {CWID, NAME};
 	private JLabel enterLabel;
 	private JButton saveButton;
 	private JButton goButton;
@@ -45,11 +46,11 @@ public class EditPrivilegesPanel extends ContentPanel {
 		
 		searchLabel.setFont(buttonFont);
 		
-		searchParameter = new JComboBox<String>();
+		searchParameter = new JComboBox<SearchBy>();
 		searchParameter.setFont(textFont);
 		
-		searchParameter.addItem("Name");
-		searchParameter.addItem("CWID");
+		searchParameter.addItem(SearchBy.NAME);
+		searchParameter.addItem(SearchBy.CWID);
 		
 		searchParameter.addActionListener(comboBoxListener);
 		
@@ -138,19 +139,23 @@ public class EditPrivilegesPanel extends ContentPanel {
 		add(new JPanel(), c);
 	
 	}
-	
+		
 	private class ComboBoxListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == searchParameter) {
-				String parameter = searchParameter.getSelectedItem().toString();
-				if (parameter == "CWID") {
+				SearchBy parameter = (SearchBy) searchParameter.getSelectedItem();
+				switch (parameter){
+				case CWID:
 					searchBy = SearchBy.CWID;
 					enterLabel.setText("Enter CWID:");
-				} else if (parameter == "Name") {
+					break;
+				case NAME:
 					searchBy = SearchBy.NAME;
 					enterLabel.setText("Enter Name:");
+					break;
+				default:
+					break;
 				}
 			}
 		}
