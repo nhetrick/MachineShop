@@ -13,6 +13,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import GUI.ListenerHelpers.LogOutListner;
+
 public class DataEntryGUI extends JPanel {
 	
 	private JPanel contentPanel;
@@ -79,7 +81,7 @@ public class DataEntryGUI extends JPanel {
 		privileges.addActionListener(buttonListener);
 		generateReport.addActionListener(buttonListener);
 		view.addActionListener(buttonListener);
-		logOut.addActionListener(buttonListener);
+		logOut.addActionListener(new LogOutListner());
 		
 		buttonPanel.add(certifications);
 		buttonPanel.add(tools);

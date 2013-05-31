@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import GUI.Driver;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -249,7 +251,6 @@ public class AccessTracker {
 		currentUser = loadUser(CWID);
 		
 		Log.startEntry(currentUser);
-	
 		return currentUser;
 		
 	}

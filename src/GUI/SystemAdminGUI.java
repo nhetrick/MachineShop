@@ -50,7 +50,7 @@ public class SystemAdminGUI extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
-		basicUser.addActionListener(new ListenerHelpers.LogOutListner());
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 		
 	}
 	

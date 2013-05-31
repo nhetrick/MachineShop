@@ -178,7 +178,7 @@ public class RemoveUsersPanel extends ContentPanel {
 								" " + user.getFirstName() +
 								" " + user.getLastName();
 						
-						JCheckBox cb = new JCheckBox(show); 
+						JCheckBox cb = new JCheckBox(show);
 						cb.setFont(textFont);
 						
 						resultsPanel.add(cb, BorderLayout.WEST);
