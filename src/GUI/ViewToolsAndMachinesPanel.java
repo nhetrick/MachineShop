@@ -121,13 +121,13 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == inUseBox) {
-				// TO DO
+				// TODO
 			} else if ( e.getSource() == notInUseBox ) {
-				// TO DO
+				// TODO
 			} else if ( e.getSource() == checkedOutBox ) {
-				// TO DO
+				// TODO
 			} else if ( e.getSource() == notCheckedOutBox ) {
-				// TO DO
+				// TODO
 			}
 		}
 	}
