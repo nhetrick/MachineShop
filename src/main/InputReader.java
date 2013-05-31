@@ -11,7 +11,7 @@ public class InputReader implements KeyListener {
 	private String input;
 	private MainGUI gui;
 	private static int errorCount = 0;
-	private static int CWID_LENGTH = 8;
+	public static final int CWID_LENGTH = 8;
 	
 	public InputReader() {
 		input = "";
