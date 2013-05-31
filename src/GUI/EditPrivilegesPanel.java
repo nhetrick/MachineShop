@@ -139,6 +139,83 @@ public class EditPrivilegesPanel extends ContentPanel {
 		add(new JPanel(), c);
 	
 	}
+	
+	public void clear(){
+		resultsPanel.removeAll();
+		searchField.setText("");
+	}
+	
+	public void findUsers(){
+		switch (searchBy){
+		case CWID:
+			String input = searchField.getText();
+			if (InputReader.isValidCWID(input)){
+				//TODO refactor
+				int CWID = Integer.parseInt(input);
+				
+				User user = AccessTracker.findUserByCWID(CWID);
+				
+				System.out.println(user);
+				System.out.println(user.isAdmin());
+				
+				JCheckBox cb1 = new JCheckBox();
+				cb1.setSelected(user.isAdmin());
+				cb1.setFont(textFont);
+				
+				JCheckBox cb2 = new JCheckBox();
+				
+				if (user.isAdmin()) {
+					Administrator adminUser = (Administrator) user;
+					cb2.setSelected(adminUser.isSystemAdmin());
+					cb2.setFont(textFont);
+				}
+				
+				else
+					cb2.setSelected(false);
+					
+				
+				//TODO show CWID and name?
+				String show = user.getCWID() +
+						" " + user.getFirstName() +
+						" " + user.getLastName();
+				
+				JPanel adminPanel = new JPanel(new GridLayout());
+				JPanel systemPanel = new JPanel(new GridLayout());
+				JPanel namePanel = new JPanel(new GridLayout());
+				
+				JLabel name = new JLabel(show);
+				name.setFont(textFont);
+				
+				JLabel adminLabel = new JLabel("Admin");
+				JLabel systemLabel = new JLabel("System Admin");
+				JLabel nameLabel = new JLabel("Name and CWID");
+				
+				adminLabel.setFont(textFont);
+				systemLabel.setFont(textFont);
+				nameLabel.setFont(textFont);
+				
+				adminPanel.add(adminLabel);
+				systemPanel.add(systemLabel);
+				namePanel.add(nameLabel);
+				
+				adminPanel.add(cb1);
+				systemPanel.add(cb2);
+				namePanel.add(name);
+				
+				resultsPanel.add(adminPanel);
+				resultsPanel.add(systemPanel);
+				resultsPanel.add(namePanel);
+				
+				searchField.setText("");
+			} else {
+				JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
+			}
+			break;
+		case NAME:
+
+			break;
+		}
+	}
 		
 	private class ComboBoxListener implements ActionListener {
 		@Override
@@ -167,77 +244,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 			if ( e.getSource() == saveButton ) {
 				// TODO
 			} else if ( e.getSource() == goButton ) {
-				resultsPanel.removeAll();
-				switch (searchBy){
-				case CWID:
-					String input = searchField.getText();
-					if (InputReader.isValidCWID(input)){
-						//TODO refactor
-						int CWID = Integer.parseInt(input);
-						
-						User user = AccessTracker.findUserByCWID(CWID);
-						
-						System.out.println(user);
-						System.out.println(user.isAdmin());
-						
-						JCheckBox cb1 = new JCheckBox();
-						cb1.setSelected(user.isAdmin());
-						cb1.setFont(textFont);
-						
-						JCheckBox cb2 = new JCheckBox();
-						
-						if (user.isAdmin()) {
-							Administrator adminUser = (Administrator) user;
-							cb2.setSelected(adminUser.isSystemAdmin());
-							cb2.setFont(textFont);
-						}
-						
-						else
-							cb2.setSelected(false);
-							
-						
-						//TODO show CWID and name?
-						String show = user.getCWID() +
-								" " + user.getFirstName() +
-								" " + user.getLastName();
-						
-						JPanel adminPanel = new JPanel(new GridLayout());
-						JPanel systemPanel = new JPanel(new GridLayout());
-						JPanel namePanel = new JPanel(new GridLayout());
-						
-						JLabel name = new JLabel(show);
-						name.setFont(textFont);
-						
-						JLabel adminLabel = new JLabel("Admin");
-						JLabel systemLabel = new JLabel("System Admin");
-						JLabel nameLabel = new JLabel("Name and CWID");
-						
-						adminLabel.setFont(textFont);
-						systemLabel.setFont(textFont);
-						nameLabel.setFont(textFont);
-						
-						adminPanel.add(adminLabel);
-						systemPanel.add(systemLabel);
-						namePanel.add(nameLabel);
-						
-						adminPanel.add(cb1);
-						systemPanel.add(cb2);
-						namePanel.add(name);
-						
-						resultsPanel.add(adminPanel);
-						resultsPanel.add(systemPanel);
-						resultsPanel.add(namePanel);
-						
-						searchField.setText("");
-					} else {
-						JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
-					}
-					break;
-				case NAME:
-
-					break;
-				}
-
+				findUsers();
 			}
 		}
 	}
