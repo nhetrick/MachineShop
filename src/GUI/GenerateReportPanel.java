@@ -159,7 +159,7 @@ public class GenerateReportPanel extends ContentPanel {
 			if (e.getSource() == generateButton) {
 				//NEED TO IMPLEMENT. defaults to user 22222222
 				
-				Log.extractLog(Driver.getAccessTracker().getUser(22222222));
+				Log.extractLog(Driver.getAccessTracker().getUser("22222222"));
 				for (LogEntry entry : Log.getResults()) {
 					JLabel label = new JLabel(entry.toString());
 					System.out.println(entry.toString());

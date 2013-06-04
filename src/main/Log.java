@@ -96,7 +96,7 @@ public class Log {
 			int id = (int) result.get("ID");
 			
 			//get CWID
-			User u = Driver.getAccessTracker().loadUser((int) result.get("userCWID"));
+			User u = Driver.getAccessTracker().loadUser((String) result.get("userCWID"));
 			
 			//get timeIn
 			Date timeIn = (Date) result.get("timeIn");

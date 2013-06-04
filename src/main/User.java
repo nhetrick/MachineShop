@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class User {
 	private ArrayList<Machine> certifiedMachines;
 	private ArrayList<Tool>	toolsCheckedOut;
-	private int CWID;
+	private String CWID;
 	private String firstName;
 	private String lastName;
 	private LogEntry currentEntry;
@@ -12,7 +12,7 @@ public class User {
 	protected boolean isAdmin = false;
 	
 	
-	public User(String firstName, String lastName, int CWID) {
+	public User(String firstName, String lastName, String CWID) {
 		// needs to be extracted from data base
 		certifiedMachines = new ArrayList<Machine>();
 		toolsCheckedOut = new ArrayList<Tool>();
@@ -40,7 +40,7 @@ public class User {
 		m.stopUsing();
 	}
 
-	public int getCWID() {
+	public String getCWID() {
 		return CWID;
 	}
 	

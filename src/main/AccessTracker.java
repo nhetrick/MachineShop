@@ -1,5 +1,6 @@
 package main;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class AccessTracker {
 	private final String dbName = "CSM_Machine_Shop";
 	private final String username = "csm";
 	private final String password = "machineshop";
-	private User currentUser = new User("", "", 0);
+	private User currentUser = new User("", "", "");
 	
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -59,7 +60,7 @@ public class AccessTracker {
 	// database and add them to the list of current users.
 	// If the CWID doesn't exist, create new user.
 	// Returns the name of the user with this CWID
-	public User loadUser(int CWID) {
+	public User loadUser(String CWID) {
 		if (currentUsers.contains(new User("", "", CWID))) {
 			currentUser = getUser(CWID);
 		} else {
@@ -111,7 +112,7 @@ public class AccessTracker {
 	
 	// Creates a new user. Should be called by loadUser()
 	// Persists new user to database
-	public User createUser(String firstName, String lastName, int CWID) {
+	public User createUser(String firstName, String lastName, String CWID) {
 		User newUser = new User(firstName, lastName, CWID);
 		
 		BasicDBObject document = new BasicDBObject();
@@ -124,6 +125,20 @@ public class AccessTracker {
 		users.insert(document);
 		
 		currentUsers.add(newUser);
+		
+		return newUser;
+	}
+	
+	public User createUser(String CWID) throws SQLException {
+		OracleConnection oracleConnection = new OracleConnection();
+		oracleConnection.getConnection();
+		ArrayList<String> results = oracleConnection.select(CWID);
+		oracleConnection.close();
+		User newUser = null;
+		
+		if (results != null) {
+			newUser = new User(results.get(1), results.get(2), CWID);
+		} 
 		
 		return newUser;
 	}
@@ -154,7 +169,7 @@ public class AccessTracker {
 	
 	// Loads the user with this CWID to list of current users
 	// Adds entry to log
-	public User processLogIn(int CWID) {
+	public User processLogIn(String CWID) {
 		// IF the user with this CWID is locked (boolean isLocked)
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
@@ -168,7 +183,7 @@ public class AccessTracker {
 	// Removes the user with this CWID from the list
 	// of current users.
 	// Also finishes the log entry for this user.
-	public void processLogOut(int CWID) {
+	public void processLogOut(String CWID) {
 		Log.finishEntry(getUser(CWID).getCurrentEntry());
 		currentUsers.remove(getUser(CWID));
 	}
@@ -186,9 +201,9 @@ public class AccessTracker {
 		return true;
 	}
 	
-	public static User findUserByCWID(int CWID){
+	public static User findUserByCWID(String cwid){
 		DBCollection users = database.getCollection("Users");
-		DBObject result = users.findOne(new BasicDBObject("CWID", CWID));
+		DBObject result = users.findOne(new BasicDBObject("CWID", cwid));
 		boolean isAdministrator;
 		boolean isSystemAdministrator;
 		boolean isLocked;
@@ -219,12 +234,12 @@ public class AccessTracker {
 
 		if ( isAdministrator ) {
 			if ( isSystemAdministrator ) {
-				user = new SystemAdministrator(firstName, lastName, CWID);
+				user = new SystemAdministrator(firstName, lastName, cwid);
 			} else {
-				user = new Administrator(firstName, lastName, CWID);
+				user = new Administrator(firstName, lastName, cwid);
 			}
 		}  else {
-			user = new User(firstName, lastName, CWID);
+			user = new User(firstName, lastName, cwid);
 		}
 
 		user.setLockedStatus(isLocked);
@@ -270,9 +285,9 @@ public class AccessTracker {
 
 	/********************************** GETTERS AND SETTERS *******************************************/
 	
-	public User getUser(int CWID) {
+	public User getUser(String cwid) {
 		for (User u : currentUsers) {
-			if (u.getCWID() == CWID) {
+			if (u.getCWID() == cwid) {
 				return u;
 			}
 		}

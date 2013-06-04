@@ -32,8 +32,8 @@ public class AdministratorTests {
 	public static void setup() {
 		driver = new Driver();
 		tracker = driver.getAccessTracker();
-		testAdmin = new SystemAdministrator("", "", 1);
-		testUser = new User("", "", 2);
+		testAdmin = new SystemAdministrator("", "", "1");
+		testUser = new User("", "", "2");
 		users = new ArrayList<User>();
 	
 		users.add(testUser);
@@ -78,7 +78,7 @@ public class AdministratorTests {
 		// create a dummy list of users to remove and add our
 		// test user to this list.
 		testUsers.add(testUser);
-		tracker.createUser("", "", 2);
+		tracker.createUser("", "", "2");
 
 		// Ensure the testUser was added to the list of current users
 		assertTrue(tracker.getCurrentUsers().contains(testUser));

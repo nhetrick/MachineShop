@@ -37,13 +37,13 @@ public class AccessTrackerTests {
 	public static void setup() {
 		driver = new Driver();
 		tracker = Driver.getAccessTracker();
-		admin = new SystemAdministrator("", "", 12);
+		admin = new SystemAdministrator("", "", "12");
 		calendar = Calendar.getInstance();
 		users = new ArrayList<User>();
 		entryIds = new ArrayList<Integer>();
 		
-		testUser1 = new User("Test1", "User1", 88888888);
-		testUser2 = new User("Test2", "User2", 99999999);
+		testUser1 = new User("Test1", "User1", "88888888");
+		testUser2 = new User("Test2", "User2", "99999999");
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class AccessTrackerTests {
 		assertFalse(tracker.getCurrentUsers().contains(testUser1));
 		
 		// Query the database for a user with this CWID.
-		tracker.createUser("Test1", "User1", 88888888);
+		tracker.createUser("Test1", "User1", "88888888");
 		users.add(testUser1);
 		
 		//user now in system

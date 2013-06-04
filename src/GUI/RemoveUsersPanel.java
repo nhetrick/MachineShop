@@ -162,12 +162,11 @@ public class RemoveUsersPanel extends ContentPanel {
 	public void findUsers(){
 		switch (searchBy){
 		case CWID:
-			String input = searchField.getText();
+			String cwid = searchField.getText();
 			clear();
-			if (InputReader.isValidCWID(input)){
-				int CWID = Integer.parseInt(input);
+			if (InputReader.isValidCWID(cwid)){
 				
-				User user = AccessTracker.findUserByCWID(CWID);
+				User user = AccessTracker.findUserByCWID(cwid);
 				String show = user.getCWID() +
 						" " + user.getFirstName() +
 						" " + user.getLastName();

@@ -4,8 +4,8 @@ public class Administrator extends User {
 	
 	protected boolean isSystemAdmin = false;
 	
-	public Administrator(String firstName, String lastName, int CWID) {
-		super(firstName, lastName, CWID);
+	public Administrator(String firstName, String lastName, String cwid) {
+		super(firstName, lastName, cwid);
 		isAdmin = true;
 	}
 	

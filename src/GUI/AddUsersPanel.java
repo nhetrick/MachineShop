@@ -125,18 +125,11 @@ public class AddUsersPanel extends ContentPanel {
 	private void saveUser() {
 		String first = firstNameField.getText();
 		String last = lastNameField.getText();
-		String id = cwidField.getText();
-		
-		try {
-			int cwid = Integer.parseInt(id);
-			if (first != null && last != null && id != null) {
-				User u = new User(first, last, cwid);
-				((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addUser(u);
-			}
-		} catch (Exception e) {
-			System.out.println("Invalid CWID");
-		}
-	
+		String cwid = cwidField.getText();
+		if (first != null && last != null && cwid != null) {
+			User u = new User(first, last, cwid);
+			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addUser(u);
+		}	
 	}
 	
 	private void clearFields() {

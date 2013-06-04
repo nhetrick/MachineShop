@@ -160,13 +160,11 @@ public class EditPrivilegesPanel extends ContentPanel {
 		Font labelFont = new Font("SansSerif", Font.BOLD, 22);
 		switch (searchBy){
 		case CWID:
-			String input = searchField.getText();
+			String cwid = searchField.getText();
 			clear();
-			if (InputReader.isValidCWID(input)){
-				//TODO refactor
-				int CWID = Integer.parseInt(input);
-				
-				User user = AccessTracker.findUserByCWID(CWID);
+			if (InputReader.isValidCWID(cwid)){
+				//TODO refactor				
+				User user = AccessTracker.findUserByCWID(cwid);
 				userInQuestion = user;
 				
 				JCheckBox cb1 = new JCheckBox();

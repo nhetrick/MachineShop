@@ -97,7 +97,6 @@ public class MainGUI extends JFrame{
 	public void handleInput() {
 
 		InputReader inReader = (InputReader) reader;
-		int CWID;
 
 		try {
 			inReader.strip();
@@ -105,8 +104,7 @@ public class MainGUI extends JFrame{
 				return;
 			}
 			if (InputReader.isValidCWID(inReader.getCWID())){
-				CWID = Integer.parseInt(inReader.getCWID());
-				login(CWID);
+				login(inReader.getCWID());
 			}
 		} catch (InputReaderException e) {
 			if (InputReader.getErrorCount() < MAX_ERROR_COUNT) {
@@ -132,13 +130,12 @@ public class MainGUI extends JFrame{
 			
 			InputReader.resetErrorCount();
 			if (InputReader.isValidCWID(input)){
-				CWID = Integer.parseInt(input);
-				login(CWID);
+				login(input);
 			}
 		}
 	}
 	
-	public void login(int CWID){
+	public void login(String CWID){
 		currentUser = tracker.processLogIn(CWID);
 		remove(centerPanel);
 		ProcessHomeScreen(currentUser);
