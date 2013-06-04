@@ -1,13 +1,17 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,12 +19,25 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.AccessTracker;
+import main.Tool;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.CommandResult;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 public class RemoveToolsPanel extends ContentPanel {
 	
 	private JButton removeButton;
 	private ButtonListener buttonListener;
 	private JButton nameSearchGoButton;
 	private JButton idSearchGoButton;
+	private JTextField nameSearchField;
+	private JTextField idSearchField;
+	private JPanel resultsPanel;
 	
 	public RemoveToolsPanel() {
 		
@@ -30,8 +47,8 @@ public class RemoveToolsPanel extends ContentPanel {
 		JLabel nameSearchLabel = new JLabel("Search By Name:");
 		JLabel idSearchLabel = new JLabel("Search By ID (UPC):");
 		
-		JTextField nameSearchField = new JTextField();
-		JTextField idSearchField = new JTextField();
+		nameSearchField = new JTextField();
+		idSearchField = new JTextField();
 		
 		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
 		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
@@ -57,8 +74,10 @@ public class RemoveToolsPanel extends ContentPanel {
 		idSearchPanel.add(idSearchField);
 		idSearchPanel.add(idSearchGoButton);
 		
-		JPanel resultsPanel = new JPanel();
-		resultsPanel.setBorder(new TitledBorder("Search Results"));
+		resultsPanel = new JPanel(new BorderLayout());
+		TitledBorder border = new TitledBorder("Search Results");
+		//border.setTitleFont(resultsFont);
+		resultsPanel.setBorder(border);
 		
 		removeButton = new JButton("Remove Tools");
 		removeButton.setFont(buttonFont);
@@ -123,10 +142,46 @@ public class RemoveToolsPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
 				showConfirmPopup();
-			} else if (e.getSource() == nameSearchGoButton ) {
-				// display results
-			} else if (e.getSource() == idSearchGoButton) {
-				// display results
+			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton ) {
+				
+				JPanel results = new JPanel(new GridBagLayout());
+				
+				ArrayList<Tool> tools = new ArrayList<Tool>();
+				ArrayList<DBObject> toolList = new ArrayList<DBObject>();
+				
+				if ( e.getSource() == nameSearchGoButton ) {
+					
+					toolList = AccessTracker.searchDatabase("Tools", "name", nameSearchField.getText());
+					
+				} else {
+					
+					toolList = AccessTracker.searchDatabase("Tools", "upc", idSearchField.getText());
+					
+				}
+				
+				for ( DBObject t : toolList ) {
+					Tool tool = new Tool( (String) t.get("name"), (String) t.get("upc"));
+					tools.add(tool);
+				}
+				
+				int y = 0;
+				
+				c.fill = GridBagConstraints.NONE;
+				c.gridx = 0;
+				
+				c.weighty = (double) 1.0/tools.size();
+								
+				for ( Tool t : tools ) {
+					JCheckBox cb = new JCheckBox(t.getName());
+					cb.setHorizontalAlignment(JCheckBox.LEFT);
+					cb.setFont(buttonFont);
+					c.gridy = y;
+					results.add(cb, c);
+					++y;
+				}
+				
+				resultsPanel.add(results, BorderLayout.WEST );
+				
 			}
 		}
 	}
