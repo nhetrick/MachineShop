@@ -17,7 +17,7 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class AccessTracker {
-	
+
 	private ArrayList<Machine> machines;
 	private ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
@@ -30,23 +30,23 @@ public class AccessTracker {
 	private final String username = "csm";
 	private final String password = "machineshop";
 	private User currentUser = new User("", "", "");
-	
+
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
 		inputReader = new InputReader();
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
-		
+
 		// Do the initialization stuff for the log and database
 		databaseSetup();
 		Log.setup();
-		
+
 		loadMachines();
 		loadTools();
-		
+
 	}
-	
+
 	private void databaseSetup() {
 		try {
 			MongoClient client = new MongoClient(hostName, port);
@@ -56,7 +56,7 @@ public class AccessTracker {
 			e.printStackTrace();
 		}
 	}
-		
+
 	// Takes a CWID and attempts to load that user from the
 	// database and add them to the list of current users.
 	// If the CWID doesn't exist, create new user.
@@ -66,8 +66,24 @@ public class AccessTracker {
 			currentUser = getUser(CWID);
 		} else {
 			currentUser = findUserByCWID(CWID);
-			currentUsers.add(currentUser);
+			if ( currentUser == null ) {
+				try {
+					currentUser = createUser(CWID);
+					if ( currentUser == null ) {
+						JOptionPane.showMessageDialog(Driver.getMainGui(),
+								"Sorry, our records show you are not a registered Mines student." +
+								"\nIf you believe this is an error, please visit the registrar." +
+								"\n\nTo use the machine shop, you must talk to the attendant on duty."
+								);
+						return null;
+					}
+				} catch (SQLException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
 		}
+		currentUsers.add(currentUser);
 		return currentUser;
 	}
 
@@ -82,15 +98,15 @@ public class AccessTracker {
 			tools.add(t);
 		}
 	}
-	
+
 	public void addTool(Tool t) {
 		tools.add(t);
 	}
-	
+
 	public void removeTool(Tool t) {
 		tools.remove(t);
 	}
-	
+
 	// Loads all the machines from the database into RAM
 	public void loadMachines() {
 		machines.clear();
@@ -102,72 +118,71 @@ public class AccessTracker {
 			machines.add(m);
 		}
 	}
-	
+
 	public void addMachine(Machine m) {
 		machines.add(m);
 	}
-	
+
 	public void removeMachine(Machine m) {
 		machines.remove(m);
 	}
-	
+
 	// Creates a new user. Should be called by loadUser()
 	// Persists new user to database
 	public User createUser(String firstName, String lastName, String CWID) {
 		User newUser = new User(firstName, lastName, CWID);
-		
+
 		BasicDBObject document = new BasicDBObject();
 		document.put("firstName", firstName);
 		document.put("lastName", lastName);
 		document.put("CWID", CWID);
-		
+
 		DBCollection users = database.getCollection("Users");
-		
+
 		users.insert(document);
-		
+
 		currentUsers.add(newUser);
-		
+
 		return newUser;
 	}
-	
+
 	public User createUser(String CWID) throws SQLException {
 		OracleConnection oracleConnection = new OracleConnection();
 		oracleConnection.getConnection();
 		ArrayList<String> results = oracleConnection.select(CWID);
 		oracleConnection.close();
-		User newUser = null;
-		
-		if (results != null) {
-			newUser = new User(results.get(1), results.get(2), CWID);
-		} 
-		
-		return newUser;
+
+		if ( results.size() != 0 ) {
+			return createUser(results.get(1), results.get(2), CWID);
+		} else {
+			return null;
+		}
 	}
-	
+
 	public void removeUser(User u) {
 		currentUsers.remove(u);
 	}
-	
+
 	public void clearUsers(ArrayList<User> users) {
 		for (User u:users) {
 			currentUsers.remove(u);
 		}
 	}
-	
+
 	public void lockUser(User u) {
 		currentUsers.remove(u);
 		u.setLockedStatus(true);
 		currentUsers.add(u);
-		
+
 	}
-	
+
 	public void unlockUser(User u) {
 		currentUsers.remove(u);
 		u.setLockedStatus(false);
 		currentUsers.add(u);
-		
+
 	}
-	
+
 	// Loads the user with this CWID to list of current users
 	// Adds entry to log
 	public User processLogIn(String CWID) {
@@ -175,12 +190,14 @@ public class AccessTracker {
 		// THEN display some error message, and make a note somewhere
 		// (log this attempt for admin to view later)
 		currentUser = loadUser(CWID);
-		
-		Log.startEntry(currentUser);
-		return currentUser;
-		
+		if ( currentUser != null ) {
+			Log.startEntry(currentUser);
+			return currentUser;
+		}
+		return null;
+
 	}
-	
+
 	// Removes the user with this CWID from the list
 	// of current users.
 	// Also finishes the log entry for this user.
@@ -188,7 +205,7 @@ public class AccessTracker {
 		Log.finishEntry(getUser(CWID).getCurrentEntry());
 		currentUsers.remove(getUser(CWID));
 	}
-	
+
 	public void updateTools() {
 		availableTools.clear();
 		for (Tool t: tools) {
@@ -196,13 +213,13 @@ public class AccessTracker {
 				availableTools.add(t);
 		}
 	}
-	
+
 	// Check that the CWID exists in the blastercard database
 	public boolean checkLegitimacy(int CWID) {
 		return true;
 	}
-	
-	public static User findUserByCWID(String cwid){
+
+	public User findUserByCWID(String cwid){
 		DBCollection users = database.getCollection("Users");
 		DBObject result = users.findOne(new BasicDBObject("CWID", cwid));
 		boolean isAdministrator;
@@ -211,6 +228,10 @@ public class AccessTracker {
 		String firstName = "";
 		String lastName = "";
 		User user;
+
+		if ( result == null ) {
+			return null;
+		}
 
 		if (result.get("locked") == null) {
 			isLocked = false;
@@ -283,24 +304,24 @@ public class AccessTracker {
 
 		return user;
 	}
-	
+
 	public static ArrayList<DBObject> searchDatabase(String collectionName, String searchFieldName, String searchFieldValue) {
-		
+
 		DBCollection collection = database.getCollection(collectionName);
 		Pattern p = Pattern.compile(searchFieldValue, Pattern.CASE_INSENSITIVE);
 		DBCursor cursor = collection.find(new BasicDBObject(searchFieldName, p));
-		
+
 		ArrayList<DBObject> returnList = new ArrayList<DBObject>();
 		while (cursor.hasNext()) {
 			returnList.add(cursor.next());
 		}
-		
+
 		return returnList;
-		
+
 	}
 
 	/********************************** GETTERS AND SETTERS *******************************************/
-	
+
 	public User getUser(String cwid) {
 		for (User u : currentUsers) {
 			if (u.getCWID() == cwid) {
@@ -309,7 +330,7 @@ public class AccessTracker {
 		}
 		return null;
 	}
-	
+
 	public ArrayList<User> getCurrentUsers() {
 		return currentUsers;
 	}
@@ -317,7 +338,7 @@ public class AccessTracker {
 	public ArrayList<Machine> getMachines() {
 		return machines;
 	}
-	
+
 	public Machine getMachineByName(String name) {
 		for (Machine m:machines) {
 			if (m.getName() == name) {
@@ -334,11 +355,11 @@ public class AccessTracker {
 	public ArrayList<Tool> getAvailableTools() {
 		return availableTools;
 	}
-	
+
 	public static DB getDatabase() {
 		return database;
 	}
-	
+
 	public User getCurrentUser() {
 		return currentUser;
 	}
@@ -347,6 +368,6 @@ public class AccessTracker {
 		this.currentUser = currentUser;
 	}
 
-	
+
 }
 

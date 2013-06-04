@@ -166,7 +166,7 @@ public class RemoveUsersPanel extends ContentPanel {
 			clear();
 			if (InputReader.isValidCWID(cwid)){
 				
-				User user = AccessTracker.findUserByCWID(cwid);
+				User user = Driver.getAccessTracker().findUserByCWID(cwid);
 				String show = user.getCWID() +
 						" " + user.getFirstName() +
 						" " + user.getLastName();

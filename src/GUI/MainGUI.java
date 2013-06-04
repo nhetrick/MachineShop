@@ -99,21 +99,29 @@ public class MainGUI extends JFrame{
 		InputReader inReader = (InputReader) reader;
 
 		try {
-			inReader.strip();
-			if (inReader.getCWID() == null){
+			inReader.strip();			
+			if (inReader.getCWID() == null) {
 				return;
 			}
-			if (InputReader.isValidCWID(inReader.getCWID())){
+			if (InputReader.isValidCWID(inReader.getCWID())) {
 				login(inReader.getCWID());
 			}
+			
 		} catch (InputReaderException e) {
+			
 			if (InputReader.getErrorCount() < MAX_ERROR_COUNT) {
 				JOptionPane.showMessageDialog(this, e.getMessage());
 				return;
 			}
 			
-			String input = JOptionPane.showInputDialog("An Error has occurred. Please enter your CWID.");
-			if (input == null){
+			String input;
+			
+			if (InputReader.getErrorCount() == 999) {
+				input = JOptionPane.showInputDialog("Enter CWID.");
+			} else {
+				input = JOptionPane.showInputDialog("An Error has occurred. Please enter your CWID.");
+			}
+			if (input == null) {
 				InputReader.resetErrorCount();
 				return;
 			}
@@ -137,8 +145,10 @@ public class MainGUI extends JFrame{
 	
 	public void login(String CWID){
 		currentUser = tracker.processLogIn(CWID);
-		remove(centerPanel);
-		ProcessHomeScreen(currentUser);
+		if ( currentUser != null ) {
+			remove(centerPanel);
+			ProcessHomeScreen(currentUser);
+		}
 	}
 	
 	public void enterPressed() {

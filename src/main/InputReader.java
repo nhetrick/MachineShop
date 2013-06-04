@@ -33,28 +33,23 @@ public class InputReader implements KeyListener {
 		} else if ( input.equals(" ") ) {
 			// TODO FOR NOW DELETE BEFORE THE RELEASE!!!!
 			CWID = "22222222";
+		} else if ( input.equals("1234") ) {
+			errorCount = 999;
+			throw new InputReaderException("");
 		}
 		else if (input.contains(error)) {
 			++errorCount;
 			throw new InputReaderException("Card read error. Please try again.");
 		} else if ( input.length() < 10 ) {
 			throw new InputReaderException("Error. Please swipe your blastercard.");
-		} else if ( input.equals("machineshop")) {
-			CWID = "22222222";
-		}
-		else
+		} else
 			throw new InputReaderException("The card is not a blastercard.");
 	}
 	
 	public static boolean isValidCWID(String input){
 		//TODO maybe some more checks
 		if (input.length() == CWID_LENGTH){
-			try {
-				int cwid = Integer.parseInt(input);
-				return true;
-			}catch(Exception e){
-				return false;
-			}
+			return true;
 		}
 		return false;
 	}

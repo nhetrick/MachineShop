@@ -164,7 +164,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 			clear();
 			if (InputReader.isValidCWID(cwid)){
 				//TODO refactor				
-				User user = AccessTracker.findUserByCWID(cwid);
+				User user = Driver.getAccessTracker().findUserByCWID(cwid);
 				userInQuestion = user;
 				
 				JCheckBox cb1 = new JCheckBox();
