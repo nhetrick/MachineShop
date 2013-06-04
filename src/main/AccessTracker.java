@@ -3,6 +3,7 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -281,6 +282,21 @@ public class AccessTracker {
 		user.loadCheckedOutTools(checkedOutToolsList);
 
 		return user;
+	}
+	
+	public static ArrayList<DBObject> searchDatabase(String collectionName, String searchFieldName, String searchFieldValue) {
+		
+		DBCollection collection = database.getCollection(collectionName);
+		Pattern p = Pattern.compile(searchFieldValue, Pattern.CASE_INSENSITIVE);
+		DBCursor cursor = collection.find(new BasicDBObject(searchFieldName, p));
+		
+		ArrayList<DBObject> returnList = new ArrayList<DBObject>();
+		while (cursor.hasNext()) {
+			returnList.add(cursor.next());
+		}
+		
+		return returnList;
+		
 	}
 
 	/********************************** GETTERS AND SETTERS *******************************************/
