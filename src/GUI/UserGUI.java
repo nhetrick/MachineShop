@@ -35,6 +35,11 @@ public class UserGUI extends JPanel {
 	
 	private ButtonListener buttonListener;
 	
+	JButton logOut;
+	JButton checkOutTools;
+	JButton selectMachine;
+	JButton returnTools;
+	
 	private Font buttonFont;
 	
 	public UserGUI(User user) {
@@ -59,7 +64,7 @@ public class UserGUI extends JPanel {
 		
 		checkedOutTools.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "Checked-out Tools"));
 		checkedOutTools.setLayout(new GridLayout(10, 5));
-	
+		
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
 		
@@ -108,7 +113,8 @@ public class UserGUI extends JPanel {
 		machinePermissions.removeAll();
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
 		for (Machine m:machines) {
-			JCheckBox machine = new JCheckBox(m.getName());
+			String show = m.getName() + " (" + m.getID() + ")";
+			JCheckBox machine = new JCheckBox(show);
 			machine.setFont(new Font("SansSerif", Font.BOLD, 20));
 			machinePermissions.add(machine);
 		}
@@ -118,11 +124,12 @@ public class UserGUI extends JPanel {
 		checkedOutTools.removeAll();
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
 		for (Tool t:tools) {
-			JCheckBox tool = new JCheckBox(t.getName());
+			String show = t.getName() + " (" + t.getUPC() + ")";
+			JCheckBox tool = new JCheckBox(show);
 			tool.setFont(new Font("SansSerif", Font.BOLD, 20));
 			checkedOutTools.add(tool);
 		}
-	}
+	}	
 	
 	private class ButtonListener implements ActionListener {
 		@Override
