@@ -1,247 +1,237 @@
 package GUI;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import GUI.MainGUI.SearchBy;
-import main.AccessTracker;
-import main.InputReader;
+import main.SystemAdministrator;
 import main.User;
+
+import com.mongodb.DBObject;
 
 public class RemoveUsersPanel extends ContentPanel {
 	
-	private JComboBox<SearchBy> searchParameter;
-	private JLabel enterLabel;
 	private JButton removeButton;
-	private JButton goButton;
 	private ButtonListener buttonListener;
-	private ComboBoxListener comboBoxListener;
-	private CheckBoxListener checkBoxListener;
-	private JTextField searchField;
+	private JButton nameSearchGoButton;
+	private JButton idSearchGoButton;
+	private JTextField nameSearchField;
+	private JTextField idSearchField;
 	private JPanel resultsPanel;
-	private SearchBy searchBy;
-	private ArrayList<String> cwidsToRemove;
+	private JScrollPane scroller;
+	
+	// Holds the list of users to potentially be deleted (searched by the admin)
+	private ArrayList<User> resultsList; 
 	
 	public RemoveUsersPanel() {
 		
 		super("Remove Users");
-		cwidsToRemove = new ArrayList<String>();
 		buttonListener = new ButtonListener();
-		comboBoxListener = new ComboBoxListener();
-		checkBoxListener = new CheckBoxListener();
+		resultsList = new ArrayList<User>();
 		
-		searchField = new JTextField();
-		JLabel searchLabel = new JLabel("Search By:");
+		JLabel nameSearchLabel = new JLabel("Search By Name:");
+		JLabel idSearchLabel = new JLabel("Search By CWID:");
 		
-		searchLabel.setFont(buttonFont);
+		nameSearchField = new JTextField();
+		idSearchField = new JTextField();
 		
-		searchParameter = new JComboBox<SearchBy>();
-		searchParameter.setFont(textFont);
+		nameSearchField.setText("Search All");
+		idSearchField.setText("Search All");
 		
-		searchParameter.addItem(SearchBy.NAME);
-		searchParameter.addItem(SearchBy.CWID);
+		nameSearchField.addActionListener(buttonListener);
+		idSearchField.addActionListener(buttonListener);
 		
-		searchParameter.addActionListener(comboBoxListener);
+		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
+		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
 		
-		enterLabel = new JLabel("Enter name:");
-		goButton = new JButton("Go");
+		JPanel dataPanel = new JPanel(new GridBagLayout());
 		
-		goButton.addActionListener(buttonListener);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 0;
+		dataPanel.add(nameSearchPanel, c);
 		
-		enterLabel.setFont(buttonFont);
-		searchField.setFont(textFont);
-		goButton.setFont(buttonFont);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 1;
+		dataPanel.add(idSearchPanel, c);
 		
-		JPanel parameterPanel = new JPanel(new GridBagLayout());
-		JPanel searchPanel = new JPanel(new GridLayout(1, 3));
+		nameSearchGoButton = new JButton("Go");
+		idSearchGoButton = new JButton("Go");
 		
-		searchPanel.add(enterLabel);
-		searchPanel.add(searchField);
-		searchPanel.add(goButton);
+		nameSearchGoButton.addActionListener(buttonListener);
+		idSearchGoButton.addActionListener(buttonListener);
 		
-		resultsPanel = new JPanel();
-		resultsPanel.setBorder(new TitledBorder("Search Results"));
-		resultsPanel.setLayout(new BorderLayout());
+		nameSearchLabel.setFont(buttonFont);
+		idSearchLabel.setFont(buttonFont);
+		nameSearchField.setFont(textFont);
+		idSearchField.setFont(textFont);
+		nameSearchGoButton.setFont(buttonFont);
+		idSearchGoButton.setFont(buttonFont);
+		
+		nameSearchPanel.add(nameSearchLabel);
+		nameSearchPanel.add(nameSearchField);
+		nameSearchPanel.add(nameSearchGoButton);
+		
+		idSearchPanel.add(idSearchLabel);
+		idSearchPanel.add(idSearchField);
+		idSearchPanel.add(idSearchGoButton);
+		
+		resultsPanel = new JPanel(new GridLayout(0, 1));
+		
+		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		scroller.setPreferredSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
+		scroller.setMaximumSize(scroller.getPreferredSize());
+		scroller.getVerticalScrollBar().setUnitIncrement(13);
+		
+		TitledBorder border = new TitledBorder("Search Results");
+		border.setTitleFont(borderFont);
+		scroller.setBorder(border);
 		
 		removeButton = new JButton("Remove Users");
 		removeButton.setFont(buttonFont);
-		removeButton.addActionListener(new ButtonListener());
+		removeButton.addActionListener(buttonListener);
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.27;
-		c.gridx = 0;
-		c.gridy = 0;
-		parameterPanel.add(searchLabel, c);
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.73;
-		c.gridx = 1;
-		c.gridy = 0;
-		parameterPanel.add(searchParameter, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(parameterPanel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 2;
-		add(searchPanel, c);
+		add(dataPanel, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.5;
 		c.gridx = 1;
-		c.gridy = 3;
-		add(resultsPanel, c);
+		c.gridy = 2;
+		add(scroller, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.1;
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.gridwidth = 1;
 		add(removeButton, c);
 		
 		c.weighty = 0.1;
-		c.gridy = 5;
+		c.gridy = 4;
 		add(new JPanel(), c);
 		
 	}
 	
-	public void showConfirmPopup() {
-		if (cwidsToRemove.size() == 0){
-			JOptionPane.showConfirmDialog(this, "No users are selected.");
-			return;
-		}
-		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users?\n" + cwidsToRemove);
-	}
-	
-	public void clear(){
-		resultsPanel.removeAll();
-		cwidsToRemove.clear();
-		searchField.setText("");
-	}
-	
-	public void findUsers(){
-		switch (searchBy){
-		case CWID:
-			String cwid = searchField.getText();
-			clear();
-			if (InputReader.isValidCWID(cwid)){
-				
-				User user = Driver.getAccessTracker().findUserByCWID(cwid);
-				String show = user.getCWID() +
-						" " + user.getFirstName() +
-						" " + user.getLastName();
-				
-				JCheckBox cb = new JCheckBox(show); 
-				cb.setName(show);
-				cb.setFont(textFont);
-				cb.addItemListener(checkBoxListener);
-				
-				//TODO layout 
-				resultsPanel.add(cb, BorderLayout.WEST);
-			} else {
-				JOptionPane.showMessageDialog(resultsPanel, "Invalid CWID");
-			}
-			break;
-		case NAME:
-			//TODO find by name
-
-			break;
-		default:
-			// do nothing
+	public boolean confirmSubmission() {
+		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users from the database?"
+											  + "\nThis action is permanent and cannot be undone.") == JOptionPane.YES_OPTION) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
-	private class ComboBoxListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == searchParameter) {
-				SearchBy parameter = (SearchBy) searchParameter.getSelectedItem();
-				switch (parameter){
-				case CWID:
-					searchBy = SearchBy.CWID;
-					enterLabel.setText("Enter CWID:");
-					break;
-				case NAME:
-					searchBy = SearchBy.NAME;
-					enterLabel.setText("Enter Name:");
-					break;
-				default:
-					break;
-				}
-			}
-		}
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
-				showConfirmPopup();
-				//TODO remove users. Even if logged in (in local memory). 
-			} else if ( e.getSource() == goButton ) {
-				findUsers();
-			}
-		}
-	}
-
-	private class CheckBoxListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			JCheckBox check = (JCheckBox) e.getSource();
-			String name = check.getName();
-			String cwid = name.substring(0,InputReader.CWID_LENGTH);
-
-			switch (e.getStateChange()){
-			case ItemEvent.SELECTED:
-				cwidsToRemove.add(cwid);
-				break;
-			case ItemEvent.DESELECTED:
-				if (cwidsToRemove.contains(cwid)){
-					cwidsToRemove.remove(cwid);
+				boolean noBoxesChecked = true;
+				for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+					JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+					if ( cb.isSelected() ) {
+						noBoxesChecked = false;
+					}
 				}
-				break;
+				ArrayList<String> removed = new ArrayList<String>();
+				// First check that they actually want to remove the users.
+				if ( !noBoxesChecked && confirmSubmission()) {
+					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
+					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
+					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+						if ( cb.isSelected() ) {
+							for ( User u : resultsList ) {
+								String s = cb.getText();
+								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+								String CWID = u.getCWID();
+								if ( s.equals(CWID) ) {
+									removed.add(u.getFirstName() + " " + u.getLastName() + " [" + CWID + "]");
+									removedBoxes.add(cb);
+									admin.removeUser(CWID);
+								}
+							}
+						}
+					}
+					
+					
+					resultsList.clear();
+					for ( JCheckBox cb : removedBoxes ) {
+						resultsPanel.remove(cb);
+					}
+					repaint();
+					
+					String message = "You Removed:\n\n";
+					for ( String s : removed ) {
+						message += s + "\n";
+					}
+					showMessage(message);
+				}
+			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton |
+					   e.getSource() == nameSearchField | e.getSource() == idSearchField ) {
+				
+				resultsPanel.removeAll();
+				resultsList.clear();
+				repaint();
+				ArrayList<DBObject> userList = new ArrayList<DBObject>();
+				
+				if ( e.getSource() == nameSearchGoButton | e.getSource() == nameSearchField ) {
+					
+					if ( nameSearchField.getText().equals("Search All"))
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
+					else						
+						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
+					
+				} else {
+					if ( idSearchField.getText().equals("Search All"))
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
+					else
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", idSearchField.getText());
+					
+				}
+				
+				for ( DBObject m : userList ) {
+					User user = new User( (String) m.get("firstName"), (String) m.get("lastName"), (String) m.get("CWID"));
+					resultsList.add(user);
+				}
+								
+				for ( User m : resultsList ) {
+					JCheckBox cb = new JCheckBox(m.getFirstName() + " " + m.getLastName() + " [" + m.getCWID() + "]");
+					cb.setHorizontalAlignment(JCheckBox.LEFT);
+					cb.setFont(buttonFont);
+					resultsPanel.add(cb);
+				}				
 			}
 		}
 	}
+
 }
 

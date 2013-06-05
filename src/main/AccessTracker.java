@@ -319,6 +319,48 @@ public class AccessTracker {
 		return returnList;
 
 	}
+	
+	public ArrayList<DBObject> searchDatabaseForUser(String userName) {
+		
+		String firstName = "";
+		String lastName = "";
+		
+		if ( userName.contains(" ")) {
+			String[] names = userName.split(" ");
+			firstName = names[0];
+			lastName = names[1];
+		} else {
+			firstName = userName;
+			lastName = userName;
+		}
+		
+		DBCollection collection = database.getCollection("Users");
+		Pattern firstNamePattern = Pattern.compile(firstName, Pattern.CASE_INSENSITIVE);
+		Pattern lastNamePattern = Pattern.compile(lastName, Pattern.CASE_INSENSITIVE);
+		
+		DBCursor cursor1 = collection.find(new BasicDBObject("firstName", firstNamePattern));
+		DBCursor cursor2 = collection.find(new BasicDBObject("lastName", lastNamePattern));
+
+		ArrayList<DBObject> returnList1 = new ArrayList<DBObject>();
+		ArrayList<DBObject> returnList2 = new ArrayList<DBObject>();
+		
+		while (cursor1.hasNext()) {
+			returnList1.add(cursor1.next());
+		}
+		
+		while (cursor2.hasNext()) {
+			returnList2.add(cursor2.next());
+		}
+		
+		if ( userName.contains(" ") ) {
+			returnList1.retainAll(returnList2);
+		} else {
+			returnList1.addAll(returnList2);
+		}
+
+		return returnList1;
+
+	}
 
 	/********************************** GETTERS AND SETTERS *******************************************/
 

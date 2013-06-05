@@ -1,8 +1,7 @@
 package GUI;
 
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import main.SystemAdministrator;
 import main.Tool;
@@ -20,10 +18,9 @@ import main.Tool;
 public class AddToolsPanel extends ContentPanel {
 	
 	private JButton saveButton;
-	private ButtonListener buttonListener;
-	
-	JTextField toolNameField;
-	JTextField toolIDField;
+	private ButtonListener buttonListener;	
+	private JTextField toolNameField;
+	private JTextField toolIDField;
 	
 	public AddToolsPanel() {
 		
@@ -42,6 +39,13 @@ public class AddToolsPanel extends ContentPanel {
 		toolNameField.setFont(textFont);
 		toolIDField.setFont(textFont);
 		
+		toolNameField.setPreferredSize(new Dimension(toolNameField.getWidth(), toolNameField.getHeight()));
+		toolNameField.setMaximumSize(toolNameField.getPreferredSize());
+		
+		toolIDField.setPreferredSize(new Dimension(toolIDField.getWidth(), toolIDField.getHeight()));
+		toolIDField.setMaximumSize(toolIDField.getPreferredSize());
+		toolIDField.addActionListener(buttonListener);
+		
 		JPanel toolNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel toolIDPanel = new JPanel(new GridLayout(1, 2));
 		
@@ -55,24 +59,10 @@ public class AddToolsPanel extends ContentPanel {
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.1;
@@ -103,7 +93,9 @@ public class AddToolsPanel extends ContentPanel {
 		String name = toolNameField.getText();
 		String upc = toolIDField.getText();
 		
-		if (name != null && upc != null) {
+		if (name.equals("") || upc.equals("")) {
+			JOptionPane.showMessageDialog(this, "Please fill in both fields.");
+		} else {
 			Tool t = new Tool(name, upc);
 			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addTool(t);
 		}
@@ -117,7 +109,7 @@ public class AddToolsPanel extends ContentPanel {
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ( e.getSource() == saveButton ) {
+			if ( e.getSource() == saveButton || e.getSource() == toolIDField ) {
 				saveTool();
 				clearFields();
 			}

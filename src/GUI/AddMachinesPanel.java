@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -7,21 +8,19 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import main.Machine;
 import main.SystemAdministrator;
-import main.Tool;
+import main.Machine;
 
 public class AddMachinesPanel extends ContentPanel {
 	
 	private JButton saveButton;
-	private ButtonListener buttonListener;
-	
-	JTextField machineNameField;
-	JTextField machineIDField;
-	
+	private ButtonListener buttonListener;	
+	private JTextField machineNameField;
+	private JTextField machineIDField;
 	
 	public AddMachinesPanel() {
 		
@@ -40,6 +39,13 @@ public class AddMachinesPanel extends ContentPanel {
 		machineNameField.setFont(textFont);
 		machineIDField.setFont(textFont);
 		
+		machineNameField.setPreferredSize(new Dimension(machineNameField.getWidth(), machineNameField.getHeight()));
+		machineNameField.setMaximumSize(machineNameField.getPreferredSize());
+		
+		machineIDField.setPreferredSize(new Dimension(machineIDField.getWidth(), machineIDField.getHeight()));
+		machineIDField.setMaximumSize(machineIDField.getPreferredSize());
+		machineIDField.addActionListener(buttonListener);
+		
 		JPanel machineNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel machineIDPanel = new JPanel(new GridLayout(1, 2));
 		
@@ -53,24 +59,10 @@ public class AddMachinesPanel extends ContentPanel {
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.1;
@@ -101,9 +93,11 @@ public class AddMachinesPanel extends ContentPanel {
 		String name = machineNameField.getText();
 		String id = machineIDField.getText();
 		
-		if (name != null && id != null) {
-			Machine m = new Machine(name, id);
-			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addMachine(m);
+		if (name.equals("") || id.equals("")) {
+			JOptionPane.showMessageDialog(this, "Please fill in both fields.");
+		} else {
+			Machine t = new Machine(name, id);
+			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addMachine(t);
 		}
 	}
 	
@@ -111,15 +105,15 @@ public class AddMachinesPanel extends ContentPanel {
 		machineNameField.setText("");
 		machineIDField.setText("");
 	}
-	
+
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ( e.getSource() == saveButton ) {
+			if ( e.getSource() == saveButton || e.getSource() == machineIDField ) {
 				saveMachine();
 				clearFields();
 			}
 		}
 	}
-
+	
 }

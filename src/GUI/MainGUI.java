@@ -91,7 +91,6 @@ public class MainGUI extends JFrame{
 		add(centerPanel);
 		setVisible(true);
 		repaint();
-		System.out.println(tracker.getCurrentUsers());
 	}
 	
 	public void handleInput() {

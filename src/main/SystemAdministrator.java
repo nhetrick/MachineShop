@@ -1,6 +1,8 @@
 package main;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import GUI.Driver;
 
 import com.mongodb.BasicDBList;
@@ -67,18 +69,6 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
-	public void addUser(User u) {
-		DBCollection userColl = database.getCollection("Users");
-		BasicDBObject document = new BasicDBObject();
-		document.put("firstName", u.getFirstName());
-		document.put("lastName", u.getLastName());
-		document.put("CWID", u.getCWID());
-		
-		DBCollection users = database.getCollection("Users");
-		
-		users.insert(document);
-	}
-	
 	public void removeUsers(ArrayList<User> users) {
 		DBCollection userColl = database.getCollection("Users");
 		for (User u : users) {
@@ -86,8 +76,6 @@ public class SystemAdministrator extends Administrator {
 			if (!(cursor == null)) {
 				userColl.remove(cursor.next());
 				tracker.removeUser(u);
-			} else {
-				System.out.println("User not found...Unable to remove");
 			}
 		}
 	}
@@ -106,7 +94,7 @@ public class SystemAdministrator extends Administrator {
 			tools.insert(tool);
 			tracker.addTool(t);
 		} else {
-			System.out.println("Tool already in system...Unable to add");
+			JOptionPane.showMessageDialog(Driver.getMainGui(), "Tool already in system...Unable to add");
 		}
 	}
 	
@@ -120,8 +108,20 @@ public class SystemAdministrator extends Administrator {
 			machines.insert(machine);
 			tracker.addMachine(m);
 		} else {
-			System.out.println("Machine already in system...Unable to add");
+			JOptionPane.showMessageDialog(Driver.getMainGui(), "Machine already in system...Unable to add");
 		}
+	}
+	
+	public void addUser(User u) {
+		DBCollection userColl = database.getCollection("Users");
+		BasicDBObject document = new BasicDBObject();
+		document.put("firstName", u.getFirstName());
+		document.put("lastName", u.getLastName());
+		document.put("CWID", u.getCWID());
+		
+		DBCollection users = database.getCollection("Users");
+		
+		users.insert(document);
 	}
 	
 	public void removeTool(String upc) {
@@ -131,8 +131,6 @@ public class SystemAdministrator extends Administrator {
 			DBObject obj = cursor.next();
 			tools.remove(obj);
 			tracker.removeTool(new Tool((String) obj.get("name"), (String) obj.get("upc")));
-		} else {
-			System.out.println("Tool not in system...Unable to remove");
 		}
 	}
 	
@@ -143,8 +141,16 @@ public class SystemAdministrator extends Administrator {
 			DBObject obj = cursor.next();
 			machines.remove(obj);
 			tracker.removeMachine(new Machine((String) obj.get("name"), (String) obj.get("ID")));
-		} else {
-			System.out.println("Machine not in system...Unable to remove");
+		}
+	}
+	
+	public void removeUser(String cwid) {
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
+		if (!(cursor == null)) {
+			DBObject obj = cursor.next();
+			users.remove(obj);
+			tracker.removeUser(new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID")));
 		}
 	}
 	

@@ -1,19 +1,15 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,15 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import main.AccessTracker;
 import main.SystemAdministrator;
 import main.Tool;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 public class RemoveToolsPanel extends ContentPanel {
@@ -103,18 +93,24 @@ public class RemoveToolsPanel extends ContentPanel {
 		idSearchPanel.add(idSearchGoButton);
 		
 		resultsPanel = new JPanel(new GridLayout(0, 1));
+		
 		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
 		scroller.setPreferredSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
 		scroller.setMaximumSize(scroller.getPreferredSize());
 		scroller.getVerticalScrollBar().setUnitIncrement(13);
 		
 		TitledBorder border = new TitledBorder("Search Results");
-		//border.setTitleFont(resultsFont);
-		resultsPanel.setBorder(border);
+		border.setTitleFont(borderFont);
+		scroller.setBorder(border);
 		
 		removeButton = new JButton("Remove Tools");
 		removeButton.setFont(buttonFont);
 		removeButton.addActionListener(buttonListener);
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.2;
@@ -158,9 +154,16 @@ public class RemoveToolsPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
+				boolean noBoxesChecked = true;
+				for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+					JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+					if ( cb.isSelected() ) {
+						noBoxesChecked = false;
+					}
+				}
 				ArrayList<String> removed = new ArrayList<String>();
 				// First check that they actually want to remove the tools.
-				if (confirmSubmission()) {
+				if ( !noBoxesChecked && confirmSubmission()) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
@@ -168,10 +171,10 @@ public class RemoveToolsPanel extends ContentPanel {
 							SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 							for ( Tool t : resultsList ) {
 								String s = cb.getText();
-								s = s.substring(s.indexOf('(') + 1, s.indexOf(')'));
+								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
 								String UPC = t.getUPC();
 								if ( s.equals(UPC) ) {
-									removed.add(t.getName() + " (" + UPC + ")");
+									removed.add(t.getName() + " [" + UPC + "]");
 									removedBoxes.add(cb);
 									admin.removeTool(UPC);
 								}
@@ -220,7 +223,7 @@ public class RemoveToolsPanel extends ContentPanel {
 				}
 								
 				for ( Tool t : resultsList ) {
-					JCheckBox cb = new JCheckBox(t.getName() + " (" + t.getUPC() + ")");
+					JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
 					resultsPanel.add(cb);
