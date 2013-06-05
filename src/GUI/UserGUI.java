@@ -3,6 +3,8 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -23,6 +25,11 @@ public class UserGUI extends JPanel {
 	private JPanel machinePermissions;
 	private JPanel checkedOutTools;
 	private User currentUser;
+	
+	JButton logOut;
+	JButton checkOutTools;
+	JButton selectMachine;
+	JButton returnTools;
 	
 	private Font buttonFont;
 	
@@ -45,7 +52,7 @@ public class UserGUI extends JPanel {
 		
 		checkedOutTools.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "Checked-out Tools"));
 		checkedOutTools.setLayout(new GridLayout(10, 5));
-	
+		
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
 		
@@ -55,10 +62,10 @@ public class UserGUI extends JPanel {
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
 		
-		JButton logOut = new JButton();
-		JButton checkOutTools = new JButton();
-		JButton selectMachine = new JButton();
-		JButton returnTools = new JButton();
+		logOut = new JButton();
+		checkOutTools = new JButton();
+		selectMachine = new JButton();
+		returnTools = new JButton();
 		
 		logOut.setText("Log Out");
 		selectMachine.setText("Select Machines");
@@ -83,7 +90,8 @@ public class UserGUI extends JPanel {
 	private void displayUserMachinePermissions() {
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
 		for (Machine m:machines) {
-			JCheckBox machine = new JCheckBox(m.getName());
+			String show = m.getName() + " (" + m.getID() + ")";
+			JCheckBox machine = new JCheckBox(show);
 			machine.setFont(new Font("SansSerif", Font.BOLD, 20));
 			machinePermissions.add(machine);
 		}
@@ -92,10 +100,11 @@ public class UserGUI extends JPanel {
 	private void displayUserCheckedOutTools() {
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
 		for (Tool t:tools) {
-			JCheckBox tool = new JCheckBox(t.getName());
+			String show = t.getName() + " (" + t.getUPC() + ")";
+			JCheckBox tool = new JCheckBox(show);
 			tool.setFont(new Font("SansSerif", Font.BOLD, 20));
 			checkedOutTools.add(tool);
 		}
-	}
+	}	
 	
 }
