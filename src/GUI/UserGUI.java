@@ -35,11 +35,6 @@ public class UserGUI extends JPanel {
 	
 	private ButtonListener buttonListener;
 	
-	JButton logOut;
-	JButton checkOutTools;
-	JButton selectMachine;
-	JButton returnTools;
-	
 	private Font buttonFont;
 	
 	public UserGUI(User user) {

@@ -171,7 +171,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 			String upc = searchField.getText();
 			clear();
 
-			returnedTools = AccessTracker.searchDatabase("Tools", "upc", upc);
+			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "upc", upc);
 
 			for (DBObject o : returnedTools) {
 				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
@@ -186,7 +186,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		case NAME:
 			String name = searchField.getText();
 			clear();
-			returnedTools = AccessTracker.searchDatabase("Tools", "name", name);
+			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "name", name);
 			System.out.println(returnedTools);
 			for (DBObject o : returnedTools) {
 				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
