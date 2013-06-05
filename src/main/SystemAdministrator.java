@@ -127,7 +127,7 @@ public class SystemAdministrator extends Administrator {
 	public void removeTool(String upc) {
 		DBCollection tools = database.getCollection("Tools");
 		DBCursor cursor = tools.find(new BasicDBObject("upc", upc));
-		if (!(cursor == null)) {
+		if (cursor != null) {
 			DBObject obj = cursor.next();
 			tools.remove(obj);
 			tracker.removeTool(new Tool((String) obj.get("name"), (String) obj.get("upc")));
