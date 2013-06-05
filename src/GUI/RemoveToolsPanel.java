@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,10 +17,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.AccessTracker;
+import main.SystemAdministrator;
 import main.Tool;
 
 import com.mongodb.BasicDBObject;
@@ -38,11 +41,16 @@ public class RemoveToolsPanel extends ContentPanel {
 	private JTextField nameSearchField;
 	private JTextField idSearchField;
 	private JPanel resultsPanel;
+	private JScrollPane scroller;
+	
+	// Holds the list of tools to potentially be deleted (searched by the admin)
+	private ArrayList<Tool> resultsList; 
 	
 	public RemoveToolsPanel() {
 		
 		super("Remove Tools");
 		buttonListener = new ButtonListener();
+		resultsList = new ArrayList<Tool>();
 		
 		JLabel nameSearchLabel = new JLabel("Search By Name:");
 		JLabel idSearchLabel = new JLabel("Search By ID (UPC):");
@@ -50,8 +58,28 @@ public class RemoveToolsPanel extends ContentPanel {
 		nameSearchField = new JTextField();
 		idSearchField = new JTextField();
 		
+		nameSearchField.setText("Search All");
+		idSearchField.setText("Search All");
+		
+		nameSearchField.addActionListener(buttonListener);
+		idSearchField.addActionListener(buttonListener);
+		
 		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
 		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
+		
+		JPanel dataPanel = new JPanel(new GridBagLayout());
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 0;
+		dataPanel.add(nameSearchPanel, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 1;
+		dataPanel.add(idSearchPanel, c);
 		
 		nameSearchGoButton = new JButton("Go");
 		idSearchGoButton = new JButton("Go");
@@ -74,7 +102,12 @@ public class RemoveToolsPanel extends ContentPanel {
 		idSearchPanel.add(idSearchField);
 		idSearchPanel.add(idSearchGoButton);
 		
-		resultsPanel = new JPanel(new BorderLayout());
+		resultsPanel = new JPanel(new GridLayout(0, 1));
+		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		scroller.setPreferredSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
+		scroller.setMaximumSize(scroller.getPreferredSize());
+		scroller.getVerticalScrollBar().setUnitIncrement(13);
+		
 		TitledBorder border = new TitledBorder("Search Results");
 		//border.setTitleFont(resultsFont);
 		resultsPanel.setBorder(border);
@@ -83,105 +116,115 @@ public class RemoveToolsPanel extends ContentPanel {
 		removeButton.setFont(buttonFont);
 		removeButton.addActionListener(buttonListener);
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(nameSearchPanel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 2;
-		add(idSearchPanel, c);
+		add(dataPanel, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.5;
 		c.gridx = 1;
-		c.gridy = 3;
-		add(resultsPanel, c);
+		c.gridy = 2;
+		add(scroller, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.1;
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.gridwidth = 1;
 		add(removeButton, c);
 		
 		c.weighty = 0.1;
-		c.gridy = 5;
+		c.gridy = 4;
 		add(new JPanel(), c);
 		
 	}
 	
-	public void showConfirmPopup() {
-		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these tools?");
+	public boolean confirmSubmission() {
+		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these tools from the database?"
+											  + "\nThis action is permanent and cannot be undone.") == JOptionPane.YES_OPTION) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == removeButton) {
-				showConfirmPopup();
-			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton ) {
+				ArrayList<String> removed = new ArrayList<String>();
+				// First check that they actually want to remove the tools.
+				if (confirmSubmission()) {
+					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
+					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+						if ( cb.isSelected() ) {
+							SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
+							for ( Tool t : resultsList ) {
+								String s = cb.getText();
+								s = s.substring(s.indexOf('(') + 1, s.indexOf(')'));
+								String UPC = t.getUPC();
+								if ( s.equals(UPC) ) {
+									removed.add(t.getName() + " (" + UPC + ")");
+									removedBoxes.add(cb);
+									admin.removeTool(UPC);
+								}
+							}
+						}
+					}
+					
+					resultsList.clear();
+					for ( JCheckBox cb : removedBoxes ) {
+						resultsPanel.remove(cb);
+					}
+					repaint();
+					
+					String message = "You Removed:\n\n";
+					for ( String s : removed ) {
+						message += s + "\n";
+					}
+					showMessage(message);
+				}
+			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton |
+					   e.getSource() == nameSearchField | e.getSource() == idSearchField ) {
 				
-				JPanel results = new JPanel(new GridBagLayout());
-				
-				ArrayList<Tool> tools = new ArrayList<Tool>();
+				resultsPanel.removeAll();
+				resultsList.clear();
+				repaint();
 				ArrayList<DBObject> toolList = new ArrayList<DBObject>();
 				
-				if ( e.getSource() == nameSearchGoButton ) {
+				if ( e.getSource() == nameSearchGoButton | e.getSource() == nameSearchField ) {
 					
-					toolList = AccessTracker.searchDatabase("Tools", "name", nameSearchField.getText());
+					if ( nameSearchField.getText().equals("Search All"))
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", "");
+					else
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", nameSearchField.getText());
 					
 				} else {
-					
-					toolList = AccessTracker.searchDatabase("Tools", "upc", idSearchField.getText());
+					if ( idSearchField.getText().equals("Search All"))
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", "");
+					else
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "upc", idSearchField.getText());
 					
 				}
 				
 				for ( DBObject t : toolList ) {
 					Tool tool = new Tool( (String) t.get("name"), (String) t.get("upc"));
-					tools.add(tool);
+					resultsList.add(tool);
 				}
-				
-				int y = 0;
-				
-				c.fill = GridBagConstraints.NONE;
-				c.gridx = 0;
-				
-				c.weighty = (double) 1.0/tools.size();
 								
-				for ( Tool t : tools ) {
-					JCheckBox cb = new JCheckBox(t.getName());
+				for ( Tool t : resultsList ) {
+					JCheckBox cb = new JCheckBox(t.getName() + " (" + t.getUPC() + ")");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
-					c.gridy = y;
-					results.add(cb, c);
-					++y;
-				}
-				
-				resultsPanel.add(results, BorderLayout.WEST );
-				
+					resultsPanel.add(cb);
+				}				
 			}
 		}
 	}

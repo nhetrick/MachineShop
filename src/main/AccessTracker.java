@@ -305,7 +305,7 @@ public class AccessTracker {
 		return user;
 	}
 
-	public static ArrayList<DBObject> searchDatabase(String collectionName, String searchFieldName, String searchFieldValue) {
+	public ArrayList<DBObject> searchDatabase(String collectionName, String searchFieldName, String searchFieldValue) {
 
 		DBCollection collection = database.getCollection(collectionName);
 		Pattern p = Pattern.compile(searchFieldValue, Pattern.CASE_INSENSITIVE);
