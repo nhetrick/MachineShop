@@ -48,9 +48,25 @@ public class User {
 		}
 	}
 	
-	public void returnTool(Tool t) {
-		t.returnTool();
-		toolsCheckedOut.remove(t);
+	public void returnTools(ArrayList<Tool> tools) {
+		
+		for (Tool tool : tools){
+			tool.returnTool();
+			toolsCheckedOut.remove(tool);
+			
+			DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
+			DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
+			if (cursor.hasNext()) {
+				DBObject result = cursor.next();
+				BasicDBList checkedoutTools = new BasicDBList();
+				for (Tool t:toolsCheckedOut) {
+					checkedoutTools.remove(new BasicDBObject("upc", t.getUPC()));
+				}
+				result.put("checkedOutTools", checkedoutTools);
+	
+				usersCollection.update(new BasicDBObject("CWID", CWID), result);
+			}
+		}
 	}
 	
 	public void useMachine(Machine m) {

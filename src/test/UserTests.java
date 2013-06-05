@@ -1,6 +1,9 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import main.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +21,9 @@ public class UserTests {
 	public void checkoutAndReturnToolTest() {
 		User testUser = new User("", "", "12345678");
 		Tool testTool = new Tool("HITCOO", "15");
+		ArrayList<Tool> tools = new ArrayList<Tool>();
+		tools.add(testTool);
+		
 		testUser.checkoutTool(testTool);
 		
 		tracker.loadTools();
@@ -29,7 +35,7 @@ public class UserTests {
 		// Ensures that the user actually has the tool
 		assertTrue(testUser.getToolsCheckedOut().contains(testTool));
 		
-		testUser.returnTool(testTool);
+		testUser.returnTools(tools);
 		
 		tracker.loadTools();
 		

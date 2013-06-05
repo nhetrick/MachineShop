@@ -347,6 +347,15 @@ public class AccessTracker {
 		}
 		return null;
 	}
+	
+	public Machine getMachineByID(String id) {
+		for (Machine m:machines) {
+			if (m.getID().equals(id)) {
+				return m;
+			}
+		}
+		return null;
+	}
 
 	public Tool getToolByUPC(String upc){
 		for (Tool t : tools){

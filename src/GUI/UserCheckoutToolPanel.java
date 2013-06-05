@@ -39,14 +39,12 @@ public class UserCheckoutToolPanel extends ContentPanel {
 	private JTextField searchField;
 	private JPanel resultsPanel;
 	private SearchBy searchBy;
-	private ArrayList<String> toolsToCheckout;
-	private JPanel home;
+	private ArrayList<Tool> toolsToCheckout;
 	
 	public UserCheckoutToolPanel() {
 		super("Checkout Tools");
 		
-		this.home = home;
-		toolsToCheckout = new ArrayList<String>();
+		toolsToCheckout = new ArrayList<Tool>();
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
 		checkBoxListener = new CheckBoxListener();
@@ -148,12 +146,12 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
-		
+		clear();
 	}
 	
 	public void showConfirmPopup() {
 		if (toolsToCheckout.size() == 0){
-			JOptionPane.showConfirmDialog(this, "No users are selected.");
+			JOptionPane.showConfirmDialog(this, "No tools are selected.");
 			return;
 		}
 	}
@@ -164,38 +162,34 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		searchField.setText("");
 	}
 
+	public void createCheckboxes(ArrayList<DBObject> returnedTools){
+		clear();
+		for (DBObject o : returnedTools) {
+			if (!((boolean) o.get("isCheckedOut")) | o.get("isCheckedOut") == null){
+				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
+				JCheckBox cb = new JCheckBox(show); 
+				cb.setName((String) o.get("upc"));
+				cb.setFont(textFont);
+				cb.addItemListener(checkBoxListener);
+				resultsPanel.add(cb, BorderLayout.WEST);
+			}
+		}
+	}
+	
 	public void findTools(){
 		ArrayList<DBObject> returnedTools;
 		switch (searchBy){
 		case UPC:
 			String upc = searchField.getText();
 			clear();
-
 			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "upc", upc);
-
-			for (DBObject o : returnedTools) {
-				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
-				JCheckBox cb = new JCheckBox(show); 
-				cb.setName((String) o.get("upc"));
-				cb.setFont(textFont);
-				cb.addItemListener(checkBoxListener);
-				resultsPanel.add(cb, BorderLayout.WEST);
-			}
-			
+			createCheckboxes(returnedTools);
 			break;
 		case NAME:
 			String name = searchField.getText();
 			clear();
 			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "name", name);
-			System.out.println(returnedTools);
-			for (DBObject o : returnedTools) {
-				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
-				JCheckBox cb = new JCheckBox(show); 
-				cb.setName((String) o.get("upc"));
-				cb.setFont(textFont);
-				cb.addItemListener(checkBoxListener);
-				resultsPanel.add(cb, BorderLayout.WEST);
-			}
+			createCheckboxes(returnedTools);
 			break;
 		default:
 			// do nothing
@@ -228,13 +222,12 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == checkoutToolsButton) {
 				showConfirmPopup();
-				for (String upc : toolsToCheckout){
-					System.out.println(upc);
-					Tool t = Driver.getAccessTracker().getToolByUPC(upc);
-					System.out.println(t);
+				for (Tool t : toolsToCheckout){
 					Driver.getAccessTracker().getCurrentUser().checkoutTool(t);
 				}
 				
+				Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addToolsCheckedOut(toolsToCheckout);
+				toolsToCheckout.clear();
 				UserGUI.returnHome();
 			
 			} else if ( e.getSource() == goButton ) {
@@ -249,13 +242,15 @@ public class UserCheckoutToolPanel extends ContentPanel {
 			JCheckBox check = (JCheckBox) e.getSource();
 			String upc = check.getName();
 
+			Tool t = Driver.getAccessTracker().getToolByUPC(upc);
+			
 			switch (e.getStateChange()){
 			case ItemEvent.SELECTED:
-				toolsToCheckout.add(upc);
+				toolsToCheckout.add(t);
 				break;
 			case ItemEvent.DESELECTED:
-				if (toolsToCheckout.contains(upc)){
-					toolsToCheckout.remove(upc);
+				if (toolsToCheckout.contains(t)){
+					toolsToCheckout.remove(t);
 				}
 				break;
 			}

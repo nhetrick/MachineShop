@@ -17,9 +17,7 @@ public class Tool {
 		this.UPC = UPC;
 	}
 	
-	public void checkoutTool() {
-		
-		isCheckedOut = true;
+	private void updateCheckoutStatus(){
 		DBCollection toolsCollection = Driver.getAccessTracker().getDatabase().getCollection("Tools");
 		DBObject result = toolsCollection.findOne(new BasicDBObject("upc", UPC));
 		if (result != null){
@@ -29,8 +27,14 @@ public class Tool {
 		}
 	}
 	
+	public void checkoutTool() {
+		isCheckedOut = true;
+		updateCheckoutStatus();
+	}
+	
 	public void returnTool() {
 		isCheckedOut = false;
+		updateCheckoutStatus();
 	}
 
 	public boolean isCheckedOut() {
