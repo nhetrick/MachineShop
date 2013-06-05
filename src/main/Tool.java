@@ -1,5 +1,11 @@
 package main;
 
+import GUI.Driver;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+
 public class Tool {
 	private boolean isCheckedOut;
 	private String name;
@@ -12,7 +18,15 @@ public class Tool {
 	}
 	
 	public void checkoutTool() {
+		
 		isCheckedOut = true;
+		DBCollection toolsCollection = Driver.getAccessTracker().getDatabase().getCollection("Tools");
+		DBObject result = toolsCollection.findOne(new BasicDBObject("upc", UPC));
+		if (result != null){
+			result.put("isCheckedOut", isCheckedOut);
+
+			toolsCollection.update(new BasicDBObject("upc", UPC), result);
+		}
 	}
 	
 	public void returnTool() {

@@ -3,8 +3,11 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.sound.sampled.ReverbType;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -17,12 +20,20 @@ import main.User;
 
 public class UserGUI extends JPanel {
 	
-	private JPanel centerPanel;
-	private JPanel contentPanel;
-	private JPanel buttonPanel;
+	private static JPanel centerPanel;
+	private static JPanel contentPanel;
+	private static JPanel buttonPanel;
 	private JPanel machinePermissions;
-	private JPanel checkedOutTools;
-	private User currentUser;
+	private static JPanel checkedOutTools;
+	private static UserCheckoutToolPanel userCheckoutToolPanel;
+	private static User currentUser;
+	
+	private JButton logOut = new JButton();
+	private JButton checkOutTools = new JButton();
+	private JButton selectMachine = new JButton();
+	private JButton returnTools = new JButton();
+	
+	private ButtonListener buttonListener;
 	
 	private Font buttonFont;
 	
@@ -34,9 +45,12 @@ public class UserGUI extends JPanel {
 		
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
+		buttonListener = new ButtonListener();
+		
 		centerPanel = new JPanel(new BorderLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(4, 1));
+		userCheckoutToolPanel = new UserCheckoutToolPanel();
 		machinePermissions = new JPanel();
 		checkedOutTools = new JPanel();
 				
@@ -55,10 +69,10 @@ public class UserGUI extends JPanel {
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
 		
-		JButton logOut = new JButton();
-		JButton checkOutTools = new JButton();
-		JButton selectMachine = new JButton();
-		JButton returnTools = new JButton();
+		logOut = new JButton();
+		checkOutTools = new JButton();
+		selectMachine = new JButton();
+		returnTools = new JButton();
 		
 		logOut.setText("Log Out");
 		selectMachine.setText("Select Machines");
@@ -77,10 +91,21 @@ public class UserGUI extends JPanel {
 		
 		add(centerPanel, BorderLayout.CENTER);
 		
+		checkOutTools.addActionListener(buttonListener);
+		
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 	}
 	
+	public static void returnHome(){
+		centerPanel.remove(userCheckoutToolPanel);
+		centerPanel.add(contentPanel, BorderLayout.CENTER);
+		
+		displayUserCheckedOutTools();
+		centerPanel.repaint();
+	}
+	
 	private void displayUserMachinePermissions() {
+		machinePermissions.removeAll();
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
 		for (Machine m:machines) {
 			JCheckBox machine = new JCheckBox(m.getName());
@@ -89,12 +114,24 @@ public class UserGUI extends JPanel {
 		}
 	}
 	
-	private void displayUserCheckedOutTools() {
+	private static void displayUserCheckedOutTools() {
+		checkedOutTools.removeAll();
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
 		for (Tool t:tools) {
 			JCheckBox tool = new JCheckBox(t.getName());
 			tool.setFont(new Font("SansSerif", Font.BOLD, 20));
 			checkedOutTools.add(tool);
+		}
+	}
+	
+	private class ButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == checkOutTools ) {
+				centerPanel.remove(contentPanel);
+
+				centerPanel.add(userCheckoutToolPanel);
+			}
 		}
 	}
 	

@@ -32,7 +32,7 @@ public class MainGUI extends JFrame{
 	private static int MAX_ERROR_COUNT = 3;
 
 	public enum SearchBy {
-		CWID("CWID"), NAME("Name");
+		CWID("CWID"), NAME("Name"), UPC("upc");
 		private final String name;
 		private SearchBy(String name){
 			this.name = name;

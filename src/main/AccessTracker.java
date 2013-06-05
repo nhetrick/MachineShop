@@ -341,13 +341,22 @@ public class AccessTracker {
 
 	public Machine getMachineByName(String name) {
 		for (Machine m:machines) {
-			if (m.getName() == name) {
+			if (m.getName().equals(name)) {
 				return m;
 			}
 		}
 		return null;
 	}
 
+	public Tool getToolByUPC(String upc){
+		for (Tool t : tools){
+			if (t.getUPC().equals(upc)){
+				return t;
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<Tool> getTools() {
 		return tools;
 	}

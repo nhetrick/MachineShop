@@ -1,6 +1,14 @@
 package main;
 import java.util.ArrayList;
 
+import GUI.Driver;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 public class User {
 	private ArrayList<Machine> certifiedMachines;
 	private ArrayList<Tool>	toolsCheckedOut;
@@ -22,9 +30,22 @@ public class User {
 		isLocked = false;
 	}
 	
-	public void checkoutTool(Tool t) {
-		t.checkoutTool();	
-		toolsCheckedOut.add(t);
+	public void checkoutTool(Tool tool) {
+		tool.checkoutTool();	
+		toolsCheckedOut.add(tool);
+		
+		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
+		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
+		if (cursor.hasNext()) {
+			DBObject result = cursor.next();
+			BasicDBList checkedoutTools = new BasicDBList();
+			for (Tool t:toolsCheckedOut) {
+				checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
+			}
+			result.put("checkedOutTools", checkedoutTools);
+
+			usersCollection.update(new BasicDBObject("CWID", CWID), result);
+		}
 	}
 	
 	public void returnTool(Tool t) {
