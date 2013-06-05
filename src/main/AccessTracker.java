@@ -324,7 +324,7 @@ public class AccessTracker {
 
 	public User getUser(String cwid) {
 		for (User u : currentUsers) {
-			if (u.getCWID() == cwid) {
+			if (u.getCWID().equals(cwid)) {
 				return u;
 			}
 		}
@@ -360,6 +360,15 @@ public class AccessTracker {
 	public Tool getToolByUPC(String upc){
 		for (Tool t : tools){
 			if (t.getUPC().equals(upc)){
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public Tool getToolByName(String name){
+		for (Tool t : tools){
+			if (t.getName().equals(name)){
 				return t;
 			}
 		}

@@ -54,9 +54,9 @@ public class LogEntry {
 		this.ID = Log.getNumEntries();
 		this.timeIn = calendar.getTime();
 		this.user = user;
-		this.machinesUsed = machinesUsed;
-		this.toolsCheckedOut = toolsCheckedOut;
-		this.toolsReturned = toolsReturned;
+		this.machinesUsed = new ArrayList<Machine>();
+		this.toolsCheckedOut = new ArrayList<Tool>();
+		this.toolsReturned = new ArrayList<Tool>();
 		Log.incrementNumEntries();
 		
 		user.setCurrentEntry(this);

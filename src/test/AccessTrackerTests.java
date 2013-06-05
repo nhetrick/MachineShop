@@ -107,6 +107,7 @@ public class AccessTrackerTests {
 		assertFalse(tracker.getCurrentUsers().contains(testUser2));
 		
 		//Ensures the entry was added to the log
+		Log.clearResults();
 		Log.extractLog(testUser2);
 		entry = Log.getResults().get(latestEntryIndex);
 			
