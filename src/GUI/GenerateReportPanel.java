@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,6 +40,8 @@ public class GenerateReportPanel extends ContentPanel {
 	JTextField toolNameField;
 	JTextField machineNameField;
 	
+	private String currentParameter;
+	
 	public GenerateReportPanel() {
 		
 		super("Generate a Report");
@@ -53,6 +56,8 @@ public class GenerateReportPanel extends ContentPanel {
 		parameters.addItem("Tool");
 		parameters.addItem("Machine");
 		parameters.addActionListener(comboBoxListener);
+		
+		currentParameter = "Date";
 		
 		parameterLabel.setFont(buttonFont);
 		parameters.setFont(textFont);
@@ -137,15 +142,19 @@ public class GenerateReportPanel extends ContentPanel {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.weightx = 1;
 				if (parameter == "Date") {
+					currentParameter = "Date";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new DatePanel(), c);
 				} else if (parameter == "User") {
+					currentParameter = "User";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new UserPanel(), c);
 				} else if (parameter == "Tool") {
+					currentParameter = "Tool";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new ToolPanel(), c);
 				} else if (parameter == "Machine") {
+					currentParameter = "Machine";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new MachinePanel(), c);
 				}
@@ -153,17 +162,45 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 	}
 	
+	private void showResults() {
+		for (LogEntry entry : Log.getResults()) {
+			JLabel label = new JLabel(entry.toString());
+			System.out.println(entry.toString());
+			resultsPanel.add(label);
+		}
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == generateButton) {
-				//NEED TO IMPLEMENT. defaults to user 22222222
-				
-				Log.extractLog(Driver.getAccessTracker().getUser("22222222"));
-				for (LogEntry entry : Log.getResults()) {
-					JLabel label = new JLabel(entry.toString());
-					System.out.println(entry.toString());
-					resultsPanel.add(label);
+				if (currentParameter.equals("User")) {
+					resultsPanel.removeAll();
+					String cwid = cwidField.getText();
+					Log.extractLog(Driver.getAccessTracker().findUserByCWID(cwid));
+					showResults();
+				} else if (currentParameter.equals("Date")) {
+					resultsPanel.removeAll();
+					Date start;
+					Date end;
+					try {
+						start = new SimpleDateFormat("MM/DD/YYYY", Locale.ENGLISH).parse(startField.getText());
+						end = new SimpleDateFormat("MM/DD/YYYY", Locale.ENGLISH).parse(endField.getText());
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						System.out.println("Invalid Date");
+						e1.printStackTrace();
+						return;
+					}
+					Log.extractLog(start, end);
+					showResults();
+				} else if (currentParameter.equals("Tool")) {
+					resultsPanel.removeAll();
+					String tool = toolNameField.getText();
+					System.out.println(tool);
+					Log.extractLogCheckedOutTool(Driver.getAccessTracker().getToolByName(tool));
+					System.out.println(Log.getResults());
+					showResults();
 				}
 			}
 		}

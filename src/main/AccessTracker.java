@@ -366,7 +366,7 @@ public class AccessTracker {
 
 	public User getUser(String cwid) {
 		for (User u : currentUsers) {
-			if (u.getCWID() == cwid) {
+			if (u.getCWID().equals(cwid)) {
 				return u;
 			}
 		}
@@ -383,13 +383,40 @@ public class AccessTracker {
 
 	public Machine getMachineByName(String name) {
 		for (Machine m:machines) {
-			if (m.getName() == name) {
+			if (m.getName().equals(name)) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
+	public Machine getMachineByID(String id) {
+		for (Machine m:machines) {
+			if (m.getID().equals(id)) {
 				return m;
 			}
 		}
 		return null;
 	}
 
+	public Tool getToolByUPC(String upc){
+		for (Tool t : tools){
+			if (t.getUPC().equals(upc)){
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public Tool getToolByName(String name){
+		for (Tool t : tools){
+			if (t.getName().equals(name)){
+				return t;
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<Tool> getTools() {
 		return tools;
 	}

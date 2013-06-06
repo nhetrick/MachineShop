@@ -154,6 +154,7 @@ public class LogTests {
 		dateIn = testEntry1.getTimeIn();
 		dateOut = testEntry6.getTimeOut();
 		
+		Log.clearResults();
 		Log.extractLog(dateIn, dateOut);
 		
 		// Ensure the results of the extraction are correct
@@ -171,6 +172,7 @@ public class LogTests {
 
 	@Test
 	public void extractLogByUserTest() {
+		Log.clearResults();
 		Log.extractLog(testUser2);
 		
 		// Ensure that this query returns 2 log entries, and
@@ -184,6 +186,7 @@ public class LogTests {
 
 	@Test
 	public void extractLogByCheckedOutToolTest() {
+		Log.clearResults();
 		Log.extractLogCheckedOutTool(testTool3);
 		
 		// log entry 3 is the only one with testTool3
@@ -192,6 +195,7 @@ public class LogTests {
 		assertTrue(Log.getResults().contains(testEntry3));
 		assertEquals(1, Log.getResults().size());
 		
+		Log.clearResults();
 		Log.extractLogCheckedOutTool(testTool5);
 		
 		// log entry 6 is the only one with testTool5
@@ -200,6 +204,7 @@ public class LogTests {
 		assertTrue(Log.getResults().contains(testEntry6));
 		assertEquals(1, Log.getResults().size());
 		
+		Log.clearResults();
 		Log.extractLogCheckedOutTool(testTool6);
 		
 		// No one checked out testTool6, so this query should
@@ -208,6 +213,7 @@ public class LogTests {
 	}
 
 	@Test public void extractLogByReturnedTool() {
+		Log.clearResults();
 		Log.extractLogReturnedTool(testTool4);
 		
 		// log entry 4 is the only one with testTool4
@@ -216,6 +222,7 @@ public class LogTests {
 		assertTrue(Log.getResults().contains(testEntry4));
 		assertEquals(1, Log.getResults().size());
 		
+		Log.clearResults();
 		Log.extractLogReturnedTool(testTool5);
 		
 		// log entry 4 is the only one with testTool5
@@ -224,6 +231,7 @@ public class LogTests {
 		assertTrue(Log.getResults().contains(testEntry4));
 		assertEquals(1, Log.getResults().size());
 		
+		Log.clearResults();
 		Log.extractLogReturnedTool(testTool6);
 		
 		// No one returned testTool6, so this query should
@@ -234,6 +242,7 @@ public class LogTests {
 
 	@Test
 	public void extractLogByMachineTest() {
+		Log.clearResults();
 		Log.extractLog(testMachine);
 		
 		// log entry 5 is the only one with testMachine

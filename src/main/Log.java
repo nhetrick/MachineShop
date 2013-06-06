@@ -49,7 +49,7 @@ public class Log {
 	}
 	
 	public static void extractLog(Date startDate, Date endDate) {
-		results.clear();
+		//results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		BasicDBObject dateRange = new BasicDBObject ("$gte",startDate);
 		dateRange.put("$lte", endDate);
@@ -60,28 +60,28 @@ public class Log {
 	}
 	
 	public static void extractLog(User user) {
-		results.clear();
+		//results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("userCWID", user.getCWID()));
 		retrieveEntryData(cursor);
 	}
 	
 	public static void extractLogCheckedOutTool(Tool checkedOutTool) {
-		results.clear();
+		//results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsCheckedOut", new BasicDBObject("upc", checkedOutTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
 	
 	public static void extractLogReturnedTool(Tool returnedTool) {
-		results.clear();
+		//results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsReturned", new BasicDBObject("upc", returnedTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
 	
 	public static void extractLog(Machine machine) {
-		results.clear();
+		//results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("machinesUsed", new BasicDBObject("id", machine.getID())));
 		retrieveEntryData(cursor);
@@ -96,7 +96,7 @@ public class Log {
 			int id = (int) result.get("ID");
 			
 			//get CWID
-			User u = Driver.getAccessTracker().loadUser((String) result.get("userCWID"));
+			User u = Driver.getAccessTracker().findUserByCWID((String) result.get("userCWID"));
 			
 			//get timeIn
 			Date timeIn = (Date) result.get("timeIn");
@@ -158,6 +158,10 @@ public class Log {
 	
 	public static void finishEntry(LogEntry entry) {
 		entry.finishEntry();
+	}
+	
+	public static void clearResults() {
+		results.clear();
 	}
 
 	public static void incrementNumEntries() {
