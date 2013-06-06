@@ -1,14 +1,11 @@
 package main;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import oracle.jdbc.pool.OracleDataSource;
-
 
 public class OracleConnection {
 	static Connection connection;
@@ -26,7 +23,7 @@ public class OracleConnection {
 	static String departmentCodeColumn = "departmentCode";
 	// -----------------------------------------------------------------
 	
-	OracleConnection() throws SQLException {
+	public OracleConnection() throws SQLException {
 		connection = null;
 	}
 	
@@ -42,6 +39,7 @@ public class OracleConnection {
 	}
 	
 	public ArrayList<String> select(String searchStr) throws SQLException {
+		
 		ArrayList<String> results = new ArrayList<String>();
 		
 		String sql = "SELECT " + cwidColumn + ", " + firstNameColumn + ", " + lastNameColumn + ", " +

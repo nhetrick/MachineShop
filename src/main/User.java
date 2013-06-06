@@ -16,10 +16,9 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private LogEntry currentEntry;
-	private boolean isLocked;
+	private boolean locked;
 	protected boolean isAdmin = false;
-	
-	
+		
 	public User(String firstName, String lastName, String CWID) {
 		// needs to be extracted from data base
 		certifiedMachines = new ArrayList<Machine>();
@@ -27,11 +26,11 @@ public class User {
 		this.CWID = CWID;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		isLocked = false;
+		locked = false;
 	}
 	
 	public void checkoutTool(Tool tool) {
-		tool.checkoutTool();	
+		tool.checkoutTool();
 		toolsCheckedOut.add(tool);
 		
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
@@ -82,18 +81,18 @@ public class User {
 	}
 	
 	public boolean isLocked() {
-		return isLocked;
+		return locked;
 	}
 	
 	public void setLockedStatus(boolean lock) {
-		isLocked = lock;
+		locked = lock;
 	}
 
 	public ArrayList<Machine> getCertifiedMachines() {
 		return certifiedMachines;
 	}
 	
-	public void loadCertifiedMachines(ArrayList<Machine> machines) {
+	public void setCertifiedMachines(ArrayList<Machine> machines) {
 		certifiedMachines = machines;
 	}
 	

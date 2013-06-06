@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 public class SwipeCardPanel extends JPanel{
 	private Font messageFont;
 	
-	public SwipeCardPanel(){
+	public SwipeCardPanel() {
+		Driver.isLogInScreen = true;
 		setLayout(new BorderLayout());
 		messageFont = new Font("SansSerif", Font.BOLD, 42);
 		

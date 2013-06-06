@@ -86,6 +86,7 @@ public class MainGUI extends JFrame{
 
 	
 	public void restart() {
+		Driver.isLogInScreen = true;
 		remove(headerBar);
 		remove(homeCenterPanel);
 		add(centerPanel);

@@ -1,4 +1,5 @@
 package main;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -54,7 +55,7 @@ public class SystemAdministrator extends Administrator {
 		users.update(searchQuery, newSystemAdmin);
 	}
 	
-	public void updatePermission(User user, ArrayList<Machine> machines) {
+	public void updateCertifications(User user, ArrayList<Machine> machines) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (cursor.hasNext()) {
 			DBObject result = cursor.next();
@@ -65,7 +66,7 @@ public class SystemAdministrator extends Administrator {
 			result.put("certifiedMachines", machinePermissions);
 			
 			users.update(new BasicDBObject("CWID", user.getCWID()), result);
-			user.loadCertifiedMachines(machines);
+			user.setCertifiedMachines(machines);
 		}
 	}
 	
@@ -112,16 +113,20 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
-	public void addUser(User u) {
-		DBCollection userColl = database.getCollection("Users");
-		BasicDBObject document = new BasicDBObject();
-		document.put("firstName", u.getFirstName());
-		document.put("lastName", u.getLastName());
-		document.put("CWID", u.getCWID());
-		
+	public boolean addUser(User u) {
 		DBCollection users = database.getCollection("Users");
-		
-		users.insert(document);
+		DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
+		if ( !cursor.hasNext() ) {
+			BasicDBObject document = new BasicDBObject();
+			document.put("firstName", u.getFirstName());
+			document.put("lastName", u.getLastName());
+			document.put("CWID", u.getCWID());
+			users.insert(document);
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(Driver.getMainGui(), "User already in system...Unable to add");
+			return false;
+		}		
 	}
 	
 	public void removeTool(String upc) {
@@ -154,6 +159,16 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	public User loadNewUser(String cwid, OracleConnection connection) throws SQLException {
+		
+		ArrayList<String> results = connection.select(cwid);
+		
+		if ( results.size() == 0 ) {
+			return null;
+		}
+		return new User(results.get(1), results.get(2), cwid);
+	}
+	
 	public void lockUser(User user) {
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
@@ -161,9 +176,7 @@ public class SystemAdministrator extends Administrator {
 			DBObject obj = cursor.next();
 			obj.put("locked", true);
 			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
-			tracker.lockUser(user);
-		} else {
-			System.out.println("User not found...Unable to Lock");
+			user.setLockedStatus(true);
 		}
 	}
 	
@@ -174,9 +187,7 @@ public class SystemAdministrator extends Administrator {
 			BasicDBObject obj = (BasicDBObject) cursor.next();
 			obj.append("locked", false);
 			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
-			tracker.unlockUser(user);
-		} else {
-			System.out.println("User not found...Unable to Unlock");
+			user.setLockedStatus(false);
 		}
 	}
 }
