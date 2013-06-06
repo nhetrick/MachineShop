@@ -49,7 +49,7 @@ public class AdministratorTests {
 		machines.add(machine1);
 		machines.add(machine2);
 
-		testAdmin.updatePermission(testUser, machines);
+		testAdmin.updateCertifications(testUser, machines);
 
 		// Ensures that the user is now certified to use the machines
 		assertTrue(testUser.getCertifiedMachines().size() == 2);
@@ -60,7 +60,7 @@ public class AdministratorTests {
 		Machine machine3 = new Machine("TEST Machine3", "ZZZZ3");
 		machines.add(machine3);
 		
-		testAdmin.updatePermission(testUser, machines);
+		testAdmin.updateCertifications(testUser, machines);
 		
 		//ensure that the user is now unable to user the previous and 
 		//certified on the new machine

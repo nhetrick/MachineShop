@@ -5,6 +5,7 @@ import main.AccessTracker;
 public class Driver {
 	private static AccessTracker tracker;
 	private static MainGUI mainGui;
+	public static boolean isLogInScreen = false;
 	
 	public Driver() {
 		tracker = new AccessTracker();
@@ -22,4 +23,5 @@ public class Driver {
 	public static AccessTracker getAccessTracker() {
 		return tracker;
 	}
+
 }

@@ -1,6 +1,8 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import GUI.Driver;
 import GUI.MainGUI;
 
 public class InputReader implements KeyListener {
@@ -64,14 +66,13 @@ public class InputReader implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if ( e.getKeyChar() != '\n') {
-			input += e.getKeyChar();
-//			System.out.println(input);
-		}
-		
-		else {
-			gui.enterPressed();
-			input = "";
+		if ( Driver.isLogInScreen ) {
+			if ( e.getKeyChar() != '\n') {
+				input += e.getKeyChar();
+			} else {
+				gui.enterPressed();
+				input = "";
+			}
 		}
 	}
 

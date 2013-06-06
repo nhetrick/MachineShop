@@ -28,7 +28,7 @@ public class ContentPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
 		
-		c.fill = GridBagConstraints.NONE;
+		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.1;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -41,7 +41,7 @@ public class ContentPanel extends JPanel {
 		c.gridy = 0;
 		add(this.title, c);
 		
-		c.fill = GridBagConstraints.NONE;
+		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.1;
 		c.gridx = 2;
 		c.gridy = 0;

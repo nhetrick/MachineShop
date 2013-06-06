@@ -169,29 +169,29 @@ public class AccessTracker {
 		}
 	}
 
-	public void lockUser(User u) {
-		currentUsers.remove(u);
-		u.setLockedStatus(true);
-		currentUsers.add(u);
-
-	}
-
-	public void unlockUser(User u) {
-		currentUsers.remove(u);
-		u.setLockedStatus(false);
-		currentUsers.add(u);
-
-	}
-
 	// Loads the user with this CWID to list of current users
 	// Adds entry to log
-	public User processLogIn(String CWID) {
-		// IF the user with this CWID is locked (boolean isLocked)
-		// THEN display some error message, and make a note somewhere
-		// (log this attempt for admin to view later)
+	public User processLogIn(String CWID) {		
 		currentUser = loadUser(CWID);
+		
 		if ( currentUser != null ) {
+			
+			// IF the user with this CWID is locked (boolean locked)
+			// THEN display some error message, and make a note somewhere
+			// (log this attempt for admin to view later)
+			
+			if ( currentUser.isLocked() ) {
+				String message = "You have been locked out of the system.\n" +
+								 "You must talk to a shop supervisor to get unlocked";
+				JOptionPane.showMessageDialog(Driver.getMainGui(), message);
+				currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]");
+				Log.startEntry(currentUser);
+				Log.finishEntry(currentUser.getCurrentEntry());
+				return null;
+			}
+			
 			Log.startEntry(currentUser);
+			Driver.isLogInScreen = false;
 			return currentUser;
 		}
 		return null;
@@ -272,7 +272,7 @@ public class AccessTracker {
 
 		ArrayList<BasicDBObject> certMachines = (ArrayList<BasicDBObject>)result.get("certifiedMachines");
 		if (certMachines == null) {
-			user.loadCertifiedMachines(new ArrayList<Machine>());
+			user.setCertifiedMachines(new ArrayList<Machine>());
 		} else {
 			for(BasicDBObject embedded : certMachines){ 
 				String id = (String)embedded.get("id"); 
@@ -280,8 +280,8 @@ public class AccessTracker {
 				if (machine.hasNext()) {
 					machinesList.add(new Machine((String) machine.next().get("name"), id));
 				}
-			} 
-			user.loadCertifiedMachines(machinesList);
+			}
+			user.setCertifiedMachines(machinesList);
 		}
 
 		//Retrieve user's checkedOutTools
