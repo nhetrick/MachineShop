@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.Machine;
+import main.OracleConnection;
 import main.SystemAdministrator;
 import main.User;
 
@@ -30,10 +32,19 @@ public class AddUsersPanel extends ContentPanel {
 	private JPanel permissionsPanel;
 	private JScrollPane scroller;
 	private User addedUser;
+	private OracleConnection connection;
 
 	public AddUsersPanel() {
-
+		
 		super("Add a New User");
+		try {
+			connection = new OracleConnection();
+			connection.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		buttonListener = new ButtonListener();
 
 		JLabel firstNameLabel = new JLabel("First Name:");
@@ -95,6 +106,7 @@ public class AddUsersPanel extends ContentPanel {
 		userIDPanel.add(userIDField);
 
 		saveButton = new JButton("Save");
+		
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);
 
@@ -128,35 +140,75 @@ public class AddUsersPanel extends ContentPanel {
 		add(scroller, c);
 
 		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 0.1;
+		c.weighty = 0.15;
 		c.gridx = 1;
 		c.gridy = 5;
 		c.gridwidth = 1;
 		add(saveButton, c);
-
-		c.weighty = 0.1;
+		saveButton.setPreferredSize(new Dimension(saveButton.getWidth(), saveButton.getHeight()) );
+		saveButton.setMaximumSize(saveButton.getPreferredSize());
+		
+		c.weighty = 0.05;
 		c.gridy = 6;
 		add(new JPanel(), c);
-
+		
 	}
 
-	private void saveUser() {
+	private boolean saveUser(ArrayList<Machine> machines) {
 		String firstName = firstNameField.getText();
 		String lastName = lastNameField.getText();
 		String cwid = userIDField.getText();
 
-		if (firstName.equals("") || cwid.equals("") || lastName.equals("")) {
-			JOptionPane.showMessageDialog(this, "Please fill in all three fields.");
-		} else {
-			addedUser = new User(firstName, lastName, cwid);
-			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).addUser(addedUser);
+		SystemAdministrator admin = ((SystemAdministrator) Driver.getAccessTracker().getCurrentUser());
+
+		try {
+			addedUser = admin.loadNewUser(cwid, connection);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
+
+		if ( addedUser == null ) {
+			String message = "Our records show that the CWID " + cwid + " either does not exist or is not an active " +
+					"student at Mines.\nDo you still want to add " + firstName +  " " + lastName +
+					" to the database?\n\nThis action is highly discouraged.";
+
+			if ( JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION ) {
+				addedUser = new User(firstName, lastName, cwid);
+				if (admin.addUser(addedUser) ) {
+					admin.updatePermission(addedUser, machines);
+					return true;
+				}
+			}
+		} else {
+			if ( firstName.equals(addedUser.getFirstName()) && lastName.equals(addedUser.getLastName()) ) {
+				if (admin.addUser(addedUser) ) {
+					admin.updatePermission(addedUser, machines);
+					return true;
+				}
+			} else {
+				String message = "Our records show that the name associated with this CWID is " +
+						addedUser.getFirstName() + " " + addedUser.getLastName() + ".\n" +
+						"Is this the user you meant to add?\n\nClick Yes to add this user " +
+						"to the database, or No/Cancel to go back.";
+				if ( JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION ) {
+					if (admin.addUser(addedUser) ) {
+						admin.updatePermission(addedUser, machines);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private void clearFields() {
 		firstNameField.setText("");
 		lastNameField.setText("");
 		userIDField.setText("");
+		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
+			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
+		}
 	}
 
 	public boolean confirmSubmission(ArrayList<String> permissionsList ) {
@@ -164,7 +216,8 @@ public class AddUsersPanel extends ContentPanel {
 		for ( String s : permissionsList ) {
 			list += s + "\n";
 		}
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to give this user these permissions?" + "\n\n" + list	) == JOptionPane.YES_OPTION) {
+		String message = "Are you sure you want to give " + firstNameField.getText() + " " + lastNameField.getText() + " " + "these permissions?\n\n" + list;
+		if (JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION) {
 			return true;
 		} else {
 			return false;
@@ -179,8 +232,6 @@ public class AddUsersPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton || e.getSource() == userIDField ) {
-				ArrayList<String> permissionsList = new ArrayList<String>();
-				SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 				boolean noBoxesChecked = true;
 				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
@@ -190,9 +241,14 @@ public class AddUsersPanel extends ContentPanel {
 				}
 
 				ArrayList<String> added = new ArrayList<String>();
-				
-				// When adding a user from this screen, the admin must add some machine permissions.
-				if ( noBoxesChecked ) {
+				ArrayList<Machine> machines = new ArrayList<Machine>();
+
+				if (firstNameField.getText().equals("") || userIDField.getText().equals("") || lastNameField.getText().equals("")) {
+					showMessage("Please fill in all three fields.");
+				} else if ( userIDField.getText().length() != 8 ) {
+					showMessage("Please enter an 8-digit CWID.");
+				} else if ( noBoxesChecked ) {
+					// When adding a user from this screen, the admin must add some machine permissions.				
 					showMessage("Please select at least one machine for which this user is certified.");
 				} else {
 					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
@@ -204,16 +260,19 @@ public class AddUsersPanel extends ContentPanel {
 								String ID = m.getID();
 								if ( s.equals(ID) ) {
 									added.add(m.getName() + " [" + ID + "]");
-									// ADD PERMISSIONS TO THE USER FOR THE SELECTED MACHINES
+									machines.add(m);
 								}
 							}
 						}
 					}
-					saveUser();
-					clearFields();
+					if ( confirmSubmission(added) ) {
+						if ( saveUser(machines) ) {
+							clearFields();
+						}
+					}
 				}
 			}
 		}
 	}
-
+	
 }

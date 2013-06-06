@@ -1,4 +1,5 @@
 package main;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -112,16 +113,20 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
-	public void addUser(User u) {
-		DBCollection userColl = database.getCollection("Users");
-		BasicDBObject document = new BasicDBObject();
-		document.put("firstName", u.getFirstName());
-		document.put("lastName", u.getLastName());
-		document.put("CWID", u.getCWID());
-		
+	public boolean addUser(User u) {
 		DBCollection users = database.getCollection("Users");
-		
-		users.insert(document);
+		DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
+		if ( !cursor.hasNext() ) {
+			BasicDBObject document = new BasicDBObject();
+			document.put("firstName", u.getFirstName());
+			document.put("lastName", u.getLastName());
+			document.put("CWID", u.getCWID());
+			users.insert(document);
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(Driver.getMainGui(), "User already in system...Unable to add");
+			return false;
+		}		
 	}
 	
 	public void removeTool(String upc) {
@@ -152,6 +157,16 @@ public class SystemAdministrator extends Administrator {
 			users.remove(obj);
 			tracker.removeUser(new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID")));
 		}
+	}
+	
+	public User loadNewUser(String cwid, OracleConnection connection) throws SQLException {
+		
+		ArrayList<String> results = connection.select(cwid);
+		
+		if ( results.size() == 0 ) {
+			return null;
+		}
+		return new User(results.get(1), results.get(2), cwid);
 	}
 	
 	public void lockUser(User user) {

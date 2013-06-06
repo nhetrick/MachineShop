@@ -26,7 +26,7 @@ public class OracleConnection {
 	static String departmentCodeColumn = "departmentCode";
 	// -----------------------------------------------------------------
 	
-	OracleConnection() throws SQLException {
+	public OracleConnection() throws SQLException {
 		connection = null;
 	}
 	
@@ -42,6 +42,7 @@ public class OracleConnection {
 	}
 	
 	public ArrayList<String> select(String searchStr) throws SQLException {
+		
 		ArrayList<String> results = new ArrayList<String>();
 		
 		String sql = "SELECT * FROM " + tableName + " WHERE " + cwidColumn + "=" + searchStr;
