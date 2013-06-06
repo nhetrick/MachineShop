@@ -14,6 +14,7 @@ import com.mongodb.DBObject;
 
 public class LogEntry {
 	private int ID;
+	private String cwid;
 	private User user;
 	private ArrayList<Machine> machinesUsed;
 	private ArrayList<Tool> toolsCheckedOut;
@@ -31,11 +32,12 @@ public class LogEntry {
 	
 	
 	
-	public LogEntry(int iD, User user, ArrayList<Machine> machinesUsed,
+	public LogEntry(int iD, String cwid, User user, ArrayList<Machine> machinesUsed,
 			ArrayList<Tool> toolsCheckedOut, Date timeOut, Date timeIn,
 			ArrayList<Tool> toolsReturned) {
 		super();
 		ID = iD;
+		this.cwid = cwid;
 		this.user = user;
 		this.machinesUsed = machinesUsed;
 		this.toolsCheckedOut = toolsCheckedOut;
@@ -54,6 +56,7 @@ public class LogEntry {
 		this.ID = Log.getNumEntries();
 		this.timeIn = calendar.getTime();
 		this.user = user;
+		cwid = user.getCWID();
 		this.machinesUsed = new ArrayList<Machine>();
 		this.toolsCheckedOut = new ArrayList<Tool>();
 		this.toolsReturned = new ArrayList<Tool>();
@@ -80,6 +83,7 @@ public class LogEntry {
 		this.ID = Log.getNumEntries();
 		this.timeIn = calendar.getTime();
 		this.user = user;
+		cwid = user.getCWID();
 		this.machinesUsed = new ArrayList<Machine>();
 		this.toolsCheckedOut = new ArrayList<Tool>();
 		this.toolsReturned = new ArrayList<Tool>();
@@ -96,6 +100,12 @@ public class LogEntry {
 		logEntries.insert(logEntry);
 	}
 	
+	public String getCwid() {
+		return cwid;
+	}
+
+
+
 	public void addMachinesUsed(ArrayList<Machine> used) {
 		for (Machine m : used){
 			machinesUsed.add(m);
@@ -198,6 +208,22 @@ public class LogEntry {
 		System.out.println("Tools Returned: " + toolsReturned);
 	}
 	
+	public User getUser() {
+		return user;
+	}
+	
+	public ArrayList<Machine> getMachinesUsed() {
+		return machinesUsed;
+	}
+
+	public ArrayList<Tool> getToolsCheckedOut() {
+		return toolsCheckedOut;
+	}
+
+	public ArrayList<Tool> getToolsReturned() {
+		return toolsReturned;
+	}
+
 	public String toString() {
 		return String.format("%5d%20s%30s%30s%30s%30s%30s", ID, user, timeIn, timeOut, machinesUsed, toolsCheckedOut, toolsReturned);
 	}

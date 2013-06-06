@@ -75,7 +75,7 @@ public class AccessTrackerTests {
 		assertTrue(tracker.getCurrentUsers().contains(testUser2));
 		
 		// Ensures the entry was added to the log
-		Log.extractLog(testUser2);
+		Log.extractLog(testUser2, true);
 		
 		int latestEntryIndex = Log.getResults().size() - 1;
 		LogEntry entry = Log.getResults().get(latestEntryIndex);
@@ -108,7 +108,7 @@ public class AccessTrackerTests {
 		
 		//Ensures the entry was added to the log
 		Log.clearResults();
-		Log.extractLog(testUser2);
+		Log.extractLog(testUser2, true);
 		entry = Log.getResults().get(latestEntryIndex);
 			
 		// Get the time from this log entry? Ensure that it is

@@ -44,7 +44,9 @@ public class OracleConnection {
 	public ArrayList<String> select(String searchStr) throws SQLException {
 		ArrayList<String> results = new ArrayList<String>();
 		
-		String sql = "SELECT * FROM " + tableName + " WHERE " + cwidColumn + "=" + searchStr;
+		String sql = "SELECT " + cwidColumn + ", " + firstNameColumn + ", " + lastNameColumn + ", " +
+				emailColumn + ", " + departmentCodeColumn + " FROM " + tableName + " WHERE " + 
+				cwidColumn + "=" + searchStr;
 		Statement statement = connection.createStatement();
 		ResultSet rows = statement.executeQuery(sql);
 

@@ -50,7 +50,7 @@ public class Tool {
 	}
 	
 	public String toString() {
-		return name;
+		return name + " (" + UPC + ")";
 	}
 	
 	@Override

@@ -1,7 +1,10 @@
 package main;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import GUI.Driver;
 
@@ -48,8 +51,9 @@ public class Log {
 		}
 	}
 	
-	public static void extractLog(Date startDate, Date endDate) {
-		//results.clear();
+	public static void extractLog(Date startDate, Date endDate, boolean clear) {
+		if (clear)
+			results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		BasicDBObject dateRange = new BasicDBObject ("$gte",startDate);
 		dateRange.put("$lte", endDate);
@@ -59,32 +63,59 @@ public class Log {
 		retrieveEntryData(cursor);
 	}
 	
-	public static void extractLog(User user) {
-		//results.clear();
+	public static void extractLog(User user, boolean clear) {
+		if (clear)
+			results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("userCWID", user.getCWID()));
 		retrieveEntryData(cursor);
 	}
 	
-	public static void extractLogCheckedOutTool(Tool checkedOutTool) {
-		//results.clear();
+	public static void extractLogCheckedOutTool(Tool checkedOutTool, boolean clear) {
+		if (clear)
+			results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsCheckedOut", new BasicDBObject("upc", checkedOutTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
 	
-	public static void extractLogReturnedTool(Tool returnedTool) {
-		//results.clear();
+	public static void extractLogReturnedTool(Tool returnedTool, boolean clear) {
+		if (clear)
+			results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsReturned", new BasicDBObject("upc", returnedTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
 	
-	public static void extractLog(Machine machine) {
-		//results.clear();
+	public static void extractLog(Machine machine, boolean clear) {
+		if (clear)
+			results.clear();
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("machinesUsed", new BasicDBObject("id", machine.getID())));
 		retrieveEntryData(cursor);
+	}
+	
+	public static void extractLogByTool(String toolName, boolean clear) {
+		if (clear)
+			results.clear();
+		ArrayList<DBObject> result = Driver.getAccessTracker().searchDatabase("Tools", "name", toolName);
+		for (DBObject obj : result) {
+			extractLogCheckedOutTool(Driver.getAccessTracker().getToolByUPC((String) obj.get("upc")), false);
+			extractLogReturnedTool(Driver.getAccessTracker().getToolByUPC((String) obj.get("upc")), false);
+		}
+		Collections.sort(results, new LogEntryIDComparator());
+		cleanResults();
+	}
+	
+	public static void extractLogByMachine(String machineName, boolean clear) {
+		if (clear)
+			results.clear();
+		ArrayList<DBObject> result = Driver.getAccessTracker().searchDatabase("Machines", "name", machineName);
+		for (DBObject obj : result) {
+			extractLog(Driver.getAccessTracker().getMachineByID((String) obj.get("ID")), false);
+		}
+		Collections.sort(results, new LogEntryIDComparator());
+		cleanResults();
 	}
 	
 	public static void retrieveEntryData(DBCursor cursor) {
@@ -146,7 +177,7 @@ public class Log {
 				} 
 			}
 			
-			LogEntry entry = new LogEntry(id, u, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
+			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), u, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
 			results.add(entry);
 		}
 	}
@@ -173,6 +204,22 @@ public class Log {
 		DBCursor result = logEntries.find(new BasicDBObject("ID", id));
 		if (!(result == null)) {
 			logEntries.remove(result.next());
+		}
+	}
+	
+	public static class LogEntryIDComparator implements Comparator<LogEntry> {
+		@Override
+	    public int compare(LogEntry entry1, LogEntry entry2) {
+	        return entry1.getID() - entry2.getID();
+	    }
+	}
+	
+	public static void cleanResults() {
+		for (int i = 0; i < results.size() - 1; i++) {
+			if (results.get(i).getID() == results.get(i+1).getID()) {
+				results.remove(i+1);
+				i--;
+			}
 		}
 	}
 	

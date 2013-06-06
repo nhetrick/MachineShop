@@ -155,7 +155,7 @@ public class LogTests {
 		dateOut = testEntry6.getTimeOut();
 		
 		Log.clearResults();
-		Log.extractLog(dateIn, dateOut);
+		Log.extractLog(dateIn, dateOut, true);
 		
 		// Ensure the results of the extraction are correct
 		// All 5 entries should be returned by this query.
@@ -173,7 +173,7 @@ public class LogTests {
 	@Test
 	public void extractLogByUserTest() {
 		Log.clearResults();
-		Log.extractLog(testUser2);
+		Log.extractLog(testUser2, true);
 		
 		// Ensure that this query returns 2 log entries, and
 		// that they are both for testUser2
@@ -187,7 +187,7 @@ public class LogTests {
 	@Test
 	public void extractLogByCheckedOutToolTest() {
 		Log.clearResults();
-		Log.extractLogCheckedOutTool(testTool3);
+		Log.extractLogCheckedOutTool(testTool3, true);
 		
 		// log entry 3 is the only one with testTool3
 		// as a checked-out tool, so it is the only one
@@ -196,7 +196,7 @@ public class LogTests {
 		assertEquals(1, Log.getResults().size());
 		
 		Log.clearResults();
-		Log.extractLogCheckedOutTool(testTool5);
+		Log.extractLogCheckedOutTool(testTool5, true);
 		
 		// log entry 6 is the only one with testTool5
 		// as a checked-out tool, so it is the only one
@@ -205,7 +205,7 @@ public class LogTests {
 		assertEquals(1, Log.getResults().size());
 		
 		Log.clearResults();
-		Log.extractLogCheckedOutTool(testTool6);
+		Log.extractLogCheckedOutTool(testTool6, true);
 		
 		// No one checked out testTool6, so this query should
 		// return no results (An empty List)
@@ -214,7 +214,7 @@ public class LogTests {
 
 	@Test public void extractLogByReturnedTool() {
 		Log.clearResults();
-		Log.extractLogReturnedTool(testTool4);
+		Log.extractLogReturnedTool(testTool4, true);
 		
 		// log entry 4 is the only one with testTool4
 		// as a returned tool, so it is the only one
@@ -223,7 +223,7 @@ public class LogTests {
 		assertEquals(1, Log.getResults().size());
 		
 		Log.clearResults();
-		Log.extractLogReturnedTool(testTool5);
+		Log.extractLogReturnedTool(testTool5, true);
 		
 		// log entry 4 is the only one with testTool5
 		// as a returned tool, so it is the only one
@@ -232,7 +232,7 @@ public class LogTests {
 		assertEquals(1, Log.getResults().size());
 		
 		Log.clearResults();
-		Log.extractLogReturnedTool(testTool6);
+		Log.extractLogReturnedTool(testTool6, true);
 		
 		// No one returned testTool6, so this query should
 		// return no results (An empty List)
@@ -243,7 +243,7 @@ public class LogTests {
 	@Test
 	public void extractLogByMachineTest() {
 		Log.clearResults();
-		Log.extractLog(testMachine);
+		Log.extractLog(testMachine, true);
 		
 		// log entry 5 is the only one with testMachine
 		// as a machine they used, so it is the only one
