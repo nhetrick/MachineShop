@@ -33,13 +33,15 @@ public class EditPrivilegesPanel extends ContentPanel {
 	private JPanel resultsPanel;
 	private JScrollPane scroller;
 
-	// Holds the list of users to potentially be deleted (searched by the admin)
-	private ArrayList<User> resultsList; 
+	// These Hold the list of users to potentially be deleted (searched by the admin)
+	ArrayList<DBObject> userList;
+	private ArrayList<User> resultsList;
 
 	public EditPrivilegesPanel() {
 
 		super("Edit User Privileges");
 		buttonListener = new ButtonListener();
+		userList = new ArrayList<DBObject>();
 		resultsList = new ArrayList<User>();
 
 		JLabel nameSearchLabel = new JLabel("Search By Name:");
@@ -148,57 +150,62 @@ public class EditPrivilegesPanel extends ContentPanel {
 	public void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
-	
+
 	public void clearFields() {
 		resultsPanel.removeAll();
 		nameSearchField.setText("");
 		idSearchField.setText("");
 	}
-	
+
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == saveButton) {
-				// First check that they actually want to change the permissions.
-				if ( confirmSubmission()) {
-					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
-					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
-						JPanel panel = (JPanel) resultsPanel.getComponent(i);
-						JLabel label = (JLabel) panel.getComponent(0);
-						String s = label.getText();
-						s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-						JCheckBox isAdminBox = (JCheckBox) panel.getComponent(1);
-						JCheckBox isSystemAdminBox = (JCheckBox) panel.getComponent(2);
-						boolean isAdmin = isAdminBox.isSelected();
-						boolean isSystemAdmin = isSystemAdminBox.isSelected();
-						for ( User u : resultsList ) {
-							String CWID = u.getCWID();
-							if ( s.equals(CWID) ) {
-								admin.updatePermissions(u, isAdmin, isSystemAdmin);
+				if ( !resultsList.isEmpty() ) {
+					// First check that they actually want to change the permissions.
+					if ( confirmSubmission()) {
+						SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
+						for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+							JPanel panel = (JPanel) resultsPanel.getComponent(i);
+							JLabel label = (JLabel) panel.getComponent(0);
+							String s = label.getText();
+							s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+							JCheckBox isAdminBox = (JCheckBox) panel.getComponent(1);
+							JCheckBox isSystemAdminBox = (JCheckBox) panel.getComponent(2);
+
+							boolean isAdmin = (isAdminBox.isSelected() || isSystemAdminBox.isSelected());
+							boolean isSystemAdmin = isSystemAdminBox.isSelected();
+
+							for ( User u : resultsList ) {
+								String CWID = u.getCWID();
+								if ( s.equals(CWID) ) {
+									admin.updatePermissions(u, isAdmin, isSystemAdmin);
+								}
 							}
 						}
+						clearFields();
+						resultsList.clear();
+						userList.clear();
+						repaint();
 					}
-					clearFields();
-					resultsList.clear();
-					repaint();
 				}
 
-			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton |
-					e.getSource() == nameSearchField | e.getSource() == idSearchField ) {
-
+			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
+					e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
 				resultsPanel.removeAll();
 				resultsList.clear();
+				userList.clear();
 				repaint();
-				ArrayList<DBObject> userList = new ArrayList<DBObject>();
 
-				if ( e.getSource() == nameSearchGoButton | e.getSource() == nameSearchField ) {
+				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
 
-					if ( nameSearchField.getText().equals("Search All"))
+					if ( nameSearchField.getText().equals("Search All") || nameSearchField.getText().equals(""))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
 					else						
 						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
 
 				} else {
+					// e.getSource() == ID search field 
 					if ( idSearchField.getText().equals("Search All"))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
 					else
@@ -207,18 +214,19 @@ public class EditPrivilegesPanel extends ContentPanel {
 				}
 
 				for ( DBObject u : userList ) {
-					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"));
 					
+					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"));
+
 					boolean isAdmin = false;
 					boolean isSystemAdmin = false;
-					
+
 					if ( u.get("isAdmin") != null ) {
 						isAdmin = (boolean) u.get("isAdmin");
 					}
 					if ( u.get("isSystemAdmin") != null ) {
 						isSystemAdmin = (boolean) u.get("isSystemAdmin");						
 					}
-					
+
 					user.setAdmin(isAdmin);
 					user.setSystemAdmin(isSystemAdmin);
 					resultsList.add(user);
@@ -226,26 +234,26 @@ public class EditPrivilegesPanel extends ContentPanel {
 
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));
-					
+
 					JLabel userName = new JLabel(u.getFirstName() + " " + u.getLastName() + " [" + u.getCWID() + "]");
 					JCheckBox isAdmin = new JCheckBox("Administrator");
 					JCheckBox isSystemAdmin = new JCheckBox("System Administrator");
-					
+
 					if ( u.isAdmin() ) {
 						isAdmin.setSelected(true);
 						if ( u.isSystemAdmin() ) {
 							isSystemAdmin.setSelected(true);
 						}
 					}
-					
+
 					userName.setFont(smallFont);
 					isAdmin.setFont(smallFont);
 					isSystemAdmin.setFont(smallFont);
-					
+
 					userPanel.add(userName);
 					userPanel.add(isAdmin);
 					userPanel.add(isSystemAdmin);
-					
+
 					resultsPanel.add(userPanel);
 				}				
 			}

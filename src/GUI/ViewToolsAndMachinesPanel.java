@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import main.Machine;
@@ -22,67 +24,83 @@ import main.Tool;
 
 public class ViewToolsAndMachinesPanel extends ContentPanel {
 	
-	private JCheckBox inUseBox;
-	private JCheckBox notInUseBox;
-	private JCheckBox checkedOutBox;
-	private JCheckBox notCheckedOutBox;
-	private CheckBoxListener checkBoxListener;
+	private JLabel inUseLabel;
+	private JLabel notInUseLabel;
+	private JLabel checkedOutLabel;
+	private JLabel notCheckedOutLabel;
 	
-	JPanel mainMachinesPanel;
-	JPanel mainToolsPanel;
+	private JPanel mainMachinesPanel;
+	private JPanel mainToolsPanel;
+	
+	private JScrollPane machinesScroller;
+	private JScrollPane toolsScroller;
 	
 	public ViewToolsAndMachinesPanel() {
 		
 		super("View Tools and Machines");
-		checkBoxListener = new CheckBoxListener();
 		
-		inUseBox = new JCheckBox("In Use");
-		notInUseBox = new JCheckBox("Not In Use");
-		checkedOutBox = new JCheckBox("Checked Out");
-		notCheckedOutBox = new JCheckBox("Not Checked Out");
+		inUseLabel = new JLabel("In Use");
+		notInUseLabel = new JLabel("Not In Use");
+		checkedOutLabel = new JLabel("Checked Out");
+		notCheckedOutLabel = new JLabel("Not Checked Out");
 		
-		inUseBox.setFont(textFont);
-		notInUseBox.setFont(textFont);
-		checkedOutBox.setFont(textFont);
-		notCheckedOutBox.setFont(textFont);
+		inUseLabel.setFont(textFont);
+		notInUseLabel.setFont(textFont);
+		checkedOutLabel.setFont(textFont);
+		notCheckedOutLabel.setFont(textFont);
 		
-		inUseBox.addActionListener(checkBoxListener);
-		notInUseBox.addActionListener(checkBoxListener);
-		checkedOutBox.addActionListener(checkBoxListener);
-		notCheckedOutBox.addActionListener(checkBoxListener);
+		notInUseLabel.setEnabled(false);
+		checkedOutLabel.setEnabled(false);
 		
-		inUseBox.setHorizontalAlignment(JCheckBox.CENTER);
-		notInUseBox.setHorizontalAlignment(JCheckBox.CENTER);
-		checkedOutBox.setHorizontalAlignment(JCheckBox.CENTER);
-		notCheckedOutBox.setHorizontalAlignment(JCheckBox.CENTER);
+		inUseLabel.setHorizontalAlignment(JCheckBox.CENTER);
+		notInUseLabel.setHorizontalAlignment(JCheckBox.CENTER);
+		checkedOutLabel.setHorizontalAlignment(JCheckBox.CENTER);
+		notCheckedOutLabel.setHorizontalAlignment(JCheckBox.CENTER);
 		
 		mainMachinesPanel = new JPanel();
 		mainToolsPanel = new JPanel();
 		
-		mainMachinesPanel.setLayout(new GridLayout(0, 4));
-		mainToolsPanel.setLayout(new GridLayout(0, 4));
+		mainMachinesPanel.setLayout(new GridLayout(0, 2));
+		mainToolsPanel.setLayout(new GridLayout(0, 2));
 		
 		JPanel machinesPanel = new JPanel(new GridBagLayout());
-		machinesPanel.setBorder(new TitledBorder("Machines"));
+		
+		for (Machine m : Driver.getAccessTracker().getMachines()) {
+			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "]" );
+			l.setFont(resultsFont);
+			l.setHorizontalAlignment(JLabel.CENTER);
+			if (!m.isInUse()) {
+				l.setEnabled(false);
+			}
+			mainMachinesPanel.add(l);
+		}
 		
 		JPanel toolsPanel = new JPanel(new GridBagLayout());
-		toolsPanel.setBorder(new TitledBorder("Tools"));
 		
-		JPanel machinesCheckBoxPanel = new JPanel(new GridLayout(1, 2));
-		JPanel toolsCheckBoxPanel = new JPanel( new GridLayout(1, 2));
+		for (Tool t : Driver.getAccessTracker().getTools()) {
+			JLabel l = new JLabel(t.getName() + " [" + t.getUPC() + "]" );
+			l.setHorizontalAlignment(JLabel.CENTER);
+			l.setFont(resultsFont);
+			if (t.isCheckedOut()) {
+				l.setEnabled(false);
+			}
+			mainToolsPanel.add(l);
+		}		
 		
-		machinesCheckBoxPanel.add(inUseBox);
-		machinesCheckBoxPanel.add(notInUseBox);
-		toolsCheckBoxPanel.add(checkedOutBox);
-		toolsCheckBoxPanel.add(notCheckedOutBox);
+		JPanel machinesLabelPanel = new JPanel(new GridLayout(1, 2));
+		JPanel toolsLabelPanel = new JPanel( new GridLayout(1, 2));
 		
+		machinesLabelPanel.add(inUseLabel);
+		machinesLabelPanel.add(notInUseLabel);
+		toolsLabelPanel.add(checkedOutLabel);
+		toolsLabelPanel.add(notCheckedOutLabel);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.weighty = 0.1;
 		c.gridx = 0;
 		c.gridy = 0;
-		machinesPanel.add(machinesCheckBoxPanel, c);
+		machinesPanel.add(machinesLabelPanel, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
@@ -96,7 +114,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridx = 0;
 		c.gridy = 0;
-		toolsPanel.add(toolsCheckBoxPanel, c);
+		toolsPanel.add(toolsLabelPanel, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
@@ -104,6 +122,24 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		toolsPanel.add(mainToolsPanel, c);
+		
+		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		machinesScroller.setPreferredSize(new Dimension(machinesScroller.getWidth(), machinesScroller.getHeight()));
+		machinesScroller.setMaximumSize(machinesScroller.getPreferredSize());
+		machinesScroller.getVerticalScrollBar().setUnitIncrement(13);
+		
+		TitledBorder machinesBorder = new TitledBorder("Machines");
+		machinesBorder.setTitleFont(borderFont);
+		machinesScroller.setBorder(machinesBorder);
+		
+		toolsScroller = new JScrollPane(toolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		toolsScroller.setPreferredSize(new Dimension(toolsScroller.getWidth(), toolsScroller.getHeight()));
+		toolsScroller.setMaximumSize(toolsScroller.getPreferredSize());
+		toolsScroller.getVerticalScrollBar().setUnitIncrement(13);
+		
+		TitledBorder toolsBorder = new TitledBorder("Tools");
+		toolsBorder.setTitleFont(borderFont);
+		toolsScroller.setBorder(toolsBorder);
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 		/******************** All weighty values should add up to 0.9 ***********************************
@@ -114,83 +150,18 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.weighty = 0.4;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(machinesPanel, c);
+		add(machinesScroller, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.4;
 		c.gridx = 1;
 		c.gridy = 2;
-		add(toolsPanel, c);
+		add(toolsScroller, c);
 		
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
-		
-		displayInUseMachines(false);
-		displayInUseMachines(true);
-		displayCheckedOutTools(false);
-		displayCheckedOutTools(true);
-	}
-	
-	public void showConfirmPopup() {
-		JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these users?");
-	}
-	
-	public void displayInUseMachines(boolean use) {
-		for (Machine m : Driver.getAccessTracker().getMachines()) {
-			if (use == m.isInUse()) {
-				JLabel label = new JLabel(m.getName());
-				label.setFont(resultsFont);
-				if (m.isInUse()) {
-					label.setForeground(Color.GRAY);
-				} 
-				mainMachinesPanel.add(label);
-			}
-		}
-	}
-	
-	public void displayCheckedOutTools(boolean status) {
-		for (Tool t : Driver.getAccessTracker().getTools()) {
-			if (status == t.isCheckedOut()) {
-				JLabel label = new JLabel(t.getName());
-				label.setFont(resultsFont);
-				if (t.isCheckedOut()) {
-					label.setForeground(Color.GRAY);
-				} 
-				mainToolsPanel.add(label);
-			}
-		}
-	}
-	
-	private class CheckBoxListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == inUseBox || e.getSource() == notInUseBox ) {
-				if (inUseBox.isSelected() && !notInUseBox.isSelected()) {
-					mainMachinesPanel.removeAll();
-					displayInUseMachines(true);
-				} else if (!inUseBox.isSelected() && notInUseBox.isSelected()) {
-					mainMachinesPanel.removeAll();
-					displayInUseMachines(false);
-				} else {
-					mainMachinesPanel.removeAll();
-					displayInUseMachines(false);
-					displayInUseMachines(true);
-				} 
-			} else if ( e.getSource() == checkedOutBox || e.getSource() == notCheckedOutBox ) {
-				if (checkedOutBox.isSelected() && !notCheckedOutBox.isSelected()) {
-					mainToolsPanel.removeAll();
-					displayCheckedOutTools(true);
-				} else if (!checkedOutBox.isSelected() && notCheckedOutBox.isSelected()) {
-					mainToolsPanel.removeAll();
-					displayCheckedOutTools(false);
-				} else {
-					mainToolsPanel.removeAll();
-					displayCheckedOutTools(false);
-					displayCheckedOutTools(true);
-				}
-			} 
-		}
+
 	}
 
 }

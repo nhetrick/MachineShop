@@ -194,15 +194,15 @@ public class RemoveToolsPanel extends ContentPanel {
 					}
 					showMessage(message);
 				}
-			} else if (e.getSource() == nameSearchGoButton | e.getSource() == idSearchGoButton |
-					   e.getSource() == nameSearchField | e.getSource() == idSearchField ) {
+			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
+					   e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
 				
 				resultsPanel.removeAll();
 				resultsList.clear();
 				repaint();
 				ArrayList<DBObject> toolList = new ArrayList<DBObject>();
 				
-				if ( e.getSource() == nameSearchGoButton | e.getSource() == nameSearchField ) {
+				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
 					
 					if ( nameSearchField.getText().equals("Search All"))
 						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", "");

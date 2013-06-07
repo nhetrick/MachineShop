@@ -17,7 +17,7 @@ public class ContentPanel extends JPanel {
 	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 	protected Font textFont = new Font("SansSerif", Font.BOLD, 28);
-	protected Font resultsFont = new Font("SansSerif", Font.PLAIN, 24);
+	protected Font resultsFont = new Font("SansSerif", Font.BOLD, 24);
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 20);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 16);
 	
