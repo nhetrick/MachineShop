@@ -215,7 +215,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 
 				for ( DBObject u : userList ) {
 					
-					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"));
+					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 
 					boolean isAdmin = false;
 					boolean isSystemAdmin = false;

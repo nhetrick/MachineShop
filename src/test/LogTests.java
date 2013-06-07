@@ -58,10 +58,10 @@ public class LogTests {
 	public static void setup() {
 		
 		driver = new Driver();
-		admin = new SystemAdministrator("", "", "0");
+		admin = new SystemAdministrator("", "", "0", "admin@password.com", "ADMN");
 		
-		testUser1 = new User("", "", "2");
-		testUser2 = new User("", "", "3");
+		testUser1 = new User("", "", "2", "rayanami2@nerv.net", "YCLN");
+		testUser2 = new User("", "", "3", "rayanami3@nerv.net", "YCLN");
 		admin.addUser(testUser1);
 		admin.addUser(testUser2);
 		users = new ArrayList<User>();
