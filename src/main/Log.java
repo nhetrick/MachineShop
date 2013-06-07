@@ -55,10 +55,21 @@ public class Log {
 		DBCollection logEntries = database.getCollection("LogEntries");
 		BasicDBObject dateRange = new BasicDBObject ("$gte",startDate);
 		dateRange.put("$lte", endDate);
-
 		BasicDBObject query = new BasicDBObject("timeIn", dateRange);
 		DBCursor cursor = logEntries.find(query);
 		retrieveEntryData(cursor);
+	}
+	
+	public static void extractResults(Date startDate, Date endDate) {
+		for (LogEntry entry : results) {
+			if (entry.getTimeIn().after(startDate)) {
+				if (!(entry.getTimeOut().before(endDate) || entry.getTimeOut() == null)) {
+					results.remove(results.indexOf(entry));
+				}
+			} else {
+				results.remove(results.indexOf(entry));
+			}
+		}
 	}
 	
 	public static void extractLog(User user, boolean clear) {
@@ -125,35 +136,34 @@ public class Log {
 			int id = (int) result.get("ID");
 			
 			//get CWID
-			User u = Driver.getAccessTracker().findUserByCWID((String) result.get("userCWID"));
+			//User u = Driver.getAccessTracker().findUserByCWID((String) result.get("userCWID"));
+			String cwid = (String) result.get("userCWID");
 			
 			//get timeIn
 			Date timeIn = (Date) result.get("timeIn");
 			
 			//get machinesUsed
 			ArrayList<Machine> machinesUsed = new ArrayList<Machine>();
-			DBCollection machinesColl = database.getCollection("Machines");
 			ArrayList<BasicDBObject> machines = (ArrayList<BasicDBObject>) result.get("machinesUsed");
 			if (!(machines == null)) {
 				for(BasicDBObject embedded : machines){ 
 					String i = (String)embedded.get("id"); 
-					DBCursor machine = machinesColl.find(new BasicDBObject("ID", i));
-					if (machine.hasNext()) {
-						machinesUsed.add(new Machine((String) machine.next().get("name"), i));
+					Machine machine = Driver.getAccessTracker().getMachineByID(i);
+					if (machine != null) {
+						machinesUsed.add(new Machine((String) machine.getName(), i));
 					}
 				} 
 			}
 			
 			//get toolsCheckedOut			
 			ArrayList<Tool> toolsCheckedOut = new ArrayList<Tool>();
-			DBCollection toolsColl = database.getCollection("Tools");
 			ArrayList<BasicDBObject> toolsOut = (ArrayList<BasicDBObject>) result.get("toolsCheckedOut");
 			if (!(toolsOut == null)) {
 				for(BasicDBObject embedded : toolsOut){ 
 					String upc = (String) embedded.get("upc"); 
-					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
-					if (tool.hasNext()) {
-						toolsCheckedOut.add(new Tool((String) tool.next().get("name"), upc));
+					Tool tool = Driver.getAccessTracker().getToolByUPC(upc);
+					if (tool != null) {
+						toolsCheckedOut.add(new Tool((String) tool.getName(), upc));
 					}
 				} 
 			}
@@ -163,19 +173,18 @@ public class Log {
 			
 			//get toolsReturned
 			ArrayList<Tool> toolsReturned = new ArrayList<Tool>();
-
 			ArrayList<BasicDBObject> toolsBack = (ArrayList<BasicDBObject>) result.get("toolsReturned");
 			if (!(toolsBack == null)) {
 				for(BasicDBObject embedded : toolsBack){ 
 					String upc = (String) embedded.get("upc"); 
-					DBCursor tool = toolsColl.find(new BasicDBObject("upc", upc));
-					if (tool.hasNext()) {
-						toolsReturned.add(new Tool((String) tool.next().get("name"), upc));
+					Tool tool = Driver.getAccessTracker().getToolByUPC(upc);
+					if (tool != null) {
+						toolsReturned.add(new Tool((String) tool.getName(), upc));
 					}
 				} 
 			}
 			
-			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), u, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
+			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
 			results.add(entry);
 		}
 	}

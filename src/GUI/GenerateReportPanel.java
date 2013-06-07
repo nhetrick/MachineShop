@@ -188,6 +188,7 @@ public class GenerateReportPanel extends ContentPanel {
 					currentParameter = "User";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new UserPanel(), c);
+					dataEntryPanel.add(new DatePanel(), c);
 				} else if (parameter == "Tool") {
 					currentParameter = "Tool";
 					dataEntryPanel.removeAll();
