@@ -214,7 +214,7 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	private void showResults() {
-		String[] columns = {"Entry ID", "User", "Log In Time", "Log Out Time", "Machines Used", 
+		String[] columns = {"Entry ID", "User", "Time In", "Time Out", "Machines Used", 
 		                    "Tools Checked Out", "Tools Returned"};
 		String data[][] = new String[Log.getResults().size()][7];
 		if (Log.getResults().size() > 0) {
