@@ -218,8 +218,8 @@ public class RemoveUsersPanel extends ContentPanel {
 					
 				}
 				
-				for ( DBObject m : userList ) {
-					User user = new User( (String) m.get("firstName"), (String) m.get("lastName"), (String) m.get("CWID"));
+				for ( DBObject u : userList ) {
+					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 					resultsList.add(user);
 				}
 								
