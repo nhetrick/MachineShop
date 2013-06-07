@@ -53,6 +53,11 @@ public class Statistics {
 	}
 	
 	private void userCheck(String cwid) {
+		if (cwid.contains("LOCKED")) {
+			numLockedUsers++;
+			cwid = (String) cwid.subSequence(0, 8);
+			System.out.println("CWID: " + cwid);
+		}
 		if (!users.contains(cwid)) {
 			numUsers++;
 			users.add(cwid);
