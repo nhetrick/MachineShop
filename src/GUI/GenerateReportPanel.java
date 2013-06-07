@@ -219,23 +219,25 @@ public class GenerateReportPanel extends ContentPanel {
 	private void showResults() {
 		String[] columns = {"Entry ID", "User", "Time In", "Time Out", "Machines Used", 
 		                    "Tools Checked Out", "Tools Returned"};
-		String data[][] = new String[Log.getResults().size()][7];
-		if (Log.getResults().size() > 0) {
-			for (LogEntry entry : Log.getResults()) {	
-				data[Log.getResults().indexOf(entry)][0] = Integer.toString(entry.getID());
-				data[Log.getResults().indexOf(entry)][1] = entry.getCwid();
-				data[Log.getResults().indexOf(entry)][2] = entry.getTimeIn().toString();
+		int size = Log.getResults().size();
+		String data[][] = new String[size][7];
+		if (size > 0) {
+			for (int i=0; i<size; i++) {
+				LogEntry entry = Log.getResults().get(i);
+				data[i][0] = Integer.toString(entry.getID());
+				data[i][1] = entry.getCwid();
+				data[i][2] = entry.getTimeIn().toString();
 				
 				String timeOut = "";
 				if (entry.getTimeOut() == null) {
-					data[Log.getResults().indexOf(entry)][3] = timeOut;
+					data[i][3] = timeOut;
 				} else {
-					data[Log.getResults().indexOf(entry)][3] = entry.getTimeOut().toString();
+					data[i][3] = entry.getTimeOut().toString();
 				}
 				
-				data[Log.getResults().indexOf(entry)][4] = entry.getMachinesUsed().toString();
-				data[Log.getResults().indexOf(entry)][5] = entry.getToolsCheckedOut().toString();
-				data[Log.getResults().indexOf(entry)][6] = entry.getToolsReturned().toString();
+				data[i][4] = entry.getMachinesUsed().toString();
+				data[i][5] = entry.getToolsCheckedOut().toString();
+				data[i][6] = entry.getToolsReturned().toString();
 			}
 		}
 		tabs.removeTabAt(1);
@@ -281,8 +283,8 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 		
 		int seconds = (int) (stats.getAvgTimeLoggedIn() / 1000) % 60;
-		int minutes = (int) (stats.getAvgTimeLoggedIn() / (1000*60)) % 60;
-		int hours = (int) (stats.getAvgTimeLoggedIn() / (1000*60*60)) % 24;
+		int minutes = (int) ((stats.getAvgTimeLoggedIn() / (1000*60)) % 60);
+		int hours = (int) ((stats.getAvgTimeLoggedIn() / (1000*60*60)) % 24);
 		
 		System.out.println(stats.getAvgTimeLoggedIn());
 		System.out.println(hours + " " + minutes + " " + seconds);
