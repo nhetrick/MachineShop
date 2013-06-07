@@ -9,6 +9,7 @@ import java.util.Map;
 public class Statistics {
 	ArrayList<LogEntry> results;
 	private int numEntries;
+	private int numEntriesModified;
 	private int numUsers;
 	private int numTools;
 	private int numMachines;
@@ -23,6 +24,7 @@ public class Statistics {
 	public Statistics() {
 		results = Log.getResults();
 		numEntries = 0;
+		numEntriesModified = 0;
 		numUsers = 0;
 		numTools = 0;
 		numMachines = 0;
@@ -39,8 +41,10 @@ public class Statistics {
 		for (LogEntry entry : results) {
 			numEntries++;
 			userCheck(entry.getCwid());
-			if (entry.getTimeOut() != null)
+			if (entry.getTimeOut() != null) {
 				determineLogInTime(entry.getTimeIn().getTime(), entry.getTimeOut().getTime());
+				numEntriesModified++;
+			}
 			machineCheck(entry.getMachinesUsed());
 			toolsCheck(entry.getToolsCheckedOut());
 			toolsCheck(entry.getToolsReturned());
@@ -57,10 +61,16 @@ public class Statistics {
 	
 	private void determineLogInTime(Long start, Long end) {
 		totalTimeLoggedIn += (end - start);
+		System.out.println(start);
+		System.out.println(end);
+		System.out.println(end - start);
 	}
 	
 	private void determineAvgTime() {
-		avgTimeLoggedIn = totalTimeLoggedIn / numEntries;
+		if (numEntriesModified != 0) {
+			avgTimeLoggedIn = totalTimeLoggedIn / numEntriesModified;
+		}
+		
 	}
 	
 	private void machineCheck(ArrayList<Machine> machines) {

@@ -163,7 +163,7 @@ public class LogEntry {
 	}
 	
 	public void finishEntry() {
-		this.timeOut = calendar.getTime();
+		this.timeOut = Calendar.getInstance().getTime();
 		
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));

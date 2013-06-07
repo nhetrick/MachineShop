@@ -45,6 +45,9 @@ public class GenerateReportPanel extends ContentPanel {
 	private JScrollPane scroller2;
 	private JTable table;
 	private JTabbedPane tabs;
+	private Statistics stats;
+	
+	private String space = "       ";
 	
 	JTextField startField;
 	JTextField endField;
@@ -244,42 +247,29 @@ public class GenerateReportPanel extends ContentPanel {
 		tabs.addTab("Results", scroller1);
 	}
 	
-	private void showStatistics() {
-		Statistics stats = new Statistics();
-		stats.run();
-		JLabel numEntries = new JLabel("Number of Log Entries: " + Integer.toString(stats.getNumEntries()));
-		JLabel numUsers = new JLabel("Number of Users: " + Integer.toString(stats.getNumUsers()));
-		JLabel numTools = new JLabel("Number of Tools Used: " + Integer.toString(stats.getNumTools()));
-		JLabel numMachines = new JLabel("Number of Machines Used: " + Integer.toString(stats.getNumMachines()));
-		
-		numEntries.setFont(resultsFont);
-		numUsers.setFont(resultsFont);
-		numTools.setFont(resultsFont);
-		numMachines.setFont(resultsFont);
-		
-		resultsPanel.add(numEntries);
-		resultsPanel.add(numUsers);
-		resultsPanel.add(numTools);
-		resultsPanel.add(numMachines);
-		
-		JLabel machineFreqTitle = new JLabel("Machine Frequencies");
-		machineFreqTitle.setFont(titleFont);
-		resultsPanel.add(machineFreqTitle);
-		for (Map.Entry entry : stats.getMachineFrequencies().entrySet()) {
-			JLabel machineFreq = new JLabel(entry.getKey() + ": " + entry.getValue());
-			machineFreq.setFont(resultsFont);
-			resultsPanel.add(machineFreq);
+	private void showMachineFrequencies() {
+		if (!stats.getMachineFrequencies().entrySet().isEmpty()) {
+			JLabel machineFreqTitle = new JLabel("Machine Frequencies");
+			machineFreqTitle.setFont(resultsFont);
+			resultsPanel.add(machineFreqTitle);
+			for (Map.Entry entry : stats.getMachineFrequencies().entrySet()) {
+				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
+			}
 		}
-		
-		JLabel toolFreqTitle = new JLabel("Tool Frequencies");
-		toolFreqTitle.setFont(titleFont);
-		resultsPanel.add(toolFreqTitle);
-		for (Map.Entry entry : stats.getToolsFrequencies().entrySet()) {
-			JLabel toolFreq = new JLabel(entry.getKey() + ": " + entry.getValue());
-			toolFreq.setFont(resultsFont);
-			resultsPanel.add(toolFreq);
+	}
+	
+	private void showToolFrequencies() {
+		if (!stats.getToolsFrequencies().entrySet().isEmpty()) {
+			JLabel toolFreqTitle = new JLabel("Tool Frequencies");
+			toolFreqTitle.setFont(resultsFont);
+			resultsPanel.add(toolFreqTitle);
+			for (Map.Entry entry : stats.getToolsFrequencies().entrySet()) {
+				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
+			}
 		}
-		
+	}
+	
+	private void showAvgLogInTime() {
 		int seconds = (int) (stats.getAvgTimeLoggedIn() / 1000) % 60;
 		int minutes = (int) (stats.getAvgTimeLoggedIn() / (1000*60)) % 60;
 		int hours = (int) (stats.getAvgTimeLoggedIn() / (1000*60*60)) % 24;
@@ -291,12 +281,85 @@ public class GenerateReportPanel extends ContentPanel {
 		JLabel avgTime = new JLabel("Avg Time Logged In: " + avg);
 		avgTime.setFont(resultsFont);
 		resultsPanel.add(avgTime);
+	}
 	
+	private void showStat(String stat, String data, Font font) {
+		JLabel label = new JLabel(stat + ": " + data);
+		label.setFont(font);
+		resultsPanel.add(label);
+	}
+	
+	private void showParameters() {
+		JLabel title = new JLabel("Parameters");
+		title.setFont(resultsFont);
+		resultsPanel.add(title);
+		
+		JLabel parameter1 = new JLabel(space + "Start Date: " + start.getTime());
+		JLabel parameter2 = new JLabel(space + "End Date: " + end.getTime());
+		parameter1.setFont(smallFont);
+		parameter2.setFont(smallFont);
+		resultsPanel.add(parameter1);
+		resultsPanel.add(parameter2);
+		
+		if (currentParameter == "User") {
+			showStat(space + "User", cwidField.getText(), smallFont);
+		} else if (currentParameter == "Tool") {
+			showStat(space + "Tool", toolNameField.getText(), smallFont);
+		} else if (currentParameter == "Machine") {
+			showStat(space + "Machine", machineNameField.getText(), smallFont);
+		}
+	}
+	
+	private void showDateStatistics() {		
+		showParameters();
+		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
+		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
+		showStat("Number of Different Tools Used", Integer.toString(stats.getNumTools()), resultsFont);
+		showStat("Number of Different Machines Used", Integer.toString(stats.getNumMachines()), resultsFont);
+		showMachineFrequencies();
+		showToolFrequencies();
+		showAvgLogInTime();
+	}
+	
+	private void showUserStatistics() {		
+		showParameters();
+		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
+		showStat("Number of Different Tools Used", Integer.toString(stats.getNumTools()), resultsFont);
+		showStat("Number of Different Machines Used", Integer.toString(stats.getNumMachines()), resultsFont);
+		showMachineFrequencies();
+		showToolFrequencies();
+		showAvgLogInTime();
+	}
+	
+	private void showToolStatistics() {		
+		showParameters();
+		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
+		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
+		showToolFrequencies();
+		showAvgLogInTime();
+	}
+	
+	private void showMachineStatistics() {		
+		showParameters();
+		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
+		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
+		showMachineFrequencies();
+		showAvgLogInTime();
 	}
 	
 	private void showReport() {
 		showResults();
-		showStatistics();
+		stats = new Statistics();
+		stats.run();
+		if (currentParameter.equals("User")) {
+			showUserStatistics();
+		} else if (currentParameter.equals("Date")) {
+			showDateStatistics();
+		} else if (currentParameter.equals("Tool")) {
+			showToolStatistics();
+		} else if (currentParameter.equals("Machine")) {
+			showMachineStatistics();
+		}
 	}
 	
 	private void setDates() {
