@@ -52,6 +52,9 @@ public class GenerateReportPanel extends ContentPanel {
 	JTextField toolNameField;
 	JTextField machineNameField;
 	
+	Calendar start;
+	Calendar end;
+	
 	JComboBox<String> startMonths;
 	JComboBox<String> endMonths;
 	JComboBox<String> startDays;
@@ -188,7 +191,6 @@ public class GenerateReportPanel extends ContentPanel {
 					currentParameter = "User";
 					dataEntryPanel.removeAll();
 					dataEntryPanel.add(new UserPanel(), c);
-					dataEntryPanel.add(new DatePanel(), c);
 				} else if (parameter == "Tool") {
 					currentParameter = "Tool";
 					dataEntryPanel.removeAll();
@@ -277,6 +279,18 @@ public class GenerateReportPanel extends ContentPanel {
 			toolFreq.setFont(resultsFont);
 			resultsPanel.add(toolFreq);
 		}
+		
+		int seconds = (int) (stats.getAvgTimeLoggedIn() / 1000) % 60;
+		int minutes = (int) (stats.getAvgTimeLoggedIn() / (1000*60)) % 60;
+		int hours = (int) (stats.getAvgTimeLoggedIn() / (1000*60*60)) % 24;
+		
+		System.out.println(stats.getAvgTimeLoggedIn());
+		System.out.println(hours + " " + minutes + " " + seconds);
+		
+		String avg = String.format("%d Hours, %d Minutes, %d Seconds", hours, minutes, seconds);
+		JLabel avgTime = new JLabel("Avg Time Logged In: " + avg);
+		avgTime.setFont(resultsFont);
+		resultsPanel.add(avgTime);
 	
 	}
 	
@@ -285,32 +299,42 @@ public class GenerateReportPanel extends ContentPanel {
 		showStatistics();
 	}
 	
+	private void setDates() {
+		start = Calendar.getInstance();
+		end = Calendar.getInstance();
+		start.set(sYear, sMonth, sDay, 0, 0, 0);
+		end.set(eYear, eMonth, eDay, 23, 59, 59);
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == generateButton) {
 				if (currentParameter.equals("User")) {
 					resultsPanel.removeAll();
+					setDates();
 					String cwid = cwidField.getText();
-					Log.extractLog(Driver.getAccessTracker().findUserByCWID(cwid), true);
+					Log.extractLog(start.getTime(), end.getTime(), true);
+					Log.extractResultsByUser(cwid);
 					showReport();
 				} else if (currentParameter.equals("Date")) {
 					resultsPanel.removeAll();		
-					Calendar start = Calendar.getInstance();
-					Calendar end = Calendar.getInstance();
-					start.set(sYear, sMonth, sDay, 0, 0, 0);
-					end.set(eYear, eMonth, eDay, 23, 59, 59);
+					setDates();
 					Log.extractLog(start.getTime(), end.getTime(), true);
 					showReport();
 				} else if (currentParameter.equals("Tool")) {
 					resultsPanel.removeAll();
+					setDates();
 					String tool = toolNameField.getText();
-					Log.extractLogByTool(tool, true);
+					Log.extractLog(start.getTime(), end.getTime(), true);
+					Log.extractResultsByTool(tool);
 					showReport();
 				} else if (currentParameter.equals("Machine")) {
 					resultsPanel.removeAll();
+					setDates();
 					String machine = machineNameField.getText();
-					Log.extractLogByMachine(machine, true);
+					Log.extractLog(start.getTime(), end.getTime(), true);
+					Log.extractResultsByMachine(machine);
 					showReport();
 				}
 			}
@@ -428,47 +452,104 @@ public class GenerateReportPanel extends ContentPanel {
 	private class UserPanel extends JPanel {
 		
 		UserPanel() {
-			setLayout(new GridLayout(1, 2));
+			setLayout(new GridBagLayout());
+			
+			JPanel cwid = new JPanel();
+			cwid.setLayout(new GridLayout(1, 2));
 			
 			JLabel cwidLabel = new JLabel("Enter User's CWID:");
-			cwidField = new JTextField();
+			cwidLabel.setHorizontalAlignment(JLabel.CENTER);
 			
+			cwidField = new JTextField();
 			cwidLabel.setFont(buttonFont);
 			cwidField.setFont(textFont);
 			
-			add(cwidLabel);
-			add(cwidField);
+			cwid.add(cwidLabel);
+			cwid.add(cwidField);
+	
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.ipady = 10;
+			add(cwid, c);
+			
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 2;
+			add(new DatePanel(), c);
 		}
 		
 	}
 
 	private class ToolPanel extends JPanel {
 		ToolPanel() {
-			setLayout(new GridLayout(1, 2));
+			setLayout(new GridBagLayout());
+			
+			JPanel tool = new JPanel();
+			tool.setLayout(new GridLayout(1, 2));
 			
 			JLabel toolNameLabel = new JLabel("Enter Name of Tool:");
-			toolNameField = new JTextField();
+			toolNameLabel.setHorizontalAlignment(JLabel.CENTER);
 			
+			toolNameField = new JTextField();
 			toolNameLabel.setFont(buttonFont);
 			toolNameField.setFont(textFont);
 			
-			add(toolNameLabel);
-			add(toolNameField);
+			tool.add(toolNameLabel);
+			tool.add(toolNameField);
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.ipady = 10;
+			add(tool, c);
+			
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 2;
+			add(new DatePanel(), c);
 		}
 	}
 	
 	private class MachinePanel extends JPanel {
 		MachinePanel() {
-			setLayout(new GridLayout(1, 2));
+			setLayout(new GridBagLayout());
+			
+			JPanel machine = new JPanel();
+			machine.setLayout(new GridLayout(1, 2));
 			
 			JLabel machineNameLabel = new JLabel("Enter Name of Machine:");
-			machineNameField = new JTextField();
+			machineNameLabel.setHorizontalAlignment(JLabel.CENTER);
 			
+			machineNameField = new JTextField();
 			machineNameLabel.setFont(buttonFont);
 			machineNameField.setFont(textFont);
 			
-			add(machineNameLabel);
-			add(machineNameField);
+			machine.add(machineNameLabel);
+			machine.add(machineNameField);
+			
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.ipady = 10;
+			add(machine, c);
+			
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.1;
+			c.weighty = 0.5;
+			c.gridx = 0;
+			c.gridy = 2;
+			add(new DatePanel(), c);
 		}
 	}
 	

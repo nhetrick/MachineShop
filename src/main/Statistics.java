@@ -2,6 +2,7 @@ package main;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,8 @@ public class Statistics {
 	private int numUsers;
 	private int numTools;
 	private int numMachines;
-	private int totalTimeLoggedIn;
-	private int avgTimeLoggedIn;
+	private long totalTimeLoggedIn;
+	private long avgTimeLoggedIn;
 	private ArrayList<String> users;
 	private int numLockedUsers;
 	private int numNotLoggedOut;
@@ -38,11 +39,13 @@ public class Statistics {
 		for (LogEntry entry : results) {
 			numEntries++;
 			userCheck(entry.getCwid());
-			determineLogInTime();
+			if (entry.getTimeOut() != null)
+				determineLogInTime(entry.getTimeIn().getTime(), entry.getTimeOut().getTime());
 			machineCheck(entry.getMachinesUsed());
 			toolsCheck(entry.getToolsCheckedOut());
 			toolsCheck(entry.getToolsReturned());
 		}
+		determineAvgTime();
 	}
 	
 	private void userCheck(String cwid) {
@@ -52,8 +55,12 @@ public class Statistics {
 		}
 	}
 	
-	private void determineLogInTime() {
-		//Count num users without log out time
+	private void determineLogInTime(Long start, Long end) {
+		totalTimeLoggedIn += (end - start);
+	}
+	
+	private void determineAvgTime() {
+		avgTimeLoggedIn = totalTimeLoggedIn / numEntries;
 	}
 	
 	private void machineCheck(ArrayList<Machine> machines) {
@@ -103,11 +110,11 @@ public class Statistics {
 		return numMachines;
 	}
 
-	public int getTotalTimeLoggedIn() {
+	public double getTotalTimeLoggedIn() {
 		return totalTimeLoggedIn;
 	}
 
-	public int getAvgTimeLoggedIn() {
+	public double getAvgTimeLoggedIn() {
 		return avgTimeLoggedIn;
 	}
 

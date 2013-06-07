@@ -62,16 +62,43 @@ public class Log {
 		retrieveEntryData(cursor);
 	}
 	
-	public static void extractResults(Date startDate, Date endDate) {
+	public static void extractResultsByTool(String name) {
+		ArrayList<LogEntry> newResults = new ArrayList<LogEntry>();
 		for (LogEntry entry : results) {
-			if (entry.getTimeIn().after(startDate)) {
-				if (!(entry.getTimeOut().before(endDate) || entry.getTimeOut() == null)) {
-					results.remove(results.indexOf(entry));
+			for (Tool t : entry.getToolsCheckedOut()) {
+				if (t.getName().contains(name)) {
+					newResults.add(entry);
 				}
-			} else {
-				results.remove(results.indexOf(entry));
+			}
+			for (Tool t : entry.getToolsReturned()) {
+				if (t.getName().contains(name)) {
+					newResults.add(entry);
+				}
 			}
 		}
+		results = newResults;
+	}
+	
+	public static void extractResultsByMachine(String name) {
+		ArrayList<LogEntry> newResults = new ArrayList<LogEntry>();
+		for (LogEntry entry : results) {
+			for (Machine m : entry.getMachinesUsed()) {
+				if (m.getName().contains(name)) {
+					newResults.add(entry);
+				}
+			}
+		}
+		results = newResults;
+	}
+	
+	public static void extractResultsByUser(String cwid) {
+		ArrayList<LogEntry> newResults = new ArrayList<LogEntry>();
+		for (LogEntry entry : results) {
+			if (entry.getCwid().contains(cwid)) {
+				newResults.add(entry);
+			}
+		}
+		results = newResults;
 	}
 	
 	public static void extractLog(User user, boolean clear) {
@@ -138,7 +165,6 @@ public class Log {
 			int id = (int) result.get("ID");
 			
 			//get CWID
-			//User u = Driver.getAccessTracker().findUserByCWID((String) result.get("userCWID"));
 			String cwid = (String) result.get("userCWID");
 			
 			//get timeIn
