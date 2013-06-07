@@ -19,8 +19,8 @@ public class SystemAdministrator extends Administrator {
 	private DB database;
 	private DBCollection users;
 	
-	public SystemAdministrator(String firstName, String lastName, String cwid) {
-		super(firstName, lastName, cwid);
+	public SystemAdministrator(String firstName, String lastName, String cwid, String email, String department) {
+		super(firstName, lastName, cwid, email, department);
 		isSystemAdmin = true;
 		tracker = Driver.getAccessTracker();
 		database = tracker.getDatabase();

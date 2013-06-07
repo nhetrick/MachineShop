@@ -18,14 +18,18 @@ public class User {
 	private LogEntry currentEntry;
 	private boolean locked;
 	protected boolean isAdmin = false;
+	private String email;
+	private String department;
 		
-	public User(String firstName, String lastName, String CWID) {
+	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
 		certifiedMachines = new ArrayList<Machine>();
 		toolsCheckedOut = new ArrayList<Tool>();
 		this.CWID = CWID;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.email = email;
+		this.department = department;
 		locked = false;
 	}
 	
@@ -114,6 +118,14 @@ public class User {
 	
 	public boolean isAdmin() {
 		return isAdmin;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getDepartment() {
+		return department;
 	}
 
 	@Override
