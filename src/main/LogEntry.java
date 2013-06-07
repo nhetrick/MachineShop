@@ -32,13 +32,13 @@ public class LogEntry {
 	
 	
 	
-	public LogEntry(int iD, String cwid, User user, ArrayList<Machine> machinesUsed,
+	public LogEntry(int iD, String cwid, ArrayList<Machine> machinesUsed,
 			ArrayList<Tool> toolsCheckedOut, Date timeOut, Date timeIn,
 			ArrayList<Tool> toolsReturned) {
 		super();
 		ID = iD;
 		this.cwid = cwid;
-		this.user = user;
+		
 		this.machinesUsed = machinesUsed;
 		this.toolsCheckedOut = toolsCheckedOut;
 		this.timeOut = timeOut;
