@@ -60,6 +60,11 @@ public class Statistics {
 	}
 	
 	private void determineAvgTime() {
+		if (numEntries == 0){
+			avgTimeLoggedIn = 0;
+			return;
+		}
+		
 		avgTimeLoggedIn = totalTimeLoggedIn / numEntries;
 	}
 	
