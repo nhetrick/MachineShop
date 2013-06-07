@@ -27,32 +27,14 @@ public class SystemAdministrator extends Administrator {
 		users = database.getCollection("Users");
 	}
 	
-	public void addAdministrator(User user) {
-		BasicDBObject newAdmin = new BasicDBObject();
-		newAdmin.append("$set", new BasicDBObject().append("isAdmin", true));
-		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
-		users.update(searchQuery, newAdmin);
-	}
-	
-	public void removeAdministrator(User user) {
-		BasicDBObject newAdmin = new BasicDBObject();
-		newAdmin.append("$set", new BasicDBObject().append("isAdmin", false));
-		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
-		users.update(searchQuery, newAdmin);
-	}
-	
-	public void addSystemAdministrator(User user) {
-		BasicDBObject newSystemAdmin = new BasicDBObject();
-		newSystemAdmin.append("$set", new BasicDBObject().append("isSystemAdmin", true));
-		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
-		users.update(searchQuery, newSystemAdmin);
-	}
-	
-	public void removeSystemAdministrator(User user) {
-		BasicDBObject newSystemAdmin = new BasicDBObject();
-		newSystemAdmin.append("$set", new BasicDBObject().append("isSystemAdmin", false));
-		BasicDBObject searchQuery = new BasicDBObject().append("CWID", user.getCWID());
-		users.update(searchQuery, newSystemAdmin);
+	public void updatePermissions(User user, boolean isAdmin, boolean isSystemAdmin) {
+		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
+		if (!(cursor == null)) {
+			BasicDBObject obj = (BasicDBObject) cursor.next();
+			obj.append("isAdmin", isAdmin);
+			obj.append("isSystemAdmin", isSystemAdmin);
+			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
+		}
 	}
 	
 	public void updateCertifications(User user, ArrayList<Machine> machines) {
@@ -70,12 +52,11 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
-	public void removeUsers(ArrayList<User> users) {
-		DBCollection userColl = database.getCollection("Users");
-		for (User u : users) {
-			DBCursor cursor = userColl.find(new BasicDBObject("CWID", u.getCWID()));
+	public void removeUsers(ArrayList<User> userList) {
+		for (User u : userList) {
+			DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 			if (!(cursor == null)) {
-				userColl.remove(cursor.next());
+				users.remove(cursor.next());
 				tracker.removeUser(u);
 			}
 		}
@@ -114,7 +95,6 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public boolean addUser(User u) {
-		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 		if ( !cursor.hasNext() ) {
 			BasicDBObject document = new BasicDBObject();
@@ -150,7 +130,6 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void removeUser(String cwid) {
-		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
 		if (!(cursor == null)) {
 			DBObject obj = cursor.next();
@@ -170,7 +149,6 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void lockUser(User user) {
-		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (!(cursor == null)) {
 			DBObject obj = cursor.next();
@@ -181,7 +159,6 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	public void unlockUser(User user) {
-		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (!(cursor == null)) {
 			BasicDBObject obj = (BasicDBObject) cursor.next();
