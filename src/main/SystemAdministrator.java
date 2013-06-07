@@ -19,8 +19,8 @@ public class SystemAdministrator extends Administrator {
 	private DB database;
 	private DBCollection users;
 	
-	public SystemAdministrator(String firstName, String lastName, String cwid) {
-		super(firstName, lastName, cwid);
+	public SystemAdministrator(String firstName, String lastName, String cwid, String email, String department) {
+		super(firstName, lastName, cwid, email, department);
 		isSystemAdmin = true;
 		tracker = Driver.getAccessTracker();
 		database = tracker.getDatabase();
@@ -134,7 +134,7 @@ public class SystemAdministrator extends Administrator {
 		if (!(cursor == null)) {
 			DBObject obj = cursor.next();
 			users.remove(obj);
-			tracker.removeUser(new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID")));
+			tracker.removeUser(new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID"), (String) obj.get("email"), (String) obj.get("department")));
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class SystemAdministrator extends Administrator {
 		if ( results.size() == 0 ) {
 			return null;
 		}
-		return new User(results.get(1), results.get(2), cwid);
+		return new User(results.get(1), results.get(2), cwid, results.get(3), results.get(4));
 	}
 	
 	public void lockUser(User user) {

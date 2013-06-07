@@ -19,7 +19,7 @@ public class UserTests {
 	
 	@Test
 	public void checkoutAndReturnToolTest() {
-		User testUser = new User("", "", "12345678");
+		User testUser = new User("", "", "12345678", "missongno@po.ke", "PKMN");
 		Tool testTool = new Tool("HITCOO", "15");
 		ArrayList<Tool> tools = new ArrayList<Tool>();
 		tools.add(testTool);

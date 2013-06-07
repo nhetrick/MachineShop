@@ -29,7 +29,7 @@ public class AccessTracker {
 	private final String dbName = "CSM_Machine_Shop";
 	private final String username = "csm";
 	private final String password = "machineshop";
-	private User currentUser = new User("", "", "");
+	private User currentUser = new User("", "", "", "", "");
 
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
@@ -62,7 +62,7 @@ public class AccessTracker {
 	// If the CWID doesn't exist, create new user.
 	// Returns the name of the user with this CWID
 	public User loadUser(String CWID) {
-		if (currentUsers.contains(new User("", "", CWID))) {
+		if (currentUsers.contains(new User("", "", CWID, "", ""))) {
 			currentUser = getUser(CWID);
 		} else {
 			currentUser = findUserByCWID(CWID);
@@ -129,13 +129,15 @@ public class AccessTracker {
 
 	// Creates a new user. Should be called by loadUser()
 	// Persists new user to database
-	public User createUser(String firstName, String lastName, String CWID) {
-		User newUser = new User(firstName, lastName, CWID);
+	public User createUser(String firstName, String lastName, String CWID, String email, String department) {
+		User newUser = new User(firstName, lastName, CWID, email, department);
 
 		BasicDBObject document = new BasicDBObject();
 		document.put("firstName", firstName);
 		document.put("lastName", lastName);
 		document.put("CWID", CWID);
+		document.put("email", email);
+		document.put("department", department);
 
 		DBCollection users = database.getCollection("Users");
 
@@ -153,7 +155,7 @@ public class AccessTracker {
 		oracleConnection.close();
 
 		if ( results.size() != 0 ) {
-			return createUser(results.get(1), results.get(2), CWID);
+			return createUser(results.get(1), results.get(2), CWID, results.get(3), results.get(4));
 		} else {
 			return null;
 		}
@@ -184,7 +186,7 @@ public class AccessTracker {
 				String message = "You have been locked out of the system.\n" +
 								 "You must talk to a shop supervisor to get unlocked";
 				JOptionPane.showMessageDialog(Driver.getMainGui(), message);
-				currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]");
+				currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
 				Log.startEntry(currentUser);
 				Log.finishEntry(currentUser.getCurrentEntry());
 				return null;
@@ -214,11 +216,6 @@ public class AccessTracker {
 		}
 	}
 
-	// Check that the CWID exists in the blastercard database
-	public boolean checkLegitimacy(int CWID) {
-		return true;
-	}
-
 	public User findUserByCWID(String cwid){
 		DBCollection users = database.getCollection("Users");
 		DBObject result = users.findOne(new BasicDBObject("CWID", cwid));
@@ -227,6 +224,8 @@ public class AccessTracker {
 		boolean isLocked;
 		String firstName = "";
 		String lastName = "";
+		String email = "";
+		String department = "";
 		User user;
 
 		if ( result == null ) {
@@ -250,18 +249,25 @@ public class AccessTracker {
 		} else {
 			isSystemAdministrator = (boolean) result.get("isSystemAdmin");
 		}
+		
+		if (result.get("department") == null) {
+			department = "undeclared";
+		} else {
+			department = (String) result.get("department");
+		}
 
 		firstName = (String) result.get("firstName");
 		lastName = (String) result.get("lastName");
-
+		email = (String) result.get("email");
+		
 		if ( isAdministrator ) {
 			if ( isSystemAdministrator ) {
-				user = new SystemAdministrator(firstName, lastName, cwid);
+				user = new SystemAdministrator(firstName, lastName, cwid, email, department);
 			} else {
-				user = new Administrator(firstName, lastName, cwid);
+				user = new Administrator(firstName, lastName, cwid, email, department);
 			}
 		}  else {
-			user = new User(firstName, lastName, cwid);
+			user = new User(firstName, lastName, cwid, email, department);
 		}
 
 		user.setLockedStatus(isLocked);
