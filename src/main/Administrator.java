@@ -24,9 +24,5 @@ public class Administrator extends User {
 	public void viewAllUsers() {
 		
 	}
-	
-	public boolean isSystemAdmin() {
-		return isSystemAdmin;
-	}
 
 }

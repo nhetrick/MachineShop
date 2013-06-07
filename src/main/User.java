@@ -20,6 +20,7 @@ public class User {
 	protected boolean isAdmin = false;
 	private String email;
 	private String department;
+	protected boolean isSystemAdmin = false;
 		
 	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
@@ -118,6 +119,18 @@ public class User {
 	
 	public boolean isAdmin() {
 		return isAdmin;
+	}
+	
+	public boolean isSystemAdmin() {
+		return isSystemAdmin;
+	}
+	
+	public void setAdmin(boolean b) {
+		isAdmin = b;
+	}
+	
+	public void setSystemAdmin(boolean b) {
+		isSystemAdmin = b;
 	}
 
 	public String getEmail() {
