@@ -39,13 +39,6 @@ public class AddMachinesPanel extends ContentPanel {
 		machineNameField.setFont(textFont);
 		machineIDField.setFont(textFont);
 		
-		machineNameField.setPreferredSize(new Dimension(machineNameField.getWidth(), machineNameField.getHeight()));
-		machineNameField.setMaximumSize(machineNameField.getPreferredSize());
-		
-		machineIDField.setPreferredSize(new Dimension(machineIDField.getWidth(), machineIDField.getHeight()));
-		machineIDField.setMaximumSize(machineIDField.getPreferredSize());
-		machineIDField.addActionListener(buttonListener);
-		
 		JPanel machineNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel machineIDPanel = new JPanel(new GridLayout(1, 2));
 		
