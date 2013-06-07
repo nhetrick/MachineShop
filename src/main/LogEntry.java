@@ -30,8 +30,6 @@ public class LogEntry {
 		database = Driver.getAccessTracker().getDatabase();
 	}
 	
-	
-	
 	public LogEntry(int iD, String cwid, ArrayList<Machine> machinesUsed,
 			ArrayList<Tool> toolsCheckedOut, Date timeOut, Date timeIn,
 			ArrayList<Tool> toolsReturned) {
@@ -163,7 +161,7 @@ public class LogEntry {
 	}
 	
 	public void finishEntry() {
-		this.timeOut = calendar.getTime();
+		this.timeOut = Calendar.getInstance().getTime();
 		
 		DBCollection logEntries = database.getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
