@@ -35,8 +35,6 @@ public class AddUsersPanel extends ContentPanel {
 	private User addedUser;
 	private OracleConnection connection;
 	private JCheckBox selectAllBox;
-	private JTextField emailField;
-	private JTextField departmentField;
 
 	public AddUsersPanel() {
 
@@ -54,28 +52,20 @@ public class AddUsersPanel extends ContentPanel {
 		JLabel firstNameLabel = new JLabel("First Name:");
 		JLabel lastNameLabel = new JLabel("Last Name:");
 		JLabel userIDLabel = new JLabel("User CWID:");
-		JLabel emailLabel = new JLabel("User Email:");
-		JLabel departmentLabel = new JLabel("Department Code:");
 
 		firstNameLabel.setFont(buttonFont);
 		lastNameLabel.setFont(buttonFont);
 		userIDLabel.setFont(buttonFont);
-		emailLabel.setFont(buttonFont);
-		departmentLabel.setFont(buttonFont);
 
 		firstNameField = new JTextField();
 		lastNameField = new JTextField();
 		userIDField = new JTextField();
-		emailField = new JTextField();
-		departmentField = new JTextField();
 
 		firstNameField.setFont(textFont);
 		lastNameField.setFont(textFont);
 		userIDField.setFont(textFont);
-		emailField.setFont(textFont);
-		departmentField.setFont(textFont);
 		
-		departmentField.addActionListener(buttonListener);
+		userIDField.addActionListener(buttonListener);
 		
 		selectAllBox = new JCheckBox("Select All");
 		selectAllBox.setFont(textFont);
@@ -112,12 +102,6 @@ public class AddUsersPanel extends ContentPanel {
 		userIDPanel.add(userIDLabel);
 		userIDPanel.add(userIDField);
 		
-		emailPanel.add(emailLabel);
-		emailPanel.add(emailField);
-		
-		departmentPanel.add(departmentLabel);
-		departmentPanel.add(departmentField);
-		
 		JPanel dataPanel = new JPanel(new GridBagLayout());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -137,18 +121,6 @@ public class AddUsersPanel extends ContentPanel {
 		c.gridx = 0;
 		c.gridy = 2;
 		dataPanel.add(userIDPanel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.2;
-		c.gridx = 0;
-		c.gridy = 3;
-		dataPanel.add(emailPanel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.2;
-		c.gridx = 0;
-		c.gridy = 4;
-		dataPanel.add(departmentPanel, c);
 		
 		saveButton = new JButton("Save");
 
@@ -199,8 +171,6 @@ public class AddUsersPanel extends ContentPanel {
 		String firstName = firstNameField.getText();
 		String lastName = lastNameField.getText();
 		String cwid = userIDField.getText();
-		String email = emailField.getText();
-		String department = departmentField.getText();
 
 		SystemAdministrator admin = ((SystemAdministrator) Driver.getAccessTracker().getCurrentUser());
 
@@ -217,7 +187,7 @@ public class AddUsersPanel extends ContentPanel {
 					" to the database?\n\nThis action is highly discouraged.";
 
 			if ( JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION ) {
-				addedUser = new User(firstName, lastName, cwid, email, department);
+				addedUser = new User(firstName, lastName, cwid, "", "");
 				if (admin.addUser(addedUser) ) {
 					admin.updateCertifications(addedUser, machines);
 					return true;
@@ -255,8 +225,6 @@ public class AddUsersPanel extends ContentPanel {
 		firstNameField.setText("");
 		lastNameField.setText("");
 		userIDField.setText("");
-		emailField.setText("");
-		departmentField.setText("");
 		selectAllBox.setSelected(false);
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
@@ -296,7 +264,7 @@ public class AddUsersPanel extends ContentPanel {
 					}
 				}
 			}
-			else if ( e.getSource() == saveButton || e.getSource() == departmentField ) {
+			else if ( e.getSource() == saveButton || e.getSource() == userIDField ) {
 				boolean noBoxesChecked = true;
 				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
@@ -308,8 +276,7 @@ public class AddUsersPanel extends ContentPanel {
 				ArrayList<String> added = new ArrayList<String>();
 				ArrayList<Machine> machines = new ArrayList<Machine>();
 
-				if (firstNameField.getText().equals("") || userIDField.getText().equals("") || lastNameField.getText().equals("")
-					 || emailField.getText().equals("") || departmentField.getText().equals("")) {
+				if (firstNameField.getText().equals("") || userIDField.getText().equals("") || lastNameField.getText().equals("")) {
 					showMessage("Please fill in all five fields.");
 				} else if ( userIDField.getText().length() != 8 ) {
 					showMessage("Please enter an 8-digit CWID.");

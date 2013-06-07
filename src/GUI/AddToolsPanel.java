@@ -39,13 +39,6 @@ public class AddToolsPanel extends ContentPanel {
 		toolNameField.setFont(textFont);
 		toolIDField.setFont(textFont);
 		
-		toolNameField.setPreferredSize(new Dimension(toolNameField.getWidth(), toolNameField.getHeight()));
-		toolNameField.setMaximumSize(toolNameField.getPreferredSize());
-		
-		toolIDField.setPreferredSize(new Dimension(toolIDField.getWidth(), toolIDField.getHeight()));
-		toolIDField.setMaximumSize(toolIDField.getPreferredSize());
-		toolIDField.addActionListener(buttonListener);
-		
 		JPanel toolNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel toolIDPanel = new JPanel(new GridLayout(1, 2));
 		

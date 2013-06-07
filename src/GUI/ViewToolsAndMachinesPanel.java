@@ -32,6 +32,12 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 	private JPanel mainMachinesPanel;
 	private JPanel mainToolsPanel;
 	
+	private JPanel blackMachinesPanel;
+	private JPanel grayMachinesPanel;
+	
+	private JPanel blackToolsPanel;
+	private JPanel grayToolsPanel;
+	
 	private JScrollPane machinesScroller;
 	private JScrollPane toolsScroller;
 	
@@ -49,7 +55,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		checkedOutLabel.setFont(textFont);
 		notCheckedOutLabel.setFont(textFont);
 		
-		notInUseLabel.setEnabled(false);
+		inUseLabel.setEnabled(false);
 		checkedOutLabel.setEnabled(false);
 		
 		inUseLabel.setHorizontalAlignment(JCheckBox.CENTER);
@@ -58,7 +64,12 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		notCheckedOutLabel.setHorizontalAlignment(JCheckBox.CENTER);
 		
 		mainMachinesPanel = new JPanel();
+		blackMachinesPanel = new JPanel(new GridLayout(0,  1));
+		grayMachinesPanel = new JPanel(new GridLayout(0,  1));
+		
 		mainToolsPanel = new JPanel();
+		blackToolsPanel = new JPanel(new GridLayout(0,  1));
+		grayToolsPanel = new JPanel(new GridLayout(0,  1));
 		
 		mainMachinesPanel.setLayout(new GridLayout(0, 2));
 		mainToolsPanel.setLayout(new GridLayout(0, 2));
@@ -69,11 +80,16 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "]" );
 			l.setFont(resultsFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
-			if (!m.isInUse()) {
+			if (m.isInUse()) {
 				l.setEnabled(false);
+				grayMachinesPanel.add(l);
+			} else {
+				blackMachinesPanel.add(l);
 			}
-			mainMachinesPanel.add(l);
 		}
+
+		mainMachinesPanel.add(blackMachinesPanel);
+		mainMachinesPanel.add(grayMachinesPanel);
 		
 		JPanel toolsPanel = new JPanel(new GridBagLayout());
 		
@@ -83,17 +99,22 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 			l.setFont(resultsFont);
 			if (t.isCheckedOut()) {
 				l.setEnabled(false);
+				grayToolsPanel.add(l);
+			} else {
+				blackToolsPanel.add(l);
 			}
-			mainToolsPanel.add(l);
-		}		
+		}	
+		
+		mainToolsPanel.add(blackToolsPanel);
+		mainToolsPanel.add(grayToolsPanel);
 		
 		JPanel machinesLabelPanel = new JPanel(new GridLayout(1, 2));
 		JPanel toolsLabelPanel = new JPanel( new GridLayout(1, 2));
 		
-		machinesLabelPanel.add(inUseLabel);
 		machinesLabelPanel.add(notInUseLabel);
-		toolsLabelPanel.add(checkedOutLabel);
+		machinesLabelPanel.add(inUseLabel);
 		toolsLabelPanel.add(notCheckedOutLabel);
+		toolsLabelPanel.add(checkedOutLabel);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;

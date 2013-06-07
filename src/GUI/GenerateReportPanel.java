@@ -316,7 +316,7 @@ public class GenerateReportPanel extends ContentPanel {
 		showParameters();
 		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
 		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
-		showStat("Number of Locked Out Users", Integer.toString(stats.getNumLockedUsers()), resultsFont);
+		showStat("Number of Locked Out Tries", Integer.toString(stats.getNumLockedUsers()), resultsFont);
 		showStat("Number of Different Tools Used", Integer.toString(stats.getNumTools()), resultsFont);
 		showStat("Number of Different Machines Used", Integer.toString(stats.getNumMachines()), resultsFont);
 		showMachineFrequencies();

@@ -75,7 +75,6 @@ public class Statistics {
 		if (numEntriesModified != 0) {
 			avgTimeLoggedIn = totalTimeLoggedIn / numEntriesModified;
 		}
-		
 	}
 	
 	private void machineCheck(ArrayList<Machine> machines) {
