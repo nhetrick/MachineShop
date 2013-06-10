@@ -107,6 +107,7 @@ public class UserGUI extends JPanel {
 		returnTools.addActionListener(buttonListener);
 		
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
+		MainGUI.pushToStack(this);
 	}
 	
 	public static void returnHome(){

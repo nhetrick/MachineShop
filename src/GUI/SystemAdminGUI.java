@@ -42,7 +42,6 @@ public class SystemAdminGUI extends JPanel {
 		dataEntry.setFont(buttonFont);
 		basicUser.setFont(buttonFont);
 		
-		
 		buttonPanel.add(dataEntry);
 		buttonPanel.add(basicUser);
 		buttonPanel.add(logOut);
@@ -52,6 +51,7 @@ public class SystemAdminGUI extends JPanel {
 		basicUser.addActionListener(new BasicUserButtonListener());
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 		
+		MainGUI.pushToStack(this);
 	}
 	
 	private class DataEntryButtonListener implements ActionListener {

@@ -71,7 +71,7 @@ public class GenerateReportPanel extends ContentPanel {
 	
 	public GenerateReportPanel() {
 		
-		super("Generate a Report");
+		super("Generate Reports & Statistics");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
 		
@@ -108,7 +108,6 @@ public class GenerateReportPanel extends ContentPanel {
 		dataEntryPanel.add(new DatePanel(), c);
 		
 		resultsPanel = new JPanel();
-		resultsPanel.setBorder(new TitledBorder("Results"));
 		resultsPanel.setLayout(new GridLayout(0, 1));
 		
 		scroller2 = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -117,7 +116,7 @@ public class GenerateReportPanel extends ContentPanel {
 		tabs = new JTabbedPane(); 
 		
 		tabs.addTab("Statistics", scroller2);
-		tabs.addTab("Results", scroller1);
+		tabs.addTab("Log", scroller1);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -246,7 +245,7 @@ public class GenerateReportPanel extends ContentPanel {
 		tabs.removeTabAt(1);
 		table = new JTable(data, columns);
 		scroller1 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		tabs.addTab("Results", scroller1);
+		tabs.addTab("Log", scroller1);
 	}
 	
 	private void showMachineFrequencies() {

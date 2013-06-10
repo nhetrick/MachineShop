@@ -50,10 +50,10 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		checkedOutLabel = new JLabel("Checked Out");
 		notCheckedOutLabel = new JLabel("Not Checked Out");
 		
-		inUseLabel.setFont(textFont);
-		notInUseLabel.setFont(textFont);
-		checkedOutLabel.setFont(textFont);
-		notCheckedOutLabel.setFont(textFont);
+		inUseLabel.setFont(titleInPanelFont);
+		notInUseLabel.setFont(titleInPanelFont);
+		checkedOutLabel.setFont(titleInPanelFont);
+		notCheckedOutLabel.setFont(titleInPanelFont);
 		
 		inUseLabel.setEnabled(false);
 		checkedOutLabel.setEnabled(false);

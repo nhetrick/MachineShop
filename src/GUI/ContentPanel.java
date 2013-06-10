@@ -20,10 +20,12 @@ public class ContentPanel extends JPanel {
 	protected Font resultsFont = new Font("SansSerif", Font.BOLD, 24);
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 20);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 16);
+	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 30);
 	
 	protected GridBagConstraints c;
 	
 	public ContentPanel(String title) {
+		
 		this.title = new JLabel(title);
 		this.title.setFont(titleFont);
 		setLayout(new GridBagLayout());

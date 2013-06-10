@@ -1,15 +1,16 @@
 package GUI;
 
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.util.Calendar;
+import java.util.Stack;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,7 +20,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import main.*;
 
-public class MainGUI extends JFrame{
+public class MainGUI extends JFrame {
+	
 	private KeyListener reader; 
 	private AccessTracker tracker;
 	private User currentUser;
@@ -30,22 +32,29 @@ public class MainGUI extends JFrame{
 	private Font headerFont;
 	private GridBagConstraints c = new GridBagConstraints();
 	private static int MAX_ERROR_COUNT = 3;
-
-	public enum SearchBy {
-		CWID("CWID"), NAME("Name"), UPC("upc");
-		private final String name;
-		private SearchBy(String name){
-			this.name = name;
-		}
-		public String toString(){
-			return name;
-		}
-	};
+	private JButton backButton;
+	private ButtonListener buttonListener;
+	
+	private final String trianglePath = "triangle.jpeg";
+	
+	private ImageIcon triangleLogo;
+	private JLabel triangleLabel;
+	
+	private static Stack<JPanel> panelStack;
 	
 	public MainGUI() {
+		
 		reader = new InputReader(this);
 		centerPanel = new SwipeCardPanel();
+		buttonListener = new ButtonListener();
 		setup();
+		
+		panelStack = new Stack<JPanel>();
+		
+		triangleLogo = new ImageIcon(trianglePath);
+		triangleLabel = new JLabel(triangleLogo);
+		
+		System.out.println(triangleLabel.toString());
 		
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -57,6 +66,10 @@ public class MainGUI extends JFrame{
 		} catch (Exception e) {
 			// use default
 		}
+		
+		backButton = new JButton("Back");
+		backButton.addActionListener(buttonListener);
+		
 	}
 
 	public void setup() {
@@ -72,7 +85,7 @@ public class MainGUI extends JFrame{
 		
 		setLayout(new GridBagLayout());
 		
-		//disables Alt+F4
+		//disable Alt+F4
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		add(centerPanel);
@@ -84,6 +97,16 @@ public class MainGUI extends JFrame{
 		tracker = Driver.getAccessTracker();
 	}
 
+	public enum SearchBy {
+		CWID("CWID"), NAME("Name"), UPC("upc");
+		private final String name;
+		private SearchBy(String name){
+			this.name = name;
+		}
+		public String toString(){
+			return name;
+		}
+	};
 	
 	public void restart() {
 		Driver.isLogInScreen = true;
@@ -147,7 +170,7 @@ public class MainGUI extends JFrame{
 		currentUser = tracker.processLogIn(CWID);
 		if ( currentUser != null ) {
 			remove(centerPanel);
-			ProcessHomeScreen(currentUser);
+			processHomeScreen(currentUser);
 		}
 	}
 	
@@ -158,9 +181,8 @@ public class MainGUI extends JFrame{
 	public User getCurrentUser() {
 		return currentUser;
 	}
-
 	
-	public void ProcessHomeScreen(User currentUser) {
+	public void processHomeScreen(User currentUser) {
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		
 		headerBar = new JPanel(new GridLayout(1, 2));
@@ -175,7 +197,21 @@ public class MainGUI extends JFrame{
 		
 		nameLabel.setFont(headerFont);
 		
-		headerBar.add(nameLabel);
+		JPanel leftPanel = new JPanel(new GridBagLayout());
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.2;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.NONE;
+		leftPanel.add(backButton, c);
+		
+		c.gridx = 2;
+		c.weightx = 0.8;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		leftPanel.add(nameLabel, c);
+		
+		headerBar.add(leftPanel);
 		headerBar.add(time);
 
 		c.gridx = 0;
@@ -202,7 +238,34 @@ public class MainGUI extends JFrame{
 		c.weighty = 0.9;
 		c.fill = GridBagConstraints.BOTH;
 		add(homeCenterPanel, c);
+		panelStack.push(homeCenterPanel);
 		
 		setVisible(true);
+		
 	}
+	
+	public void goBack() {
+		System.out.println(panelStack.toString());
+		if ( !panelStack.isEmpty() )
+			panelStack.pop();
+		if ( !panelStack.isEmpty() )
+			homeCenterPanel = panelStack.pop();
+	}
+	
+	public static void pushToStack(JPanel panel) {
+		panelStack.push(panel);
+	}
+	
+	private class ButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == backButton ) {
+				goBack();
+				repaint();
+			}
+		}
+		
+	}
+	
 }
