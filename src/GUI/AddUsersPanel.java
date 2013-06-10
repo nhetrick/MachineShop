@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.omg.CORBA.UserException;
 
 import main.Machine;
 import main.OracleConnection;
@@ -124,6 +123,12 @@ public class AddUsersPanel extends ContentPanel {
 
 		userIDPanel.add(userIDLabel);
 		userIDPanel.add(userIDField);
+		
+	    emailPanel.add(emailLabel);
+	    emailPanel.add(emailField);
+
+	    departmentPanel.add(departLabel);
+	    departmentPanel.add(departField);
 
 		JPanel dataPanel = new JPanel(new GridBagLayout());
 
