@@ -23,7 +23,7 @@ public class AddToolsPanel extends ContentPanel {
 	private JTextField toolIDField;
 	
 	public AddToolsPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Add a New Tool");
 		buttonListener = new ButtonListener();
 		
@@ -82,10 +82,12 @@ public class AddToolsPanel extends ContentPanel {
 		
 	}
 	
+	// Saves the tool to the database.
 	private void saveTool() {
 		String name = toolNameField.getText();
 		String upc = toolIDField.getText();
 		
+		// Adding tools needs both name and UPC of the tool being added.
 		if (name.equals("") || upc.equals("")) {
 			JOptionPane.showMessageDialog(this, "Please fill in both fields.");
 		} else {
@@ -94,6 +96,7 @@ public class AddToolsPanel extends ContentPanel {
 		}
 	}
 	
+	// Clears both text fields to empty.
 	private void clearFields() {
 		toolNameField.setText("");
 		toolIDField.setText("");

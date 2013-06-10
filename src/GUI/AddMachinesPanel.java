@@ -23,7 +23,7 @@ public class AddMachinesPanel extends ContentPanel {
 	private JTextField machineIDField;
 	
 	public AddMachinesPanel() {
-		
+		// All the fonts are in ContentPanel
 		super("Add a New Machine");
 		buttonListener = new ButtonListener();
 		
@@ -82,10 +82,12 @@ public class AddMachinesPanel extends ContentPanel {
 		
 	}
 	
+	// Saves the machine to database.
 	private void saveMachine() {
 		String name = machineNameField.getText();
 		String id = machineIDField.getText();
 		
+		// Adding machines needs both name and ID of the machine being added.
 		if (name.equals("") || id.equals("")) {
 			JOptionPane.showMessageDialog(this, "Please fill in both fields.");
 		} else {
@@ -94,6 +96,7 @@ public class AddMachinesPanel extends ContentPanel {
 		}
 	}
 	
+	// Clears the text fields to empty
 	private void clearFields() {
 		machineNameField.setText("");
 		machineIDField.setText("");

@@ -101,6 +101,8 @@ public class SystemAdministrator extends Administrator {
 			document.put("firstName", u.getFirstName());
 			document.put("lastName", u.getLastName());
 			document.put("CWID", u.getCWID());
+			document.put("email", u.getEmail());
+			document.put("department", u.getDepartment());
 			users.insert(document);
 			return true;
 		} else {
