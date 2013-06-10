@@ -35,6 +35,7 @@ public class UserGUI extends JPanel {
 	private JButton checkOutTools = new JButton();
 	private JButton selectMachine = new JButton();
 	private JButton returnTools = new JButton();
+	private JButton done = new JButton();
 	
 	private ButtonListener buttonListener;
 	
@@ -55,7 +56,7 @@ public class UserGUI extends JPanel {
 		
 		centerPanel = new JPanel(new BorderLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
-		buttonPanel = new JPanel(new GridLayout(4, 1));
+		buttonPanel = new JPanel(new GridLayout(5, 1));
 		userCheckoutToolPanel = new UserCheckoutToolPanel();
 		machinePermissions = new JPanel();
 		checkedOutTools = new JPanel();
@@ -80,24 +81,22 @@ public class UserGUI extends JPanel {
 		centerPanel.add(contentPanel, BorderLayout.CENTER);
 		centerPanel.add(buttonPanel, BorderLayout.EAST);
 		
-		logOut = new JButton();
-		checkOutTools = new JButton();
-		selectMachine = new JButton();
-		returnTools = new JButton();
-		
 		logOut.setText("Log Out");
 		selectMachine.setText("Select Machines");
 		checkOutTools.setText("Check Out Tools");
 		returnTools.setText("Return Tools");
+		done.setText("Done");
 		
 		logOut.setFont(buttonFont);
 		checkOutTools.setFont(buttonFont);
 		selectMachine.setFont(buttonFont);
 		returnTools.setFont(buttonFont);
+		done.setFont(buttonFont);
 		
 		buttonPanel.add(selectMachine);
 		buttonPanel.add(checkOutTools);
 		buttonPanel.add(returnTools);
+		buttonPanel.add(done);
 		buttonPanel.add(logOut);
 		
 		add(centerPanel, BorderLayout.CENTER);
@@ -107,7 +106,9 @@ public class UserGUI extends JPanel {
 		returnTools.addActionListener(buttonListener);
 		
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
-		MainGUI.pushToStack(this);
+
+		done.addActionListener(new ListenerHelpers.DoneListener());
+
 	}
 	
 	public static void returnHome(){

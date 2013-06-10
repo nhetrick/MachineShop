@@ -23,6 +23,7 @@ public class LogEntry {
 	private ArrayList<Tool> toolsReturned;
 	private Calendar calendar;
 	private DB database;
+	private boolean adminLogOut;
 	
 	public LogEntry() {
 		calendar = Calendar.getInstance();
@@ -171,6 +172,24 @@ public class LogEntry {
 		
 		logEntries.update(new BasicDBObject("ID", ID), result);
 	}
+	
+	public void adminFinishEntry() {
+		adminLogOut = true;
+		
+		this.timeOut = Calendar.getInstance().getTime();
+		
+		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCursor cursor = logEntries.find(new BasicDBObject("ID", ID));
+		DBObject result = cursor.next();
+		
+		result.put("timeOut", timeOut);
+		result.put("adminLogOut", true);
+		
+		logEntries.update(new BasicDBObject("ID", ID), result);		
+		
+		Driver.getAccessTracker().removeUser(user);
+	}
+	
 	
 	public Date getTimeIn() {
 		return timeIn;

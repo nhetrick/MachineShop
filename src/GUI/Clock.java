@@ -36,8 +36,6 @@ public class Clock extends JLabel implements Runnable {
 		Calendar calendar = Calendar.getInstance();
 		String time = calendar.getTime().toLocaleString();
 		setText(time);
-		repaint();
-		
+		repaint();	
 	}
-
 }

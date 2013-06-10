@@ -37,8 +37,11 @@ public class AddUsersPanel extends ContentPanel {
 	private JCheckBox selectAllBox;
 
 	public AddUsersPanel() {
-
+		// All the fonts are in ContentPanel.
 		super("Add a New User");
+		// Tries to connect to the Oracle database that contains students information.
+		// The Oracle database is a dummy one for now, and will be needed to change
+		// the actual Mines database.
 		try {
 			connection = new OracleConnection();
 			connection.getConnection();
@@ -73,7 +76,8 @@ public class AddUsersPanel extends ContentPanel {
 		selectAllBox.addActionListener(buttonListener);
 
 		permissionsPanel = new JPanel(new GridLayout(0, 2));
-
+		
+		// Displays all the machines.
 		for ( Machine m : Driver.getAccessTracker().getMachines() ) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
@@ -90,8 +94,11 @@ public class AddUsersPanel extends ContentPanel {
 		JPanel firstNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel lastNamePanel = new JPanel(new GridLayout(1, 2));
 		JPanel userIDPanel = new JPanel(new GridLayout(1, 2));
-		JPanel emailPanel = new JPanel(new GridLayout(1, 2));
-		JPanel departmentPanel = new JPanel(new GridLayout(1, 2));
+		
+		// Manually type the email and department.
+		// TODO figure out if we want this or not
+//		JPanel emailPanel = new JPanel(new GridLayout(1, 2));
+//		JPanel departmentPanel = new JPanel(new GridLayout(1, 2));
 
 		firstNamePanel.add(firstNameLabel);
 		firstNamePanel.add(firstNameField);
@@ -121,6 +128,8 @@ public class AddUsersPanel extends ContentPanel {
 		c.gridx = 0;
 		c.gridy = 2;
 		dataPanel.add(userIDPanel, c);
+		
+		// TODO email and department panels go here if we want them
 		
 		saveButton = new JButton("Save");
 
@@ -174,6 +183,7 @@ public class AddUsersPanel extends ContentPanel {
 
 		SystemAdministrator admin = ((SystemAdministrator) Driver.getAccessTracker().getCurrentUser());
 
+		// Gets the user with same CWID from the Oracle database if that user exists.
 		try {
 			addedUser = admin.loadNewUser(cwid, connection);
 		} catch (SQLException e) {
@@ -182,11 +192,15 @@ public class AddUsersPanel extends ContentPanel {
 		}
 
 		if ( addedUser == null ) {
+			// If the user being added does not exist in Oracle database, 
+			// ask the System Administrator if he/she still wants to add.
 			String message = "Our records show that the CWID " + cwid + " either does not exist or is not an active " +
 					"student at Mines.\nDo you still want to add " + firstName +  " " + lastName +
 					" to the database?\n\nThis action is highly discouraged.";
 
 			if ( JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION ) {
+				// TODO for now, if the user is not in Oracle database, email and department code are blank strings.
+				// If we manually type email and department code, this will have that instead.
 				addedUser = new User(firstName, lastName, cwid, "", "");
 				if (admin.addUser(addedUser) ) {
 					admin.updateCertifications(addedUser, machines);
@@ -204,6 +218,8 @@ public class AddUsersPanel extends ContentPanel {
 					clearFields();
 				}
 			} else {
+				// If the name in Oracle database is different from what was entered, 
+				// ask the System Administrator if this is the person he/she wants to add.
 				String message = "Our records show that the name associated with this CWID is " +
 						addedUser.getFirstName() + " " + addedUser.getLastName() + ".\n" +
 						"Is this the user you meant to add?\n\nClick Yes to add this user " +
@@ -220,7 +236,8 @@ public class AddUsersPanel extends ContentPanel {
 		}
 		return false;
 	}
-
+	
+	// Clears the text fields to empty, and deselect the check box.
 	private void clearFields() {
 		firstNameField.setText("");
 		lastNameField.setText("");
@@ -231,6 +248,7 @@ public class AddUsersPanel extends ContentPanel {
 		}
 	}
 
+	// Asks the System Administrator if the certification is correct.
 	public boolean confirmSubmission(ArrayList<String> permissionsList ) {
 		String list = "";
 		for ( String s : permissionsList ) {
@@ -251,6 +269,7 @@ public class AddUsersPanel extends ContentPanel {
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// Selects/deselects all the machines when selectAllBox is selected/deselected.
 			if ( e.getSource() == selectAllBox ) {
 				if ( selectAllBox.isSelected() ) {
 					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
@@ -266,18 +285,22 @@ public class AddUsersPanel extends ContentPanel {
 			}
 			else if ( e.getSource() == saveButton || e.getSource() == userIDField ) {
 				boolean noBoxesChecked = true;
+				
 				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 					if ( cb.isSelected() ) {
 						noBoxesChecked = false;
+						break;
 					}
 				}
 
 				ArrayList<String> added = new ArrayList<String>();
 				ArrayList<Machine> machines = new ArrayList<Machine>();
 
+				// Adding new user requires first name, last name, and CWID.
+				// TODO if we decide to manually enter email and department code, we need to have them checked here.
 				if (firstNameField.getText().equals("") || userIDField.getText().equals("") || lastNameField.getText().equals("")) {
-					showMessage("Please fill in all five fields.");
+					showMessage("Please fill in all three fields.");
 				} else if ( userIDField.getText().length() != 8 ) {
 					showMessage("Please enter an 8-digit CWID.");
 				} else if ( noBoxesChecked ) {
@@ -307,5 +330,4 @@ public class AddUsersPanel extends ContentPanel {
 			}
 		}
 	}
-
 }

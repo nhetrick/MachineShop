@@ -68,11 +68,8 @@ public class AdminGUI extends JPanel {
 		buttonPanel.add(logOut);
 		
 		add(centerPanel, BorderLayout.CENTER);
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());
-		
-		MainGUI.pushToStack(this);
-		
-	}
-	
 
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());	
+
+	}
 }

@@ -101,6 +101,8 @@ public class SystemAdministrator extends Administrator {
 			document.put("firstName", u.getFirstName());
 			document.put("lastName", u.getLastName());
 			document.put("CWID", u.getCWID());
+			document.put("email", u.getEmail());
+			document.put("department", u.getDepartment());
 			users.insert(document);
 			return true;
 		} else {
@@ -165,6 +167,14 @@ public class SystemAdministrator extends Administrator {
 			obj.append("locked", false);
 			users.update(new BasicDBObject("CWID", user.getCWID()), obj);
 			user.setLockedStatus(false);
+		}
+	}
+	
+	public void logOutAllUsers() {
+		ArrayList<User> currentUsers = tracker.getCurrentUsers();
+		for (User u : currentUsers) {
+			if (!u.getCWID().equals(tracker.getCurrentUser().getCWID()))
+				u.getCurrentEntry().adminFinishEntry();
 		}
 	}
 }
