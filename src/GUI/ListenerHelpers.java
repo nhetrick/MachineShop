@@ -12,4 +12,11 @@ public class ListenerHelpers {
 			Driver.getMainGui().restart();
 		}
 	}
+	
+	public static class DoneListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Driver.getMainGui().restart();
+		}
+	}
 }

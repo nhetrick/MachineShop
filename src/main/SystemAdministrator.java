@@ -167,4 +167,12 @@ public class SystemAdministrator extends Administrator {
 			user.setLockedStatus(false);
 		}
 	}
+	
+	public void logOutAllUsers() {
+		ArrayList<User> currentUsers = tracker.getCurrentUsers();
+		for (User u : currentUsers) {
+			if (!u.getCWID().equals(tracker.getCurrentUser().getCWID()))
+				u.getCurrentEntry().adminFinishEntry();
+		}
+	}
 }

@@ -2,17 +2,24 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import main.SystemAdministrator;
 import main.User;
 
 public class SystemAdminGUI extends JPanel {
 	private JPanel centerPanel;
 	private JPanel buttonPanel;
+	private JPanel massLogOutPanel;
 	private User currentUser;
 	
 	private Font buttonFont;
@@ -41,7 +48,8 @@ public class SystemAdminGUI extends JPanel {
 		logOut.setFont(buttonFont);
 		dataEntry.setFont(buttonFont);
 		basicUser.setFont(buttonFont);
-		
+	
+		addLogOutPanel();
 		
 		buttonPanel.add(dataEntry);
 		buttonPanel.add(basicUser);
@@ -50,8 +58,32 @@ public class SystemAdminGUI extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
+		
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());
 		
+	}
+	
+	private void addLogOutPanel() {
+		massLogOutPanel = new JPanel();
+		massLogOutPanel.setLayout(new BorderLayout());
+		JPanel users = new JPanel();
+		users.setLayout(new GridLayout(0, 1));
+		for (User u : Driver.getAccessTracker().getCurrentUsers()) {
+			if (!u.getCWID().equals(Driver.getAccessTracker().getCurrentUser().getCWID())) {
+				JLabel label = new JLabel(u.getFirstName() + " " + u.getLastName());
+				label.setFont(buttonFont);
+				users.add(label);
+			}
+			//users.add(label);
+		}
+		JScrollPane scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		massLogOutPanel.add(scroller, BorderLayout.CENTER);
+		JButton massLogOut = new JButton("Log Out All Users");
+		massLogOut.addActionListener(new LogOutAllUsersButtonListener());
+		massLogOut.setFont(buttonFont);
+		massLogOutPanel.add(massLogOut, BorderLayout.SOUTH);
+		
+		centerPanel.add(massLogOutPanel, BorderLayout.WEST);
 	}
 	
 	private class DataEntryButtonListener implements ActionListener {
@@ -67,6 +99,15 @@ public class SystemAdminGUI extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			centerPanel.removeAll();
 			centerPanel.add(new UserGUI(currentUser));
+		}
+	}
+	
+	private class LogOutAllUsersButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
+			massLogOutPanel.removeAll();
+			addLogOutPanel();
 		}
 	}
 }
