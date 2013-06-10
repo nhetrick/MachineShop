@@ -96,8 +96,8 @@ public class UserGUI extends JPanel {
 		buttonPanel.add(selectMachine);
 		buttonPanel.add(checkOutTools);
 		buttonPanel.add(returnTools);
-		buttonPanel.add(logOut);
 		buttonPanel.add(done);
+		buttonPanel.add(logOut);
 		
 		add(centerPanel, BorderLayout.CENTER);
 		

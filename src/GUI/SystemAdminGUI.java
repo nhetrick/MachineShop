@@ -83,7 +83,7 @@ public class SystemAdminGUI extends JPanel {
 		massLogOut.setFont(buttonFont);
 		massLogOutPanel.add(massLogOut, BorderLayout.SOUTH);
 		
-		centerPanel.add(massLogOutPanel, BorderLayout.WEST);
+		centerPanel.add(massLogOutPanel, BorderLayout.EAST);
 	}
 	
 	private class DataEntryButtonListener implements ActionListener {
