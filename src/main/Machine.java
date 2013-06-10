@@ -3,12 +3,12 @@ package main;
 public class Machine {
 	String name;
 	String ID;
-	boolean inUse;
+	int numUsers;
 	
 	public Machine(String name, String ID) {
 		this.name = name;
 		this.ID = ID;
-		inUse = false;
+		numUsers = 0;
 	}
 	
 	public String getID() {
@@ -32,15 +32,15 @@ public class Machine {
 		return (this.ID.equals(obj.getID()));
 	}
 
-	public boolean isInUse() {
-		return inUse;
+	public int getNumUsers() {
+		return numUsers;
 	}
 	
 	public void use() {
-		inUse = true;
+		numUsers++;
 	}
 	
 	public void stopUsing() {
-		inUse = false;
+		numUsers--;
 	}
 }

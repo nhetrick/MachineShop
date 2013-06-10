@@ -77,10 +77,10 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		JPanel machinesPanel = new JPanel(new GridBagLayout());
 		
 		for (Machine m : Driver.getAccessTracker().getMachines()) {
-			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "]" );
+			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "] " + "(" + m.getNumUsers() + " Users)");
 			l.setFont(resultsFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
-			if (m.isInUse()) {
+			if (m.getNumUsers() > 0) {
 				l.setEnabled(false);
 				grayMachinesPanel.add(l);
 			} else {

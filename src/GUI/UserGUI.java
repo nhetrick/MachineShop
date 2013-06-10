@@ -149,6 +149,9 @@ public class UserGUI extends JPanel {
 	}	
 	
 	public void selectMachines(){
+		for (Machine m : Driver.getAccessTracker().getCurrentUser().getCurrentEntry().getMachinesUsed()) {
+			m.stopUsing();
+		}
 		
 		Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addMachinesUsed(selectedMachines);
 		
@@ -156,6 +159,10 @@ public class UserGUI extends JPanel {
 		for ( Machine m : selectedMachines ) {
 			message += m + "\n";
 		}
+		
+		for (Machine m : Driver.getAccessTracker().getCurrentUser().getCurrentEntry().getMachinesUsed()) {
+			m.use();
+		}		
 		
 		JOptionPane.showMessageDialog(this, message);
 		

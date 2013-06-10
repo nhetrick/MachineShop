@@ -75,7 +75,6 @@ public class SystemAdminGUI extends JPanel {
 				label.setFont(buttonFont);
 				users.add(label);
 			}
-			//users.add(label);
 		}
 		JScrollPane scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		massLogOutPanel.add(scroller, BorderLayout.CENTER);

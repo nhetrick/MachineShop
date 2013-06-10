@@ -171,6 +171,10 @@ public class LogEntry {
 		result.put("timeOut", timeOut);
 		
 		logEntries.update(new BasicDBObject("ID", ID), result);
+		
+		for (Machine m : machinesUsed) {
+			m.stopUsing();
+		}
 	}
 	
 	public void adminFinishEntry() {
@@ -188,6 +192,10 @@ public class LogEntry {
 		logEntries.update(new BasicDBObject("ID", ID), result);		
 		
 		Driver.getAccessTracker().removeUser(user);
+		
+		for (Machine m : machinesUsed) {
+			m.stopUsing();
+		}
 	}
 	
 	

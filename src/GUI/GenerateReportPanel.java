@@ -337,7 +337,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private void showToolStatistics() {		
 		showParameters();
 		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
-		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont)
+		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
 		showAvgLogInTime();
 	}
 	
