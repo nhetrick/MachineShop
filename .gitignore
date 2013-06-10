@@ -4,3 +4,4 @@ bin
 *~
 *.autosave
 Thumbs.db
+*.swp
