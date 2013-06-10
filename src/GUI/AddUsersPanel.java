@@ -322,11 +322,11 @@ public class AddUsersPanel extends ContentPanel {
 				|| departField.getText().equals("")) {
 			showMessage("Please fill in all five fields.");
 			return false;
-		} else if (!(Driver.getAccessTracker().checkValidEmail(emailField.getText()))){
-			showMessage("Please enter a valid email address");
-			return false;
 		} else if (userIDField.getText().length() != 8) {
 			showMessage("Please enter an 8-digit CWID.");
+			return false;
+		} else if (!(Driver.getAccessTracker().checkValidEmail(emailField.getText()))){
+			showMessage("Please enter a valid email address");
 			return false;
 		}
 		return true;
@@ -345,52 +345,49 @@ public class AddUsersPanel extends ContentPanel {
 			}
 		}
 	}
-
-	public void save(){
-		boolean noBoxesChecked = true;
-
+	
+	public boolean ensureASelectedPermission(){
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
 			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 			if (cb.isSelected()) {
-				noBoxesChecked = false;
-				break;
+				return true;
 			}
 		}
+		
+	// When adding a user from this screen, the admin must add
+	// some machine permissions.
+	showMessage("Please select at least one machine for which this user is certified.");
+	return false;
+	}
 
+	public void save(){
+		
 		ArrayList<String> added = new ArrayList<String>();
 		ArrayList<Machine> machines = new ArrayList<Machine>();
 
 		// Adding new user requires first name, last name, and CWID.
 		// TODO if we decide to manually enter email and department
-		if (!validFields()) {
+		if ((!validFields()) || (!ensureASelectedPermission())) {
 			return;
-		} else if (noBoxesChecked) {
-			// When adding a user from this screen, the admin must add
-			// some machine permissions.
-			showMessage("Please select at least one machine for which this user is certified.");
-		} else {
-			for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-				JCheckBox cb = (JCheckBox) permissionsPanel
-						.getComponent(i);
-				if (cb.isSelected()) {
-					for (Machine m : Driver.getAccessTracker()
-							.getMachines()) {
-						String s = cb.getText();
-						s = s.substring(s.indexOf('[') + 1,
-								s.indexOf(']'));
-						String ID = m.getID();
-						if (s.equals(ID)) {
-							added.add(m.getName() + " [" + ID + "]");
-							machines.add(m);
-						}
+		}
+		
+		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
+			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+			if (cb.isSelected()) {
+				for (Machine m : Driver.getAccessTracker().getMachines()) {
+					String s = cb.getText();
+					s = s.substring(s.indexOf('[') + 1,s.indexOf(']'));
+					String ID = m.getID();
+					if (s.equals(ID)) {
+						added.add(m.getName() + " [" + ID + "]");
+						machines.add(m);
 					}
 				}
 			}
-			if (confirmSubmission(added)) {
-				if (saveUser(machines)) {
-					clearFields();
-				}
-			}
+		}
+		
+		if (confirmSubmission(added) && saveUser(machines)) {
+			clearFields();
 		}
 	}
 	
