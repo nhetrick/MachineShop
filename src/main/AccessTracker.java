@@ -189,7 +189,7 @@ public class AccessTracker {
 				JOptionPane.showMessageDialog(Driver.getMainGui(), message);
 				currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
 				Log.startEntry(currentUser);
-				Log.finishEntry(currentUser.getCurrentEntry());
+				processLogOut(currentUser.getCWID());
 				return null;
 			}
 			
