@@ -199,8 +199,7 @@ public class AddUsersPanel extends ContentPanel {
 		c.gridy = 5;
 		add(new JPanel(), c);
 
-		scroller.setMaximumSize(new Dimension(scroller.getWidth(), scroller
-				.getHeight()));
+		scroller.setMaximumSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
 		scroller.setMaximumSize(scroller.getPreferredSize());
 		scroller.getVerticalScrollBar().setUnitIncrement(13);
 
@@ -210,6 +209,8 @@ public class AddUsersPanel extends ContentPanel {
 		String firstName = firstNameField.getText();
 		String lastName = lastNameField.getText();
 		String cwid = userIDField.getText();
+		String email = emailField.getText();
+		String department = departField.getText();
 
 		SystemAdministrator admin = ((SystemAdministrator) Driver
 				.getAccessTracker().getCurrentUser());
@@ -237,7 +238,7 @@ public class AddUsersPanel extends ContentPanel {
 				// and department code are blank strings.
 				// If we manually type email and department code, this will have
 				// that instead.
-				addedUser = new User(firstName, lastName, cwid, "", "");
+				addedUser = new User(firstName, lastName, cwid, email, department);
 				if (admin.addUser(addedUser)) {
 					admin.updateCertifications(addedUser, machines);
 					return true;
@@ -312,82 +313,93 @@ public class AddUsersPanel extends ContentPanel {
 	public void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
+	
+	public boolean validFields(){
+		if (firstNameField.getText().equals("")
+				|| userIDField.getText().equals("")
+				|| lastNameField.getText().equals("") 
+				|| emailField.getText().equals("")
+				|| departField.getText().equals("")) {
+			showMessage("Please fill in all five fields.");
+			return false;
+		} else if (userIDField.getText().length() != 8) {
+			showMessage("Please enter an 8-digit CWID.");
+			return false;
+		} else if (!(Driver.getAccessTracker().checkValidEmail(emailField.getText()))){
+			showMessage("Please enter a valid email address");
+			return false;
+		}
+		return true;
+	}
+	
+	public void toggleAll(){
+		if (selectAllBox.isSelected()) {
+			for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
+				JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+				cb.setSelected(true);
+			}
+		} else {
+			for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
+				JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+				cb.setSelected(false);
+			}
+		}
+	}
+	
+	public boolean ensureASelectedPermission(){
+		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
+			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+			if (cb.isSelected()) {
+				return true;
+			}
+		}
+		
+	// When adding a user from this screen, the admin must add
+	// some machine permissions.
+	showMessage("Please select at least one machine for which this user is certified.");
+	return false;
+	}
 
+	public void save(){
+		
+		ArrayList<String> added = new ArrayList<String>();
+		ArrayList<Machine> machines = new ArrayList<Machine>();
+
+		// Adding new user requires first name, last name, and CWID.
+		// TODO if we decide to manually enter email and department
+		if ((!validFields()) || (!ensureASelectedPermission())) {
+			return;
+		}
+		
+		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
+			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+			if (cb.isSelected()) {
+				for (Machine m : Driver.getAccessTracker().getMachines()) {
+					String s = cb.getText();
+					s = s.substring(s.indexOf('[') + 1,s.indexOf(']'));
+					String ID = m.getID();
+					if (s.equals(ID)) {
+						added.add(m.getName() + " [" + ID + "]");
+						machines.add(m);
+					}
+				}
+			}
+		}
+		
+		if (confirmSubmission(added) && saveUser(machines)) {
+			clearFields();
+		}
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Selects/deselects all the machines when selectAllBox is
 			// selected/deselected.
 			if (e.getSource() == selectAllBox) {
-				if (selectAllBox.isSelected()) {
-					for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-						JCheckBox cb = (JCheckBox) permissionsPanel
-								.getComponent(i);
-						cb.setSelected(true);
-					}
-				} else {
-					for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-						JCheckBox cb = (JCheckBox) permissionsPanel
-								.getComponent(i);
-						cb.setSelected(false);
-					}
-				}
-			} else if (e.getSource() == saveButton
-					|| e.getSource() == userIDField) {
-				boolean noBoxesChecked = true;
-
-				for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
-					if (cb.isSelected()) {
-						noBoxesChecked = false;
-						break;
-					}
-				}
-
-				ArrayList<String> added = new ArrayList<String>();
-				ArrayList<Machine> machines = new ArrayList<Machine>();
-
-				// Adding new user requires first name, last name, and CWID.
-				// TODO if we decide to manually enter email and department
-				// code, we need to have them checked here.
-				if (firstNameField.getText().equals("")
-						|| userIDField.getText().equals("")
-						|| lastNameField.getText().equals("") 
-						|| emailField.getText().equals("")
-						|| departField.getText().equals("")) {
-					showMessage("Please fill in all three fields.");
-				} else if (!(Driver.getAccessTracker().checkValidEmail(emailField.getText()))){
-					showMessage("Please enter a valid email address");
-				} else if (userIDField.getText().length() != 8) {
-					showMessage("Please enter an 8-digit CWID.");
-				} else if (noBoxesChecked) {
-					// When adding a user from this screen, the admin must add
-					// some machine permissions.
-					showMessage("Please select at least one machine for which this user is certified.");
-				} else {
-					for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-						JCheckBox cb = (JCheckBox) permissionsPanel
-								.getComponent(i);
-						if (cb.isSelected()) {
-							for (Machine m : Driver.getAccessTracker()
-									.getMachines()) {
-								String s = cb.getText();
-								s = s.substring(s.indexOf('[') + 1,
-										s.indexOf(']'));
-								String ID = m.getID();
-								if (s.equals(ID)) {
-									added.add(m.getName() + " [" + ID + "]");
-									machines.add(m);
-								}
-							}
-						}
-					}
-					if (confirmSubmission(added)) {
-						if (saveUser(machines)) {
-							clearFields();
-						}
-					}
-				}
+				toggleAll();
+			} else if (e.getSource() == saveButton) {
+				save();
 			}
 		}
 	}
