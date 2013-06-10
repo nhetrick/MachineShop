@@ -3,6 +3,7 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
@@ -366,6 +367,17 @@ public class AccessTracker {
 
 		return returnList1;
 
+	}
+	
+	public boolean checkValidEmail(String email){
+		String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		try {
+			Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+			Matcher matcher = pattern.matcher(email);
+			return matcher.matches();
+		}catch(Exception e) {
+			return false;
+		}
 	}
 
 	/********************************** GETTERS AND SETTERS *******************************************/
