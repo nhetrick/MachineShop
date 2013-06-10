@@ -1,14 +1,20 @@
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,6 +33,7 @@ public class MainGUI extends JFrame {
 	private User currentUser;
 	private JPanel centerPanel;
 	private JPanel headerBar;
+	private JPanel footerBar;
 	private JPanel homeCenterPanel;
 	private Clock time;
 	private Font headerFont;
@@ -35,10 +42,14 @@ public class MainGUI extends JFrame {
 	private JButton backButton;
 	private ButtonListener buttonListener;
 	
-	private final String trianglePath = "triangle.jpeg";
+	private final String trianglePath = "/Images/triangle.jpg";
+	private final String bannerPath = "/Images/banner.jpg";
 	
-	private ImageIcon triangleLogo;
+	private BufferedImage triangleLogo;
+	private BufferedImage banner;
+	
 	private JLabel triangleLabel;
+	private JLabel bannerLabel;
 	
 	private static Stack<JPanel> panelStack;
 	
@@ -51,8 +62,11 @@ public class MainGUI extends JFrame {
 		
 		panelStack = new Stack<JPanel>();
 		
-		triangleLogo = new ImageIcon(trianglePath);
-		triangleLabel = new JLabel(triangleLogo);
+		ImageIcon triangleIcon = createImageIcon(trianglePath);
+		triangleLabel = new JLabel(triangleIcon);
+		
+		ImageIcon bannerIcon = createImageIcon(bannerPath);
+		bannerLabel = new JLabel(bannerIcon);
 		
 		System.out.println(triangleLabel.toString());
 		
@@ -72,6 +86,18 @@ public class MainGUI extends JFrame {
 		
 	}
 
+    protected static ImageIcon createImageIcon(String path) {
+    	
+        java.net.URL imageURL = MainGUI.class.getResource(path);
+
+        if (imageURL == null) {
+            System.err.println("Resource not found: " + path);
+            return null;
+        } else {
+            return new ImageIcon(imageURL);
+        }
+    }
+	
 	public void setup() {
 		//sets the cursor to invisible
 //		tk = Toolkit.getDefaultToolkit();
@@ -183,13 +209,19 @@ public class MainGUI extends JFrame {
 	}
 	
 	public void processHomeScreen(User currentUser) {
-		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		
+		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		headerBar = new JPanel(new GridLayout(1, 2));
+		headerBar.setBackground(Color.white);
+		
+		footerBar = new JPanel(new GridBagLayout());
+		footerBar.setBackground(Color.white);
+		footerBar.add(bannerLabel);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
 		JLabel nameLabel = new JLabel(userName);
+		nameLabel.setBackground(Color.white);
 		time = new Clock(headerFont);
 		
 		nameLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -198,13 +230,14 @@ public class MainGUI extends JFrame {
 		nameLabel.setFont(headerFont);
 		
 		JPanel leftPanel = new JPanel(new GridBagLayout());
+		leftPanel.setBackground(Color.white);
 		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0.2;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.NONE;
-		leftPanel.add(backButton, c);
+		leftPanel.add(triangleLabel, c);
 		
 		c.gridx = 2;
 		c.weightx = 0.8;
@@ -216,7 +249,7 @@ public class MainGUI extends JFrame {
 
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
+		c.weightx = 0.1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(headerBar, c);
@@ -235,10 +268,15 @@ public class MainGUI extends JFrame {
 		
 		c.gridy = 1;
 		c.gridx = 0;
-		c.weighty = 0.9;
+		c.weighty = 0.8;
 		c.fill = GridBagConstraints.BOTH;
 		add(homeCenterPanel, c);
-		panelStack.push(homeCenterPanel);
+		
+		c.gridy = 2;
+		c.gridx = 0;
+		c.weighty = 0.8;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(footerBar, c);
 		
 		setVisible(true);
 		
