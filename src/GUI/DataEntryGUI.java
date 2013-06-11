@@ -159,5 +159,4 @@ public class DataEntryGUI extends MainPanel {
 			current.setBackground(buttonBackground);
 		}
 	}
-
 }

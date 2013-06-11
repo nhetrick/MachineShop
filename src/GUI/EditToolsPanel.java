@@ -22,7 +22,7 @@ public class EditToolsPanel extends ContentPanel {
 	private ButtonListener buttonListener;
 	
 	public EditToolsPanel() {
-				
+		// All the fonts are in ContentPanel.
 		super("Edit Tools");
 		buttonListener = new ButtonListener();
 		
@@ -87,6 +87,5 @@ public class EditToolsPanel extends ContentPanel {
 			}
 			repaint();
 		}
-	}
-	
+	}	
 }

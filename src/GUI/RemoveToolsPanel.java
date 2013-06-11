@@ -37,7 +37,7 @@ public class RemoveToolsPanel extends ContentPanel {
 	private ArrayList<Tool> resultsList; 
 	
 	public RemoveToolsPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Remove Tools");
 		buttonListener = new ButtonListener();
 		resultsList = new ArrayList<Tool>();
@@ -188,6 +188,7 @@ public class RemoveToolsPanel extends ContentPanel {
 					}
 					repaint();
 					
+					// Lists all the tools that are removed.
 					String message = "You Removed:\n\n";
 					for ( String s : removed ) {
 						message += s + "\n";
@@ -231,6 +232,4 @@ public class RemoveToolsPanel extends ContentPanel {
 			}
 		}
 	}
-
 }
-

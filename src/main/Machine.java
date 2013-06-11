@@ -24,6 +24,7 @@ public class Machine {
 		return name;
 	}
 
+	// Only the ID is compared to check if two machines are the same.
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Machine))

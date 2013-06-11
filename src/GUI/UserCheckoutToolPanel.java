@@ -42,6 +42,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 	private ArrayList<Tool> toolsToCheckout;
 	
 	public UserCheckoutToolPanel() {
+		// All the fonts are in ContentPanel.
 		super("Checkout Tools");
 		
 		toolsToCheckout = new ArrayList<Tool>();
@@ -257,4 +258,3 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		}
 	}
 }
-

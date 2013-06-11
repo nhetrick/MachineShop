@@ -37,7 +37,7 @@ public class LockUsersPanel extends ContentPanel {
 	private ArrayList<User> resultsList; 
 	
 	public LockUsersPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Lock Users");
 		buttonListener = new ButtonListener();
 		resultsList = new ArrayList<User>();
@@ -234,6 +234,4 @@ public class LockUsersPanel extends ContentPanel {
 			}
 		}
 	}
-
 }
-

@@ -103,8 +103,6 @@ public class LogEntry {
 		return cwid;
 	}
 
-
-
 	public void addMachinesUsed(ArrayList<Machine> used) {
 		for (Machine m : used){
 			machinesUsed.add(m);
@@ -197,7 +195,6 @@ public class LogEntry {
 			m.stopUsing();
 		}
 	}
-	
 	
 	public Date getTimeIn() {
 		return timeIn;

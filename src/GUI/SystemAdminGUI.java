@@ -157,6 +157,6 @@ public class SystemAdminGUI extends MainPanel {
 				}
 			}
 		}
-	}
 
+	}
 }

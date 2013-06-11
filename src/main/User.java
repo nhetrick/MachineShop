@@ -18,9 +18,9 @@ public class User {
 	private LogEntry currentEntry;
 	private boolean locked;
 	protected boolean isAdmin = false;
+	protected boolean isSystemAdmin = false;
 	private String email;
 	private String department;
-	protected boolean isSystemAdmin = false;
 		
 	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
@@ -53,7 +53,6 @@ public class User {
 	}
 	
 	public void returnTools(ArrayList<Tool> tools) {
-		
 		for (Tool tool : tools){
 			tool.returnTool();
 			toolsCheckedOut.remove(tool);
@@ -141,6 +140,7 @@ public class User {
 		return department;
 	}
 
+	// only the CWID are compared to check if two users are the same
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof User))
@@ -161,5 +161,4 @@ public class User {
 	public void setCurrentEntry(LogEntry currentEntry) {
 		this.currentEntry = currentEntry;
 	}
-
 }

@@ -42,7 +42,8 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 	private JScrollPane toolsScroller;
 	
 	public ViewToolsAndMachinesPanel() {
-		
+		// All the fonts are in ContetnPanel.
+		// TODO decide which one should be black and gray.
 		super("View Tools and Machines");
 		
 		inUseLabel = new JLabel("In Use");
@@ -103,7 +104,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 			} else {
 				blackToolsPanel.add(l);
 			}
-		}	
+		}
 		
 		mainToolsPanel.add(grayToolsPanel);
 		mainToolsPanel.add(blackToolsPanel);
@@ -182,8 +183,5 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
-
 	}
-
 }
-
