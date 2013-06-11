@@ -151,6 +151,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 					}
 				}
 				ArrayList<String> checkedOut = new ArrayList<String>();
+				ArrayList<Tool> tcheckedOut = new ArrayList<Tool>();
 
 				if ( !noBoxesChecked) {
 					ArrayList<JCheckBox> checkedBoxes = new ArrayList<JCheckBox>();
@@ -163,12 +164,15 @@ public class UserCheckoutToolPanel extends ContentPanel {
 								String UPC = t.getUPC();
 								if ( s.equals(UPC) ) {
 									checkedOut.add(t.getName() + " [" + UPC + "]");
+									tcheckedOut.add(t);
 									checkedBoxes.add(cb);
 									currentUser.checkoutTool(Driver.getAccessTracker().getToolByUPC(UPC));
 								}
 							}
 						}
 					}
+					
+					currentUser.getCurrentEntry().addToolsCheckedOut(tcheckedOut);
 
 					resultsList.clear();
 					for ( JCheckBox cb : checkedBoxes ) {
