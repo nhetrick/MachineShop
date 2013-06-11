@@ -202,7 +202,7 @@ public class UserGUI extends JPanel {
 		}
 	}
 	
-	private class MachineCheckBoxListener implements ItemListener {
+	public class MachineCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();
@@ -223,7 +223,7 @@ public class UserGUI extends JPanel {
 		}
 	}
 	
-	private class ToolCheckBoxListener implements ItemListener {
+	public class ToolCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();

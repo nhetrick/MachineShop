@@ -154,6 +154,7 @@ public class EditCertificationsPanel extends ContentPanel {
 				}
 
 				user = Driver.getAccessTracker().findUserByCWID(input);
+				cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
 				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);

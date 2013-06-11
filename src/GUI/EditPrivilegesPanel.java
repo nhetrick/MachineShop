@@ -141,7 +141,13 @@ public class EditPrivilegesPanel extends ContentPanel {
 
 	public boolean confirmSubmission() {
 		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to change the permissions for these users?") == JOptionPane.YES_OPTION) {
-			return true;
+			for (int i = 0; i < resultsPanel.getComponentCount(); i++) {
+				JPanel panel = (JPanel) resultsPanel.getComponent(i);
+				if(((JCheckBox) panel.getComponent(2)).isSelected()) 
+					return true;
+			}
+			showMessage("NO SYSTEM ADMINISTRATOR SELECTED. Please select atleast one System Administrator.");
+			return false;
 		} else {
 			return false;
 		}
@@ -215,21 +221,23 @@ public class EditPrivilegesPanel extends ContentPanel {
 
 				for ( DBObject u : userList ) {
 					
-					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
+					if (!(((String) u.get("CWID")).equals(Driver.getAccessTracker().getCurrentUser().getCWID()))){
+						User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 
-					boolean isAdmin = false;
-					boolean isSystemAdmin = false;
+						boolean isAdmin = false;
+						boolean isSystemAdmin = false;
 
-					if ( u.get("isAdmin") != null ) {
-						isAdmin = (boolean) u.get("isAdmin");
+						if ( u.get("isAdmin") != null ) {
+							isAdmin = (boolean) u.get("isAdmin");
+						}
+						if ( u.get("isSystemAdmin") != null ) {
+							isSystemAdmin = (boolean) u.get("isSystemAdmin");						
+						}
+
+						user.setAdmin(isAdmin);
+						user.setSystemAdmin(isSystemAdmin);
+						resultsList.add(user);
 					}
-					if ( u.get("isSystemAdmin") != null ) {
-						isSystemAdmin = (boolean) u.get("isSystemAdmin");						
-					}
-
-					user.setAdmin(isAdmin);
-					user.setSystemAdmin(isSystemAdmin);
-					resultsList.add(user);
 				}
 
 				for ( User u : resultsList ) {
