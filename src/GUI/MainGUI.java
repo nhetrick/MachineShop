@@ -135,10 +135,10 @@ public class MainGUI extends JFrame {
 			return name;
 		}
 	};
-	
+
 	// Returns the user to the "Swipe Blastercard" screen
 	public void restart() {
-		
+
 		Driver.isLogInScreen = true;
 		remove(headerBar);
 		remove(footerBar);
@@ -146,7 +146,7 @@ public class MainGUI extends JFrame {
 		add(mainPanel);
 		setVisible(true);
 		repaint();
-		
+
 	}
 
 	public void handleInput() {
@@ -213,10 +213,10 @@ public class MainGUI extends JFrame {
 	public User getCurrentUser() {
 		return currentUser;
 	}
-	
+
 	// This function does most of the work to set up the homescreen for whichever
 	// user is currently logged in (whether they are an Admin, SystemAdmin, or User)
-	
+
 	public void processHomeScreen(User currentUser) {
 
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
@@ -314,7 +314,5 @@ public class MainGUI extends JFrame {
 				repaint();
 			}
 		}
-
 	}
-
 }

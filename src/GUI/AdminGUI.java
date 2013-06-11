@@ -12,7 +12,7 @@ import javax.swing.border.EtchedBorder;
 import main.User;
 
 public class AdminGUI extends JPanel {
-	
+	// TODO linking buttons and functions.
 	private JPanel centerPanel;
 	private JPanel contentPanel;
 	private JPanel buttonPanel;

@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+bin
+.metadata
+.settings
+*~
+*.autosave
+Thumbs.db
+=======
 bin
 .metadata
 .settings
@@ -5,3 +13,4 @@ bin
 *.autosave
 Thumbs.db
 *.swp
+>>>>>>> 04d513cd7c2ee80bb047e60534c20e2016467f82
