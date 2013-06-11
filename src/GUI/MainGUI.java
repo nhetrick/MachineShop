@@ -140,7 +140,9 @@ public class MainGUI extends JFrame {
 	public void restart() {
 		
 		Driver.isLogInScreen = true;
-		this.removeAll();
+		remove(headerBar);
+		remove(footerBar);
+		remove(mainContentPanel);
 		add(mainPanel);
 		setVisible(true);
 		repaint();
