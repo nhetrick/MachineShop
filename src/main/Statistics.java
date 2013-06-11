@@ -13,6 +13,7 @@ public class Statistics {
 	private int numUsers;
 	private int numTools;
 	private int numMachines;
+	private int numDept;
 	private long totalTimeLoggedIn;
 	private long avgTimeLoggedIn;
 	private ArrayList<String> users;
@@ -20,6 +21,7 @@ public class Statistics {
 	private int numNotLoggedOut;
 	private Map<String, Integer> machineFrequencies;
 	private Map<String, Integer> toolsFrequencies;
+	private Map<String, Integer> deptFrequencies;
 	
 	public Statistics() {
 		results = Log.getResults();
@@ -28,6 +30,7 @@ public class Statistics {
 		numUsers = 0;
 		numTools = 0;
 		numMachines = 0;
+		numDept = 0;
 		totalTimeLoggedIn = 0;
 		avgTimeLoggedIn = 0;
 		users = new ArrayList<String>();
@@ -35,12 +38,14 @@ public class Statistics {
 		numNotLoggedOut = 0;
 		machineFrequencies = new HashMap<String, Integer>();
 		toolsFrequencies = new HashMap<String, Integer>();
+		deptFrequencies = new HashMap<String, Integer>();
 	}
 	
 	public void run() {
 		for (LogEntry entry : results) {
 			numEntries++;
 			userCheck(entry.getCwid());
+			//deptCheck(entry.getUser().getDepartment());
 			if (entry.getTimeOut() != null) {
 				determineLogInTime(entry.getTimeIn().getTime(), entry.getTimeOut().getTime());
 				numEntriesModified++;
@@ -64,6 +69,15 @@ public class Statistics {
 		}
 	}
 	
+	private void deptCheck(String dept) {
+		if (!deptFrequencies.containsKey(dept)) {
+			numDept++;
+			deptFrequencies.put(dept, 1);
+		} else {
+			deptFrequencies.put(dept,  deptFrequencies.get(dept) + 1);
+		}
+	}
+
 	private void determineLogInTime(Long start, Long end) {
 		totalTimeLoggedIn += (end - start);
 		System.out.println(start);
@@ -122,6 +136,18 @@ public class Statistics {
 
 	public int getNumMachines() {
 		return numMachines;
+	}
+	
+	public int getNumEntriesModified() {
+		return numEntriesModified;
+	}
+
+	public int getNumDept() {
+		return numDept;
+	}
+
+	public Map<String, Integer> getDeptFrequencies() {
+		return deptFrequencies;
 	}
 
 	public double getTotalTimeLoggedIn() {
