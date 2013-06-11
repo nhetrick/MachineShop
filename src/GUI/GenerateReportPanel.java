@@ -428,7 +428,7 @@ public class GenerateReportPanel extends ContentPanel {
 				saveExcelButton.setVisible(true);
 			} else if (e.getSource() == saveExcelButton){
 				ExcelExporter exp = new ExcelExporter();
-				String exportFile = "ReportExports/report - "+Calendar.getInstance().getTime()+".xls";
+				String exportFile = "ReportExports/ActivityReport - "+Calendar.getInstance().getTime()+".xls";
 				try {
 					exp.exportTable(table, exportFile);
 				} catch (Exception e1) {
