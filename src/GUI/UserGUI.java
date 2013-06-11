@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.sound.sampled.ReverbType;
 import javax.swing.BorderFactory;
@@ -20,7 +21,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import main.Machine;
+import main.MachineComparator;
 import main.Tool;
+import main.ToolComparator;
 import main.User;
 
 public class UserGUI extends MainPanel {
@@ -107,6 +110,8 @@ public class UserGUI extends MainPanel {
 	private void displayUserMachinePermissions() {
 		machinesPanel.removeAll();
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
+		// sorts the machine list
+		Collections.sort(machines, new MachineComparator());
 		for (Machine m : machines) {
 			String name = m.getName() + " [" + m.getID() + "]";
 			JCheckBox machineBox = new JCheckBox(name);
@@ -123,6 +128,8 @@ public class UserGUI extends MainPanel {
 	private void displayUserCheckedOutTools() {
 		checkedOutToolsPanel.removeAll();
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
+		// sorts the tools list
+		Collections.sort(tools, new ToolComparator());
 		for (Tool t : tools) {
 			String name = t.getName() + " [" + t.getUPC() + "]";
 			JCheckBox toolBox = new JCheckBox(name);

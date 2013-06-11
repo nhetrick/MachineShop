@@ -22,6 +22,7 @@ import com.mongodb.DBObject;
 
 import main.SystemAdministrator;
 import main.Tool;
+import main.ToolComparator;
 
 public class UserCheckoutToolPanel extends ContentPanel {
 
@@ -211,6 +212,8 @@ public class UserCheckoutToolPanel extends ContentPanel {
 					resultsList.add(tool);
 				}
 
+				// sorts the resultslist
+				Collections.sort(resultsList, new ToolComparator());
 				for ( Tool t : resultsList ) {
 					JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
