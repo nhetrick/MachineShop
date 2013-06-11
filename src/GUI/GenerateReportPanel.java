@@ -274,6 +274,17 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 	}
 	
+	private void showDeptFrequencies() {
+		if (!stats.getDeptFrequencies().entrySet().isEmpty()) {
+			JLabel deptFreqTitle = new JLabel("Department Frequencies");
+			deptFreqTitle.setFont(resultsFont);
+			resultsPanel.add(deptFreqTitle);
+			for (Map.Entry entry : stats.getDeptFrequencies().entrySet()) {
+				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
+			}
+		}
+	}
+	
 	private void showAvgLogInTime() {
 		int seconds = (int) (stats.getAvgTimeLoggedIn() / 1000) % 60;
 		int minutes = (int) ((stats.getAvgTimeLoggedIn() / (1000*60)) % 60);
@@ -324,6 +335,7 @@ public class GenerateReportPanel extends ContentPanel {
 		showStat("Number of Different Machines Used", Integer.toString(stats.getNumMachines()), resultsFont);
 		showMachineFrequencies();
 		showToolFrequencies();
+		showDeptFrequencies();
 		showAvgLogInTime();
 	}
 	
@@ -342,6 +354,7 @@ public class GenerateReportPanel extends ContentPanel {
 		showParameters();
 		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
 		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
+		showDeptFrequencies();
 		showAvgLogInTime();
 	}
 	
@@ -349,6 +362,7 @@ public class GenerateReportPanel extends ContentPanel {
 		showParameters();
 		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
 		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
+		showDeptFrequencies();
 		showAvgLogInTime();
 	}
 	
