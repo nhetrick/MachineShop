@@ -105,7 +105,7 @@ public class UserGUI extends JPanel {
 		selectMachine.addActionListener(buttonListener);
 		returnTools.addActionListener(buttonListener);
 		
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());
+		logOut.addActionListener(new ListenerHelpers.LogOutListener());
 		done.addActionListener(new ListenerHelpers.DoneListener());
 	}
 	

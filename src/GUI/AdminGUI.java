@@ -146,7 +146,7 @@ public class AdminGUI extends JPanel {
 		viewActiveUsers.addActionListener(buttonListener);
 		
 
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());	
+		logOut.addActionListener(new ListenerHelpers.LogOutListener());	
 		done.addActionListener(new ListenerHelpers.DoneListener());
 	
 	}

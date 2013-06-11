@@ -283,7 +283,7 @@ public class MainGUI extends JFrame {
 
 		if ( currentUser.isAdmin() ) {
 			if ( ((Administrator) currentUser).isSystemAdmin() ) {
-				mainContentPanel = new SystemAdminGUI(currentUser);
+				mainContentPanel = new SystemAdminPanel(currentUser);
 			} else {
 				mainContentPanel = new AdminGUI(currentUser);
 			}

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -28,7 +29,7 @@ public class MainPanel extends JPanel {
 	}
 	
 	public void setup() {
-		
+		setLayout(new BorderLayout()); 
 	}
 	
 	protected boolean confirm(String message) {
@@ -36,6 +37,27 @@ public class MainPanel extends JPanel {
 			return true;
 		}
 		return false;
+	}
+	
+	protected void switchPanels(JPanel panel) {
+		removeAll();
+		add(panel, BorderLayout.CENTER);
+		repaint();
+	}
+	
+	protected void switchContentPanel(JPanel panel) {
+		resetButtonBackgrounds();
+		contentPanel.removeAll();
+		contentPanel.setLayout(new BorderLayout());
+		contentPanel.add(panel, BorderLayout.CENTER);
+		repaint();
+	}
+	
+	public void resetButtonBackgrounds(){
+		for ( int i = 0; i < buttonPanel.getComponentCount(); ++i)  {
+			JButton b = (JButton) buttonPanel.getComponent(i);
+			b.setBackground(null);
+		}
 	}
 	
 }

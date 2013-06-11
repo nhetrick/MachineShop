@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class ListenerHelpers {
 	
-	public static class LogOutListner implements ActionListener {
+	public static class LogOutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());

@@ -14,7 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import GUI.ListenerHelpers.LogOutListner;
+import GUI.ListenerHelpers.LogOutListener;
 
 public class DataEntryGUI extends MainPanel {
 	
@@ -75,8 +75,12 @@ public class DataEntryGUI extends MainPanel {
 		
 		for ( JButton b : buttons ) {
 			b.setFont(buttonFont);
+			b.addActionListener(buttonListener);
 			buttonPanel.add(b);
 		}
+		
+		logOut.removeActionListener(buttonListener);
+		logOut.addActionListener(new ListenerHelpers.LogOutListener());
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
@@ -93,7 +97,7 @@ public class DataEntryGUI extends MainPanel {
 		
 		add(buttonPanel, c);
 		
-		switchPanels(new ViewToolsAndMachinesPanel());
+		switchContentPanel(new ViewToolsAndMachinesPanel());
 		
 	}
 	
@@ -104,44 +108,27 @@ public class DataEntryGUI extends MainPanel {
 		buttonFont = new Font("SansSerif", Font.BOLD, 30);
 	}
 	
-	public void resetButtonBackgrounds(){
-		certifications.setBackground(null);
-		users.setBackground(null);
-		tools.setBackground(null);
-		machines.setBackground(null);
-		privileges.setBackground(null);
-		generateReport.setBackground(null);
-		viewToolsAndMachines.setBackground(null);	
-	}
-	
-	public void switchPanels(JPanel panel) {
-		contentPanel.removeAll();
-		resetButtonBackgrounds();
-		contentPanel.add(panel);
-		repaint();
-	}
-	
 	private class ButtonListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
 			if ( e.getSource() == certifications ) {
-				switchPanels(new EditCertificationsPanel());
+				switchContentPanel(new EditCertificationsPanel());
 			} else if ( e.getSource() == users ) {
-				switchPanels(new EditUsersPanel());
+				switchContentPanel(new EditUsersPanel());
 			} else if ( e.getSource() == tools ) {
-				switchPanels(new EditToolsPanel());
+				switchContentPanel(new EditToolsPanel());
 			} else if ( e.getSource() == machines ) {
-				switchPanels(new EditMachinesPanel());
+				switchContentPanel(new EditMachinesPanel());
 			} else if ( e.getSource() == privileges ) {
-				switchPanels(new EditPrivilegesPanel());
+				switchContentPanel(new EditPrivilegesPanel());
 			} else if ( e.getSource() == generateReport ) {
-				switchPanels(new GenerateReportPanel());
+				switchContentPanel(new GenerateReportPanel());
 			} else if ( e.getSource() == viewActiveUsers ) {
-				switchPanels(new ViewActiveUsersPanel() );
+				switchContentPanel(new ViewActiveUsersPanel() );
 			} else if ( e.getSource() == viewToolsAndMachines ) {
-				switchPanels(new ViewToolsAndMachinesPanel());
+				switchContentPanel(new ViewToolsAndMachinesPanel());
 			}
 			JButton current = (JButton) e.getSource();
 			current.setBackground(buttonBackground);
