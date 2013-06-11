@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -19,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.ExcelExporter;
 import main.Log;
 import main.LogEntry;
 import main.Statistics;
@@ -29,6 +31,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
 	private JButton generateButton;
+	private JButton saveExcelButton;
 	private JPanel dataEntryPanel;
 	private JPanel resultsPanel;
 	private JScrollPane scroller1;
@@ -36,6 +39,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private JTable table;
 	private JTabbedPane tabs;
 	private Statistics stats;
+	private boolean haveGeneratedReport;
 	
 	private String space = "       ";
 	
@@ -76,6 +80,8 @@ public class GenerateReportPanel extends ContentPanel {
 		
 		currentParameter = "Date";
 		
+		haveGeneratedReport = false;
+		
 		setDefaultDate();
 		
 		parameterLabel.setFont(buttonFont);
@@ -84,6 +90,10 @@ public class GenerateReportPanel extends ContentPanel {
 		generateButton = new JButton("Generate");
 		generateButton.setFont(buttonFont);
 		generateButton.addActionListener(buttonListener);
+		
+		saveExcelButton = new JButton("Save to Excel file");
+		saveExcelButton.setFont(buttonFont);
+		saveExcelButton.addActionListener(buttonListener);
 		
 		JPanel parameterPanel = new JPanel(new GridLayout(1, 2));
 		
@@ -146,11 +156,16 @@ public class GenerateReportPanel extends ContentPanel {
 		add(generateButton, c);
 		
 		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 0.5;
+		c.weighty = 0.4;
 		c.gridx = 1;
 		c.gridy = 4;
 		add(tabs, c);
 		
+		c.weighty = 0.1;
+		c.gridy = 5;
+		saveExcelButton.setVisible(false);
+		add(saveExcelButton, c);
+	
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
@@ -359,10 +374,16 @@ public class GenerateReportPanel extends ContentPanel {
 		end.set(eYear, eMonth, eDay, 23, 59, 59);
 	}
 	
+	public void showMessage(String message){
+		JOptionPane.showMessageDialog(this, message);
+	}
+	
 	private class ButtonListener implements ActionListener {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == generateButton) {
+				haveGeneratedReport = true;
 				if (currentParameter.equals("User")) {
 					resultsPanel.removeAll();
 					setDates();
@@ -390,8 +411,22 @@ public class GenerateReportPanel extends ContentPanel {
 					Log.extractResultsByMachine(machine);
 					showReport();
 				}
+				saveExcelButton.setVisible(true);
+			} else if (e.getSource() == saveExcelButton){
+				ExcelExporter exp = new ExcelExporter();
+				String exportFile = "ReportExports/report - "+Calendar.getInstance().getTime()+".xls";
+				try {
+					exp.exportTable(table, exportFile);
+				} catch (Exception e1) {
+					showMessage("Export failed!");
+					e1.printStackTrace();
+					return;
+				}
+				
+				showMessage("saved to \"" + exportFile+"\"");
 			}
 		}
+
 	}
 	
 	private class DatePanel extends JPanel {

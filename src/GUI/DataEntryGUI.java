@@ -27,6 +27,9 @@ public class DataEntryGUI extends MainPanel {
 	private JButton generateReport;
 	private JButton viewActiveUsers;
 	private JButton viewToolsAndMachines;
+	private JButton done;
+	private ButtonListener buttonListener;
+
 	private Color buttonBackground;
 	
 	public DataEntryGUI() {
@@ -51,6 +54,7 @@ public class DataEntryGUI extends MainPanel {
 		generateReport = new JButton();
 		viewActiveUsers = new JButton();
 		viewToolsAndMachines = new JButton();
+		done = new JButton();
 		logOut = new JButton();
 		
 		certifications.setText("Machine Certifications");
@@ -61,6 +65,7 @@ public class DataEntryGUI extends MainPanel {
 		generateReport.setText("Generate Report");
 		viewActiveUsers.setText("View Active Users");
 		viewToolsAndMachines.setText("View Tools/Machines");
+		done.setText("Done");
 		logOut.setText("Log Out");
 		
 		buttons.add(certifications);
@@ -71,12 +76,16 @@ public class DataEntryGUI extends MainPanel {
 		buttons.add(generateReport);
 		buttons.add(viewActiveUsers);
 		buttons.add(viewToolsAndMachines);
+		buttons.add(done);
 		buttons.add(logOut);
 		
 		formatAndAddButtons();
 		
 		logOut.removeActionListener(buttonListener);
 		logOut.addActionListener(new ListenerHelpers.LogOutListener());
+		
+		done.removeActionListener(buttonListener);
+		done.addActionListener(new ListenerHelpers.DoneListener());
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;

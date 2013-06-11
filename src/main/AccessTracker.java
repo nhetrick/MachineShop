@@ -2,6 +2,8 @@ package main;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +26,6 @@ public class AccessTracker {
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private ArrayList<User> usersWithTools;
-	private InputReader inputReader;
 	private static DB database;
 	private final String hostName = "dharma.mongohq.com";
 	private final int port = 10096;
@@ -36,7 +37,6 @@ public class AccessTracker {
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
 		usersWithTools = new ArrayList<User>();
-		inputReader = new InputReader();
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
@@ -46,7 +46,6 @@ public class AccessTracker {
 		Log.setup();
 		
 		setUsersWithTools();
-		System.out.println(usersWithTools);
 
 		loadMachines();
 		loadTools();
@@ -62,7 +61,8 @@ public class AccessTracker {
 		}
 	}
 	
-	private void setUsersWithTools() {
+	public void setUsersWithTools() {
+		usersWithTools.clear();
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find();
 		while(cursor.hasNext()) {
@@ -111,6 +111,7 @@ public class AccessTracker {
 		while(cursor.hasNext()) {
 			DBObject tool = cursor.next();
 			Tool t = new Tool((String) tool.get("name"), (String) tool.get("upc"));
+			t.setCheckedOut((boolean) tool.get("isCheckedOut"));
 			tools.add(t);
 		}
 	}
@@ -180,6 +181,9 @@ public class AccessTracker {
 
 	public void removeUser(User u) {
 		currentUsers.remove(u);
+		if (u.getToolsCheckedOut().isEmpty()) {
+			usersWithTools.remove(u);
+		}
 	}
 
 	public void clearUsers(ArrayList<User> users) {
@@ -380,7 +384,7 @@ public class AccessTracker {
 		} else {
 			returnList1.addAll(returnList2);
 		}
-
+	
 		return returnList1;
 	}
 	

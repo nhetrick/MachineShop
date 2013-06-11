@@ -166,7 +166,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 	public void createCheckboxes(ArrayList<DBObject> returnedTools){
 		clear();
 		for (DBObject o : returnedTools) {
-			if (!((boolean) o.get("isCheckedOut")) || o.get("isCheckedOut") == null){
+			if (!((boolean) o.get("isCheckedOut"))){
 				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
 				JCheckBox cb = new JCheckBox(show); 
 				cb.setName((String) o.get("upc"));

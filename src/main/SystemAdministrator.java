@@ -77,6 +77,7 @@ public class SystemAdministrator extends Administrator {
 			BasicDBObject tool = new BasicDBObject();
 			tool.put("name", t.getName());
 			tool.put("upc", t.getUPC());
+			tool.put("isCheckedOut", false);
 			tools.insert(tool);
 			tracker.addTool(t);
 		} else {

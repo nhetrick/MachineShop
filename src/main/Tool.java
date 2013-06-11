@@ -62,4 +62,9 @@ public class Tool {
 		return (this.UPC.equals(obj.getUPC()));
 	}
 
+	public void setCheckedOut(boolean b) {
+		isCheckedOut = b;
+		
+	}
+
 }

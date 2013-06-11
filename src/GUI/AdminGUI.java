@@ -131,8 +131,8 @@ public class AdminGUI extends JPanel {
 		buttonPanel.add(checkOutTools);
 		buttonPanel.add(returnTools);
 		buttonPanel.add(generateReport);
-		buttonPanel.add(viewToolsAndMachines);
 		buttonPanel.add(viewActiveUsers);
+		buttonPanel.add(viewToolsAndMachines);
 		buttonPanel.add(done);
 		buttonPanel.add(logOut);
 		
