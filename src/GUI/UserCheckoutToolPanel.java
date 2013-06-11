@@ -1,258 +1,223 @@
 package GUI;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.SystemAdministrator;
+import main.Tool;
+
 import com.mongodb.DBObject;
 
-import GUI.MainGUI.SearchBy;
-import main.AccessTracker;
-import main.InputReader;
-import main.Tool;
-import main.User;
-
 public class UserCheckoutToolPanel extends ContentPanel {
-	
-	private JComboBox<SearchBy> searchParameter;
-	private JLabel enterLabel;
-	private JButton checkoutToolsButton;
-	private JButton goButton;
+
+	private JButton checkoutButton;
 	private ButtonListener buttonListener;
-	private ComboBoxListener comboBoxListener;
-	private CheckBoxListener checkBoxListener;
-	private JTextField searchField;
+	private JButton nameSearchGoButton;
+	private JButton idSearchGoButton;
+	private JTextField nameSearchField;
+	private JTextField idSearchField;
 	private JPanel resultsPanel;
-	private SearchBy searchBy;
-	private ArrayList<Tool> toolstoCheckout;
-	
+	private JScrollPane scroller;
+
+	// Holds the list of tools to potentially be deleted (searched by the admin)
+	private ArrayList<Tool> resultsList; 
+
 	public UserCheckoutToolPanel() {
 
-		super("Checkout Tools");
-		
-		toolstoCheckout = new ArrayList<Tool>();
+		super("Check Out Tools");
 		buttonListener = new ButtonListener();
-		comboBoxListener = new ComboBoxListener();
-		checkBoxListener = new CheckBoxListener();
-		
-		searchField = new JTextField();
-		JLabel searchLabel = new JLabel("Search By:");
-		
-		searchLabel.setFont(buttonFont);
-		
-		searchParameter = new JComboBox<SearchBy>();
-		searchParameter.setFont(textFont);
-		
-		searchParameter.addItem(SearchBy.NAME);
-		searchParameter.addItem(SearchBy.UPC);
-		
-		searchParameter.addActionListener(comboBoxListener);
-		
-		enterLabel = new JLabel("Enter Name:");
-		searchBy = SearchBy.NAME;
-		goButton = new JButton("Go");
-		
-		goButton.addActionListener(buttonListener);
-		
-		enterLabel.setFont(buttonFont);
-		searchField.setFont(textFont);
-		goButton.setFont(buttonFont);
-		
-		JPanel parameterPanel = new JPanel(new GridBagLayout());
-		JPanel searchPanel = new JPanel(new GridLayout(1, 3));
-		
-		searchPanel.add(enterLabel);
-		searchPanel.add(searchField);
-		searchPanel.add(goButton);
-		
-		resultsPanel = new JPanel();
-		resultsPanel.setBorder(new TitledBorder("Search Results"));
-		resultsPanel.setLayout(new GridLayout(0,1));
-		
-		checkoutToolsButton = new JButton("Checkout Tools");
-		checkoutToolsButton.setFont(buttonFont);
-		checkoutToolsButton.addActionListener(new ButtonListener());
-		
+		resultsList = new ArrayList<Tool>();
+
+		JLabel nameSearchLabel = new JLabel("Search By Name:");
+		JLabel idSearchLabel = new JLabel("Search By ID (UPC):");
+
+		nameSearchField = new JTextField();
+		idSearchField = new JTextField();
+
+		nameSearchField.setText("Search All");
+		idSearchField.setText("Search All");
+
+		nameSearchField.addActionListener(buttonListener);
+		idSearchField.addActionListener(buttonListener);
+
+		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
+		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
+
+		JPanel dataPanel = new JPanel(new GridBagLayout());
+
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.27;
+		c.weighty = 0.5;
 		c.gridx = 0;
 		c.gridy = 0;
-		parameterPanel.add(searchLabel, c);
-		
+		dataPanel.add(nameSearchPanel, c);
+
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.73;
-		c.gridx = 1;
-		c.gridy = 0;
-		parameterPanel.add(searchParameter, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
+		c.weighty = 0.5;
 		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
+		c.gridy = 1;
+		dataPanel.add(idSearchPanel, c);
+
+		nameSearchGoButton = new JButton("Go");
+		idSearchGoButton = new JButton("Go");
+
+		nameSearchGoButton.addActionListener(buttonListener);
+		idSearchGoButton.addActionListener(buttonListener);
+
+		nameSearchLabel.setFont(buttonFont);
+		idSearchLabel.setFont(buttonFont);
+		nameSearchField.setFont(textFont);
+		idSearchField.setFont(textFont);
+		nameSearchGoButton.setFont(buttonFont);
+		idSearchGoButton.setFont(buttonFont);
+
+		nameSearchPanel.add(nameSearchLabel);
+		nameSearchPanel.add(nameSearchField);
+		nameSearchPanel.add(nameSearchGoButton);
+
+		idSearchPanel.add(idSearchLabel);
+		idSearchPanel.add(idSearchField);
+		idSearchPanel.add(idSearchGoButton);
+
+		resultsPanel = new JPanel(new GridLayout(0, 1));
+
+		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		scroller.setPreferredSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
+		scroller.setMaximumSize(scroller.getPreferredSize());
+		scroller.getVerticalScrollBar().setUnitIncrement(13);
+
+		TitledBorder border = new TitledBorder("Search Results");
+		border.setTitleFont(borderFont);
+		scroller.setBorder(border);
+
+		checkoutButton = new JButton("Check Out");
+		checkoutButton.setFont(buttonFont);
+		checkoutButton.addActionListener(buttonListener);
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(parameterPanel, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 2;
-		add(searchPanel, c);
-		
+		add(dataPanel, c);
+
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.5;
 		c.gridx = 1;
-		c.gridy = 3;
-		add(resultsPanel, c);
-		
+		c.gridy = 2;
+		add(scroller, c);
+
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.1;
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.gridwidth = 1;
-		add(checkoutToolsButton, c);
-		
+		add(checkoutButton, c);
+
 		c.weighty = 0.1;
-		c.gridy = 5;
+		c.gridy = 4;
 		add(new JPanel(), c);
-		clear();
-	}
-	
-	public void showConfirmPopup() {
-		if (toolstoCheckout.size() == 0){
-			JOptionPane.showConfirmDialog(this, "No tools are selected.");
-			return;
-		}
+
 	}
 
-	public void clear(){
-		resultsPanel.removeAll();
-		toolstoCheckout.clear();
-		searchField.setText("");
-	}
-
-	public void createCheckboxes(ArrayList<DBObject> returnedTools){
-		clear();
-		for (DBObject o : returnedTools) {
-			if (!((boolean) o.get("isCheckedOut"))){
-				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;
-				JCheckBox cb = new JCheckBox(show); 
-				cb.setName((String) o.get("upc"));
-				cb.setFont(textFont);
-				cb.addItemListener(checkBoxListener);
-				resultsPanel.add(cb, BorderLayout.WEST);
-			}
-		}
-	}
-	
-	public void findTools(){
-		ArrayList<DBObject> returnedTools;
-		switch (searchBy){
-		case UPC:
-			String upc = searchField.getText();
-			clear();
-			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "upc", upc);
-			createCheckboxes(returnedTools);
-			break;
-		case NAME:
-			String name = searchField.getText();
-			clear();
-			returnedTools = Driver.getAccessTracker().searchDatabase("Tools", "name", name);
-			createCheckboxes(returnedTools);
-			break;
-		default:
-			// do nothing
-		}
-	}
-	
-	private class ComboBoxListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == searchParameter) {
-				SearchBy parameter = (SearchBy) searchParameter.getSelectedItem();
-				switch (parameter){
-				case UPC:
-					searchBy = SearchBy.UPC;
-					enterLabel.setText("Enter upc:");
-					break;
-				case NAME:
-					searchBy = SearchBy.NAME;
-					enterLabel.setText("Enter Name:");
-					break;
-				default:
-					break;
-				}
-			}
-		}
-	}
-	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == checkoutToolsButton) {
-				showConfirmPopup();
-				for (Tool t : toolstoCheckout){
-					Driver.getAccessTracker().getCurrentUser().checkoutTool(t);
+			if (e.getSource() == checkoutButton) {
+				boolean noBoxesChecked = true;
+				for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+					JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+					if ( cb.isSelected() ) {
+						noBoxesChecked = false;
+					}
 				}
-				
-				Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addToolsCheckedOut(toolstoCheckout);
-				toolstoCheckout.clear();
-			
-			} else if ( e.getSource() == goButton ) {
-				findTools();
-			}
-		}
-	}
+				ArrayList<String> checkedOut = new ArrayList<String>();
 
-	private class CheckBoxListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			JCheckBox check = (JCheckBox) e.getSource();
-			String upc = check.getName();
+				if ( !noBoxesChecked) {
+					ArrayList<JCheckBox> checkedBoxes = new ArrayList<JCheckBox>();
+					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
+						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
+						if ( cb.isSelected() ) {
+							for ( Tool t : resultsList ) {
+								String s = cb.getText();
+								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+								String UPC = t.getUPC();
+								if ( s.equals(UPC) ) {
+									checkedOut.add(t.getName() + " [" + UPC + "]");
+									checkedBoxes.add(cb);
+									currentUser.checkoutTool(Driver.getAccessTracker().getToolByUPC(UPC));
+								}
+							}
+						}
+					}
 
-			Tool t = Driver.getAccessTracker().getToolByUPC(upc);
-			
-			switch (e.getStateChange()){
-			case ItemEvent.SELECTED:
-				toolstoCheckout.add(t);
-				break;
-			case ItemEvent.DESELECTED:
-				if (toolstoCheckout.contains(t)){
-					toolstoCheckout.remove(t);
+					resultsList.clear();
+					for ( JCheckBox cb : checkedBoxes ) {
+						resultsPanel.remove(cb);
+					}
+					repaint();
+
+					// Lists all the tools that are being checked out.
+					String message = "You Checked Out:\n\n";
+					for ( String s : checkedOut ) {
+						message += s + "\n";
+					}
+					showMessage(message);
 				}
-				break;
+			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
+					e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
+
+				resultsPanel.removeAll();
+				resultsList.clear();
+				repaint();
+				ArrayList<DBObject> toolList = new ArrayList<DBObject>();
+
+				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
+
+					if ( nameSearchField.getText().equals("Search All"))
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", "");
+					else
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", nameSearchField.getText());
+
+				} else {
+					if ( idSearchField.getText().equals("Search All"))
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "name", "");
+					else
+						toolList = Driver.getAccessTracker().searchDatabase("Tools", "upc", idSearchField.getText());
+
+				}
+
+				for ( DBObject t : toolList ) {
+					Tool tool = Driver.getAccessTracker().getToolByUPC((String) t.get("upc")); 
+					resultsList.add(tool);
+				}
+
+				for ( Tool t : resultsList ) {
+					JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
+					cb.setHorizontalAlignment(JCheckBox.LEFT);
+					cb.setFont(buttonFont);
+					if ( t.isCheckedOut() ) {
+						cb.setEnabled(false);
+					}
+					resultsPanel.add(cb);
+				}				
 			}
 		}
 	}

@@ -8,7 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import main.User;
 
 public class ContentPanel extends JPanel {
 	
@@ -23,6 +26,7 @@ public class ContentPanel extends JPanel {
 	protected JLabel title;
 	
 	protected GridBagConstraints c;
+	protected User currentUser = Driver.getAccessTracker().getCurrentUser();
 	
 	public ContentPanel(String title) {
 		
@@ -49,6 +53,10 @@ public class ContentPanel extends JPanel {
 		c.gridx = 2;
 		c.gridy = 0;
 		add(new JPanel(), c);
+	}
+	
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 	
 }

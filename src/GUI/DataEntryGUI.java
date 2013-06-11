@@ -27,16 +27,16 @@ public class DataEntryGUI extends MainPanel {
 	private JButton generateReport;
 	private JButton viewActiveUsers;
 	private JButton viewToolsAndMachines;
+
 	private JButton done;
-	private ButtonListener buttonListener;
 
 	private Color buttonBackground;
 	
 	public DataEntryGUI() {
 		
 		super(Driver.getAccessTracker().getCurrentUser());
+		buttonListener = new ButtonListener();
 		setLayout(new GridBagLayout());
-		buttonBackground = new Color(210, 73, 18);
 		buttonFont = new Font("SansSerif", Font.BOLD, 30);
 		
 		buttonListener = new ButtonListener();
@@ -129,7 +129,7 @@ public class DataEntryGUI extends MainPanel {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
 			}
 			JButton current = (JButton) e.getSource();
-			current.setBackground(buttonBackground);
+			current.setBackground(orange);
 		}
 	}
 }

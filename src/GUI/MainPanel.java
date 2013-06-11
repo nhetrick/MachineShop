@@ -33,6 +33,7 @@ public class MainPanel extends JPanel {
 	protected ActionListener buttonListener;
 	
 	protected Color darkBlue = new Color(33, 49, 77);
+	protected Color orange = new Color(210, 73, 18);
 	
 	public MainPanel(User user) {
 		

@@ -44,6 +44,8 @@ public class UserGUI extends MainPanel {
 	private MachineCheckBoxListener machineCheckBoxListener;
 	private ToolCheckBoxListener toolCheckBoxListener;
 	
+	private boolean isCheckingOutTools = false;
+	
 	public UserGUI(User user) {
 
 		super(user);
@@ -152,12 +154,13 @@ public class UserGUI extends MainPanel {
 		showMessage(message);
 
 		displayUserMachinePermissions();
+		resetButtonBackgrounds();
 		repaint();
 
 	}
 
 	public void returnTools() {
-
+		if (!isCheckingOutTools) {
 		if (toolsToReturn.size() == 0) {
 			showMessage("No tools selected");
 		} else {
@@ -171,19 +174,29 @@ public class UserGUI extends MainPanel {
 
 			toolsToReturn.clear();
 		}
+		}
+		resetButtonBackgrounds();
 	}
 
 	private class ButtonListener implements ActionListener {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			JButton current = (JButton) e.getSource();
 			if ( e.getSource() == checkOutToolsButton ) {
-				remove(contentPanel);
-				add(userCheckoutToolPanel);
-				repaint();
+				switchContentPanel(new UserCheckoutToolPanel());
+				isCheckingOutTools = true;
+				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
-				selectMachines();
+				if ( !isCheckingOutTools ) {
+					selectMachines();
+					current.setBackground(orange);
+				}
 			} else if ( e.getSource() == returnToolsButton ) {
-				returnTools();
+				if ( !isCheckingOutTools ) {
+					returnTools();
+					current.setBackground(orange);
+				}
 			}
 		}
 	}

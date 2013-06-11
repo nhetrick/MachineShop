@@ -146,7 +146,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 				if(((JCheckBox) panel.getComponent(2)).isSelected()) 
 					return true;
 			}
-			showMessage("NO SYSTEM ADMINISTRATOR SELECTED. Please select atleast one System Administrator.");
+			showMessage("NO SYSTEM ADMINISTRATOR SELECTED. Please select at least one System Administrator.");
 			return false;
 		} else {
 			return false;
@@ -157,7 +157,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
-	// Cealrs all the text fields.
+	// Clears all the text fields.
 	public void clearFields() {
 		resultsPanel.removeAll();
 		nameSearchField.setText("");
@@ -212,7 +212,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
 
 				} else {
-					// e.getSource() == ID search field 
+					// e.getSource() == idSearchField 
 					if ( idSearchField.getText().equals("Search All"))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
 					else
