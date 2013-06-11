@@ -2,6 +2,8 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,9 +17,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
-
-import GUI.UserGUI.MachineCheckBoxListener;
-import GUI.UserGUI.ToolCheckBoxListener;
 
 import main.Machine;
 import main.Tool;
@@ -46,6 +45,8 @@ public class AdminGUI extends JPanel {
 	JButton viewActiveUsers;
 	JButton done;
 	
+	GridBagConstraints c = new GridBagConstraints();
+	
 	private ArrayList<Machine> selectedMachines;
 	private ArrayList<Tool> toolsToReturn;
 	private static ToolCheckBoxListener toolCheckBoxListener;
@@ -54,13 +55,14 @@ public class AdminGUI extends JPanel {
 		currentUser = user;
 		
 		setLayout(new BorderLayout());
-		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		
 		buttonFont = new Font("SansSerif", Font.BOLD, 24);
 		
-		centerPanel = new JPanel(new BorderLayout());
+		buttonListener = new ButtonListener();
+		
+		centerPanel = new JPanel(new GridBagLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
-		buttonPanel = new JPanel(new GridLayout(5, 1));
+		buttonPanel = new JPanel(new GridLayout(8, 1));
 		userCheckoutToolPanel = new UserCheckoutToolPanel();
 		
 		machinePermissions = new JPanel();
@@ -83,8 +85,20 @@ public class AdminGUI extends JPanel {
 		contentPanel.add(machinePermissions);		
 		contentPanel.add(checkedOutTools);
 		
-		centerPanel.add(contentPanel, BorderLayout.CENTER);
-		centerPanel.add(buttonPanel, BorderLayout.EAST);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 0.5;
+		c.anchor = GridBagConstraints.LINE_START;
+		
+		centerPanel.add(contentPanel, c);
+		
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		c.gridx = 1;
+		
+		centerPanel.add(buttonPanel, c);
 		
 		logOut = new JButton();
 		checkOutTools = new JButton();
@@ -127,18 +141,14 @@ public class AdminGUI extends JPanel {
 		checkOutTools.addActionListener(buttonListener);
 		selectMachine.addActionListener(buttonListener);
 		returnTools.addActionListener(buttonListener);
+		generateReport.addActionListener(buttonListener);
+		viewToolsAndMachines.addActionListener(buttonListener);
+		viewActiveUsers.addActionListener(buttonListener);
+		
 
 		logOut.addActionListener(new ListenerHelpers.LogOutListner());	
 		done.addActionListener(new ListenerHelpers.DoneListener());
 	
-	}
-	
-	public static void returnHome(){
-		centerPanel.remove(userCheckoutToolPanel);
-		centerPanel.add(contentPanel, BorderLayout.CENTER);
-		
-		displayUserCheckedOutTools();
-		centerPanel.repaint();
 	}
 	
 	private void displayUserMachinePermissions() {
@@ -208,29 +218,37 @@ public class AdminGUI extends JPanel {
 		toolsToReturn.clear();
 	}
 	
+	public void switchPanels(JPanel panel) {
+		centerPanel.removeAll();
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		c.gridx = 1;
+		centerPanel.add(buttonPanel, c);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 0.5;
+		c.anchor = GridBagConstraints.LINE_START;
+		centerPanel.add(panel, c);
+		repaint();
+	}
+	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == checkOutTools ) {
-				centerPanel.remove(contentPanel);
-				centerPanel.add(userCheckoutToolPanel);
-				centerPanel.repaint();
+				switchPanels(userCheckoutToolPanel);
 			} else if ( e.getSource() == selectMachine ){
 				selectMachines();
 			} else if ( e.getSource() == returnTools ){
 				returnTools();
 			} else if ( e.getSource() == generateReport) {
-				centerPanel.remove(contentPanel);
-				centerPanel.add(new GenerateReportPanel());
-				centerPanel.repaint();
+				switchPanels(new GenerateReportPanel());
 			} else if ( e.getSource() == viewToolsAndMachines) {
-				centerPanel.remove(contentPanel);
-				centerPanel.add(new ViewToolsAndMachinesPanel());
-				centerPanel.repaint();
+				switchPanels(new ViewToolsAndMachinesPanel());
 			} else if ( e.getSource() == viewActiveUsers) {
-				//centerPanel.remove(contentPanel);
-				//centerPanel.add(ne);
-				//centerPanel.repaint();
+				
 			}
 		}
 	}
