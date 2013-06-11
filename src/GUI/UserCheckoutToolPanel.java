@@ -171,7 +171,8 @@ public class UserCheckoutToolPanel extends ContentPanel {
 
 					resultsList.clear();
 					for ( JCheckBox cb : checkedBoxes ) {
-						resultsPanel.remove(cb);
+						cb.setEnabled(false);
+						cb.setSelected(false);
 					}
 					repaint();
 
@@ -216,6 +217,8 @@ public class UserCheckoutToolPanel extends ContentPanel {
 					cb.setFont(buttonFont);
 					if ( t.isCheckedOut() ) {
 						cb.setEnabled(false);
+					} else {
+						cb.setEnabled(true);
 					}
 					resultsPanel.add(cb);
 				}				
