@@ -151,7 +151,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 					}
 				}
 				ArrayList<String> checkedOut = new ArrayList<String>();
-
+				ArrayList<Tool> checkedOutTools = new ArrayList<Tool>();
 				if ( !noBoxesChecked) {
 					ArrayList<JCheckBox> checkedBoxes = new ArrayList<JCheckBox>();
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
@@ -170,7 +170,10 @@ public class UserCheckoutToolPanel extends ContentPanel {
 						}
 					}
 
-					resultsList.clear();
+					for ( Tool t : checkedOutTools ) {
+						resultsList.remove(t);
+					}
+					
 					for ( JCheckBox cb : checkedBoxes ) {
 						cb.setEnabled(false);
 						cb.setSelected(false);
