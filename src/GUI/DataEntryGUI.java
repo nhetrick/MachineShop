@@ -27,19 +27,23 @@ public class DataEntryGUI extends MainPanel {
 	private JButton generateReport;
 	private JButton viewActiveUsers;
 	private JButton viewToolsAndMachines;
+
 	private JButton done;
-	private ButtonListener buttonListener;
+
 	private Color buttonBackground;
 	
 	public DataEntryGUI() {
 		
 		super(Driver.getAccessTracker().getCurrentUser());
+		buttonListener = new ButtonListener();
+		setLayout(new GridBagLayout());
+		buttonFont = new Font("SansSerif", Font.BOLD, 30);
 		
 		buttonListener = new ButtonListener();
 		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEtchedBorder());
-		buttonPanel = new JPanel(new GridLayout(0, 1));
+		
 		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
 		certifications = new JButton();
@@ -64,8 +68,6 @@ public class DataEntryGUI extends MainPanel {
 		done.setText("Done");
 		logOut.setText("Log Out");
 		
-		ArrayList<JButton> buttons = new ArrayList<JButton>();
-		
 		buttons.add(certifications);
 		buttons.add(users);
 		buttons.add(tools);
@@ -77,11 +79,7 @@ public class DataEntryGUI extends MainPanel {
 		buttons.add(done);
 		buttons.add(logOut);
 		
-		for ( JButton b : buttons ) {
-			b.setFont(buttonFont);
-			b.addActionListener(buttonListener);
-			buttonPanel.add(b);
-		}
+		formatAndAddButtons();
 		
 		logOut.removeActionListener(buttonListener);
 		logOut.addActionListener(new ListenerHelpers.LogOutListener());
@@ -108,13 +106,6 @@ public class DataEntryGUI extends MainPanel {
 		
 	}
 	
-	@Override
-	public void setup() {
-		setLayout(new GridBagLayout());
-		buttonBackground = new Color(63, 146, 176);
-		buttonFont = new Font("SansSerif", Font.BOLD, 30);
-	}
-	
 	private class ButtonListener implements ActionListener {
 		
 		@Override
@@ -138,7 +129,7 @@ public class DataEntryGUI extends MainPanel {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
 			}
 			JButton current = (JButton) e.getSource();
-			current.setBackground(buttonBackground);
+			current.setBackground(orange);
 		}
 	}
 }

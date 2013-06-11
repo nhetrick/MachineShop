@@ -8,11 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import main.User;
+
 public class ContentPanel extends JPanel {
-	
-	protected JLabel title;
 	
 	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
@@ -22,7 +23,10 @@ public class ContentPanel extends JPanel {
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 16);
 	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 30);
 	
+	protected JLabel title;
+	
 	protected GridBagConstraints c;
+	protected User currentUser = Driver.getAccessTracker().getCurrentUser();
 	
 	public ContentPanel(String title) {
 		
@@ -49,6 +53,10 @@ public class ContentPanel extends JPanel {
 		c.gridx = 2;
 		c.gridy = 0;
 		add(new JPanel(), c);
+	}
+	
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 	
 }

@@ -82,7 +82,7 @@ public class EditToolsPanel extends ContentPanel {
 			} else if ( e.getSource() == removeButton ) {
 				removeAll();
 				setLayout(new BorderLayout());
-				add(new RemoveToolsPanel(), BorderLayout.CENTER);
+				add(new UserCheckoutToolPanel(), BorderLayout.CENTER);
 				repaint();
 			}
 			repaint();
