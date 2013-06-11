@@ -210,7 +210,7 @@ public class Log {
 				} 
 			}
 			
-			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
+			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), (String) result.get("department"), machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
 			results.add(entry);
 		}
 	}
