@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,6 +20,7 @@ import javax.swing.border.TitledBorder;
 
 import main.SystemAdministrator;
 import main.User;
+import main.UserComparator;
 
 import com.mongodb.DBObject;
 
@@ -224,7 +226,9 @@ public class UnlockUsersPanel extends ContentPanel {
 					if (locked)
 						resultsList.add(user);
 				}
-								
+				
+				// sorts the resultslist
+				Collections.sort(resultsList, new UserComparator());
 				for ( User u : resultsList ) {
 					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getCWID() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);

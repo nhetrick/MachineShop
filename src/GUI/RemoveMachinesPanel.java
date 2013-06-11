@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.MachineComparator;
 import main.SystemAdministrator;
 import main.Machine;
 
@@ -221,7 +223,9 @@ public class RemoveMachinesPanel extends ContentPanel {
 					Machine machine = new Machine( (String) m.get("name"), (String) m.get("ID"));
 					resultsList.add(machine);
 				}
-								
+				
+				// sorts the resultslist
+				Collections.sort(resultsList, new MachineComparator());
 				for ( Machine m : resultsList ) {
 					JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);

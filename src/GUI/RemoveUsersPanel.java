@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,6 +20,7 @@ import javax.swing.border.TitledBorder;
 
 import main.SystemAdministrator;
 import main.User;
+import main.UserComparator;
 
 import com.mongodb.DBObject;
 
@@ -223,7 +225,9 @@ public class RemoveUsersPanel extends ContentPanel {
 					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 					resultsList.add(user);
 				}
-								
+				
+				// sorts the resultslist
+				Collections.sort(resultsList, new UserComparator());
 				for ( User m : resultsList ) {
 					JCheckBox cb = new JCheckBox(m.getFirstName() + " " + m.getLastName() + " [" + m.getCWID() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);

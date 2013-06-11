@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,6 +26,7 @@ import GUI.MainGUI.SearchBy;
 import main.AccessTracker;
 import main.InputReader;
 import main.Tool;
+import main.ToolComparator;
 import main.User;
 
 public class UserCheckoutToolPanel extends ContentPanel {
@@ -165,6 +167,8 @@ public class UserCheckoutToolPanel extends ContentPanel {
 
 	public void createCheckboxes(ArrayList<DBObject> returnedTools){
 		clear();
+		
+		// TODO needs to change this fuction to sort
 		for (DBObject o : returnedTools) {
 			if (!((boolean) o.get("isCheckedOut"))){
 				String show = (String) o.get("name") + " (" + (String) o.get("upc") + ")" ;

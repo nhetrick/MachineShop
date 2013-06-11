@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,6 +20,7 @@ import javax.swing.border.TitledBorder;
 
 import main.SystemAdministrator;
 import main.Tool;
+import main.ToolComparator;
 
 import com.mongodb.DBObject;
 
@@ -225,6 +227,8 @@ public class RemoveToolsPanel extends ContentPanel {
 					}
 				}
 								
+				//sorts the resultlists
+				Collections.sort(resultsList, new ToolComparator());
 				for ( Tool t : resultsList ) {
 					JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
