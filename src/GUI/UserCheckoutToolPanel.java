@@ -39,13 +39,13 @@ public class UserCheckoutToolPanel extends ContentPanel {
 	private JTextField searchField;
 	private JPanel resultsPanel;
 	private SearchBy searchBy;
-	private ArrayList<Tool> toolsToCheckout;
+	private ArrayList<Tool> toolstoCheckout;
 	
 	public UserCheckoutToolPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Checkout Tools");
 		
-		toolsToCheckout = new ArrayList<Tool>();
+		toolstoCheckout = new ArrayList<Tool>();
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
 		checkBoxListener = new CheckBoxListener();
@@ -151,7 +151,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 	}
 	
 	public void showConfirmPopup() {
-		if (toolsToCheckout.size() == 0){
+		if (toolstoCheckout.size() == 0){
 			JOptionPane.showConfirmDialog(this, "No tools are selected.");
 			return;
 		}
@@ -159,7 +159,7 @@ public class UserCheckoutToolPanel extends ContentPanel {
 
 	public void clear(){
 		resultsPanel.removeAll();
-		toolsToCheckout.clear();
+		toolstoCheckout.clear();
 		searchField.setText("");
 	}
 
@@ -223,13 +223,12 @@ public class UserCheckoutToolPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == checkoutToolsButton) {
 				showConfirmPopup();
-				for (Tool t : toolsToCheckout){
+				for (Tool t : toolstoCheckout){
 					Driver.getAccessTracker().getCurrentUser().checkoutTool(t);
 				}
 				
-				Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addToolsCheckedOut(toolsToCheckout);
-				toolsToCheckout.clear();
-				UserGUI.returnHome();
+				Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addToolsCheckedOut(toolstoCheckout);
+				toolstoCheckout.clear();
 			
 			} else if ( e.getSource() == goButton ) {
 				findTools();
@@ -247,11 +246,11 @@ public class UserCheckoutToolPanel extends ContentPanel {
 			
 			switch (e.getStateChange()){
 			case ItemEvent.SELECTED:
-				toolsToCheckout.add(t);
+				toolstoCheckout.add(t);
 				break;
 			case ItemEvent.DESELECTED:
-				if (toolsToCheckout.contains(t)){
-					toolsToCheckout.remove(t);
+				if (toolstoCheckout.contains(t)){
+					toolstoCheckout.remove(t);
 				}
 				break;
 			}

@@ -12,8 +12,6 @@ import javax.swing.JPanel;
 
 public class ContentPanel extends JPanel {
 	
-	protected JLabel title;
-	
 	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
 	protected Font textFont = new Font("SansSerif", Font.BOLD, 28);
@@ -21,6 +19,8 @@ public class ContentPanel extends JPanel {
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 20);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 16);
 	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 30);
+	
+	protected JLabel title;
 	
 	protected GridBagConstraints c;
 	

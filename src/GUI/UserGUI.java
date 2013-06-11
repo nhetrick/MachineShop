@@ -15,220 +15,208 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import main.Machine;
 import main.Tool;
 import main.User;
 
-public class UserGUI extends JPanel {
-	
-	private static JPanel centerPanel;
-	private static JPanel contentPanel;
-	private static JPanel buttonPanel;
-	private JPanel machinePermissions;
-	private static JPanel checkedOutTools;
-	private static UserCheckoutToolPanel userCheckoutToolPanel;
-	private static User currentUser;
-	
-	private JButton logOut = new JButton();
-	private JButton checkOutTools = new JButton();
-	private JButton selectMachine = new JButton();
-	private JButton returnTools = new JButton();
-	private JButton done = new JButton();
-	
-	private ButtonListener buttonListener;
-	
-	private Font buttonFont;
+public class UserGUI extends MainPanel {
+
+	private JPanel machinesPanel;
+	private JPanel checkedOutToolsPanel;
+	private UserCheckoutToolPanel userCheckoutToolPanel;
+
+	private JButton logOutButton = new JButton();
+	private JButton checkOutToolsButton = new JButton();
+	private JButton selectMachinesButton = new JButton();
+	private JButton returnToolsButton = new JButton();
+	private JButton doneButton = new JButton();
+
+	private JScrollPane machinesScroller;
+	private JScrollPane toolsScroller;
+
 	private ArrayList<Machine> selectedMachines;
 	private ArrayList<Tool> toolsToReturn;
-	private static ToolCheckBoxListener toolCheckBoxListener;
+	
+	private MachineCheckBoxListener machineCheckBoxListener;
+	private ToolCheckBoxListener toolCheckBoxListener;
 	
 	public UserGUI(User user) {
-		currentUser = user;
-		
-		setLayout(new BorderLayout());
-		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
-		
-		buttonFont = new Font("SansSerif", Font.BOLD, 24);
-		
+
+		super(user);
 		buttonListener = new ButtonListener();
-		
-		centerPanel = new JPanel(new BorderLayout());
-		contentPanel = new JPanel(new GridLayout(2, 1));
-		buttonPanel = new JPanel(new GridLayout(5, 1));
-		userCheckoutToolPanel = new UserCheckoutToolPanel();
-		machinePermissions = new JPanel();
-		checkedOutTools = new JPanel();
-		
-		selectedMachines = new ArrayList<Machine>();
-		toolsToReturn = new ArrayList<Tool>();
-				
+		machineCheckBoxListener = new MachineCheckBoxListener();
 		toolCheckBoxListener = new ToolCheckBoxListener();
 		
-		machinePermissions.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "My Machines"));
-		machinePermissions.setLayout(new GridLayout(10, 5));
-		
-		checkedOutTools.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(), "Checked-out Tools"));
-		checkedOutTools.setLayout(new GridLayout(10, 5));
+		contentPanel = new JPanel(new GridLayout(2, 1));
+		userCheckoutToolPanel = new UserCheckoutToolPanel();
+		machinesPanel = new JPanel();
+		checkedOutToolsPanel = new JPanel();
+
+		selectedMachines = new ArrayList<Machine>();
+		toolsToReturn = new ArrayList<Tool>();
+
+		machinesPanel.setLayout(new GridLayout(0, 2));
+		checkedOutToolsPanel.setLayout(new GridLayout(0, 1));
 		
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
 		
-		contentPanel.add(machinePermissions);		
-		contentPanel.add(checkedOutTools);
+		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		TitledBorder machineBorder = new TitledBorder("My Machines");
+		machineBorder.setTitleFont(borderFont);
+		machinesScroller.setBorder(machineBorder);
 		
-		centerPanel.add(contentPanel, BorderLayout.CENTER);
-		centerPanel.add(buttonPanel, BorderLayout.EAST);
+		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		TitledBorder toolBorder = new TitledBorder("Checked out Tools");
+		toolBorder.setTitleFont(borderFont);
+		toolsScroller.setBorder(toolBorder);
+
+		contentPanel.add(machinesScroller);		
+		contentPanel.add(toolsScroller);
+
+		selectMachinesButton.setText("Select Machines");
+		checkOutToolsButton.setText("Check Out Tools");
+		returnToolsButton.setText("Return Tools");
+		doneButton.setText("I'm Finished (Start Working)");
+		logOutButton.setText("Log Out");
+
+		buttons.add(selectMachinesButton);
+		buttons.add(checkOutToolsButton);
+		buttons.add(returnToolsButton);
+		buttons.add(doneButton);
+		buttons.add(logOutButton);
 		
-		logOut.setText("Log Out");
-		selectMachine.setText("Select Machines");
-		checkOutTools.setText("Check Out Tools");
-		returnTools.setText("Return Tools");
-		done.setText("Done");
+		formatAndAddButtons();
 		
-		logOut.setFont(buttonFont);
-		checkOutTools.setFont(buttonFont);
-		selectMachine.setFont(buttonFont);
-		returnTools.setFont(buttonFont);
-		done.setFont(buttonFont);
+		add(contentPanel, BorderLayout.CENTER);
+		add(buttonPanel, BorderLayout.EAST);
 		
-		buttonPanel.add(selectMachine);
-		buttonPanel.add(checkOutTools);
-		buttonPanel.add(returnTools);
-		buttonPanel.add(done);
-		buttonPanel.add(logOut);
+		logOutButton.removeActionListener(buttonListener);
+		doneButton.removeActionListener(buttonListener);
+		logOutButton.addActionListener(new ListenerHelpers.LogOutListener());
+		doneButton.addActionListener(new ListenerHelpers.DoneListener());
 		
-		add(centerPanel, BorderLayout.CENTER);
-		
-		checkOutTools.addActionListener(buttonListener);
-		selectMachine.addActionListener(buttonListener);
-		returnTools.addActionListener(buttonListener);
-		
-		logOut.addActionListener(new ListenerHelpers.LogOutListener());
-		done.addActionListener(new ListenerHelpers.DoneListener());
 	}
-	
-	public static void returnHome(){
-		centerPanel.remove(userCheckoutToolPanel);
-		centerPanel.add(contentPanel, BorderLayout.CENTER);
-		
-		displayUserCheckedOutTools();
-		centerPanel.repaint();
-	}
-	
+
 	private void displayUserMachinePermissions() {
-		machinePermissions.removeAll();
+		machinesPanel.removeAll();
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
-		for (Machine m:machines) {
-			String show = m.getName() + " (" + m.getID() + ")";
-			JCheckBox machine = new JCheckBox(show);
-			machine.setName(m.getID());
-			machine.setFont(new Font("SansSerif", Font.BOLD, 20));
+		for (Machine m : machines) {
+			String name = m.getName() + " [" + m.getID() + "]";
+			JCheckBox machineBox = new JCheckBox(name);
+			machineBox.setName(m.getID());
+			machineBox.setFont(buttonFont);
 			if (selectedMachines.contains(m)){
-				machine.setEnabled(false);
+				machineBox.setEnabled(false);
 			}
-			machine.addItemListener(new MachineCheckBoxListener());
-			machinePermissions.add(machine);
+			machineBox.addItemListener(machineCheckBoxListener);
+			machinesPanel.add(machineBox);
 		}
 	}
-	
-	private static void displayUserCheckedOutTools() {
-		checkedOutTools.removeAll();
+
+	private void displayUserCheckedOutTools() {
+		checkedOutToolsPanel.removeAll();
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
-		for (Tool t:tools) {
-			String show = t.getName() + " (" + t.getUPC() + ")";
-			JCheckBox tool = new JCheckBox(show);
-			tool.setName(t.getUPC());
-			tool.setFont(new Font("SansSerif", Font.BOLD, 20));
-			tool.addItemListener(toolCheckBoxListener);
-			checkedOutTools.add(tool);
+		for (Tool t : tools) {
+			String name = t.getName() + " [" + t.getUPC() + "]";
+			JCheckBox toolBox = new JCheckBox(name);
+			toolBox.setName(t.getUPC());
+			toolBox.setFont(buttonFont);
+			toolBox.addItemListener(toolCheckBoxListener);
+			checkedOutToolsPanel.add(toolBox);
 		}
 	}	
-	
-	public void selectMachines(){
-		for (Machine m : Driver.getAccessTracker().getCurrentUser().getCurrentEntry().getMachinesUsed()) {
+
+	public void selectMachines() {
+
+		for (Machine m : currentUser.getCurrentEntry().getMachinesUsed()) {
 			m.stopUsing();
 		}
-		
-		Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addMachinesUsed(selectedMachines);
-		
+
+		currentUser.getCurrentEntry().addMachinesUsed(selectedMachines);
+
 		String message = "You are using:\n\n";
+
 		for ( Machine m : selectedMachines ) {
 			message += m + "\n";
 		}
-		
-		for (Machine m : Driver.getAccessTracker().getCurrentUser().getCurrentEntry().getMachinesUsed()) {
+
+		for (Machine m : currentUser.getCurrentEntry().getMachinesUsed()) {
 			m.use();
-		}		
-		
-		JOptionPane.showMessageDialog(this, message);
-		
-		displayUserMachinePermissions();
-		//selectedMachines.clear();
-	}
-	
-	public void returnTools(){
-		
-		if (toolsToReturn.size() == 0){
-			JOptionPane.showMessageDialog(this, "No tools selected");
-			return;
 		}
-		
-		Driver.getAccessTracker().getCurrentUser().getCurrentEntry().addToolsReturned(toolsToReturn);
-		
-		Driver.getAccessTracker().getCurrentUser().returnTools(toolsToReturn);
-		displayUserCheckedOutTools();
-		centerPanel.repaint();
-		
-		toolsToReturn.clear();
+
+		showMessage(message);
+
+		displayUserMachinePermissions();
+		repaint();
+
 	}
-	
+
+	public void returnTools() {
+
+		if (toolsToReturn.size() == 0) {
+			showMessage("No tools selected");
+		} else {
+
+			currentUser.getCurrentEntry().addToolsReturned(toolsToReturn);
+
+			currentUser.returnTools(toolsToReturn);
+			
+			displayUserCheckedOutTools();
+			repaint();
+
+			toolsToReturn.clear();
+		}
+	}
+
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ( e.getSource() == checkOutTools ) {
-				centerPanel.remove(contentPanel);
-
-				centerPanel.add(userCheckoutToolPanel);
-				centerPanel.repaint();
-			} else if ( e.getSource() == selectMachine ){
+			if ( e.getSource() == checkOutToolsButton ) {
+				remove(contentPanel);
+				add(userCheckoutToolPanel);
+				repaint();
+			} else if ( e.getSource() == selectMachinesButton ) {
 				selectMachines();
-			} else if ( e.getSource() == returnTools ){
+			} else if ( e.getSource() == returnToolsButton ) {
 				returnTools();
 			}
 		}
 	}
-	
+
 	public class MachineCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();
 			String id = check.getName();
-			
+
 			Machine m = Driver.getAccessTracker().getMachineByID(id);
-			
-			switch (e.getStateChange()){
+
+			switch (e.getStateChange()) {
 			case ItemEvent.SELECTED:
 				selectedMachines.add(m);
 				break;
 			case ItemEvent.DESELECTED:
-				if (selectedMachines.contains(m)){
+				if (selectedMachines.contains(m)) {
 					selectedMachines.remove(m);
 				}
 				break;
 			}
 		}
 	}
-	
+
 	public class ToolCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();
 			String upc = check.getName();
-			
+
 			Tool t = Driver.getAccessTracker().getToolByUPC(upc);
-			
+
 			switch (e.getStateChange()){
 			case ItemEvent.SELECTED:
 				toolsToReturn.add(t);

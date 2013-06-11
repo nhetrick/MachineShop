@@ -27,13 +27,12 @@ public class SystemAdminGUI extends MainPanel {
 	private JButton massLogOutButton;
 	private JScrollPane scroller;
 
-	private ButtonListener buttonListener;
-
 	public SystemAdminGUI(User user) {
 
 		super(user);
 		buttonListener = new ButtonListener();
-
+		contentPanel = new JPanel(new GridBagLayout());	
+		
 		logOutButton = new JButton();
 		dataEntryButton = new JButton();
 		basicUserButton = new JButton();
@@ -75,12 +74,6 @@ public class SystemAdminGUI extends MainPanel {
 		
 		MainGUI.pushToStack(this);
 		
-	}
-	
-	public void setup() {
-		super.setup();
-		contentPanel = new JPanel(new GridBagLayout());
-		buttonPanel = new JPanel(new GridLayout(3, 1));
 	}
 
 	private void createMassLogOutPanel() {
