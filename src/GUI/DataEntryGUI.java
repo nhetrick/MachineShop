@@ -151,7 +151,7 @@ public class DataEntryGUI extends MainPanel {
 			} else if ( e.getSource() == generateReport ) {
 				switchPanels(new GenerateReportPanel());
 			} else if ( e.getSource() == viewActiveUsers ) {
-				switchPanels(new JPanel() );
+				switchPanels(new ViewActiveUsersPanel() );
 			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchPanels(new ViewToolsAndMachinesPanel());
 			}
