@@ -148,6 +148,7 @@ public class AccessTracker {
 		return newUser;
 	}
 
+	// Create user by finding that user from Oracle database.
 	public User createUser(String CWID) throws SQLException {
 		OracleConnection oracleConnection = new OracleConnection();
 		oracleConnection.getConnection();
@@ -256,6 +257,7 @@ public class AccessTracker {
 			department = (String) result.get("department");
 		}
 
+		// First name, last name, and email should not be null.
 		firstName = (String) result.get("firstName");
 		lastName = (String) result.get("lastName");
 		email = (String) result.get("email");
@@ -323,7 +325,6 @@ public class AccessTracker {
 		}
 
 		return returnList;
-
 	}
 	
 	public ArrayList<DBObject> searchDatabaseForUser(String userName) {
@@ -365,9 +366,9 @@ public class AccessTracker {
 		}
 
 		return returnList1;
-
 	}
 	
+	// check if email follows the pattern.
 	public boolean checkValidEmail(String email){
 		String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		try {
@@ -453,7 +454,4 @@ public class AccessTracker {
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
 	}
-
-
 }
-

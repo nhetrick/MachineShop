@@ -27,6 +27,7 @@ public class SystemAdministrator extends Administrator {
 		users = database.getCollection("Users");
 	}
 	
+	// updates user status as user, admin, or system admin.
 	public void updatePermissions(User user, boolean isAdmin, boolean isSystemAdmin) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (!(cursor == null)) {
@@ -37,6 +38,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// updates user's machine certifications.
 	public void updateCertifications(User user, ArrayList<Machine> machines) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (cursor.hasNext()) {
@@ -52,6 +54,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// TODO used only in test. remove this and change test
 	public void removeUsers(ArrayList<User> userList) {
 		for (User u : userList) {
 			DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
@@ -66,6 +69,7 @@ public class SystemAdministrator extends Administrator {
 		
 	}
 	
+	// adds the tool to database.
 	public void addTool(Tool t) {
 		DBCollection tools = database.getCollection("Tools");
 		DBCursor cursor = tools.find(new BasicDBObject("upc", t.getUPC()));
@@ -80,6 +84,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// adds the machine to database.
 	public void addMachine(Machine m) {
 		DBCollection machines = database.getCollection("Machines");
 		DBCursor cursor = machines.find(new BasicDBObject("ID", m.getID()));
@@ -94,6 +99,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// adds the user to database
 	public boolean addUser(User u) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 		if ( !cursor.hasNext() ) {
@@ -111,6 +117,7 @@ public class SystemAdministrator extends Administrator {
 		}		
 	}
 	
+	// removes the tool from database
 	public void removeTool(String upc) {
 		DBCollection tools = database.getCollection("Tools");
 		DBCursor cursor = tools.find(new BasicDBObject("upc", upc));
@@ -121,6 +128,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// removes the machine from database
 	public void removeMachine(String id) {
 		DBCollection machines = database.getCollection("Machines");
 		DBCursor cursor = machines.find(new BasicDBObject("ID", id));
@@ -131,6 +139,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// removes the user from database
 	public void removeUser(String cwid) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
 		if (!(cursor == null)) {
@@ -140,6 +149,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// loads new user from Oracel database
 	public User loadNewUser(String cwid, OracleConnection connection) throws SQLException {
 		
 		ArrayList<String> results = connection.select(cwid);
@@ -150,6 +160,7 @@ public class SystemAdministrator extends Administrator {
 		return new User(results.get(1), results.get(2), cwid, results.get(3), results.get(4));
 	}
 	
+	// locks the user
 	public void lockUser(User user) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (!(cursor == null)) {
@@ -160,6 +171,7 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	// unlocks the user
 	public void unlockUser(User user) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", user.getCWID()));
 		if (!(cursor == null)) {
@@ -170,6 +182,8 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
+	
+	// logs out all the users currently logged in
 	public void logOutAllUsers() {
 		ArrayList<User> currentUsers = tracker.getCurrentUsers();
 		for (User u : currentUsers) {
