@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import GUI.Driver;
+
 public class Statistics {
 	ArrayList<LogEntry> results;
 	private int numEntries;
@@ -45,7 +47,10 @@ public class Statistics {
 		for (LogEntry entry : results) {
 			numEntries++;
 			userCheck(entry.getCwid());
-			//deptCheck(entry.getUser().getDepartment());
+			String dept = entry.getDept();
+			if (dept != null) {
+				deptCheck(dept);
+			}
 			if (entry.getTimeOut() != null) {
 				determineLogInTime(entry.getTimeIn().getTime(), entry.getTimeOut().getTime());
 				numEntriesModified++;
@@ -80,9 +85,6 @@ public class Statistics {
 
 	private void determineLogInTime(Long start, Long end) {
 		totalTimeLoggedIn += (end - start);
-		System.out.println(start);
-		System.out.println(end);
-		System.out.println(end - start);
 	}
 	
 	private void determineAvgTime() {

@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Comparator;
+
 import GUI.Driver;
 
 import com.mongodb.BasicDBObject;
@@ -66,5 +68,4 @@ public class Tool {
 		isCheckedOut = b;
 		
 	}
-
 }

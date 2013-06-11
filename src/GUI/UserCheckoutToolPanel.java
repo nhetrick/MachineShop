@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -17,10 +18,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import com.mongodb.DBObject;
+
 import main.SystemAdministrator;
 import main.Tool;
-
-import com.mongodb.DBObject;
 
 public class UserCheckoutToolPanel extends ContentPanel {
 

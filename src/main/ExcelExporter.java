@@ -28,7 +28,11 @@ public class ExcelExporter {
 		// write data
 		for(int row=0; row < model.getRowCount(); row++){
 			for(int col=0; col < model.getColumnCount(); col++){
-				out.write(model.getValueAt(row, col).toString()+"\t");
+				if (model.getValueAt(row, col) == null){
+					out.write("\t");
+				} else {
+					out.write(model.getValueAt(row, col).toString()+"\t");
+				}
 			}
 			out.write("\n");
 		}

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -16,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.Machine;
+import main.MachineComparator;
 import main.SystemAdministrator;
 import main.User;
 
@@ -51,7 +53,12 @@ public class EditCertificationsPanel extends ContentPanel {
 
 		permissionsPanel = new JPanel(new GridLayout(0, 2));
 
-		for ( Machine m : Driver.getAccessTracker().getMachines() ) {
+		// sorts the machines list
+		ArrayList<Machine> sorted = new ArrayList<Machine>();
+		sorted = Driver.getAccessTracker().getMachines();
+		Collections.sort(sorted, new MachineComparator());
+		
+		for ( Machine m : sorted ) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
 			cb.setFont(borderFont);

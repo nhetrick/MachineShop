@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,7 +22,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import main.Machine;
+import main.MachineComparator;
 import main.Tool;
+import main.ToolComparator;
 
 public class ViewToolsAndMachinesPanel extends ContentPanel {
 	
@@ -62,13 +66,20 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		
 		machineBlack.gridy = 1;
 		machineBlack.gridx = 1;
+		machineBlack.weighty = 0.9;
 		machineBlack.weightx = 0.5;
 		
 		machineGray.gridy = 1;
 		machineGray.gridx = 0;
+		machineGray.weighty = 0.9;
 		machineGray.weightx = 0.5;
 		
-		for (Machine m : Driver.getAccessTracker().getMachines()) {
+		// sorts the machines list
+		ArrayList<Machine> sortedMachine = new ArrayList<Machine>();
+		sortedMachine = Driver.getAccessTracker().getMachines();
+		Collections.sort(sortedMachine, new MachineComparator());
+		
+		for (Machine m : sortedMachine) {
 			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "] " + "(" + m.getNumUsers() + " Users)");
 			l.setFont(resultsFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
@@ -97,7 +108,12 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		toolGray.weighty = 0.9;
 		toolGray.weightx = 0.5;
 		
-		for (Tool t : Driver.getAccessTracker().getTools()) {
+		// sorts the tools list
+		ArrayList<Tool> sortedTools = new ArrayList<Tool>();
+		sortedTools = Driver.getAccessTracker().getTools();
+		Collections.sort(sortedTools, new ToolComparator());
+		
+		for (Tool t : sortedTools) {
 			JLabel l = new JLabel(t.getName() + " [" + t.getUPC() + "]");
 			l.setFont(resultsFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
