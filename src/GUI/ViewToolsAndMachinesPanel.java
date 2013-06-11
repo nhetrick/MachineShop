@@ -62,10 +62,12 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		
 		machineBlack.gridy = 1;
 		machineBlack.gridx = 1;
+		machineBlack.weighty = 0.9;
 		machineBlack.weightx = 0.5;
 		
 		machineGray.gridy = 1;
 		machineGray.gridx = 0;
+		machineGray.weighty = 0.9;
 		machineGray.weightx = 0.5;
 		
 		for (Machine m : Driver.getAccessTracker().getMachines()) {
