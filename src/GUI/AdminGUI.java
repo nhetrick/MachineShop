@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,7 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import main.Machine;
+import main.MachineComparator;
 import main.Tool;
+import main.ToolComparator;
 import main.User;
 
 public class AdminGUI extends JPanel {
@@ -154,6 +157,9 @@ public class AdminGUI extends JPanel {
 	private void displayUserMachinePermissions() {
 		machinePermissions.removeAll();
 		ArrayList<Machine> machines = currentUser.getCertifiedMachines();
+		
+		// sorts the machines list
+		Collections.sort(machines, new MachineComparator());
 		for (Machine m:machines) {
 			String show = m.getName() + " (" + m.getID() + ")";
 			JCheckBox machine = new JCheckBox(show);
@@ -170,6 +176,9 @@ public class AdminGUI extends JPanel {
 	private static void displayUserCheckedOutTools() {
 		checkedOutTools.removeAll();
 		ArrayList<Tool> tools = currentUser.getToolsCheckedOut();
+		
+		// sorts the tools list
+		Collections.sort(tools, new ToolComparator());
 		for (Tool t:tools) {
 			String show = t.getName() + " (" + t.getUPC() + ")";
 			JCheckBox tool = new JCheckBox(show);
