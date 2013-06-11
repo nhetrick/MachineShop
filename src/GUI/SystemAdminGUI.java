@@ -10,65 +10,87 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
 
 import main.SystemAdministrator;
 import main.User;
 
-public class SystemAdminGUI extends JPanel {
-	private JPanel centerPanel;
-	private JPanel buttonPanel;
-	private JPanel massLogOutPanel;
-	private User currentUser;
-	
-	private Font buttonFont;
+public class SystemAdminGUI extends MainPanel {
 
-	
+	private JPanel massLogOutPanel;
+	private JButton logOutButton;
+	private JButton dataEntryButton;
+	private JButton basicUserButton;
+	private JButton massLogOutButton;
+	private JScrollPane scroller;
+
+	private ButtonListener buttonListener;
+
 	public SystemAdminGUI(User user) {
-		currentUser = user;
-		setLayout(new BorderLayout());
-		//setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+
+		super(user);
+		buttonListener = new ButtonListener();
+
+		logOutButton = new JButton();
+		dataEntryButton = new JButton();
+		basicUserButton = new JButton();
+
+		logOutButton.setText("Log Out");
+		dataEntryButton.setText("Data Entry");
+		basicUserButton.setText("Basic User");
+
+		logOutButton.setFont(buttonFont);
+		dataEntryButton.setFont(buttonFont);
+		basicUserButton.setFont(buttonFont);
+
+		dataEntryButton.addActionListener(buttonListener);
+		basicUserButton.addActionListener(new BasicUserButtonListener());
+		logOutButton.addActionListener(new ListenerHelpers.LogOutListner());
+
+		buttonPanel.add(dataEntryButton);
+		buttonPanel.add(basicUserButton);
+		buttonPanel.add(logOutButton);
 		
-		buttonFont = new Font("SansSerif", Font.BOLD, 24);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.7;
+		c.weighty = 1;
 		
-		centerPanel = new JPanel(new BorderLayout());
-		buttonPanel = new JPanel(new GridLayout(3, 1));
+		contentPanel.add(buttonPanel, c);
+		createMassLogOutPanel();
 		
-		centerPanel.add(buttonPanel, BorderLayout.CENTER);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 0.3;
+		c.weighty = 1;
+
+		contentPanel.add(massLogOutPanel, c);
 		
-		JButton logOut = new JButton();
-		JButton dataEntry = new JButton();
-		JButton basicUser = new JButton();
-		
-		logOut.setText("Log Out");
-		dataEntry.setText("Data Entry");
-		basicUser.setText("Basic User");
-		
-		logOut.setFont(buttonFont);
-		dataEntry.setFont(buttonFont);
-		basicUser.setFont(buttonFont);
-	
-		addLogOutPanel();
-		
-		buttonPanel.add(dataEntry);
-		buttonPanel.add(basicUser);
-		buttonPanel.add(logOut);
-		
-		add(centerPanel, BorderLayout.CENTER);
-		dataEntry.addActionListener(new DataEntryButtonListener());
-		basicUser.addActionListener(new BasicUserButtonListener());
-		
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());
+		add(contentPanel, BorderLayout.CENTER);
 		
 		MainGUI.pushToStack(this);
+		
 	}
-	
-	private void addLogOutPanel() {
+
+	@Override
+	public void setup() {
+		setLayout(new BorderLayout());
+		contentPanel = new JPanel(new GridBagLayout());
+		buttonPanel = new JPanel(new GridLayout(3, 1));
+	}
+
+	private void createMassLogOutPanel() {
+
 		massLogOutPanel = new JPanel();
-		massLogOutPanel.setLayout(new BorderLayout());
+		massLogOutPanel.setLayout(new GridBagLayout());
 		JPanel users = new JPanel();
 		users.setLayout(new GridLayout(0, 1));
+
 		for (User u : Driver.getAccessTracker().getCurrentUsers()) {
 			if (!u.getCWID().equals(Driver.getAccessTracker().getCurrentUser().getCWID())) {
 				JLabel label = new JLabel(u.getFirstName() + " " + u.getLastName());
@@ -76,38 +98,65 @@ public class SystemAdminGUI extends JPanel {
 				users.add(label);
 			}
 		}
-		JScrollPane scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		massLogOutPanel.add(scroller, BorderLayout.CENTER);
-		JButton massLogOut = new JButton("Log Out All Users");
-		massLogOut.addActionListener(new LogOutAllUsersButtonListener());
-		massLogOut.setFont(buttonFont);
-		massLogOutPanel.add(massLogOut, BorderLayout.SOUTH);
+
+		massLogOutButton = new JButton("Log Out All Users");
+		massLogOutButton.setFont(buttonFont);
+		massLogOutButton.addActionListener(buttonListener);
+
+		scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		TitledBorder border = new TitledBorder("Current Users");
+		border.setTitleFont(borderFont);
+		scroller.setBorder(border);
 		
-		centerPanel.add(massLogOutPanel, BorderLayout.EAST);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0.8;
+		
+		massLogOutPanel.add(scroller, c);
+		
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 0.2;
+		
+		massLogOutPanel.add(massLogOutButton, c);
+
 	}
 	
 	private class DataEntryButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			centerPanel.removeAll();
-			centerPanel.add(new DataEntryGUI());
+			contentPanel.removeAll();
+			contentPanel.add(new DataEntryGUI());
 		}
 	}
-	
+
 	private class BasicUserButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			centerPanel.removeAll();
-			centerPanel.add(new UserGUI(currentUser));
+			contentPanel.removeAll();
+			contentPanel.add(new UserGUI(currentUser));
 		}
 	}
-	
-	private class LogOutAllUsersButtonListener implements ActionListener {
+
+	private class ButtonListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
-			massLogOutPanel.removeAll();
-			addLogOutPanel();
+		public void actionPerformed(ActionEvent e) {
+			if ( e.getSource() == dataEntryButton ) {
+				removeAll();
+				add(new DataEntryGUI(), BorderLayout.CENTER);
+			} else if ( e.getSource() == basicUserButton ) {
+				removeAll();
+				add(new UserGUI(currentUser), BorderLayout.CENTER);
+			} else if ( e.getSource() == massLogOutButton ) {
+				if ( confirm("Are you sure you want to log out all current users?")) {
+					((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
+					scroller.removeAll();
+					repaint();
+				}
+			}
 		}
+
 	}
 }

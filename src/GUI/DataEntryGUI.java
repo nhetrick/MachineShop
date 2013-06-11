@@ -15,11 +15,7 @@ import javax.swing.JPanel;
 
 import GUI.ListenerHelpers.LogOutListner;
 
-public class DataEntryGUI extends JPanel {
-	
-	private JPanel contentPanel;
-	private JPanel buttonPanel;
-	private Font buttonFont;
+public class DataEntryGUI extends MainPanel {
 	
 	private JButton logOut;
 	private JButton certifications;
@@ -28,19 +24,16 @@ public class DataEntryGUI extends JPanel {
 	private JButton machines;
 	private JButton privileges;
 	private JButton generateReport;
-	private JButton view;
-	
+	private JButton viewActiveUsers;
+	private JButton viewToolsAndMachines;
 	private ButtonListener buttonListener;
 	private Color buttonBackground;
 	
 	public DataEntryGUI() {
 		
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		buttonListener = new ButtonListener();
+		super(Driver.getAccessTracker().getCurrentUser());
 		
-		buttonBackground = new Color(63, 146, 176);
-		buttonFont = new Font("SansSerif", Font.BOLD, 30);
+		buttonListener = new ButtonListener();
 		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -54,7 +47,8 @@ public class DataEntryGUI extends JPanel {
 		machines = new JButton();
 		privileges = new JButton();
 		generateReport = new JButton();
-		view = new JButton();
+		viewActiveUsers = new JButton();
+		viewToolsAndMachines = new JButton();
 		
 		logOut.setFont(buttonFont);
 		certifications.setFont(buttonFont);
@@ -63,7 +57,8 @@ public class DataEntryGUI extends JPanel {
 		machines.setFont(buttonFont);
 		privileges.setFont(buttonFont);
 		generateReport.setFont(buttonFont);
-		view.setFont(buttonFont);
+		viewActiveUsers.setFont(buttonFont);
+		viewToolsAndMachines.setFont(buttonFont);
 		
 		logOut.setText("Log Out");
 		certifications.setText("Machine Certifications");
@@ -72,7 +67,8 @@ public class DataEntryGUI extends JPanel {
 		machines.setText("Edit Machines");
 		privileges.setText("User Privileges");
 		generateReport.setText("Generate Report");
-		view.setText("View Tools/Machines");
+		viewActiveUsers.setText("View Active Users");
+		viewToolsAndMachines.setText("View Tools/Machines");
 		
 		certifications.addActionListener(buttonListener);
 		users.addActionListener(buttonListener);
@@ -80,7 +76,8 @@ public class DataEntryGUI extends JPanel {
 		machines.addActionListener(buttonListener);
 		privileges.addActionListener(buttonListener);
 		generateReport.addActionListener(buttonListener);
-		view.addActionListener(buttonListener);
+		viewActiveUsers.addActionListener(buttonListener);
+		viewToolsAndMachines.addActionListener(buttonListener);
 		logOut.addActionListener(new LogOutListner());
 		
 		buttonPanel.add(certifications);
@@ -89,7 +86,8 @@ public class DataEntryGUI extends JPanel {
 		buttonPanel.add(users);
 		buttonPanel.add(privileges);
 		buttonPanel.add(generateReport);
-		buttonPanel.add(view);
+		buttonPanel.add(viewActiveUsers);
+		buttonPanel.add(viewToolsAndMachines);
 		buttonPanel.add(logOut);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -111,6 +109,13 @@ public class DataEntryGUI extends JPanel {
 		
 	}
 	
+	@Override
+	public void setup() {
+		setLayout(new GridBagLayout());
+		buttonBackground = new Color(63, 146, 176);
+		buttonFont = new Font("SansSerif", Font.BOLD, 30);
+	}
+	
 	public void resetButtonBackgrounds(){
 		certifications.setBackground(null);
 		users.setBackground(null);
@@ -118,7 +123,7 @@ public class DataEntryGUI extends JPanel {
 		machines.setBackground(null);
 		privileges.setBackground(null);
 		generateReport.setBackground(null);
-		view.setBackground(null);	
+		viewToolsAndMachines.setBackground(null);	
 	}
 	
 	public void switchPanels(JPanel panel) {
@@ -145,7 +150,9 @@ public class DataEntryGUI extends JPanel {
 				switchPanels(new EditPrivilegesPanel());
 			} else if ( e.getSource() == generateReport ) {
 				switchPanels(new GenerateReportPanel());
-			} else if ( e.getSource() == view ) {
+			} else if ( e.getSource() == viewActiveUsers ) {
+				switchPanels(new ViewActiveUsersPanel() );
+			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchPanels(new ViewToolsAndMachinesPanel());
 			}
 			JButton current = (JButton) e.getSource();

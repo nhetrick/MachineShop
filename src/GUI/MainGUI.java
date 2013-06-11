@@ -224,7 +224,8 @@ public class MainGUI extends JFrame {
 	// user is currently logged in (whether they are an Admin, SystemAdmin, or User)
 
 	public void processHomeScreen(User currentUser) {
-
+		
+		// Create header and footer bars
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		headerBar = new JPanel(new GridLayout(1, 2));
 		headerBar.setBackground(Color.white);
@@ -232,9 +233,10 @@ public class MainGUI extends JFrame {
 		footerBar = new JPanel(new GridBagLayout());
 		footerBar.setBackground(Color.white);
 		footerBar.add(bannerLabel);
-
+		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
-
+		
+		// Add the user's name and the clock		
 		JLabel nameLabel = new JLabel(userName);
 		nameLabel.setBackground(Color.white);
 		time = new Clock(headerFont);
@@ -246,7 +248,8 @@ public class MainGUI extends JFrame {
 
 		JPanel leftPanel = new JPanel(new GridBagLayout());
 		leftPanel.setBackground(Color.white);
-
+		
+		// Set up the constraints to format everything correctly
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0.15;
@@ -269,7 +272,12 @@ public class MainGUI extends JFrame {
 		c.weighty = 0.05;
 		c.fill = GridBagConstraints.BOTH;
 		add(headerBar, c);
-
+		
+		// This is where we create and add the main panel with all the relevant information.
+		// This panel will be switched in and out for other panels all throughout the runtime
+		// of the program. These panels will be stored in a stack so that the back button will
+		// function correctly.
+		
 		mainContentPanel = new JPanel();
 		mainContentPanel.setBackground(Color.white);
 

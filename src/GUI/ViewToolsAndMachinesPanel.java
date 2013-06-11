@@ -89,8 +89,8 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 			}
 		}
 
-		mainMachinesPanel.add(blackMachinesPanel);
 		mainMachinesPanel.add(grayMachinesPanel);
+		mainMachinesPanel.add(blackMachinesPanel);
 		
 		JPanel toolsPanel = new JPanel(new GridBagLayout());
 		
@@ -106,16 +106,16 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 			}
 		}
 		
-		mainToolsPanel.add(blackToolsPanel);
 		mainToolsPanel.add(grayToolsPanel);
+		mainToolsPanel.add(blackToolsPanel);
 		
 		JPanel machinesLabelPanel = new JPanel(new GridLayout(1, 2));
 		JPanel toolsLabelPanel = new JPanel( new GridLayout(1, 2));
 		
-		machinesLabelPanel.add(notInUseLabel);
 		machinesLabelPanel.add(inUseLabel);
-		toolsLabelPanel.add(notCheckedOutLabel);
+		machinesLabelPanel.add(notInUseLabel);
 		toolsLabelPanel.add(checkedOutLabel);
+		toolsLabelPanel.add(notCheckedOutLabel);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
