@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 
 import main.*;
 
@@ -52,12 +54,18 @@ public class MainGUI extends JFrame {
 
 	private JLabel minesMlabel;
 	private JLabel bannerLabel;
+	
+	private Color borderColor = Color.black;
+	private Color darkBlue = new Color(33, 49, 77);
+	private Color orange = new Color(210, 73, 42);
+	private Color coolGray = new Color(178, 180, 179);
 
 	// For keeping track of which panel to go to when the "back" button is pressed
 	private static Stack<JPanel> panelStack;
 
 	public MainGUI() {
-
+		
+		this.getContentPane().setBackground(Color.white);
 		reader = new InputReader(this);
 		mainPanel = new SwipeCardPanel();
 		buttonListener = new ButtonListener();
@@ -228,10 +236,12 @@ public class MainGUI extends JFrame {
 		// Create header and footer bars
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
 		headerBar = new JPanel(new GridLayout(1, 2));
+		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
-
+		
 		footerBar = new JPanel(new GridBagLayout());
 		footerBar.setBackground(Color.white);
+		footerBar.setBorder(new LineBorder(borderColor, 4));
 		footerBar.add(bannerLabel);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
@@ -290,7 +300,9 @@ public class MainGUI extends JFrame {
 		} 	else {
 			mainContentPanel = new UserGUI(currentUser);
 		}
-
+		
+		mainContentPanel.setBorder(new LineBorder(borderColor, 4));
+		
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weighty = 0.9;
