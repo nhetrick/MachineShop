@@ -1,3 +1,5 @@
+// TODO remove this file maybe?
+
 package GUI;
 
 import java.awt.BorderLayout;
@@ -67,5 +69,4 @@ public class HomeScreen extends JFrame {
 		
 		setVisible(true);
 	}
-	
 }

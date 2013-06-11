@@ -59,8 +59,7 @@ public class SystemAdminGUI extends JPanel {
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
 		
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());
-		
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());		
 	}
 	
 	private void addLogOutPanel() {
@@ -74,7 +73,6 @@ public class SystemAdminGUI extends JPanel {
 				label.setFont(buttonFont);
 				users.add(label);
 			}
-			//users.add(label);
 		}
 		JScrollPane scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		massLogOutPanel.add(scroller, BorderLayout.CENTER);
