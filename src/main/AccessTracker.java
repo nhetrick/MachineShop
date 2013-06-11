@@ -19,12 +19,11 @@ import com.mongodb.MongoClient;
 
 public class AccessTracker {
 
-	private static ArrayList<Machine> machines;
-	private static ArrayList<Tool>	tools;
+	private ArrayList<Machine> machines;
+	private ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private ArrayList<User> usersWithTools;
-	private InputReader inputReader;
 	private static DB database;
 	private final String hostName = "dharma.mongohq.com";
 	private final int port = 10096;
@@ -36,7 +35,6 @@ public class AccessTracker {
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
 		usersWithTools = new ArrayList<User>();
-		inputReader = new InputReader();
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
 		availableTools = new ArrayList<Tool>();
