@@ -324,7 +324,7 @@ public class AddUsersPanel extends ContentPanel {
 			showMessage("Please fill in all five fields.");
 			return false;
 		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
-			showMessage("Please enter an 8-digit CWID.");
+			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID.");
 			return false;
 		} else if (!(Validator.isValidEmail(emailField.getText()))){
 			showMessage("Please enter a valid email address");
