@@ -31,7 +31,11 @@ public class ExcelExporter {
 				if (model.getValueAt(row, col) == null){
 					out.write("\t");
 				} else {
-					out.write(model.getValueAt(row, col).toString()+"\t");
+					String cell = model.getValueAt(row, col).toString();
+					
+//					cell = cell.replaceAll(",", " ");
+					
+					out.write(cell+"\t");
 				}
 			}
 			out.write("\n");
