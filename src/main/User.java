@@ -18,9 +18,9 @@ public class User {
 	private LogEntry currentEntry;
 	private boolean locked;
 	protected boolean isAdmin = false;
+	protected boolean isSystemAdmin = false;
 	private String email;
 	private String department;
-	protected boolean isSystemAdmin = false;
 		
 	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
