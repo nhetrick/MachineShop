@@ -248,7 +248,7 @@ public class AdminGUI extends JPanel {
 			} else if ( e.getSource() == viewToolsAndMachines) {
 				switchPanels(new ViewToolsAndMachinesPanel());
 			} else if ( e.getSource() == viewActiveUsers) {
-				
+				switchPanels(new ViewActiveUsersPanel());
 			}
 		}
 	}
