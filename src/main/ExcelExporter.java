@@ -41,7 +41,7 @@ public class ExcelExporter {
 		if (dir.exists()){
 			return true;
 		} else {
-			return dir.mkdir();
+			return dir.mkdirs();
 		}
 	}
 }
