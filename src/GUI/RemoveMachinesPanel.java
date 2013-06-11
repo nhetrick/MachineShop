@@ -37,7 +37,7 @@ public class RemoveMachinesPanel extends ContentPanel {
 	private ArrayList<Machine> resultsList; 
 	
 	public RemoveMachinesPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Remove Machines");
 		buttonListener = new ButtonListener();
 		resultsList = new ArrayList<Machine>();
@@ -134,7 +134,6 @@ public class RemoveMachinesPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 4;
 		add(new JPanel(), c);
-		
 	}
 	
 	public boolean confirmSubmission() {
@@ -188,6 +187,7 @@ public class RemoveMachinesPanel extends ContentPanel {
 					}
 					repaint();
 					
+					// Lists all the machines that are removed.
 					String message = "You Removed:\n\n";
 					for ( String s : removed ) {
 						message += s + "\n";
@@ -231,6 +231,4 @@ public class RemoveMachinesPanel extends ContentPanel {
 			}
 		}
 	}
-
 }
-

@@ -37,7 +37,7 @@ public class UnlockUsersPanel extends ContentPanel {
 	private ArrayList<User> resultsList;
 	
 	public UnlockUsersPanel() {
-		
+		// All the fonts are in ContetnPanel.
 		super("Unlock Users");
 		buttonListener = new ButtonListener();
 		resultsList = new ArrayList<User>();
@@ -134,7 +134,6 @@ public class UnlockUsersPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 4;
 		add(new JPanel(), c);
-		
 	}
 	
 	public boolean confirmSubmission() {
@@ -187,6 +186,7 @@ public class UnlockUsersPanel extends ContentPanel {
 					}
 					repaint();
 					
+					// Lists all the users that are unlocked.
 					String message = "You Unlocked:\n\n";
 					for ( String s : unlocked ) {
 						message += s + "\n";
@@ -234,6 +234,4 @@ public class UnlockUsersPanel extends ContentPanel {
 			}
 		}
 	}
-
 }
-

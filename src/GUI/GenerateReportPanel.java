@@ -1,19 +1,12 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -25,13 +18,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 import main.Log;
 import main.LogEntry;
 import main.Statistics;
-import main.SystemAdministrator;
 
 public class GenerateReportPanel extends ContentPanel {
 
@@ -70,7 +60,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private String currentParameter;
 	
 	public GenerateReportPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Generate Reports & Statistics");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
@@ -164,9 +154,9 @@ public class GenerateReportPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
-		
 	}
 	
+	// Sets the date as today's date.
 	private void setDefaultDate() {
 		Calendar today = Calendar.getInstance();
 		sYear = today.get(Calendar.YEAR);
@@ -235,8 +225,7 @@ public class GenerateReportPanel extends ContentPanel {
 					data[i][3] = timeOut;
 				} else {
 					data[i][3] = entry.getTimeOut().toString();
-				}
-				
+				}				
 				data[i][4] = entry.getMachinesUsed().toString();
 				data[i][5] = entry.getToolsCheckedOut().toString();
 				data[i][6] = entry.getToolsReturned().toString();
@@ -406,7 +395,6 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	private class DatePanel extends JPanel {
-		
 		DatePanel() {
 			
 			Font smallFont = new Font("SansSerif", Font.BOLD, 18);
@@ -507,14 +495,11 @@ public class GenerateReportPanel extends ContentPanel {
 			add(endDay);
 			add(endDays);
 			add(endYear);
-			add(endYears);
-						
+			add(endYears);				
 		}
-		
 	}
 	
 	private class UserPanel extends JPanel {
-		
 		UserPanel() {
 			setLayout(new GridBagLayout());
 			
@@ -545,10 +530,9 @@ public class GenerateReportPanel extends ContentPanel {
 			c.gridx = 0;
 			c.gridy = 2;
 			add(new DatePanel(), c);
-		}
-		
+		}	
 	}
-
+	
 	private class ToolPanel extends JPanel {
 		ToolPanel() {
 			setLayout(new GridBagLayout());
@@ -615,6 +599,5 @@ public class GenerateReportPanel extends ContentPanel {
 			c.gridy = 2;
 			add(new DatePanel(), c);
 		}
-	}
-	
+	}	
 }

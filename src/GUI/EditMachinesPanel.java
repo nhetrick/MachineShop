@@ -22,7 +22,7 @@ public class EditMachinesPanel extends ContentPanel {
 	private ButtonListener buttonListener;
 	
 	public EditMachinesPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Edit Machines");
 		buttonListener = new ButtonListener();
 		

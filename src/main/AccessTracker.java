@@ -45,7 +45,6 @@ public class AccessTracker {
 
 		loadMachines();
 		loadTools();
-
 	}
 
 	private void databaseSetup() {

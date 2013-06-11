@@ -53,7 +53,6 @@ public class User {
 	}
 	
 	public void returnTools(ArrayList<Tool> tools) {
-		
 		for (Tool tool : tools){
 			tool.returnTool();
 			toolsCheckedOut.remove(tool);
@@ -141,6 +140,7 @@ public class User {
 		return department;
 	}
 
+	// User is only compared by CWID.
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof User))
@@ -150,6 +150,7 @@ public class User {
 		return (this.CWID == obj.getCWID());
 	}
 	
+	// User toString returns only the name.
 	public String toString() {
 		return firstName + " " + lastName;
 	}
@@ -161,5 +162,4 @@ public class User {
 	public void setCurrentEntry(LogEntry currentEntry) {
 		this.currentEntry = currentEntry;
 	}
-
 }

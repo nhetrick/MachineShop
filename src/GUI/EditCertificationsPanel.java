@@ -33,7 +33,7 @@ public class EditCertificationsPanel extends ContentPanel {
 	private User user;
 
 	public EditCertificationsPanel() {
-
+		// All the fonts are in ContentPanel.
 		super("Edit User's Machine Certifications");
 		buttonListener = new ButtonListener();
 
@@ -110,14 +110,12 @@ public class EditCertificationsPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == saveButton) {
-
 				if ( user == null ) {
 					showMessage("Please enter the user's CWID.");
-
 				}
 				else {
 					ArrayList<Machine> machines = new ArrayList<Machine>();
-
+					
 					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 						if ( cb.isSelected() ) {
@@ -131,16 +129,15 @@ public class EditCertificationsPanel extends ContentPanel {
 							}
 						}
 					}
-
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 					admin.updateCertifications(user, machines);
 				}
 				clearFields();
 
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
-
 				String input = cwidField.getText();
 				if (input.contains(start)) {
+					// if the input starts with ;984000017, strips the next 8 digits, and set it as the input.
 					input = input.split(start)[1].substring(0, 8);
 					cwidField.setText(input);
 				} else if (input.contains(error)) {
@@ -154,6 +151,7 @@ public class EditCertificationsPanel extends ContentPanel {
 				}
 
 				user = Driver.getAccessTracker().findUserByCWID(input);
+				cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
 				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
@@ -176,6 +174,7 @@ public class EditCertificationsPanel extends ContentPanel {
 		}
 	}
 
+	// Clears all the text fields to empty, and set the user null.
 	private void clearFields() {
 		cwidField.setText("");
 		user = null;
@@ -184,4 +183,3 @@ public class EditCertificationsPanel extends ContentPanel {
 		}
 	}
 }
-
