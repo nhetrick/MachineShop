@@ -224,26 +224,27 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	private void showResults() {
-		String[] columns = {"Entry ID", "User", "Time In", "Time Out", "Machines Used", 
+		String[] columns = {"Entry ID", "User", "Dept", "Time In", "Time Out", "Machines Used", 
 		                    "Tools Checked Out", "Tools Returned"};
 		int size = Log.getResults().size();
-		String data[][] = new String[size][7];
+		String data[][] = new String[size][8];
 		if (size > 0) {
 			for (int i=0; i<size; i++) {
 				LogEntry entry = Log.getResults().get(i);
 				data[i][0] = Integer.toString(entry.getID());
 				data[i][1] = entry.getCwid();
-				data[i][2] = entry.getTimeIn().toString();
+				data[i][2] = entry.getDept();
+				data[i][3] = entry.getTimeIn().toString();
 				
 				String timeOut = "";
 				if (entry.getTimeOut() == null) {
-					data[i][3] = timeOut;
+					data[i][4] = timeOut;
 				} else {
-					data[i][3] = entry.getTimeOut().toString();
+					data[i][4] = entry.getTimeOut().toString();
 				}				
-				data[i][4] = entry.getMachinesUsed().toString();
-				data[i][5] = entry.getToolsCheckedOut().toString();
-				data[i][6] = entry.getToolsReturned().toString();
+				data[i][5] = entry.getMachinesUsed().toString();
+				data[i][6] = entry.getToolsCheckedOut().toString();
+				data[i][7] = entry.getToolsReturned().toString();
 			}
 		}
 		tabs.removeTabAt(1);
@@ -428,7 +429,7 @@ public class GenerateReportPanel extends ContentPanel {
 				saveExcelButton.setVisible(true);
 			} else if (e.getSource() == saveExcelButton){
 				ExcelExporter exp = new ExcelExporter();
-				String exportFile = "ReportExports/report - "+Calendar.getInstance().getTime()+".xls";
+				String exportFile = "ReportExports/report - " + Calendar.getInstance().getTime()+".xls";
 				try {
 					exp.exportTable(table, exportFile);
 				} catch (Exception e1) {

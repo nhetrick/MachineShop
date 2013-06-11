@@ -16,6 +16,7 @@ public class LogEntry {
 	private int ID;
 	private String cwid;
 	private User user;
+	private String dept;
 	private ArrayList<Machine> machinesUsed;
 	private ArrayList<Tool> toolsCheckedOut;
 	private Date timeOut;
@@ -31,12 +32,13 @@ public class LogEntry {
 		database = Driver.getAccessTracker().getDatabase();
 	}
 	
-	public LogEntry(int iD, String cwid, ArrayList<Machine> machinesUsed,
+	public LogEntry(int iD, String cwid, String dept, ArrayList<Machine> machinesUsed,
 			ArrayList<Tool> toolsCheckedOut, Date timeOut, Date timeIn,
 			ArrayList<Tool> toolsReturned) {
 		super();
 		ID = iD;
 		this.cwid = cwid;
+		this.dept = dept;
 		
 		this.machinesUsed = machinesUsed;
 		this.toolsCheckedOut = toolsCheckedOut;
@@ -47,8 +49,6 @@ public class LogEntry {
 		database = Driver.getAccessTracker().getDatabase();
 	}
 
-
-
 	// FOR TESTING PURPOSES ONLY
 	public void startEntry(User user, ArrayList<Machine> machinesUsed, ArrayList<Tool> toolsCheckedOut, ArrayList<Tool> toolsReturned) {
 		// AUTO-GENERATE ID
@@ -56,6 +56,7 @@ public class LogEntry {
 		this.timeIn = calendar.getTime();
 		this.user = user;
 		cwid = user.getCWID();
+		dept = user.getDepartment();
 		this.machinesUsed = new ArrayList<Machine>();
 		this.toolsCheckedOut = new ArrayList<Tool>();
 		this.toolsReturned = new ArrayList<Tool>();
@@ -83,6 +84,7 @@ public class LogEntry {
 		this.timeIn = calendar.getTime();
 		this.user = user;
 		cwid = user.getCWID();
+		dept = user.getDepartment();
 		this.machinesUsed = new ArrayList<Machine>();
 		this.toolsCheckedOut = new ArrayList<Tool>();
 		this.toolsReturned = new ArrayList<Tool>();
@@ -94,6 +96,7 @@ public class LogEntry {
 		logEntry.put("ID", ID);
 		logEntry.put("timeIn", timeIn);
 		logEntry.put("userCWID", user.getCWID());
+		logEntry.put("department", dept);
 		
 		DBCollection logEntries = database.getCollection("LogEntries"); 
 		logEntries.insert(logEntry);
@@ -202,6 +205,10 @@ public class LogEntry {
 	
 	public Date getTimeOut() {
 		return timeOut;
+	}
+	
+	public String getDept() {
+		return dept;
 	}
 	
 	public void setTimeOut(Date timeOut) {
