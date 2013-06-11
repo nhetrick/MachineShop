@@ -23,6 +23,7 @@ public class AccessTracker {
 	private ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
+	private ArrayList<User> usersWithTools;
 	private InputReader inputReader;
 	private static DB database;
 	private final String hostName = "dharma.mongohq.com";
@@ -34,6 +35,7 @@ public class AccessTracker {
 
 	public AccessTracker() {
 		currentUsers = new ArrayList<User>();
+		usersWithTools = new ArrayList<User>();
 		inputReader = new InputReader();
 		machines = new ArrayList<Machine>();
 		tools = new ArrayList<Tool>();
@@ -42,6 +44,9 @@ public class AccessTracker {
 		// Do the initialization stuff for the log and database
 		databaseSetup();
 		Log.setup();
+		
+		setUsersWithTools();
+		System.out.println(usersWithTools);
 
 		loadMachines();
 		loadTools();
@@ -54,6 +59,17 @@ public class AccessTracker {
 			database.authenticate(username, password.toCharArray());			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void setUsersWithTools() {
+		DBCollection users = database.getCollection("Users");
+		DBCursor cursor = users.find();
+		while(cursor.hasNext()) {
+			DBObject current = cursor.next();
+			if (current.get("checkedOutTools") != null && !((ArrayList) current.get("checkedOutTools")).isEmpty()) {
+				usersWithTools.add(findUserByCWID(current.get("CWID").toString()));
+			}
 		}
 	}
 
@@ -397,6 +413,10 @@ public class AccessTracker {
 
 	public ArrayList<Machine> getMachines() {
 		return machines;
+	}
+
+	public ArrayList<User> getUsersWithTools() {
+		return usersWithTools;
 	}
 
 	public Machine getMachineByName(String name) {
