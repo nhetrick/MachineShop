@@ -27,7 +27,7 @@ public class DataEntryGUI extends MainPanel {
 	private JButton generateReport;
 	private JButton viewActiveUsers;
 	private JButton viewToolsAndMachines;
-
+	private JButton logInUser;
 	private JButton done;
 
 	private Color buttonBackground;
@@ -54,6 +54,7 @@ public class DataEntryGUI extends MainPanel {
 		generateReport = new JButton();
 		viewActiveUsers = new JButton();
 		viewToolsAndMachines = new JButton();
+		logInUser = new JButton();
 		done = new JButton();
 		logOut = new JButton();
 		
@@ -65,6 +66,7 @@ public class DataEntryGUI extends MainPanel {
 		generateReport.setText("Generate Report");
 		viewActiveUsers.setText("View Active Users");
 		viewToolsAndMachines.setText("View Tools/Machines");
+		logInUser.setText("Log In Another User");
 		done.setText("Done");
 		logOut.setText("Log Out");
 		
@@ -76,6 +78,7 @@ public class DataEntryGUI extends MainPanel {
 		buttons.add(generateReport);
 		buttons.add(viewActiveUsers);
 		buttons.add(viewToolsAndMachines);
+		buttons.add(logInUser);
 		buttons.add(done);
 		buttons.add(logOut);
 		
@@ -127,6 +130,8 @@ public class DataEntryGUI extends MainPanel {
 				switchContentPanel(new ViewActiveUsersPanel() );
 			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
+			} else if ( e.getSource() == logInUser ) {
+				switchContentPanel(new LogInAnotherUserPanel());
 			}
 			JButton current = (JButton) e.getSource();
 			current.setBackground(orange);
