@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,10 +38,9 @@ public class DataEntryGUI extends MainPanel {
 		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEtchedBorder());
-		buttonPanel = new JPanel(new GridLayout(8, 1));
+		buttonPanel = new JPanel(new GridLayout(0, 1));
 		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
-		logOut = new JButton();
 		certifications = new JButton();
 		users = new JButton();
 		tools = new JButton();
@@ -49,18 +49,8 @@ public class DataEntryGUI extends MainPanel {
 		generateReport = new JButton();
 		viewActiveUsers = new JButton();
 		viewToolsAndMachines = new JButton();
+		logOut = new JButton();
 		
-		logOut.setFont(buttonFont);
-		certifications.setFont(buttonFont);
-		users.setFont(buttonFont);
-		tools.setFont(buttonFont);
-		machines.setFont(buttonFont);
-		privileges.setFont(buttonFont);
-		generateReport.setFont(buttonFont);
-		viewActiveUsers.setFont(buttonFont);
-		viewToolsAndMachines.setFont(buttonFont);
-		
-		logOut.setText("Log Out");
 		certifications.setText("Machine Certifications");
 		users.setText("Edit Users");
 		tools.setText("Edit Tools");
@@ -69,26 +59,24 @@ public class DataEntryGUI extends MainPanel {
 		generateReport.setText("Generate Report");
 		viewActiveUsers.setText("View Active Users");
 		viewToolsAndMachines.setText("View Tools/Machines");
+		logOut.setText("Log Out");
 		
-		certifications.addActionListener(buttonListener);
-		users.addActionListener(buttonListener);
-		tools.addActionListener(buttonListener);
-		machines.addActionListener(buttonListener);
-		privileges.addActionListener(buttonListener);
-		generateReport.addActionListener(buttonListener);
-		viewActiveUsers.addActionListener(buttonListener);
-		viewToolsAndMachines.addActionListener(buttonListener);
-		logOut.addActionListener(new LogOutListner());
+		ArrayList<JButton> buttons = new ArrayList<JButton>();
 		
-		buttonPanel.add(certifications);
-		buttonPanel.add(tools);
-		buttonPanel.add(machines);
-		buttonPanel.add(users);
-		buttonPanel.add(privileges);
-		buttonPanel.add(generateReport);
-		buttonPanel.add(viewActiveUsers);
-		buttonPanel.add(viewToolsAndMachines);
-		buttonPanel.add(logOut);
+		buttons.add(certifications);
+		buttons.add(users);
+		buttons.add(tools);
+		buttons.add(machines);
+		buttons.add(privileges);
+		buttons.add(generateReport);
+		buttons.add(viewActiveUsers);
+		buttons.add(viewToolsAndMachines);
+		buttons.add(logOut);
+		
+		for ( JButton b : buttons ) {
+			b.setFont(buttonFont);
+			buttonPanel.add(b);
+		}
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
