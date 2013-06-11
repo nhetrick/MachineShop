@@ -60,7 +60,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private String currentParameter;
 	
 	public GenerateReportPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Generate Reports & Statistics");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
@@ -154,9 +154,9 @@ public class GenerateReportPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
-		
 	}
 	
+	// Sets the date as today's date.
 	private void setDefaultDate() {
 		Calendar today = Calendar.getInstance();
 		sYear = today.get(Calendar.YEAR);
@@ -225,8 +225,7 @@ public class GenerateReportPanel extends ContentPanel {
 					data[i][3] = timeOut;
 				} else {
 					data[i][3] = entry.getTimeOut().toString();
-				}
-				
+				}				
 				data[i][4] = entry.getMachinesUsed().toString();
 				data[i][5] = entry.getToolsCheckedOut().toString();
 				data[i][6] = entry.getToolsReturned().toString();
@@ -396,7 +395,6 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	private class DatePanel extends JPanel {
-		
 		DatePanel() {
 			
 			Font smallFont = new Font("SansSerif", Font.BOLD, 18);
@@ -497,14 +495,11 @@ public class GenerateReportPanel extends ContentPanel {
 			add(endDay);
 			add(endDays);
 			add(endYear);
-			add(endYears);
-						
+			add(endYears);				
 		}
-		
 	}
 	
 	private class UserPanel extends JPanel {
-		
 		UserPanel() {
 			setLayout(new GridBagLayout());
 			
@@ -535,10 +530,9 @@ public class GenerateReportPanel extends ContentPanel {
 			c.gridx = 0;
 			c.gridy = 2;
 			add(new DatePanel(), c);
-		}
-		
+		}	
 	}
-
+	
 	private class ToolPanel extends JPanel {
 		ToolPanel() {
 			setLayout(new GridBagLayout());
@@ -605,6 +599,5 @@ public class GenerateReportPanel extends ContentPanel {
 			c.gridy = 2;
 			add(new DatePanel(), c);
 		}
-	}
-	
+	}	
 }

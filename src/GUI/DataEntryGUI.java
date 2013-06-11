@@ -152,5 +152,4 @@ public class DataEntryGUI extends JPanel {
 			current.setBackground(buttonBackground);
 		}
 	}
-
 }

@@ -38,7 +38,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 	private ArrayList<User> resultsList;
 
 	public EditPrivilegesPanel() {
-
+		// All the fonts are in ContentPanel.
 		super("Edit User Privileges");
 		buttonListener = new ButtonListener();
 		userList = new ArrayList<DBObject>();
@@ -157,6 +157,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
+	// Cealrs all the text fields.
 	public void clearFields() {
 		resultsPanel.removeAll();
 		nameSearchField.setText("");
@@ -263,10 +264,8 @@ public class EditPrivilegesPanel extends ContentPanel {
 					userPanel.add(isSystemAdmin);
 
 					resultsPanel.add(userPanel);
-				}				
+				}
 			}
 		}
 	}
-
 }
-

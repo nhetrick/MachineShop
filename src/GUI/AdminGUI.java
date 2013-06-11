@@ -24,7 +24,7 @@ import main.Tool;
 import main.User;
 
 public class AdminGUI extends JPanel {
-	
+
 	private static JPanel centerPanel;
 	private static JPanel contentPanel;
 	private static JPanel buttonPanel;

@@ -18,7 +18,7 @@ public class EditUsersPanel extends ContentPanel {
 	private ButtonListener buttonListener;
 	
 	public EditUsersPanel() {
-		
+		// All the fonts are in ContentPanel.
 		super("Edit Users");
 		buttonListener = new ButtonListener();
 		
