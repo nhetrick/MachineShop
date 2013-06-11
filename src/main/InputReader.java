@@ -13,7 +13,6 @@ public class InputReader implements KeyListener {
 	private String input;
 	private MainGUI gui;
 	private static int errorCount = 0;
-	public static final int CWID_LENGTH = 8;
 	
 	public InputReader() {
 		input = "";
@@ -46,14 +45,6 @@ public class InputReader implements KeyListener {
 			throw new InputReaderException("Error. Please swipe your blastercard.");
 		} else
 			throw new InputReaderException("The card is not a blastercard.");
-	}
-	
-	public static boolean isValidCWID(String input){
-		//TODO maybe some more checks
-		if (input.length() == CWID_LENGTH){
-			return true;
-		}
-		return false;
 	}
 	
 	public String getCWID(){
