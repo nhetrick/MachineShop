@@ -53,6 +53,7 @@ public class Tool {
 		return name + " (" + UPC + ")";
 	}
 	
+	// only the UPC is compared to check if two tools are the same.
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Tool))

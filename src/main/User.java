@@ -18,9 +18,9 @@ public class User {
 	private LogEntry currentEntry;
 	private boolean locked;
 	protected boolean isAdmin = false;
+	protected boolean isSystemAdmin = false;
 	private String email;
 	private String department;
-	protected boolean isSystemAdmin = false;
 		
 	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
@@ -140,7 +140,7 @@ public class User {
 		return department;
 	}
 
-	// User is only compared by CWID.
+	// only the CWID are compared to check if two users are the same
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof User))
@@ -150,7 +150,6 @@ public class User {
 		return (this.CWID == obj.getCWID());
 	}
 	
-	// User toString returns only the name.
 	public String toString() {
 		return firstName + " " + lastName;
 	}

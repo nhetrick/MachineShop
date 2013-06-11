@@ -95,9 +95,15 @@ public class MainGUI extends JFrame {
 		//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
 		//sets the screen to full screen
+		
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
-		setResizable(false);
+		
+		if (Validator.isUnixOS()){
+			setResizable(true);
+		} else {
+			setResizable(false);
+		}
 
 		setLayout(new GridBagLayout());
 
@@ -158,7 +164,7 @@ public class MainGUI extends JFrame {
 			if (inReader.getCWID() == null) {
 				return;
 			}
-			if (InputReader.isValidCWID(inReader.getCWID())) {
+			if (Validator.isValidCWID(inReader.getCWID())) {
 				login(inReader.getCWID());
 			}
 
@@ -182,7 +188,7 @@ public class MainGUI extends JFrame {
 			}
 
 			int tries = 0;
-			while (!InputReader.isValidCWID(input) && tries < MAX_ERROR_COUNT) {
+			while (!Validator.isValidCWID(input) && tries < MAX_ERROR_COUNT) {
 				input = JOptionPane.showInputDialog("Not a valid CWID. Please try again. ");
 				if (input == null){
 					InputReader.resetErrorCount();
@@ -192,7 +198,7 @@ public class MainGUI extends JFrame {
 			}
 
 			InputReader.resetErrorCount();
-			if (InputReader.isValidCWID(input)){
+			if (Validator.isValidCWID(input)){
 				login(input);
 			}
 		}
