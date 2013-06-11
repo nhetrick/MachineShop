@@ -23,6 +23,7 @@ import main.Machine;
 import main.OracleConnection;
 import main.SystemAdministrator;
 import main.User;
+import main.Validator;
 
 public class AddUsersPanel extends ContentPanel {
 
@@ -322,11 +323,14 @@ public class AddUsersPanel extends ContentPanel {
 				|| departField.getText().equals("")) {
 			showMessage("Please fill in all five fields.");
 			return false;
-		} else if (userIDField.getText().length() != 8) {
+		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
 			showMessage("Please enter an 8-digit CWID.");
 			return false;
-		} else if (!(Driver.getAccessTracker().checkValidEmail(emailField.getText()))){
+		} else if (!(Validator.isValidEmail(emailField.getText()))){
 			showMessage("Please enter a valid email address");
+			return false;
+		} else if (!(Validator.isValidDeptCode(departField.getText()))){
+			showMessage("Please enter a department code of length " + Validator.DEPT_CODE_LENGTH );
 			return false;
 		}
 		return true;
@@ -354,10 +358,10 @@ public class AddUsersPanel extends ContentPanel {
 			}
 		}
 		
-	// When adding a user from this screen, the admin must add
-	// some machine permissions.
-	showMessage("Please select at least one machine for which this user is certified.");
-	return false;
+		// When adding a user from this screen, the admin must add
+		// some machine permissions.
+		showMessage("Please select at least one machine for which this user is certified.");
+		return false;
 	}
 
 	public void save(){
