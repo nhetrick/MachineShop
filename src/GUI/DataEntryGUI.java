@@ -107,6 +107,8 @@ public class DataEntryGUI extends JPanel {
 		
 		add(buttonPanel, c);
 		
+		switchPanels(new ViewToolsAndMachinesPanel());
+		
 	}
 	
 	public void resetButtonBackgrounds(){

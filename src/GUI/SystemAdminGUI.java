@@ -59,7 +59,9 @@ public class SystemAdminGUI extends JPanel {
 		dataEntry.addActionListener(new DataEntryButtonListener());
 		basicUser.addActionListener(new BasicUserButtonListener());
 		
-		logOut.addActionListener(new ListenerHelpers.LogOutListner());		
+		logOut.addActionListener(new ListenerHelpers.LogOutListner());
+		
+		MainGUI.pushToStack(this);
 	}
 	
 	private void addLogOutPanel() {
