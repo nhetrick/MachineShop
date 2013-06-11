@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
@@ -10,6 +11,10 @@ public class ExcelExporter {
 
 	public void exportTable(JTable table, String filename) throws Exception{
 		File file = new File(filename);
+		if (!dirExists(file)){
+			throw new IOException("directory could not be created");
+		}
+		
 		TableModel model = table.getModel();
 		FileWriter out = new FileWriter(file);
 		
@@ -29,5 +34,14 @@ public class ExcelExporter {
 		}
 
 		out.close();
+	}
+	
+	public boolean dirExists(File file) throws IOException{
+		File dir = new File(file.getParent());
+		if (dir.exists()){
+			return true;
+		} else {
+			return dir.mkdir();
+		}
 	}
 }
