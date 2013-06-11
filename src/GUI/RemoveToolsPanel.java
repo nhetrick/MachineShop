@@ -219,8 +219,10 @@ public class RemoveToolsPanel extends ContentPanel {
 				}
 				
 				for ( DBObject t : toolList ) {
-					Tool tool = new Tool( (String) t.get("name"), (String) t.get("upc"));
-					resultsList.add(tool);
+					if (!(boolean) t.get("isCheckedOut")) {
+						Tool tool = new Tool( (String) t.get("name"), (String) t.get("upc"));
+						resultsList.add(tool);
+					}
 				}
 								
 				for ( Tool t : resultsList ) {

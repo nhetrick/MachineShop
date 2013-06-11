@@ -19,8 +19,8 @@ import com.mongodb.MongoClient;
 
 public class AccessTracker {
 
-	private ArrayList<Machine> machines;
-	private ArrayList<Tool>	tools;
+	private static ArrayList<Machine> machines;
+	private static ArrayList<Tool>	tools;
 	private ArrayList<Tool> availableTools;
 	private ArrayList<User> currentUsers;
 	private ArrayList<User> usersWithTools;
@@ -46,7 +46,6 @@ public class AccessTracker {
 		Log.setup();
 		
 		setUsersWithTools();
-		System.out.println(usersWithTools);
 
 		loadMachines();
 		loadTools();
@@ -62,7 +61,8 @@ public class AccessTracker {
 		}
 	}
 	
-	private void setUsersWithTools() {
+	public void setUsersWithTools() {
+		usersWithTools.clear();
 		DBCollection users = database.getCollection("Users");
 		DBCursor cursor = users.find();
 		while(cursor.hasNext()) {
@@ -111,6 +111,7 @@ public class AccessTracker {
 		while(cursor.hasNext()) {
 			DBObject tool = cursor.next();
 			Tool t = new Tool((String) tool.get("name"), (String) tool.get("upc"));
+			t.setCheckedOut((boolean) tool.get("isCheckedOut"));
 			tools.add(t);
 		}
 	}
@@ -180,6 +181,9 @@ public class AccessTracker {
 
 	public void removeUser(User u) {
 		currentUsers.remove(u);
+		if (u.getToolsCheckedOut().isEmpty()) {
+			usersWithTools.remove(u);
+		}
 	}
 
 	public void clearUsers(ArrayList<User> users) {

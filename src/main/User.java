@@ -147,7 +147,7 @@ public class User {
 			return false;
 		
 		User obj = (User) o;
-		return (this.CWID == obj.getCWID());
+		return (this.CWID.equals(obj.getCWID()));
 	}
 	
 	public String toString() {
