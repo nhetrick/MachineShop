@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.SystemAdministrator;
 import main.User;
 import main.UserComparator;
@@ -159,18 +160,38 @@ public class RemoveUsersPanel extends ContentPanel {
 				if ( !noBoxesChecked && confirm(question)) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
+					boolean duplicates = false;
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
 						if ( cb.isSelected() ) {
+							String name = "";
 							for ( User u : resultsList ) {
-								String s = cb.getText();
-								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-								String CWID = u.getCWID();
-								if ( s.equals(CWID) ) {
-									removed.add(u.getFirstName() + " " + u.getLastName() + " [" + CWID + "]");
-									removedBoxes.add(cb);
-									admin.removeUser(CWID);
+								for ( User v : resultsList ) {
+									name = v.getFirstName() + " " + v.getLastName();
+									if ( name.equals(u.getFirstName() + " " + u.getLastName()) ) {
+										duplicates = true;
+									}
 								}
+								
+								String s = u.getCWID();
+								s = cb.getText();
+								String CWID = u.getCWID();
+								if ( s.equals(u.getFirstName() + " " + u.getLastName() ) ) {
+									if ( duplicates ) {
+										String message = "There are multiple users with the name " + name +
+										         ".\n Please search by CWID to find the user you want to remove";
+										showMessage(message);
+										duplicates = false;
+										break;
+									} else {
+										removed.add(s);
+										removedBoxes.add(cb);
+										admin.removeUser(CWID);
+									}
+								}
+							}
+							if ( duplicates ) {
+								break;
 							}
 						}
 					}
@@ -187,7 +208,9 @@ public class RemoveUsersPanel extends ContentPanel {
 					for ( String s : removed ) {
 						message += s + "\n";
 					}
-					showMessage(message);
+					if ( !removed.isEmpty() ) {
+						showMessage(message);
+					}
 				}
 			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
 					   e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
@@ -205,11 +228,16 @@ public class RemoveUsersPanel extends ContentPanel {
 						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
 					
 				} else {
-					if ( idSearchField.getText().equals("Search All"))
+					if ( idSearchField.getText().equals("Search All") || idSearchField.getText().equals(""))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else
-						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", idSearchField.getText());
-					
+					else {
+						String input = idSearchField.getText();
+						if ( input.length() > 7)
+							input = BlasterCardListener.strip(input);
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", input);
+					}
+					idSearchField.setText("");
+					nameSearchField.setText("");
 				}
 				
 				for ( DBObject u : userList ) {
@@ -220,7 +248,7 @@ public class RemoveUsersPanel extends ContentPanel {
 				// sorts the resultslist
 				Collections.sort(resultsList, new UserComparator());
 				for ( User m : resultsList ) {
-					JCheckBox cb = new JCheckBox(m.getFirstName() + " " + m.getLastName() + " [" + m.getCWID() + "]");
+					JCheckBox cb = new JCheckBox(m.getFirstName() + " " + m.getLastName());
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
 					resultsPanel.add(cb);

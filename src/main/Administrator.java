@@ -7,21 +7,5 @@ public class Administrator extends User {
 		isAdmin = true;
 		isSystemAdmin = false;
 	}
-	
-	public void generateReport() {
-		
-	}
-	
-	public void viewAllTools() {
-		
-	}
-	
-	public void viewAllMachines() {
-		
-	}
-	
-	public void viewAllUsers() {
-		
-	}
 
 }
