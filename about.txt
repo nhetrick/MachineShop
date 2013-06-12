@@ -1,0 +1,16 @@
+About SOME TITLE
+
+Description: 
+
+Version: 1.0
+Release Date: June 21, 2013
+
+This product was developed by Summer 2013 CSM's CSCI Field Session Team, CSM #2.
+	Development Team:
+		- Nicola Hetrick
+		- Taylor Sallee
+		- Shawn Toffel
+		- Chaeha Park
+		
+For installation details, please see README.txt and/or the instruction manual.
+For help, please use the provided help button or see help.txt

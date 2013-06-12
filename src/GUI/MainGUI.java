@@ -11,8 +11,12 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
@@ -22,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
@@ -47,6 +52,10 @@ public class MainGUI extends JFrame {
 	private GridBagConstraints c = new GridBagConstraints();
 	private static int MAX_ERROR_COUNT = 3;
 	private JButton backButton;
+	private JButton helpButton;
+	private JButton aboutButton;
+	private JButton close;
+	private JFrame frame;
 	private ButtonListener buttonListener;
 
 	private final String mPath = "/Images/minesM.jpg";
@@ -59,6 +68,8 @@ public class MainGUI extends JFrame {
 	private Color darkBlue = new Color(33, 49, 77);
 	private Color orange = new Color(210, 73, 42);
 	private Color coolGray = new Color(178, 180, 179);
+	
+	protected Font smallFont = new Font("SansSerif", Font.BOLD, 12);
 
 	// For keeping track of which panel to go to when the "back" button is pressed
 	private static Stack<JPanel> panelStack;
@@ -81,7 +92,15 @@ public class MainGUI extends JFrame {
 
 		backButton = new JButton("Back");
 		backButton.addActionListener(buttonListener);
-
+		
+		helpButton = new JButton("Help");
+		helpButton.addActionListener(buttonListener);
+		helpButton.setFont(smallFont);
+		
+		aboutButton = new JButton("About");
+		aboutButton.addActionListener(buttonListener);
+		aboutButton.setFont(smallFont);
+	
 	}
 
 	protected static ImageIcon createImageIcon(String path) {
@@ -246,7 +265,26 @@ public class MainGUI extends JFrame {
 		footerBar = new JPanel(new GridBagLayout());
 		footerBar.setBackground(Color.white);
 		footerBar.setBorder(new LineBorder(borderColor, 4));
-		footerBar.add(bannerLabel);
+		//footerBar.add(bannerLabel);
+		JPanel helpButtons = new JPanel();
+		helpButtons.setBackground(Color.WHITE);
+		helpButtons.add(aboutButton);
+		helpButtons.add(helpButton);
+		footerBar.setLayout(new GridBagLayout());
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.9;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.NONE;
+		footerBar.add(bannerLabel, c);
+		
+		c.gridx = 2;
+		c.gridy = 0;
+		c.weightx = 0.1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.NONE;
+		footerBar.add(helpButtons, c);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
@@ -334,6 +372,47 @@ public class MainGUI extends JFrame {
 	public static void pushToStack(JPanel panel) {
 		panelStack.push(panel);
 	}
+	
+	private void displayTextFile(String title, String file) {
+		frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.setTitle(title);
+		frame.setSize(getMinimumSize());
+		frame.setLocationRelativeTo(null);
+		frame.setLayout(new GridBagLayout());
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 1));
+		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		Scanner in;
+		try {
+			in = new Scanner(new FileReader(file));
+			while (in.hasNextLine()) {
+				JLabel label = new JLabel();
+				label.setText(in.nextLine());
+				label.setFont(smallFont);
+				panel.add(label);
+			}			
+		} catch (FileNotFoundException e) {
+			System.out.println("Documentation Could Not Be Found");
+		}
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 0.9;
+		c.fill = GridBagConstraints.BOTH;
+		frame.add(scroller, c);
+		
+		close = new JButton("Close");
+		close.addActionListener(buttonListener);
+		close.setFont(smallFont);
+
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weighty = 0.1;
+		c.fill = GridBagConstraints.NONE;
+		frame.add(close, c);
+		
+		frame.setVisible(true);
+	}
 
 	private class ButtonListener implements ActionListener {
 
@@ -341,6 +420,14 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == backButton ) {
 				goBack();
+				repaint();
+			} else if (e.getSource() == helpButton) {
+				displayTextFile("Help", "help.txt");
+			} else if (e.getSource() == aboutButton) {
+				displayTextFile("About", "about.txt");
+			} else if (e.getSource() == close) {
+				frame.setVisible(false);
+				frame.dispose();
 				repaint();
 			}
 		}
