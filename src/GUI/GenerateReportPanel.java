@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -38,9 +39,13 @@ public class GenerateReportPanel extends ContentPanel {
 	private JScrollPane machineFreqScoller;
 	private JScrollPane toolFreqScoller;
 	private JScrollPane deptFreqScoller;
-	private JTable statsTable;
 	private JTabbedPane tabs;
 	private Statistics stats;
+	private JTable deptFreqsTable;
+	public JTable machineFreqsTable;
+	public JTable toolFreqsTable;
+	private JTable generalStatsTable;
+	private JTable logTable;
 	
 	JTextField startField;
 	JTextField endField;
@@ -63,6 +68,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private String currentParameter;
 	SimpleDateFormat dateFileFormat;
 	private boolean haveGeneratedReport;
+	
 	
 	
 	public GenerateReportPanel() {
@@ -243,8 +249,8 @@ public class GenerateReportPanel extends ContentPanel {
 			}
 		}
 		
-		statsTable = new JTable(data, columns);
-		logScroller.setViewportView(statsTable);
+		logTable = new JTable(data, columns);
+		logScroller.setViewportView(logTable);
 	}
 	
 	public JTable createGeneralStatsTable(Map<String, String> generalStats){
@@ -264,6 +270,7 @@ public class GenerateReportPanel extends ContentPanel {
 		data[index][1] = getAvgLogInTime();
 		
 		JTable statsTable = new JTable(data, columns);
+		statsTable.setName("General Statistics:");
 		
 		return statsTable;
 	}
@@ -280,6 +287,7 @@ public class GenerateReportPanel extends ContentPanel {
 			index++;			
 		}
 		JTable machineFreqs = new JTable(machFreqData, columns);
+		machineFreqs.setName("Machine Frequencies:");
 		return machineFreqs;
 	}
 	
@@ -297,6 +305,7 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 		
 		JTable toolFreqs = new JTable(toolFreqData, columns);
+		toolFreqs.setName("Tool Frequencies:");
 		
 		return toolFreqs;
 		
@@ -313,19 +322,21 @@ public class GenerateReportPanel extends ContentPanel {
 			deptFreqData[index][1] = stat;
 			index++;			
 		}
+		
 		JTable deptFreqTable = new JTable(deptFreqData, columns);
+		deptFreqTable.setName("Department Frequencies:");
 		
 		return deptFreqTable;
 	}
 	
 	public void showDateStats(){
 		
-		JTable generalStats = createGeneralStatsTable(stats.getGeneralStatistics());
-		JTable machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
-		JTable toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
-		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
+		generalStatsTable = createGeneralStatsTable(stats.getGeneralStatistics());
+		machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
+		toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
+		deptFreqsTable = createDeptFrequenciesTable(stats.getDeptFrequencies());
 		
-		statsScroller.setViewportView(generalStats);
+		statsScroller.setViewportView(generalStatsTable);
 		machineFreqScoller.setViewportView(machineFreqsTable);
 		toolFreqScoller.setViewportView(toolFreqsTable);
 		deptFreqScoller.setViewportView(deptFreqsTable);
@@ -333,11 +344,11 @@ public class GenerateReportPanel extends ContentPanel {
 	
 	public void showgeneralUserStats(){
 		
-		JTable generalStats = createGeneralStatsTable(stats.getUserStatistics());
-		JTable machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
-		JTable toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
+		generalStatsTable = createGeneralStatsTable(stats.getUserStatistics());
+		machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
+		toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
 		
-		statsScroller.setViewportView(generalStats);
+		statsScroller.setViewportView(generalStatsTable);
 		machineFreqScoller.setViewportView(machineFreqsTable);
 		toolFreqScoller.setViewportView(toolFreqsTable);
 		
@@ -345,9 +356,10 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	public void showToolStats(){
-		JTable generalStats = createGeneralStatsTable(stats.getGeneralToolStats());
-		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
-		statsScroller.setViewportView(generalStats);
+		generalStatsTable = createGeneralStatsTable(stats.getGeneralToolStats());
+		deptFreqsTable = createDeptFrequenciesTable(stats.getDeptFrequencies());
+		
+		statsScroller.setViewportView(generalStatsTable);
 		deptFreqScoller.setViewportView(deptFreqsTable);
 		
 		tabs.remove(1);
@@ -355,9 +367,9 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	public void showMachineStats(){
-		JTable generalStats = createGeneralStatsTable(stats.getGeneralMachineStats());
-		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
-		statsScroller.setViewportView(generalStats);
+		generalStatsTable = createGeneralStatsTable(stats.getGeneralMachineStats());
+		deptFreqsTable = createDeptFrequenciesTable(stats.getDeptFrequencies());
+		statsScroller.setViewportView(generalStatsTable);
 		deptFreqScoller.setViewportView(deptFreqsTable);
 		
 		tabs.remove(1);
@@ -434,13 +446,44 @@ public class GenerateReportPanel extends ContentPanel {
 			} else if (e.getSource() == saveExcelButton){
 				ExcelExporter exp = new ExcelExporter();
 
+				ArrayList<JTable> tables = new ArrayList<JTable>();
+				
+				if (currentParameter.equals("Date")){
+
+				}
+				
+				switch (currentParameter){
+				case "Date":
+					tables.add(generalStatsTable);
+					tables.add(machineFreqsTable);
+					tables.add(toolFreqsTable);
+					tables.add(deptFreqsTable);
+					break;
+				case "User":
+					tables.add(generalStatsTable);
+					tables.add(machineFreqsTable);
+					tables.add(toolFreqsTable);
+					break;
+				case "Tool":
+					tables.add(generalStatsTable);
+					tables.add(deptFreqsTable);
+					break;
+				case "Machine":
+					tables.add(generalStatsTable);
+					tables.add(deptFreqsTable);
+					break;
+				
+				}
+				
 				try {
 					String date = dateFileFormat.format(Calendar.getInstance().getTime());
-					String exportFile = "ReportExports/ActivityReport - "+date+".xls";
+					String logFile = "ReportExports/ActivityReport - "+date+".xls";
+					String statsFile = "ReportExports/"+currentParameter+"_statistics_report - "+date+".xls";
 					
-					exp.exportTable(statsTable, exportFile);
+					exp.exportTable(logTable, logFile);
+					exp.exportTables(tables, statsFile);
 					
-					showMessage("saved to \"" + exportFile+"\"");
+					showMessage("saved to ReportExports");
 				} catch (Exception e1) {
 					showMessage("Export failed!");
 					e1.printStackTrace();
