@@ -172,6 +172,7 @@ public class GenerateReportPanel extends ContentPanel {
 		tabs.addTab("Department Frequencies", deptFreqScoller);
 		tabs.addTab("Log", logScroller);
 	}
+	
 	// Sets the date as today's date.
 	private void setDefaultDate() {
 		Calendar today = Calendar.getInstance();
@@ -227,6 +228,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private void showLog() {
 		String[] columns = {"Entry ID", "User", "Dept", "Time In", "Time Out", "Machines Used", 
 		                    "Tools Checked Out", "Tools Returned"};
+		
 		int size = Log.getResults().size();
 		String data[][] = new String[size][8];
 		if (size > 0) {
@@ -330,7 +332,6 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	public void showDateStats(){
-		
 		generalStatsTable = createGeneralStatsTable(stats.getGeneralStatistics());
 		machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
 		toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
@@ -343,7 +344,6 @@ public class GenerateReportPanel extends ContentPanel {
 	}
 	
 	public void showgeneralUserStats(){
-		
 		generalStatsTable = createGeneralStatsTable(stats.getUserStatistics());
 		machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
 		toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
@@ -388,8 +388,10 @@ public class GenerateReportPanel extends ContentPanel {
 	
 	private void showReport() {
 		showLog();
+		
 		stats = new Statistics();
 		stats.run();
+	
 		if (currentParameter.equals("User")) {
 			showgeneralUserStats();
 		} else if (currentParameter.equals("Date")) {
@@ -415,6 +417,7 @@ public class GenerateReportPanel extends ContentPanel {
 			addTabs();
 			if (e.getSource() == generateButton) {
 				haveGeneratedReport = true;
+				
 				if (currentParameter.equals("User")) {
 					resultsPanel.removeAll();
 					setDates();
@@ -448,10 +451,6 @@ public class GenerateReportPanel extends ContentPanel {
 
 				ArrayList<JTable> tables = new ArrayList<JTable>();
 				
-				if (currentParameter.equals("Date")){
-
-				}
-				
 				switch (currentParameter){
 				case "Date":
 					tables.add(generalStatsTable);
@@ -472,13 +471,12 @@ public class GenerateReportPanel extends ContentPanel {
 					tables.add(generalStatsTable);
 					tables.add(deptFreqsTable);
 					break;
-				
 				}
 				
 				try {
 					String date = dateFileFormat.format(Calendar.getInstance().getTime());
-					String logFile = "ReportExports/ActivityReport - "+date+".xls";
-					String statsFile = "ReportExports/"+currentParameter+"_statistics_report - "+date+".xls";
+					String logFile = "ReportExports/"+currentParameter+"_log_export - "+date+".xls";
+					String statsFile = "ReportExports/"+currentParameter+"_statistics_export - "+date+".xls";
 					
 					exp.exportTable(logTable, logFile);
 					exp.exportTables(tables, statsFile);
@@ -489,7 +487,6 @@ public class GenerateReportPanel extends ContentPanel {
 					e1.printStackTrace();
 					return;
 				}
-				
 				
 			}
 		}
