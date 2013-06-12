@@ -72,10 +72,6 @@ public class SystemAdminGUI extends MainPanel {
 		
 		add(contentPanel, BorderLayout.CENTER);
 		
-		//cards.add(contentPanel);
-		//add(cards, BorderLayout.CENTER);
-		//MainGUI.pushToStack(this);
-		
 	}
 
 	private void createMassLogOutPanel() {
@@ -97,7 +93,7 @@ public class SystemAdminGUI extends MainPanel {
 		massLogOutButton.setFont(buttonFont);
 		massLogOutButton.addActionListener(buttonListener);
 
-		scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller = new JScrollPane(users, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		TitledBorder border = new TitledBorder("Current Users");
 		border.setTitleFont(borderFont);
 		scroller.setBorder(border);

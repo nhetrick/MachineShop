@@ -18,9 +18,6 @@ public class MainPanel extends GUI {
 	
 	public MainPanel() {
 
-		//MainGUI.pushToStack(this);
-		System.out.println("Pushed to stack");
-
 		setLayout(new BorderLayout());
 		// Set Content Panel in child panels
 		contentPanel = new JPanel();
@@ -35,7 +32,7 @@ public class MainPanel extends GUI {
 	protected void switchPanels(JPanel panel) {
 		removeAll();
 		add(panel, BorderLayout.CENTER);
-		repaint();
+//		repaint();
 	}
 	
 	protected void switchContentPanel(JPanel panel) {
@@ -46,8 +43,6 @@ public class MainPanel extends GUI {
 		CardLayout cl = (CardLayout) cards.getLayout();
         cl.last(cards);
 		contentPanel.add(cards, BorderLayout.CENTER);
-		System.out.println("Switched Content Panel. Pushed to stack");
-		repaint();
 	}
 	
 	public void resetButtonBackgrounds() {
