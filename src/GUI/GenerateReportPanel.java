@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -42,8 +41,6 @@ public class GenerateReportPanel extends ContentPanel {
 	private JTable statsTable;
 	private JTabbedPane tabs;
 	private Statistics stats;
-	
-	private String space = "       ";
 	
 	JTextField startField;
 	JTextField endField;
@@ -367,12 +364,6 @@ public class GenerateReportPanel extends ContentPanel {
 		tabs.remove(1);
 	}
 	
-	private void showAvgLogInTime() {
-		JLabel avgTime = new JLabel("Avg Time Logged In: " + getAvgLogInTime());
-		avgTime.setFont(resultsFont);
-		resultsPanel.add(avgTime);
-	}
-	
 	private String getAvgLogInTime(){
 		int seconds = (int) (stats.getAvgTimeLoggedIn() / 1000) % 60;
 		int minutes = (int) ((stats.getAvgTimeLoggedIn() / (1000*60)) % 60);
@@ -383,35 +374,6 @@ public class GenerateReportPanel extends ContentPanel {
 		return avg; 
 	}
 	
-	private void showStat(String stat, String data, Font font) {
-		JLabel label = new JLabel(stat + ": " + data);
-		label.setFont(font);
-		resultsPanel.add(label);
-	}
-	
-	/*
-	private void showParameters() {
-		JLabel title = new JLabel("Parameters");
-		title.setFont(resultsFont);
-		resultsPanel.add(title);
-		
-		JLabel parameter1 = new JLabel(space + "Start Date: " + start.getTime());
-		JLabel parameter2 = new JLabel(space + "End Date: " + end.getTime());
-		parameter1.setFont(smallFont);
-		parameter2.setFont(smallFont);
-		resultsPanel.add(parameter1);
-		resultsPanel.add(parameter2);
-		
-		if (currentParameter == "User") {
-			showStat(space + "User", cwidField.getText(), smallFont);
-		} else if (currentParameter == "Tool") {
-			showStat(space + "Tool", toolNameField.getText(), smallFont);
-		} else if (currentParameter == "Machine") {
-			showStat(space + "Machine", machineNameField.getText(), smallFont);
-		}
-	}
-	
-	*/
 	private void showReport() {
 		showLog();
 		stats = new Statistics();

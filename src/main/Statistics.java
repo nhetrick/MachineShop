@@ -1,12 +1,8 @@
 package main;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import GUI.Driver;
 
 public class Statistics {
 	ArrayList<LogEntry> results;
