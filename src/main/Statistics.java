@@ -118,6 +118,28 @@ public class Statistics {
 		}
 	}
 	
+	public Map<String, String> getDateStatistics() {	
+		Map<String, String> dateStats = new HashMap<String, String>();
+		
+		dateStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		dateStats.put("Number of Different Users", Integer.toString(getNumUsers()));
+		dateStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
+		dateStats.put("Number of Different Tools Used", Integer.toString(getNumTools()));
+		dateStats.put("Number of Different Machines Used", Integer.toString(getNumMachines()));
+		
+		return dateStats;
+ 	}
+	
+	public Map<String, String> getUserStatistics() {	
+		Map<String, String> userStats = new HashMap<String, String>();
+		userStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		userStats.put("Number of Different Tools Used", Integer.toString(getNumTools()));
+		userStats.put("Number of Different Machines Used", Integer.toString(getNumMachines()));
+		userStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
+		
+		return userStats;
+	}
+	
 	//------------------------------GETTERS AND SETTERS------------------------------------
 
 	public ArrayList<LogEntry> getResults() {
