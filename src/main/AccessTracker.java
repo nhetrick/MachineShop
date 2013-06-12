@@ -114,6 +114,7 @@ public class AccessTracker {
 			DBObject tool = cursor.next();
 			Tool t = new Tool((String) tool.get("name"), (String) tool.get("upc"));
 			t.setCheckedOut((boolean) tool.get("isCheckedOut"));
+			t.setLastUsedBy((String) tool.get("lastUsedBy"));
 			tools.add(t);
 		}
 	}
@@ -124,6 +125,7 @@ public class AccessTracker {
 
 	public void removeTool(Tool t) {
 		tools.remove(t);
+		
 	}
 
 	// Loads all the machines from the database into RAM

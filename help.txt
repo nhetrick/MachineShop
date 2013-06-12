@@ -1,28 +1,23 @@
-HELP
+HELP (with Version 1.0)
 
-A
-B
-C
-D
-E
-F
-G
-H
-I
-J
-K
-L
-M
-N
-O
-P
-Q
-R
-S
-T
-U
-V
-W
-X
-Y
-Z
+Installation:
+
+Using the Software:
+	Basic User:
+		Available Functions: 
+			Select Machines
+			Checkout Tools
+			Return Tools
+
+	Administrator:
+	
+	System Administrator:
+	
+Moving To A New Machines:
+
+Database Details:
+
+
+
+
+

@@ -170,12 +170,8 @@ public class RemoveToolsPanel extends ContentPanel {
 								if ( s.equals(UPC) ) {
 									removed.add(t.getName() + " [" + UPC + "]");
 									removedBoxes.add(cb);
-									if (!t.isCheckedOut()) {
-										admin.removeTool(UPC);
-									} else {
-										t.returnTool();
-										admin.removeTool(UPC);
-									}
+									admin.removeTool(UPC);
+									System.out.println("Admin remove");
 									removedTools.add(t);
 								}
 							}

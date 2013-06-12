@@ -1,12 +1,8 @@
 package main;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import GUI.Driver;
 
 public class Statistics {
 	ArrayList<LogEntry> results;
@@ -116,6 +112,44 @@ public class Statistics {
 				toolsFrequencies.put(name,  toolsFrequencies.get(name) + 1);
 			}
 		}
+	}
+	
+	public Map<String, String> getGeneralStatistics() {	
+		Map<String, String> dateStats = new HashMap<String, String>();
+		
+		dateStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		dateStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
+		dateStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
+		dateStats.put("Number of Different Tools Used", Integer.toString(getNumTools()));
+		dateStats.put("Number of Different Machines Used", Integer.toString(getNumMachines()));
+		
+		return dateStats;
+ 	}
+	
+	public Map<String, String> getUserStatistics() {	
+		Map<String, String> userStats = new HashMap<String, String>();
+		userStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		userStats.put("Number of Different Tools Used", Integer.toString(getNumTools()));
+		userStats.put("Number of Different Machines Used", Integer.toString(getNumMachines()));
+		userStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
+		
+		return userStats;
+	}
+	
+	public Map<String, String> getGeneralToolStats(){
+		Map<String, String> toolStats = new HashMap<String, String>();
+		toolStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		toolStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
+		
+		return toolStats;
+	}
+	
+	public Map<String, String> getGeneralMachineStats(){
+		Map<String, String> machineStats = new HashMap<String, String>();
+		machineStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		machineStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
+		
+		return machineStats;
 	}
 	
 	//------------------------------GETTERS AND SETTERS------------------------------------
