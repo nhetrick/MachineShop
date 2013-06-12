@@ -122,11 +122,19 @@ public class SystemAdministrator extends Administrator {
 	public void removeTool(String upc) {
 		DBCollection tools = database.getCollection("Tools");
 		DBCursor cursor = tools.find(new BasicDBObject("upc", upc));
+		Tool t = new Tool("", "");
 		if (cursor != null) {
 			DBObject obj = cursor.next();
+			t = Driver.getAccessTracker().getToolByUPC(upc);
 			tools.remove(obj);
 			tracker.removeTool(new Tool((String) obj.get("name"), (String) obj.get("upc")));
 		}
+		if (t.getLastUsedBy() != null) {
+			ArrayList<Tool> ts = new ArrayList<Tool>();
+			ts.add(t);
+			t.getLastUsedBy().returnTools(ts);
+		}
+		
 	}
 	
 	// removes the machine from database

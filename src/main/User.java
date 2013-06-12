@@ -37,6 +37,7 @@ public class User {
 	
 	public void checkoutTool(Tool tool) {
 		tool.checkoutTool();
+		tool.updateCheckoutStatus(this);
 		toolsCheckedOut.add(tool);
 		
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
@@ -52,24 +53,26 @@ public class User {
 			usersCollection.update(new BasicDBObject("CWID", CWID), result);
 		}
 	}
-	
+
 	public void returnTools(ArrayList<Tool> tools) {
+		System.out.println(tools);
 		for (Tool tool : tools){
 			tool.returnTool();
+			tool.updateCheckoutStatus(this);
 			toolsCheckedOut.remove(tool);
-			
-			DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
-			DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
-			if (cursor.hasNext()) {
-				DBObject result = cursor.next();
-				BasicDBList checkedoutTools = new BasicDBList();
-				for (Tool t:toolsCheckedOut) {
-					checkedoutTools.remove(new BasicDBObject("upc", t.getUPC()));
-				}
-				result.put("checkedOutTools", checkedoutTools);
-	
-				usersCollection.update(new BasicDBObject("CWID", CWID), result);
+		}
+		
+		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
+		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
+		if (cursor.hasNext()) {
+			DBObject result = cursor.next();
+			BasicDBList checkedoutTools = new BasicDBList();
+			for (Tool t:toolsCheckedOut) {
+				checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
 			}
+			result.put("checkedOutTools", checkedoutTools);
+
+			usersCollection.update(new BasicDBObject("CWID", CWID), result);
 		}
 	}
 	

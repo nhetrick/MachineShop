@@ -12,6 +12,7 @@ public class Tool {
 	private boolean isCheckedOut;
 	private String name;
 	private String UPC;
+	private User lastUsedBy;
 	
 	public Tool(String name, String UPC) {
 		isCheckedOut = false;
@@ -19,24 +20,31 @@ public class Tool {
 		this.UPC = UPC;
 	}
 	
-	private void updateCheckoutStatus() {
+	public Tool(String name, String UPC, User u) {
+		isCheckedOut = false;
+		this.name = name;
+		this.UPC = UPC;
+		lastUsedBy = u;
+	}
+	
+	public void updateCheckoutStatus(User u) {
 		DBCollection toolsCollection = Driver.getAccessTracker().getDatabase().getCollection("Tools");
 		DBObject result = toolsCollection.findOne(new BasicDBObject("upc", UPC));
 		if (result != null) {
 			result.put("isCheckedOut", isCheckedOut);
+			result.put("lastUsedBy", u.getCWID());
 
 			toolsCollection.update(new BasicDBObject("upc", UPC), result);
 		}
+		lastUsedBy = u;
 	}
 	
 	public void checkoutTool() {
 		isCheckedOut = true;
-		updateCheckoutStatus();
 	}
 	
 	public void returnTool() {
 		isCheckedOut = false;
-		updateCheckoutStatus();
 	}
 
 	public boolean isCheckedOut() {
@@ -55,6 +63,10 @@ public class Tool {
 		return name + " (" + UPC + ")";
 	}
 	
+	public User getLastUsedBy() {
+		return lastUsedBy;
+	}
+
 	// only the UPC is compared to check if two tools are the same.
 	@Override
 	public boolean equals(Object o) {
@@ -67,5 +79,9 @@ public class Tool {
 	public void setCheckedOut(boolean b) {
 		isCheckedOut = b;
 		
+	}
+
+	public void setLastUsedBy(String string) {
+		lastUsedBy = new User("", "", string, "", "");		
 	}
 }
