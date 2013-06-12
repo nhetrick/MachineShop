@@ -40,7 +40,7 @@ public class GenerateReportPanel extends ContentPanel {
 	private JScrollPane machineFreqScoller;
 	private JScrollPane toolFreqScoller;
 	private JScrollPane deptFreqScoller;
-	private JTable table;
+	private JTable statsTable;
 	private JTabbedPane tabs;
 	private Statistics stats;
 	private boolean haveGeneratedReport;
@@ -124,12 +124,7 @@ public class GenerateReportPanel extends ContentPanel {
 		logScroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		tabs = new JTabbedPane(); 
-		
-		tabs.addTab("General Statistics", statsScroller);
-		tabs.addTab("Machine Frequencies", machineFreqScoller);
-		tabs.addTab("Tool Frequencies", toolFreqScoller);
-		tabs.addTab("Department Frequencies", deptFreqScoller);
-		tabs.addTab("Log", logScroller);
+
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.1;
@@ -184,6 +179,16 @@ public class GenerateReportPanel extends ContentPanel {
 		add(new JPanel(), c);
 	}
 	
+	private void addTabs(){
+		if (tabs.getTabCount() > 0){
+			tabs.removeAll();
+		}
+		tabs.addTab("General Statistics", statsScroller);
+		tabs.addTab("Machine Frequencies", machineFreqScoller);
+		tabs.addTab("Tool Frequencies", toolFreqScoller);
+		tabs.addTab("Department Frequencies", deptFreqScoller);
+		tabs.addTab("Log", logScroller);
+	}
 	// Sets the date as today's date.
 	private void setDefaultDate() {
 		Calendar today = Calendar.getInstance();
@@ -236,7 +241,7 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 	}
 	
-	private void showResults() {
+	private void showLog() {
 		String[] columns = {"Entry ID", "User", "Dept", "Time In", "Time Out", "Machines Used", 
 		                    "Tools Checked Out", "Tools Returned"};
 		int size = Log.getResults().size();
@@ -261,19 +266,17 @@ public class GenerateReportPanel extends ContentPanel {
 			}
 		}
 		
-		table = new JTable(data, columns);
-		logScroller.setViewportView(table);
+		statsTable = new JTable(data, columns);
+		logScroller.setViewportView(statsTable);
 	}
 	
-	public void showDateStats(){
-		Map<String, String> dateStats = stats.getDateStatistics();
-		Map<String, Integer> machineFrequencies = stats.getMachineFrequencies();
-		Map<String, Integer> toolFrequencies = stats.getToolsFrequencies();
-		Map<String, Integer> deptFrequencies = stats.getDeptFrequencies();
+	public JTable createGeneralStatsTable(Map<String, String> generalStats){
+		String columns[] = {"", ""};
+		String data[][] =  new String[generalStats.size()+1][2];
 		
-		String data[][] =  new String[dateStats.size()+1][2];
 		int index = 0;
-		for (Map.Entry<String, String> entry: dateStats.entrySet()){
+		
+		for (Map.Entry<String, String> entry: generalStats.entrySet()){
 			String title = entry.getKey();
 			String stat = entry.getValue();
 			data[index][0] = title;
@@ -283,8 +286,15 @@ public class GenerateReportPanel extends ContentPanel {
 		data[index][0] = "Avg Time Logged In";
 		data[index][1] = getAvgLogInTime();
 		
+		JTable statsTable = new JTable(data, columns);
+		
+		return statsTable;
+	}
+	
+	public JTable createMachineFrequenciesTable(Map<String, Integer> machineFrequencies){
 		String machFreqData[][] = new String[machineFrequencies.size()][2];
-		index = 0;
+		int index = 0;
+		String columns[] = {"", ""};
 		for (Map.Entry<String, Integer> entry: machineFrequencies.entrySet()){
 			String title = entry.getKey().toString();
 			String stat = entry.getValue().toString();
@@ -292,9 +302,15 @@ public class GenerateReportPanel extends ContentPanel {
 			machFreqData[index][1] = stat;
 			index++;			
 		}
+		JTable machineFreqs = new JTable(machFreqData, columns);
+		return machineFreqs;
+	}
+	
+	public JTable createToolFrequenciesTable(Map<String, Integer> toolFrequencies) {
 		
 		String toolFreqData[][] = new String[toolFrequencies.size()][2];
-		index = 0;
+		int index = 0;
+		String columns[] = {"", ""};
 		for (Map.Entry<String, Integer> entry: toolFrequencies.entrySet()){
 			String title = entry.getKey().toString();
 			String stat = entry.getValue().toString();
@@ -303,8 +319,16 @@ public class GenerateReportPanel extends ContentPanel {
 			index++;			
 		}
 		
+		JTable toolFreqs = new JTable(toolFreqData, columns);
+		
+		return toolFreqs;
+		
+	}
+	
+	public JTable createDeptFrequenciesTable(Map<String, Integer> deptFrequencies){
 		String deptFreqData[][] = new String[deptFrequencies.size()][2];
-		index = 0;
+		int index = 0;
+		String columns[] = {"",""};
 		for (Map.Entry<String, Integer> entry: deptFrequencies.entrySet()){
 			String title = entry.getKey().toString();
 			String stat = entry.getValue().toString();
@@ -312,53 +336,55 @@ public class GenerateReportPanel extends ContentPanel {
 			deptFreqData[index][1] = stat;
 			index++;			
 		}
-
-		String columns[] = {"", ""};
-		
-		JTable statsTable = new JTable(data, columns);
-		statsScroller.setViewportView(statsTable);
-		
-		JTable machineFreqTable = new JTable(machFreqData, columns);
-		machineFreqScoller.setViewportView(machineFreqTable);
-		
-		JTable toolFreqTable = new JTable(toolFreqData, columns);
-		toolFreqScoller.setViewportView(toolFreqTable);
-		
 		JTable deptFreqTable = new JTable(deptFreqData, columns);
-		deptFreqScoller.setViewportView(deptFreqTable);
+		
+		return deptFreqTable;
 	}
 	
-	private void showMachineFrequencies() {
-		if (!stats.getMachineFrequencies().entrySet().isEmpty()) {
-			JLabel machineFreqTitle = new JLabel("Machine Frequencies");
-			machineFreqTitle.setFont(resultsFont);
-			resultsPanel.add(machineFreqTitle);
-			for (Map.Entry entry : stats.getMachineFrequencies().entrySet()) {
-				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
-			}
-		}
+	public void showDateStats(){
+		
+		JTable generalStats = createGeneralStatsTable(stats.getGeneralStatistics());
+		JTable machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
+		JTable toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
+		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
+		
+		statsScroller.setViewportView(generalStats);
+		machineFreqScoller.setViewportView(machineFreqsTable);
+		toolFreqScoller.setViewportView(toolFreqsTable);
+		deptFreqScoller.setViewportView(deptFreqsTable);
 	}
 	
-	private void showToolFrequencies() {
-		if (!stats.getToolsFrequencies().entrySet().isEmpty()) {
-			JLabel toolFreqTitle = new JLabel("Tool Frequencies");
-			toolFreqTitle.setFont(resultsFont);
-			resultsPanel.add(toolFreqTitle);
-			for (Map.Entry entry : stats.getToolsFrequencies().entrySet()) {
-				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
-			}
-		}
+	public void showUserStats(){
+		
+		JTable generalStats = createGeneralStatsTable(stats.getGeneralStatistics());
+		JTable machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
+		JTable toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
+		
+		statsScroller.setViewportView(generalStats);
+		machineFreqScoller.setViewportView(machineFreqsTable);
+		toolFreqScoller.setViewportView(toolFreqsTable);
+		
+		tabs.remove(3);
 	}
 	
-	private void showDeptFrequencies() {
-		if (!stats.getDeptFrequencies().entrySet().isEmpty()) {
-			JLabel deptFreqTitle = new JLabel("Department Frequencies");
-			deptFreqTitle.setFont(resultsFont);
-			resultsPanel.add(deptFreqTitle);
-			for (Map.Entry entry : stats.getDeptFrequencies().entrySet()) {
-				showStat(space + entry.getKey().toString(), entry.getValue().toString(), smallFont);
-			}
-		}
+	public void showToolStats(){
+		JTable generalStats = createGeneralStatsTable(stats.getGeneralToolStats());
+		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
+		statsScroller.setViewportView(generalStats);
+		deptFreqScoller.setViewportView(deptFreqsTable);
+		
+		tabs.remove(1);
+		tabs.remove(1);
+	}
+	
+	public void showMachineStats(){
+		JTable generalStats = createGeneralStatsTable(stats.getGeneralMachineStats());
+		JTable deptFreqsTable = createToolFrequenciesTable(stats.getDeptFrequencies());
+		statsScroller.setViewportView(generalStats);
+		deptFreqScoller.setViewportView(deptFreqsTable);
+		
+		tabs.remove(1);
+		tabs.remove(1);
 	}
 	
 	private void showAvgLogInTime() {
@@ -404,33 +430,7 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 	}
 	
-	private void showDateStatistics() {		
-		Map<String, String> dateStats = stats.getDateStatistics();
-		showParameters();
-		
-		for (Map.Entry<String, String> entry : dateStats.entrySet()){
-			String title = entry.getKey();
-			String stat = entry.getValue();
-			showStat(title, stat, resultsFont);
-		}
-		showMachineFrequencies();
-		showToolFrequencies();
-		showDeptFrequencies();
-		showAvgLogInTime();
-		
-	}
-	
-	private void showUserStatistics() {		
-		showParameters();
-		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
-		showStat("Number of Different Tools Used", Integer.toString(stats.getNumTools()), resultsFont);
-		showStat("Number of Different Machines Used", Integer.toString(stats.getNumMachines()), resultsFont);
-		showStat("Number of Locked Out Tries", Integer.toString(stats.getNumLockedUsers()), resultsFont);
-		showMachineFrequencies();
-		showToolFrequencies();
-		showAvgLogInTime();
-	}
-	
+/*
 	private void showToolStatistics() {		
 		showParameters();
 		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
@@ -446,20 +446,19 @@ public class GenerateReportPanel extends ContentPanel {
 		showDeptFrequencies();
 		showAvgLogInTime();
 	}
-	
+	*/
 	private void showReport() {
-		showResults();
+		showLog();
 		stats = new Statistics();
 		stats.run();
 		if (currentParameter.equals("User")) {
-			showUserStatistics();
+			showUserStats();
 		} else if (currentParameter.equals("Date")) {
-		//	showDateStatistics();
 			showDateStats();
 		} else if (currentParameter.equals("Tool")) {
-			showToolStatistics();
+			showToolStats();
 		} else if (currentParameter.equals("Machine")) {
-			showMachineStatistics();
+			showMachineStats();
 		}
 	}
 	
@@ -478,6 +477,7 @@ public class GenerateReportPanel extends ContentPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			addTabs();
 			if (e.getSource() == generateButton) {
 				haveGeneratedReport = true;
 				if (currentParameter.equals("User")) {
@@ -515,7 +515,7 @@ public class GenerateReportPanel extends ContentPanel {
 					String date = dateFileFormat.format(Calendar.getInstance().getTime());
 					String exportFile = "ReportExports/ActivityReport - "+date+".xls";
 					
-					exp.exportTable(table, exportFile);
+					exp.exportTable(statsTable, exportFile);
 					
 					showMessage("saved to \"" + exportFile+"\"");
 				} catch (Exception e1) {

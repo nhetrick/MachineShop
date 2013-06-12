@@ -118,11 +118,11 @@ public class Statistics {
 		}
 	}
 	
-	public Map<String, String> getDateStatistics() {	
+	public Map<String, String> getGeneralStatistics() {	
 		Map<String, String> dateStats = new HashMap<String, String>();
 		
 		dateStats.put("Number of Entries", Integer.toString(getNumEntries()));
-		dateStats.put("Number of Different Users", Integer.toString(getNumUsers()));
+		dateStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
 		dateStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
 		dateStats.put("Number of Different Tools Used", Integer.toString(getNumTools()));
 		dateStats.put("Number of Different Machines Used", Integer.toString(getNumMachines()));
@@ -138,6 +138,22 @@ public class Statistics {
 		userStats.put("Number of Locked Out Tries", Integer.toString(getNumLockedUsers()));
 		
 		return userStats;
+	}
+	
+	public Map<String, String> getGeneralToolStats(){
+		Map<String, String> toolStats = new HashMap<String, String>();
+		toolStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		toolStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
+		
+		return toolStats;
+	}
+	
+	public Map<String, String> getGeneralMachineStats(){
+		Map<String, String> machineStats = new HashMap<String, String>();
+		machineStats.put("Number of Entries", Integer.toString(getNumEntries()));
+		machineStats.put("Number of Unique Users", Integer.toString(getNumUsers()));
+		
+		return machineStats;
 	}
 	
 	//------------------------------GETTERS AND SETTERS------------------------------------
