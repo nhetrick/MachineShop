@@ -131,7 +131,7 @@ public class DataEntryGUI extends MainPanel {
 			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
 			} else if ( e.getSource() == logInUser ) {
-				switchContentPanel(new LogInAnotherUserPanel());
+				//switchContentPanel(new LogInAnotherUserPanel());
 			}
 			JButton current = (JButton) e.getSource();
 			current.setBackground(orange);
