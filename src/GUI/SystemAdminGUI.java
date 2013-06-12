@@ -72,7 +72,9 @@ public class SystemAdminGUI extends MainPanel {
 		
 		add(contentPanel, BorderLayout.CENTER);
 		
-		MainGUI.pushToStack(this);
+		//cards.add(contentPanel);
+		//add(cards, BorderLayout.CENTER);
+		//MainGUI.pushToStack(this);
 		
 	}
 

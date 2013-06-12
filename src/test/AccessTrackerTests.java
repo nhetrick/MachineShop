@@ -117,13 +117,6 @@ public class AccessTrackerTests {
 		assertTrue(entry.getTimeOut().after(currentTime));
 		assertTrue(entry.getTimeOut().compareTo(entry.getTimeIn())>=0);
 	}
-		
-	@Test
-	public void checkLegitimacyTest() {
-		// CAN'T DO YET BECAUSE WE DON'T HAVE ACCESS
-		// TO THE BLASTERCARD DATABASE
-		fail("Not yet implemented");
-	}
 	
 	@Test
 	public void loadNameTest() {

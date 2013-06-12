@@ -24,6 +24,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 
 	private JButton saveButton;
 	private JButton goButton;
+	private JButton logOutUser;
 	private ButtonListener buttonListener;
 	private JTextField cwidField;
 	private String start = ";984000017";
@@ -35,10 +36,14 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	private JPanel tool1;
 	private JPanel tool2;
 	private User user;
+	private User current;
 
 	public LogInAnotherUserPanel() {
 		// All the fonts are in ContentPanel.
 		super("Log In Another User");
+		
+		current = Driver.getAccessTracker().getCurrentUser();
+		
 		buttonListener = new ButtonListener();
 
 		JLabel cwidLabel = new JLabel("Enter CWID:");
@@ -71,6 +76,10 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		selectionPanel.add(tool1);
 		selectionPanel.add(tool2);
 		
+		logOutUser = new JButton("Log User Out");
+		logOutUser.setFont(buttonFont);
+		logOutUser.addActionListener(buttonListener);
+		
 		scroller = new JScrollPane(selectionPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		TitledBorder border = new TitledBorder("Selection Options");
@@ -94,24 +103,32 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		c.gridy = 1;
 		add(cwidPanel, c);
 
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0.0;
+		c.weighty = 0.1;
+		c.gridwidth = 1;
+		c.gridx = 1;
+		c.gridy = 2;
+		add(logOutUser, c);
+		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.0;
 		c.weighty = 0.5;
 		c.gridwidth = 1;
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		add(scroller, c);
-
+		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.0;
 		c.weighty = 0.1;
 		c.gridwidth = 1;
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		add(saveButton, c);
 
 		c.weighty = 0.1;
-		c.gridy = 4;
+		c.gridy = 5;
 		add(new JPanel(), c);
 	}
 
@@ -120,6 +137,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	}
 	
 	private void showMachines() {
+		machines.removeAll();
 		for ( Machine m : user.getCertifiedMachines() ) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
@@ -129,22 +147,27 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	}
 	
 	private void showTool1() {
+		tool1.removeAll();
 		for ( Tool t : Driver.getAccessTracker().getTools()) {
-			if (!t.isCheckedOut()) {
+			JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
+			cb.setHorizontalAlignment(JCheckBox.LEFT);
+			cb.setFont(borderFont);
+			tool1.add(cb);
+			if (t.isCheckedOut()) {
+				cb.setEnabled(false);
+			}
+		}
+	}
+
+	private void showTool2() {
+		tool2.removeAll();
+		for ( Tool t : Driver.getAccessTracker().getTools()) {
+			if (t.getLastUsedBy() == user) {
 				JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 				cb.setHorizontalAlignment(JCheckBox.LEFT);
 				cb.setFont(borderFont);
 				tool1.add(cb);
 			}
-		}
-	}
-	
-	private void showTool2() {
-		for ( Tool t : user.getToolsCheckedOut()) {
-			JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
-			cb.setHorizontalAlignment(JCheckBox.LEFT);
-			cb.setFont(borderFont);
-			tool1.add(cb);
 		}
 	}
 
@@ -209,15 +232,18 @@ public class LogInAnotherUserPanel extends ContentPanel {
 						}
 					}
 					
-//					User current = Driver.getAccessTracker().getCurrentUser();
-//					
-//					Driver.getAccessTracker().processLogIn(user.getCWID());
-//					user.getCurrentEntry().addMachinesUsed(machinesSelected);
-//					user.getCurrentEntry().addToolsCheckedOut(tool1Selected);
-//					user.getCurrentEntry().addToolsReturned(tool2Selected);
-//					Driver.getAccessTracker().processLogOut(user.getCWID());
-//					
-//					Driver.getAccessTracker().setCurrentUser(current);
+					for (Machine m : machinesSelected) {
+						user.useMachine(m);
+					}
+					user.getCurrentEntry().addMachinesUsed(machinesSelected);
+					for (Tool t : tool1Selected) {
+						user.checkoutTool(t);
+					}
+					user.getCurrentEntry().addToolsCheckedOut(tool1Selected);
+					user.returnTools(tool2Selected);
+					user.getCurrentEntry().addToolsReturned(tool2Selected);
+					
+					Driver.getAccessTracker().setCurrentUser(current);
 					
 				}
 				clearFields();
@@ -238,12 +264,17 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					return;
 				}
 
-				user = Driver.getAccessTracker().findUserByCWID(input);
+				user = Driver.getAccessTracker().processLogIn(input);
 				cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
 				showMachines();
 				showTool1();
 				showTool2();
+			} else if ( e.getSource() == logOutUser) {
+				if (cwidField != null)  {
+					Driver.getAccessTracker().processLogOut(user.getCWID());
+					clearFields();
+				}
 			}
 		}
 	}
@@ -252,8 +283,8 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	private void clearFields() {
 		cwidField.setText("");
 		user = null;
-		for (int i = 0; i < selectionPanel.getComponentCount(); ++i ) {
-			( (JCheckBox) selectionPanel.getComponent(i) ).setSelected(false);
-		}
+		machines.removeAll();
+		tool1.removeAll();
+		tool2.removeAll();
 	}
 }

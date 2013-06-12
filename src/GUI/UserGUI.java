@@ -36,6 +36,7 @@ public class UserGUI extends MainPanel {
 	private JScrollPane machinesScroller;
 	private JScrollPane toolsScroller;
 
+	private ArrayList<Machine> oldMachines;
 	private ArrayList<Machine> selectedMachines;
 	private ArrayList<Tool> toolsToReturn;
 
@@ -57,6 +58,7 @@ public class UserGUI extends MainPanel {
 		checkedOutToolsPanel = new JPanel();
 
 		selectedMachines = new ArrayList<Machine>();
+		oldMachines = user.getCurrentEntry().getMachinesUsed();
 		toolsToReturn = new ArrayList<Tool>();
 
 		machinesPanel.setLayout(new GridLayout(0, 2));
@@ -112,7 +114,7 @@ public class UserGUI extends MainPanel {
 			JCheckBox machineBox = new JCheckBox(name);
 			machineBox.setName(m.getID());
 			machineBox.setFont(buttonFont);
-			if (selectedMachines.contains(m)){
+			if (selectedMachines.contains(m) || oldMachines.contains(m)){
 				machineBox.setEnabled(false);
 			}
 			machineBox.addItemListener(machineCheckBoxListener);
@@ -153,7 +155,7 @@ public class UserGUI extends MainPanel {
 			m.use();
 		}
 
-		showMessage(message);
+		//showMessage(message);
 
 		displayUserMachinePermissions();
 		resetButtonBackgrounds();
