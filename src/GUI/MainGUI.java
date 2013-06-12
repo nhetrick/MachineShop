@@ -370,6 +370,17 @@ public class MainGUI extends JFrame {
 		
 		frame.setVisible(true);
 	}
+	
+	public static void showMessage(String message) {
+		JOptionPane.showMessageDialog(Driver.getMainGui(), message);
+	}
+	
+	public static boolean confirm(String message) {
+		if ( JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION ) {
+			return true;
+		}
+		return false;
+	}
 
 	private class ButtonListener implements ActionListener {
 		@Override

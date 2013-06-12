@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -381,13 +383,14 @@ public class AccessTracker {
 			returnList2.add(cursor2.next());
 		}
 		
-		if ( userName.contains(" ") ) {
+		if ( userName.contains(" ")) {
 			returnList1.retainAll(returnList2);
+			return returnList1;
 		} else {
 			returnList1.addAll(returnList2);
+			HashSet<DBObject> returnSet = new HashSet<DBObject>(returnList1);
+			return new ArrayList<DBObject>(returnSet);
 		}
-	
-		return returnList1;
 	}
 	
 	// check if email follows the pattern.

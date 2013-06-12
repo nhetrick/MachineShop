@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import oracle.net.aso.g;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+import main.BlasterCardListener;
 import main.Machine;
 import main.MachineComparator;
 import main.SystemAdministrator;
@@ -24,31 +34,30 @@ import main.User;
 public class EditCertificationsPanel extends ContentPanel {
 
 	private JButton saveButton;
-	private JButton goButton;
-	private JTextField cwidField;
-	private String start = ";984000017";
-	private String error = "E?";
-
+	private JTextField nameSearchField;
+	private JTextField idSearchField;
+	private JButton nameSearchGoButton;
+	private JButton idSearchGoButton;
 	private JScrollPane scroller;
 	private JPanel permissionsPanel;
 	private User user;
 
 	public EditCertificationsPanel() {
-		
+
 		super("Edit User's Machine Certifications");
 		buttonListener = new ButtonListener();
 
-		JLabel cwidLabel = new JLabel("Enter CWID:");
-		cwidField = new JTextField();
+		JLabel nameSearchLabel = new JLabel("Search By Name:");
+		JLabel idSearchLabel = new JLabel("Search By CWID:");
 
-		cwidField.setFont(textFont);
-		cwidField.addActionListener(buttonListener);
+		nameSearchField = new JTextField();
+		idSearchField = new JTextField();
 
-		cwidLabel.setFont(borderFont);
+		nameSearchField.addActionListener(buttonListener);
+		idSearchField.addActionListener(buttonListener);
 
-		goButton = new JButton("Go");
-		goButton.setFont(buttonFont);
-		goButton.addActionListener(buttonListener);
+		JPanel nameSearchPanel = new JPanel(new GridLayout(1, 3));
+		JPanel idSearchPanel = new JPanel(new GridLayout(1, 3));
 
 		permissionsPanel = new JPanel(new GridLayout(0, 2));
 
@@ -56,7 +65,7 @@ public class EditCertificationsPanel extends ContentPanel {
 		ArrayList<Machine> sorted = new ArrayList<Machine>();
 		sorted = Driver.getAccessTracker().getMachines();
 		Collections.sort(sorted, new MachineComparator());
-		
+
 		for ( Machine m : sorted ) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
@@ -64,28 +73,60 @@ public class EditCertificationsPanel extends ContentPanel {
 			permissionsPanel.add(cb);
 		}
 
-		scroller = new JScrollPane(permissionsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
+		scroller = new JScrollPane(permissionsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		TitledBorder border = new TitledBorder("User Certifications");
 		border.setTitleFont(borderFont);
 		scroller.setBorder(border);
-
-		JPanel cwidPanel = new JPanel(new GridLayout(1, 3));
-
-		cwidPanel.add(cwidLabel);
-		cwidPanel.add(cwidField);
-		cwidPanel.add(goButton);
 
 		saveButton = new JButton("Save");
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);
 
+		JPanel dataPanel = new JPanel(new GridBagLayout());
+
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.6;
-		c.weighty = 0.1;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 0;
+		dataPanel.add(nameSearchPanel, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.5;
+		c.gridx = 0;
+		c.gridy = 1;
+		dataPanel.add(idSearchPanel, c);
+
+		nameSearchGoButton = new JButton("Go");
+		idSearchGoButton = new JButton("Go");
+
+		nameSearchGoButton.addActionListener(buttonListener);
+		idSearchGoButton.addActionListener(buttonListener);
+
+		nameSearchLabel.setFont(buttonFont);
+		idSearchLabel.setFont(buttonFont);
+		nameSearchField.setFont(textFont);
+		idSearchField.setFont(textFont);
+		nameSearchGoButton.setFont(buttonFont);
+		idSearchGoButton.setFont(buttonFont);
+
+		nameSearchPanel.add(nameSearchLabel);
+		nameSearchPanel.add(nameSearchField);
+		nameSearchPanel.add(nameSearchGoButton);
+
+		idSearchPanel.add(idSearchLabel);
+		idSearchPanel.add(idSearchField);
+		idSearchPanel.add(idSearchGoButton);
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		/******************** All weighty values should add up to 0.9 ***********************************
+		 ******************** All weightx values should add up to 0.8 **********************************/
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.2;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(cwidPanel, c);
+		add(dataPanel, c);		
 
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.0;
@@ -107,11 +148,11 @@ public class EditCertificationsPanel extends ContentPanel {
 		c.gridy = 4;
 		add(new JPanel(), c);
 	}
-	
-	// Clears all the text fields, and set the user to null.
+
+	// Clears all the text fields.
 	private void clearFields() {
-		cwidField.setText("");
-		user = null;
+		idSearchField.setText("");
+		nameSearchField.setText("");
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
 		}
@@ -126,7 +167,7 @@ public class EditCertificationsPanel extends ContentPanel {
 				}
 				else {
 					ArrayList<Machine> machines = new ArrayList<Machine>();
-					
+
 					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 						if ( cb.isSelected() ) {
@@ -145,43 +186,80 @@ public class EditCertificationsPanel extends ContentPanel {
 				}
 				clearFields();
 
-			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
-				String input = cwidField.getText();
-				if (input.contains(start)) {
-					// if the input starts with ;984000017, strips the next 8 digits, and set it as the input.
-					input = input.split(start)[1].substring(0, 8);
-					cwidField.setText(input);
-				} else if (input.contains(error)) {
-					showMessage("Card read error. Please try again.");
-					cwidField.setText("");
-					return;
-				} else if (input.length() != 8){
-					showMessage("Please enter an 8-digit CWID.");
-					cwidField.setText("");
-					return;
-				}
+			} else if ( e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton ||
+					e.getSource() == nameSearchField    || e.getSource() == idSearchField) {
 
-				user = Driver.getAccessTracker().findUserByCWID(input);
-				cwidField.setText(user.getFirstName() + " " + user.getLastName());
+				if ( e.getSource() == idSearchGoButton || e.getSource() == idSearchField ) {
 
-				for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
-					JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
-					String s = cb.getText();
-					s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-					if (user.getCertifiedMachines().isEmpty())
-						cb.setSelected(false);
-					else {
-						for ( Machine m : user.getCertifiedMachines() ) {
-							if ( m.getID().equals(s) ) {
-								cb.setSelected(true);
-								break;
-							} else {
+					String input = BlasterCardListener.strip(idSearchField.getText());
+					user = Driver.getAccessTracker().findUserByCWID(input);
+					if ( user != null ) {
+
+						idSearchField.setText(user.getFirstName() + " " + user.getLastName());
+						nameSearchField.setText(user.getFirstName() + " " + user.getLastName());
+
+						for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
+							JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+							String s = cb.getText();
+							s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+							if (user.getCertifiedMachines().isEmpty())
 								cb.setSelected(false);
+							else {
+								for ( Machine m : user.getCertifiedMachines() ) {
+									if ( m.getID().equals(s) ) {
+										cb.setSelected(true);
+										break;
+									} else {
+										cb.setSelected(false);
+									}
+								}
+							}
+						}
+					}
+				} else {
+					String input = nameSearchField.getText();
+					ArrayList<DBObject> users = Driver.getAccessTracker().searchDatabaseForUser(input);
+					user = null;
+					ArrayList<User> usersFound = new ArrayList<User>();
+					for ( DBObject dbo : users ) {
+						if ( ((String) dbo.get("firstName") + " " + (String) dbo.get("lastName")).equals(input) ) {
+							user = Driver.getAccessTracker().findUserByCWID((String) dbo.get("CWID"));
+							usersFound.add(user);
+						}
+					}
+					if ( user != null ) {
+
+						if ( usersFound.size() > 1) {
+							String message = "There were " + usersFound.size() + " users found with this name.\n" +
+									         "Please search the user by CWID to find the one you want to edit.";
+							showMessage(message);
+						} else {
+
+							idSearchField.setText(user.getFirstName() + " " + user.getLastName());
+							nameSearchField.setText(user.getFirstName() + " " + user.getLastName());
+
+							for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
+								JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+								String s = cb.getText();
+								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+								if (user.getCertifiedMachines().isEmpty())
+									cb.setSelected(false);
+								else {
+									for ( Machine m : user.getCertifiedMachines() ) {
+										if ( m.getID().equals(s) ) {
+											cb.setSelected(true);
+											break;
+										} else {
+											cb.setSelected(false);
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			repaint();
 		}
 	}
 
