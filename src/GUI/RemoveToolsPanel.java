@@ -139,19 +139,6 @@ public class RemoveToolsPanel extends ContentPanel {
 
 	}
 
-	public boolean confirmSubmission() {
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these tools from the database?"
-				+ "\nThis action is permanent and cannot be undone.") == JOptionPane.YES_OPTION) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
-
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -165,8 +152,12 @@ public class RemoveToolsPanel extends ContentPanel {
 				}
 				ArrayList<String> removed = new ArrayList<String>();
 				ArrayList<Tool> removedTools = new ArrayList<Tool>();
+				
+				String question = "Are you sure you want to remove these tools from the database?"
+				+ "\nThis action is permanent and cannot be undone.";
+				
 				// First check that they actually want to remove the tools.
-				if ( !noBoxesChecked && confirmSubmission()) {
+				if ( !noBoxesChecked && confirm(question)) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);

@@ -19,10 +19,9 @@ public class EditToolsPanel extends ContentPanel {
 	
 	private JButton addButton;
 	private JButton removeButton;
-	private ButtonListener buttonListener;
 	
 	public EditToolsPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Edit Tools");
 		buttonListener = new ButtonListener();
 		
@@ -39,25 +38,6 @@ public class EditToolsPanel extends ContentPanel {
 		
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.2; 

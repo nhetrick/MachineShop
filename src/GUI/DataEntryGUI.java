@@ -14,11 +14,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import GUI.ListenerHelpers.LogOutListener;
+import GUI.GUI.LogOutListener;
 
 public class DataEntryGUI extends MainPanel {
 	
-	private JButton logOut;
 	private JButton certifications;
 	private JButton users;
 	private JButton tools;
@@ -29,22 +28,14 @@ public class DataEntryGUI extends MainPanel {
 	private JButton viewToolsAndMachines;
 	private JButton logInUser;
 	private JButton done;
-
-	private Color buttonBackground;
+	private JButton logOut;
 	
 	public DataEntryGUI() {
 		
-		super(Driver.getAccessTracker().getCurrentUser());
+		super();
+		contentPanel = new JPanel(new BorderLayout());
 		buttonListener = new ButtonListener();
 		setLayout(new GridBagLayout());
-		buttonFont = new Font("SansSerif", Font.BOLD, 30);
-		
-		buttonListener = new ButtonListener();
-		
-		contentPanel = new JPanel(new BorderLayout());
-		contentPanel.setBorder(BorderFactory.createEtchedBorder());
-		
-		buttonPanel.setBorder(BorderFactory.createEtchedBorder());
 		
 		certifications = new JButton();
 		users = new JButton();
@@ -85,10 +76,10 @@ public class DataEntryGUI extends MainPanel {
 		formatAndAddButtons();
 		
 		logOut.removeActionListener(buttonListener);
-		logOut.addActionListener(new ListenerHelpers.LogOutListener());
+		logOut.addActionListener(new GUI.LogOutListener());
 		
 		done.removeActionListener(buttonListener);
-		done.addActionListener(new ListenerHelpers.DoneListener());
+		done.addActionListener(new GUI.DoneListener());
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
@@ -97,6 +88,8 @@ public class DataEntryGUI extends MainPanel {
 		c.weightx = 0.5;
 		c.anchor = GridBagConstraints.LINE_START;
 		
+		contentPanel = new ViewToolsAndMachinesPanel();
+		
 		add(contentPanel, c);
 		
 		c.anchor = GridBagConstraints.LINE_END;
@@ -104,8 +97,6 @@ public class DataEntryGUI extends MainPanel {
 		c.gridx = 1;
 		
 		add(buttonPanel, c);
-		
-		switchContentPanel(new ViewToolsAndMachinesPanel());
 		
 	}
 	
@@ -131,7 +122,7 @@ public class DataEntryGUI extends MainPanel {
 			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
 			} else if ( e.getSource() == logInUser ) {
-				//switchContentPanel(new LogInAnotherUserPanel());
+				switchContentPanel(new LogInAnotherUserPanel());
 			}
 			JButton current = (JButton) e.getSource();
 			current.setBackground(orange);

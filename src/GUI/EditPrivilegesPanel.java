@@ -27,7 +27,6 @@ import com.mongodb.DBObject;
 public class EditPrivilegesPanel extends ContentPanel {
 
 	private JButton saveButton;
-	private ButtonListener buttonListener;
 	private JButton nameSearchGoButton;
 	private JButton idSearchGoButton;
 	private JTextField nameSearchField;
@@ -40,7 +39,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 	private ArrayList<User> resultsList;
 
 	public EditPrivilegesPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Edit User Privileges");
 		buttonListener = new ButtonListener();
 		userList = new ArrayList<DBObject>();
@@ -142,21 +141,16 @@ public class EditPrivilegesPanel extends ContentPanel {
 	}
 
 	public boolean confirmSubmission() {
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to change the permissions for these users?") == JOptionPane.YES_OPTION) {
+		if ( confirm("Are you sure you want to change the permissions for these users?") ) {
 			for (int i = 0; i < resultsPanel.getComponentCount(); i++) {
 				JPanel panel = (JPanel) resultsPanel.getComponent(i);
 				if(((JCheckBox) panel.getComponent(2)).isSelected()) 
 					return true;
 			}
-			showMessage("NO SYSTEM ADMINISTRATOR SELECTED. Please select at least one System Administrator.");
-			return false;
-		} else {
+			showMessage("NO SYSTEM ADMINISTRATOR SELECTED.\nPlease select at least one System Administrator.");
 			return false;
 		}
-	}
-
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
+		return false;
 	}
 
 	// Clears all the text fields.

@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,14 +9,10 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.sound.sampled.ReverbType;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import main.Machine;
@@ -30,7 +25,7 @@ public class UserGUI extends MainPanel {
 
 	private JPanel machinesPanel;
 	private JPanel checkedOutToolsPanel;
-	private UserCheckoutToolPanel userCheckoutToolPanel;
+	private CheckoutToolsPanel checkoutToolsPanel;
 
 	private JButton logOutButton = new JButton();
 	private JButton checkOutToolsButton = new JButton();
@@ -43,21 +38,21 @@ public class UserGUI extends MainPanel {
 
 	private ArrayList<Machine> selectedMachines;
 	private ArrayList<Tool> toolsToReturn;
-	
+
 	private MachineCheckBoxListener machineCheckBoxListener;
 	private ToolCheckBoxListener toolCheckBoxListener;
-	
-	private boolean isCheckingOutTools = false;
-	
-	public UserGUI(User user) {
 
-		super(user);
+	private boolean isCheckingOutTools = false;
+
+	public UserGUI(User user) {
+		
+		super();
 		buttonListener = new ButtonListener();
 		machineCheckBoxListener = new MachineCheckBoxListener();
 		toolCheckBoxListener = new ToolCheckBoxListener();
-		
+
 		contentPanel = new JPanel(new GridLayout(2, 1));
-		userCheckoutToolPanel = new UserCheckoutToolPanel();
+		checkoutToolsPanel = new CheckoutToolsPanel();
 		machinesPanel = new JPanel();
 		checkedOutToolsPanel = new JPanel();
 
@@ -66,15 +61,15 @@ public class UserGUI extends MainPanel {
 
 		machinesPanel.setLayout(new GridLayout(0, 2));
 		checkedOutToolsPanel.setLayout(new GridLayout(0, 1));
-		
+
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
-		
+
 		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
 		TitledBorder machineBorder = new TitledBorder("My Machines");
 		machineBorder.setTitleFont(borderFont);
 		machinesScroller.setBorder(machineBorder);
-		
+
 		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
 		TitledBorder toolBorder = new TitledBorder("Checked out Tools");
 		toolBorder.setTitleFont(borderFont);
@@ -94,17 +89,17 @@ public class UserGUI extends MainPanel {
 		buttons.add(returnToolsButton);
 		buttons.add(doneButton);
 		buttons.add(logOutButton);
-		
+
 		formatAndAddButtons();
-		
+
 		add(contentPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.EAST);
-		
+
 		logOutButton.removeActionListener(buttonListener);
 		doneButton.removeActionListener(buttonListener);
-		logOutButton.addActionListener(new ListenerHelpers.LogOutListener());
-		doneButton.addActionListener(new ListenerHelpers.DoneListener());
-		
+		logOutButton.addActionListener(new GUI.LogOutListener());
+		doneButton.addActionListener(new GUI.DoneListener());
+
 	}
 
 	private void displayUserMachinePermissions() {
@@ -168,19 +163,19 @@ public class UserGUI extends MainPanel {
 
 	public void returnTools() {
 		if (!isCheckingOutTools) {
-		if (toolsToReturn.size() == 0) {
-			showMessage("No tools selected");
-		} else {
+			if (toolsToReturn.size() == 0) {
+				showMessage("No tools selected");
+			} else {
 
-			currentUser.getCurrentEntry().addToolsReturned(toolsToReturn);
+				currentUser.getCurrentEntry().addToolsReturned(toolsToReturn);
 
-			currentUser.returnTools(toolsToReturn);
-			
-			displayUserCheckedOutTools();
-			repaint();
+				currentUser.returnTools(toolsToReturn);
 
-			toolsToReturn.clear();
-		}
+				displayUserCheckedOutTools();
+				repaint();
+
+				toolsToReturn.clear();
+			}
 		}
 		resetButtonBackgrounds();
 	}
@@ -191,7 +186,7 @@ public class UserGUI extends MainPanel {
 		public void actionPerformed(ActionEvent e) {
 			JButton current = (JButton) e.getSource();
 			if ( e.getSource() == checkOutToolsButton ) {
-				switchContentPanel(new UserCheckoutToolPanel());
+				switchContentPanel(new CheckoutToolsPanel());
 				isCheckingOutTools = true;
 				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
@@ -207,11 +202,17 @@ public class UserGUI extends MainPanel {
 						selectMachines();
 						current.setBackground(orange);
 					}
+				} else {
+					isCheckingOutTools = false;
+					switchPanels(new UserGUI(currentUser));
 				}
 			} else if ( e.getSource() == returnToolsButton ) {
 				if ( !isCheckingOutTools ) {
 					returnTools();
 					current.setBackground(orange);
+				} else {
+					isCheckingOutTools = false;
+					switchPanels(new UserGUI(currentUser));
 				}
 			}
 		}

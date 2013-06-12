@@ -27,7 +27,6 @@ import com.mongodb.DBObject;
 public class LockUsersPanel extends ContentPanel {
 	
 	private JButton lockButton;
-	private ButtonListener buttonListener;
 	private JButton nameSearchGoButton;
 	private JButton idSearchGoButton;
 	private JTextField nameSearchField;
@@ -139,18 +138,6 @@ public class LockUsersPanel extends ContentPanel {
 		
 	}
 	
-	public boolean confirmSubmission() {
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to lock these users?") == JOptionPane.YES_OPTION) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
-	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -164,7 +151,7 @@ public class LockUsersPanel extends ContentPanel {
 				}
 				ArrayList<String> locked = new ArrayList<String>();
 				// First check that they actually want to lock the users.
-				if ( !noBoxesChecked && confirmSubmission()) {
+				if ( !noBoxesChecked && confirm("Are you sure you want to lock these users?")) {
 					ArrayList<JCheckBox> lockedBoxes = new ArrayList<JCheckBox>();
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {

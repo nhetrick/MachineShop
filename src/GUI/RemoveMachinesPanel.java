@@ -27,7 +27,6 @@ import com.mongodb.DBObject;
 public class RemoveMachinesPanel extends ContentPanel {
 	
 	private JButton removeButton;
-	private ButtonListener buttonListener;
 	private JButton nameSearchGoButton;
 	private JButton idSearchGoButton;
 	private JTextField nameSearchField;
@@ -39,7 +38,7 @@ public class RemoveMachinesPanel extends ContentPanel {
 	private ArrayList<Machine> resultsList; 
 	
 	public RemoveMachinesPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Remove Machines");
 		buttonListener = new ButtonListener();
 		resultsList = new ArrayList<Machine>();
@@ -138,19 +137,6 @@ public class RemoveMachinesPanel extends ContentPanel {
 		add(new JPanel(), c);
 	}
 	
-	public boolean confirmSubmission() {
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove these machines from the database?"
-											  + "\nThis action is permanent and cannot be undone.") == JOptionPane.YES_OPTION) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
-	
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -164,8 +150,12 @@ public class RemoveMachinesPanel extends ContentPanel {
 				}
 				ArrayList<String> removed = new ArrayList<String>();
 				ArrayList<Machine> removedMachines = new ArrayList<Machine>();
+				
+				String question = "Are you sure you want to remove these machines from the database?"
+				  + "\nThis action is permanent and cannot be undone.";
+				
 				// First check that they actually want to remove the machines.
-				if ( !noBoxesChecked && confirmSubmission()) {
+				if ( !noBoxesChecked && confirm(question)) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);

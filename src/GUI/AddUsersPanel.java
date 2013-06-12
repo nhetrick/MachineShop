@@ -43,9 +43,9 @@ public class AddUsersPanel extends ContentPanel {
 	private JCheckBox selectAllBox;
 
 	public AddUsersPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Add a New User");
-		// Tries to connect to the Oracle database that contains students
+		// Tries to connect to the Oracle database that contains student
 		// information.
 		// The Oracle database is a dummy one for now, and will be needed to
 		// change
@@ -84,7 +84,7 @@ public class AddUsersPanel extends ContentPanel {
 		emailField.setFont(textFont);
 		departField.setFont(textFont);
 
-		userIDField.addActionListener(buttonListener);
+		departField.addActionListener(buttonListener);
 
 		selectAllBox = new JCheckBox("Select All");
 		selectAllBox.setFont(textFont);
@@ -302,28 +302,8 @@ public class AddUsersPanel extends ContentPanel {
 			((JCheckBox) permissionsPanel.getComponent(i)).setSelected(false);
 		}
 	}
-
-	// Asks the System Administrator if the certification is correct.
-	public boolean confirmSubmission(ArrayList<String> permissionsList) {
-		String list = "";
-		for (String s : permissionsList) {
-			list += s + "\n";
-		}
-		String message = "Are you sure you want to give "
-				+ firstNameField.getText() + " " + lastNameField.getText()
-				+ " " + "these permissions?\n\n" + list;
-		if (JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
 	
-	public boolean validFields(){
+	public boolean validFields() {
 		if (firstNameField.getText().equals("")
 				|| userIDField.getText().equals("")
 				|| lastNameField.getText().equals("") 
@@ -334,17 +314,17 @@ public class AddUsersPanel extends ContentPanel {
 		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
 			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID.");
 			return false;
-		} else if (!(Validator.isValidEmail(emailField.getText()))){
+		} else if (!(Validator.isValidEmail(emailField.getText()))) {
 			showMessage("Please enter a valid email address");
 			return false;
-		} else if (!(Validator.isValidDeptCode(departField.getText()))){
+		} else if (!(Validator.isValidDeptCode(departField.getText()))) {
 			showMessage("Please enter a department code of length " + Validator.DEPT_CODE_LENGTH );
 			return false;
 		}
 		return true;
 	}
 	
-	public void toggleAll(){
+	public void toggleAll() {
 		if (selectAllBox.isSelected()) {
 			for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
 				JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
@@ -358,7 +338,7 @@ public class AddUsersPanel extends ContentPanel {
 		}
 	}
 	
-	public boolean ensureASelectedPermission(){
+	public boolean ensureASelectedPermission() {
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
 			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 			if (cb.isSelected()) {
@@ -372,7 +352,7 @@ public class AddUsersPanel extends ContentPanel {
 		return false;
 	}
 
-	public void save(){
+	public void save() {
 		
 		ArrayList<String> added = new ArrayList<String>();
 		ArrayList<Machine> machines = new ArrayList<Machine>();
@@ -398,7 +378,15 @@ public class AddUsersPanel extends ContentPanel {
 			}
 		}
 		
-		if (confirmSubmission(added) && saveUser(machines)) {
+		String list = "";
+		for (String s : added) {
+			list += s + "\n";
+		}
+		String message = "Are you sure you want to give "
+				+ firstNameField.getText() + " " + lastNameField.getText()
+				+ " " + "these permissions?\n\n" + list;
+		
+		if (confirm(message) && saveUser(machines)) {
 			clearFields();
 		}
 	}
@@ -410,7 +398,7 @@ public class AddUsersPanel extends ContentPanel {
 			// selected/deselected.
 			if (e.getSource() == selectAllBox) {
 				toggleAll();
-			} else if (e.getSource() == saveButton) {
+			} else if (e.getSource() == saveButton || e.getSource() == departField) {
 				save();
 			}
 		}

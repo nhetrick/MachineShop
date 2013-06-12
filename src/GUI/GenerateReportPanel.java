@@ -29,7 +29,6 @@ import main.Statistics;
 public class GenerateReportPanel extends ContentPanel {
 
 	private JComboBox<String> parameters;
-	private ButtonListener buttonListener;
 	private ComboBoxListener comboBoxListener;
 	private JButton generateButton;
 	private JButton saveExcelButton;
@@ -43,7 +42,6 @@ public class GenerateReportPanel extends ContentPanel {
 	private JTable statsTable;
 	private JTabbedPane tabs;
 	private Statistics stats;
-	private boolean haveGeneratedReport;
 	
 	private String space = "       ";
 	
@@ -67,13 +65,16 @@ public class GenerateReportPanel extends ContentPanel {
 	
 	private String currentParameter;
 	SimpleDateFormat dateFileFormat;
+	private boolean haveGeneratedReport;
 	
 	
 	public GenerateReportPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Generate Reports & Statistics");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
+		
+		haveGeneratedReport = false;
 		
 		parameters = new JComboBox<String>();
 		JLabel parameterLabel = new JLabel("Report Parameter:");
@@ -85,8 +86,6 @@ public class GenerateReportPanel extends ContentPanel {
 		parameters.addActionListener(comboBoxListener);
 		
 		currentParameter = "Date";
-		
-		haveGeneratedReport = false;
 		dateFileFormat = new SimpleDateFormat("dd-MM-yyyy HH.mm.ss");
 		
 		setDefaultDate();
@@ -125,25 +124,6 @@ public class GenerateReportPanel extends ContentPanel {
 		
 		tabs = new JTabbedPane(); 
 
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.1;
@@ -467,10 +447,6 @@ public class GenerateReportPanel extends ContentPanel {
 		end = Calendar.getInstance();
 		start.set(sYear, sMonth, sDay, 0, 0, 0);
 		end.set(eYear, eMonth, eDay, 23, 59, 59);
-	}
-	
-	public void showMessage(String message){
-		JOptionPane.showMessageDialog(this, message);
 	}
 	
 	private class ButtonListener implements ActionListener {
