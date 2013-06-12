@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -17,7 +18,7 @@ public class MainPanel extends GUI {
 	
 	public MainPanel() {
 
-		MainGUI.pushToStack(this);
+		//MainGUI.pushToStack(this);
 		System.out.println("Pushed to stack");
 
 		setLayout(new BorderLayout());
@@ -41,7 +42,10 @@ public class MainPanel extends GUI {
 		resetButtonBackgrounds();
 		contentPanel.removeAll();
 		contentPanel.setLayout(new BorderLayout());
-		contentPanel.add(panel, BorderLayout.CENTER);
+		cards.add(panel);
+		CardLayout cl = (CardLayout) cards.getLayout();
+        cl.last(cards);
+		contentPanel.add(cards, BorderLayout.CENTER);
 		System.out.println("Switched Content Panel. Pushed to stack");
 		repaint();
 	}

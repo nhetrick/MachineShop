@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -16,6 +17,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.Stack;
+
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -53,10 +56,8 @@ public class MainGUI extends JFrame {
 	private JLabel minesMlabel;
 	private JLabel bannerLabel;
 	
+	
 	private Color borderColor = Color.black;
-
-	// For keeping track of which panel to go to when the "back" button is pressed
-	private static Stack<JPanel> panelStack;
 	private Font miniFont = new Font("SansSerif", Font.BOLD, 12);
 
 	public MainGUI() {
@@ -73,7 +74,7 @@ public class MainGUI extends JFrame {
 		setLayout(new GridBagLayout());
 		setup();
 
-		panelStack = new Stack<JPanel>();
+	// = new Stack<JPanel>();
 
 		ImageIcon mIcon = GUI.createImageIcon(mPath);
 		minesMlabel = new JLabel(mIcon);
@@ -81,7 +82,8 @@ public class MainGUI extends JFrame {
 		ImageIcon bannerIcon = GUI.createImageIcon(bannerPath);
 		bannerLabel = new JLabel(bannerIcon);
 
-		backButton = new JButton("Back");
+		backButton = new JButton("\u22b2Prev");
+        
 		backButton.addActionListener(buttonListener);
 
 		helpButton = new JButton("Help");
@@ -203,6 +205,7 @@ public class MainGUI extends JFrame {
 		c.gridy = 0;
 		c.weightx = 0.2;
 		c.fill = GridBagConstraints.HORIZONTAL;
+ 
 		leftPanel.add(backButton, c);
 		
 		c.gridx = 2;
@@ -239,6 +242,8 @@ public class MainGUI extends JFrame {
 		}
 		
 		mainContentPanel.setBorder(new LineBorder(borderColor, 4));
+		
+		//cards.add(mainContentPanel);
 		
 		c.gridx = 0;
 		c.gridy = 1;
@@ -325,32 +330,6 @@ public class MainGUI extends JFrame {
 		return currentUser;
 	}
 
-	public void goBack() {
-		System.out.println(panelStack.size());
-		if ( !panelStack.isEmpty() )
-			panelStack.pop();
-		if ( !panelStack.isEmpty() ) {
-			
-			remove(mainContentPanel);
-			mainContentPanel = panelStack.peek();
-			//mainContentPanel.add(panelStack.peek(), BorderLayout.CENTER);
-			
-			c.gridx = 0;
-			c.gridy = 1;
-			c.weighty = 0.9;
-			c.fill = GridBagConstraints.BOTH;
-			add(panelStack.peek(), c);
-			
-			pack();
-			revalidate();
-			repaint();
-		}
-	}
-
-	public static void pushToStack(JPanel panel) {
-		panelStack.push(panel);
-	}
-	
 	private void displayTextFile(String title, String file) {
 		frame = new JFrame();
 		frame.setUndecorated(true);
@@ -396,8 +375,8 @@ public class MainGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == backButton ) {
-				goBack();
-				repaint();
+				CardLayout cl = (CardLayout) GUI.cards.getLayout();
+                cl.previous(GUI.cards);
 			} else if (e.getSource() == helpButton) {
 				displayTextFile("Help", "help.txt");
 			} else if (e.getSource() == aboutButton) {

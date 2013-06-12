@@ -153,7 +153,7 @@ public class UserGUI extends MainPanel {
 			m.use();
 		}
 
-		showMessage(message);
+		//showMessage(message);
 
 		displayUserMachinePermissions();
 		resetButtonBackgrounds();
