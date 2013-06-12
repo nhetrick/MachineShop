@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -23,7 +21,7 @@ public class SwipeCardPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		messageFont = new Font("SansSerif", Font.BOLD, 50);
 		
-		JLabel picture = new JLabel(createImageIcon(trianglePath));
+		JLabel picture = new JLabel(GUI.createImageIcon(trianglePath));
 		picture.setBackground(Color.white);
 		picture.setVerticalAlignment(JLabel.TOP);
 		
@@ -46,18 +44,6 @@ public class SwipeCardPanel extends JPanel {
 		c.weighty = 0.4;
 		add(message, c);
 		
-	}
-	
-	private ImageIcon createImageIcon(String path) {
-
-		java.net.URL imageURL = MainGUI.class.getResource(path);
-
-		if (imageURL == null) {
-			System.err.println("Resource not found: " + path);
-			return null;
-		} else {
-			return new ImageIcon(imageURL);
-		}
 	}
 	
 }

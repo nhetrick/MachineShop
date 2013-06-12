@@ -25,7 +25,6 @@ public class EditCertificationsPanel extends ContentPanel {
 
 	private JButton saveButton;
 	private JButton goButton;
-	private ButtonListener buttonListener;
 	private JTextField cwidField;
 	private String start = ";984000017";
 	private String error = "E?";
@@ -35,7 +34,7 @@ public class EditCertificationsPanel extends ContentPanel {
 	private User user;
 
 	public EditCertificationsPanel() {
-		// All the fonts are in ContentPanel.
+		
 		super("Edit User's Machine Certifications");
 		buttonListener = new ButtonListener();
 
@@ -108,9 +107,14 @@ public class EditCertificationsPanel extends ContentPanel {
 		c.gridy = 4;
 		add(new JPanel(), c);
 	}
-
-	public void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message);
+	
+	// Clears all the text fields, and set the user to null.
+	private void clearFields() {
+		cwidField.setText("");
+		user = null;
+		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
+			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
+		}
 	}
 
 	private class ButtonListener implements ActionListener {
@@ -181,12 +185,4 @@ public class EditCertificationsPanel extends ContentPanel {
 		}
 	}
 
-	// Clears all the text fields to empty, and set the user null.
-	private void clearFields() {
-		cwidField.setText("");
-		user = null;
-		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
-			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
-		}
-	}
 }

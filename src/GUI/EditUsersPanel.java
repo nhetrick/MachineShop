@@ -15,10 +15,9 @@ public class EditUsersPanel extends ContentPanel {
 	private JButton removeButton;
 	private JButton lockButton;
 	private JButton unlockButton;
-	private ButtonListener buttonListener;
 	
 	public EditUsersPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Edit Users");
 		buttonListener = new ButtonListener();
 		
@@ -43,25 +42,6 @@ public class EditUsersPanel extends ContentPanel {
 		buttonPanel.add(removeButton);
 		buttonPanel.add(lockButton);
 		buttonPanel.add(unlockButton);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(new JPanel(), c);
-		
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.8;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(title, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(new JPanel(), c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0.3;

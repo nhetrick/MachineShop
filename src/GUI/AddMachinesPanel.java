@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,13 +16,12 @@ import main.Machine;
 
 public class AddMachinesPanel extends ContentPanel {
 	
-	private JButton saveButton;
-	private ButtonListener buttonListener;	
+	private JButton saveButton;	
 	private JTextField machineNameField;
 	private JTextField machineIDField;
 	
 	public AddMachinesPanel() {
-		// All the fonts are in ContentPanel
+
 		super("Add a New Machine");
 		buttonListener = new ButtonListener();
 		
@@ -96,7 +94,7 @@ public class AddMachinesPanel extends ContentPanel {
 		}
 	}
 	
-	// Clears the text fields to empty
+	// Clears all the text fields
 	private void clearFields() {
 		machineNameField.setText("");
 		machineIDField.setText("");

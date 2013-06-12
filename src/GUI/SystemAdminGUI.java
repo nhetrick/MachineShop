@@ -29,7 +29,7 @@ public class SystemAdminGUI extends MainPanel {
 
 	public SystemAdminGUI(User user) {
 
-		super(user);
+		super();
 		buttonListener = new ButtonListener();
 		contentPanel = new JPanel(new GridBagLayout());	
 		
@@ -47,7 +47,7 @@ public class SystemAdminGUI extends MainPanel {
 
 		dataEntryButton.addActionListener(buttonListener);
 		basicUserButton.addActionListener(buttonListener);
-		logOutButton.addActionListener(new ListenerHelpers.LogOutListener());
+		logOutButton.addActionListener(new GUI.LogOutListener());
 
 		buttonPanel.add(dataEntryButton);
 		buttonPanel.add(basicUserButton);

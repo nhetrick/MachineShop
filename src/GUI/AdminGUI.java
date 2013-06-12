@@ -32,7 +32,7 @@ public class AdminGUI extends JPanel {
 	private static JPanel buttonPanel;
 	private JPanel machinePermissions;
 	private static JPanel checkedOutTools;
-	private static UserCheckoutToolPanel userCheckoutToolPanel;
+	private static CheckoutToolsPanel userCheckoutToolPanel;
 	private static User currentUser;
 
 	private Font buttonFont;
@@ -66,7 +66,7 @@ public class AdminGUI extends JPanel {
 		centerPanel = new JPanel(new GridBagLayout());
 		contentPanel = new JPanel(new GridLayout(2, 1));
 		buttonPanel = new JPanel(new GridLayout(8, 1));
-		userCheckoutToolPanel = new UserCheckoutToolPanel();
+		userCheckoutToolPanel = new CheckoutToolsPanel();
 		
 		machinePermissions = new JPanel();
 		checkedOutTools = new JPanel();
@@ -149,8 +149,8 @@ public class AdminGUI extends JPanel {
 		viewActiveUsers.addActionListener(buttonListener);
 		
 
-		logOut.addActionListener(new ListenerHelpers.LogOutListener());	
-		done.addActionListener(new ListenerHelpers.DoneListener());
+		logOut.addActionListener(new GUI.LogOutListener());	
+		done.addActionListener(new GUI.DoneListener());
 	
 	}
 	

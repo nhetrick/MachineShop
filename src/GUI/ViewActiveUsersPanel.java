@@ -36,7 +36,7 @@ public class ViewActiveUsersPanel extends JPanel{
 		title.setFont(new Font("SansSerif", Font.BOLD, 38));
 		title.setHorizontalAlignment(JLabel.CENTER);
 
-		String[] columns = {"Name", "Machine Certifications", "Current Machines", "Current Tools", "System Priviledges"};
+		String[] columns = {"Name", "Machine Certifications", "Currently Using", "Checked Out Tools", "System Priviledges"};
 		int size = activeUsers.size();
 		String data[][] = new String[size][7];
 		if (size > 0) {

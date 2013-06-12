@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,13 +16,12 @@ import main.Tool;
 
 public class AddToolsPanel extends ContentPanel {
 	
-	private JButton saveButton;
-	private ButtonListener buttonListener;	
+	private JButton saveButton;	
 	private JTextField toolNameField;
 	private JTextField toolIDField;
 	
 	public AddToolsPanel() {
-		// All the fonts are in ContentPanel.
+
 		super("Add a New Tool");
 		buttonListener = new ButtonListener();
 		
@@ -96,7 +94,7 @@ public class AddToolsPanel extends ContentPanel {
 		}
 	}
 	
-	// Clears both text fields to empty.
+	// Clears all text fields.
 	private void clearFields() {
 		toolNameField.setText("");
 		toolIDField.setText("");
