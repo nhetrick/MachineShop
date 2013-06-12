@@ -203,8 +203,10 @@ public class UserGUI extends MainPanel {
 							noBoxesSelected = false;
 						}
 					}
-					selectMachines();
-					current.setBackground(orange);
+					if ( !noBoxesSelected ) {
+						selectMachines();
+						current.setBackground(orange);
+					}
 				}
 			} else if ( e.getSource() == returnToolsButton ) {
 				if ( !isCheckingOutTools ) {
