@@ -164,6 +164,7 @@ public class RemoveToolsPanel extends ContentPanel {
 					}
 				}
 				ArrayList<String> removed = new ArrayList<String>();
+				ArrayList<Tool> removedTools = new ArrayList<Tool>();
 				// First check that they actually want to remove the tools.
 				if ( !noBoxesChecked && confirmSubmission()) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
@@ -176,30 +177,35 @@ public class RemoveToolsPanel extends ContentPanel {
 								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
 								String UPC = t.getUPC();
 								if ( s.equals(UPC) ) {
+									removed.add(t.getName() + " [" + UPC + "]");
+									removedBoxes.add(cb);
 									if (!t.isCheckedOut()) {
-										removed.add(t.getName() + " [" + UPC + "]");
-										removedBoxes.add(cb);
 										admin.removeTool(UPC);
 									} else {
 										t.returnTool();
+										admin.removeTool(UPC);
 									}
+									removedTools.add(t);
 								}
 							}
 						}
 					}
-
-					resultsList.clear();
+					
+					for ( Tool t : removedTools ) {
+						resultsList.remove(t);
+					}
+					
 					for ( JCheckBox cb : removedBoxes ) {
 						resultsPanel.remove(cb);
 					}
-					repaint();
 
-					// Lists all the tools that are removed.
+					// Lists all the tools that were removed.
 					String message = "You Removed:\n\n";
 					for ( String s : removed ) {
 						message += s + "\n";
 					}
 					showMessage(message);
+					repaint();
 				}
 			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
 					e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
@@ -229,7 +235,7 @@ public class RemoveToolsPanel extends ContentPanel {
 					resultsList.add(tool);
 				}
 
-				//sorts the resultlists
+				//sorts the resultsList
 				Collections.sort(resultsList, new ToolComparator());
 				for ( Tool t : resultsList ) {
 					JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");

@@ -196,6 +196,13 @@ public class UserGUI extends MainPanel {
 				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
 				if ( !isCheckingOutTools ) {
+					boolean noBoxesSelected = true;
+					for ( int i = 0; i < machinesPanel.getComponentCount(); ++i ) {
+						JCheckBox cb = (JCheckBox) machinesPanel.getComponent(i);
+						if ( cb.isSelected() ) {
+							noBoxesSelected = false;
+						}
+					}
 					selectMachines();
 					current.setBackground(orange);
 				}

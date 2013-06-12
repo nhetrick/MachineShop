@@ -163,6 +163,7 @@ public class RemoveMachinesPanel extends ContentPanel {
 					}
 				}
 				ArrayList<String> removed = new ArrayList<String>();
+				ArrayList<Machine> removedMachines = new ArrayList<Machine>();
 				// First check that they actually want to remove the machines.
 				if ( !noBoxesChecked && confirmSubmission()) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
@@ -176,6 +177,7 @@ public class RemoveMachinesPanel extends ContentPanel {
 								String ID = m.getID();
 								if ( s.equals(ID) ) {
 									removed.add(m.getName() + " [" + ID + "]");
+									removedMachines.add(m);
 									removedBoxes.add(cb);
 									admin.removeMachine(ID);
 								}
@@ -183,7 +185,10 @@ public class RemoveMachinesPanel extends ContentPanel {
 						}
 					}
 					
-					resultsList.clear();
+					for ( Machine m : removedMachines ) {
+						resultsList.remove(m);
+					}
+					
 					for ( JCheckBox cb : removedBoxes ) {
 						resultsPanel.remove(cb);
 					}
