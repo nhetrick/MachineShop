@@ -336,7 +336,9 @@ public class MainGUI extends JFrame {
 		frame.setTitle(title);
 		frame.setSize(getMinimumSize());
 		frame.setLocationRelativeTo(null);
-		frame.setLayout(new GridBagLayout());
+		JPanel all = new JPanel();
+		all.setLayout(new GridBagLayout());
+		all.setBorder(new LineBorder(borderColor, 4));
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
 		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -356,7 +358,7 @@ public class MainGUI extends JFrame {
 		c.gridy = 0;
 		c.weighty = 0.9;
 		c.fill = GridBagConstraints.BOTH;
-		frame.add(scroller, c);
+		all.add(scroller, c);
 		
 		close = new JButton("Close");
 		close.addActionListener(buttonListener);
@@ -366,8 +368,9 @@ public class MainGUI extends JFrame {
 		c.gridy = 1;
 		c.weighty = 0.1;
 		c.fill = GridBagConstraints.NONE;
-		frame.add(close, c);
+		all.add(close, c);
 		
+		frame.add(all);
 		frame.setVisible(true);
 	}
 	

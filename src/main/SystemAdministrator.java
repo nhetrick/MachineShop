@@ -151,10 +151,21 @@ public class SystemAdministrator extends Administrator {
 	// removes the user from database
 	public void removeUser(String cwid) {
 		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
+		User u = new User("", "", "", "", "");
+		ArrayList<String> tools = new ArrayList<String>();
 		if (!(cursor == null)) {
 			DBObject obj = cursor.next();
+			u = new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID"), (String) obj.get("email"), (String) obj.get("department"));
+			tools = (ArrayList<String>) obj.get("toolsCheckedOut");
 			users.remove(obj);
-			tracker.removeUser(new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID"), (String) obj.get("email"), (String) obj.get("department")));
+			tracker.removeUser(u);
+		}
+		if (!tools.isEmpty()) {
+			ArrayList<Tool> ts = new ArrayList<Tool>();
+			for (String t : tools) {
+				ts.add(Driver.getAccessTracker().getToolByUPC(t));
+			}
+			u.returnTools(ts);
 		}
 	}
 	
