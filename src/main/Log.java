@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import GUI.Driver;
 
@@ -30,6 +31,15 @@ public class Log {
 		// the database.
 		database = Driver.getAccessTracker().getDatabase();
 		numEntries = (int) database.getCollection("LogEntries").count();
+	}
+	
+	private static boolean containsIgnoreCase(String str1, String str2){
+		try{
+			boolean found = Pattern.compile(str2, Pattern.CASE_INSENSITIVE + Pattern.LITERAL).matcher(str1).find();
+			return found;
+		}catch (Exception e){
+			return false;
+		}
 	}
 	
 	public static void printLog() {
@@ -69,7 +79,7 @@ public class Log {
 				}
 			}
 			for (Tool t : entry.getToolsReturned()) {
-				if (t.getName().contains(name)) {
+				if (containsIgnoreCase(t.getName(), name)) {
 					newResults.add(entry);
 				}
 			}
@@ -81,7 +91,7 @@ public class Log {
 		ArrayList<LogEntry> newResults = new ArrayList<LogEntry>();
 		for (LogEntry entry : results) {
 			for (Machine m : entry.getMachinesUsed()) {
-				if (m.getName().contains(name)) {
+				if (containsIgnoreCase(m.getName(), name)) {
 					newResults.add(entry);
 				}
 			}
@@ -92,7 +102,7 @@ public class Log {
 	public static void extractResultsByUser(String cwid) {
 		ArrayList<LogEntry> newResults = new ArrayList<LogEntry>();
 		for (LogEntry entry : results) {
-			if (entry.getCwid().contains(cwid)) {
+			if (containsIgnoreCase(entry.getCwid(), cwid)) {
 				newResults.add(entry);
 			}
 		}
