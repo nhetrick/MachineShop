@@ -334,9 +334,9 @@ public class GenerateReportPanel extends ContentPanel {
 		deptFreqScoller.setViewportView(deptFreqsTable);
 	}
 	
-	public void showUserStats(){
+	public void showgeneralUserStats(){
 		
-		JTable generalStats = createGeneralStatsTable(stats.getGeneralStatistics());
+		JTable generalStats = createGeneralStatsTable(stats.getUserStatistics());
 		JTable machineFreqsTable = createMachineFrequenciesTable(stats.getMachineFrequencies());
 		JTable toolFreqsTable = createToolFrequenciesTable(stats.getToolsFrequencies());
 		
@@ -389,6 +389,7 @@ public class GenerateReportPanel extends ContentPanel {
 		resultsPanel.add(label);
 	}
 	
+	/*
 	private void showParameters() {
 		JLabel title = new JLabel("Parameters");
 		title.setFont(resultsFont);
@@ -410,29 +411,13 @@ public class GenerateReportPanel extends ContentPanel {
 		}
 	}
 	
-/*
-	private void showToolStatistics() {		
-		showParameters();
-		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
-		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
-		showDeptFrequencies();
-		showAvgLogInTime();
-	}
-	
-	private void showMachineStatistics() {		
-		showParameters();
-		showStat("Number of Entries", Integer.toString(stats.getNumEntries()), resultsFont);
-		showStat("Number of Different Users", Integer.toString(stats.getNumUsers()), resultsFont);
-		showDeptFrequencies();
-		showAvgLogInTime();
-	}
 	*/
 	private void showReport() {
 		showLog();
 		stats = new Statistics();
 		stats.run();
 		if (currentParameter.equals("User")) {
-			showUserStats();
+			showgeneralUserStats();
 		} else if (currentParameter.equals("Date")) {
 			showDateStats();
 		} else if (currentParameter.equals("Tool")) {
