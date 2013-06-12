@@ -34,7 +34,7 @@ public class ExcelExporter {
 				} else {
 					String cell = model.getValueAt(row, col).toString();
 					
-//					cell = cell.replaceAll(",", " ");
+					cell = cell.replaceAll(",", " ");
 					
 					out.write(cell+"\t");
 				}
@@ -74,7 +74,7 @@ public class ExcelExporter {
 					} else {
 						String cell = model.getValueAt(row, col).toString();
 						
-//						cell = cell.replaceAll(",", " ");
+						cell = cell.replaceAll(",", " ");
 						
 						out.write(cell+"\t");
 					}
