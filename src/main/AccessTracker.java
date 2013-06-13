@@ -208,17 +208,15 @@ public class AccessTracker {
 			if ( currentUser != null ) {
 
 				// IF the user with this CWID is locked (boolean locked)
-				// THEN display some error message, and make a note somewhere
+				// THEN display some error message, and make a note
 				// (log this attempt for admin to view later)
-
 				if ( currentUser.isLocked() ) {
 					String message = "You have been locked out of the system.\n" +
 							"You must talk to a shop supervisor to get unlocked";
 					JOptionPane.showMessageDialog(Driver.getMainGui(), message);
 					currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
 					Log.startEntry(currentUser);
-					Log.finishEntry(currentUser.getCurrentEntry());
-					removeUser(currentUser);
+					processLogOut(currentUser.getCWID());
 					return null;
 				}
 
@@ -226,6 +224,7 @@ public class AccessTracker {
 			}
 		}
 		Driver.isLogInScreen = false;
+		GUI
 		return currentUser;
 	}
 
