@@ -192,8 +192,6 @@ public class LogEntry {
 		
 		logEntries.update(new BasicDBObject("ID", ID), result);		
 		
-		Driver.getAccessTracker().removeUser(user);
-		
 		for (Machine m : machinesUsed) {
 			m.stopUsing();
 		}
