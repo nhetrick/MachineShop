@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import GUI.Driver;
+import GUI.GUI;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -224,6 +225,7 @@ public class AccessTracker {
 			}
 		}
 		Driver.isLogInScreen = false;
+		GUI.clearCards();
 		return currentUser;
 	}
 

@@ -389,8 +389,8 @@ public class MainGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == backButton ) {
-				CardLayout cl = (CardLayout) GUI.cards.getLayout();
-                cl.previous(GUI.cards);
+				CardLayout cl = (CardLayout) GUI.getCards().getLayout();
+                cl.previous(GUI.getCards());
 			} else if (e.getSource() == helpButton) {
 				displayTextFile("Help", "help.txt");
 			} else if (e.getSource() == aboutButton) {
