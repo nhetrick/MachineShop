@@ -60,10 +60,12 @@ public class SystemAdministrator extends Administrator {
 		for (User u : userList) {
 			DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 			if (!(cursor == null)) {
+				System.out.println(u.getToolsCheckedOut());
+				u.returnTools(u.getToolsCheckedOut());
 				users.remove(cursor.next());
 				tracker.removeUser(u);
+				
 			}
-			u.returnTools(u.getToolsCheckedOut());
 		}
 	}
 	

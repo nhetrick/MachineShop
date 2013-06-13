@@ -162,13 +162,11 @@ public class LogInAnotherUserPanel extends ContentPanel {
 
 	private void showTool2() {
 		tool2.removeAll();
-		for ( Tool t : Driver.getAccessTracker().getTools()) {
-			if (t.getLastUsedBy() == user) {
-				JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
-				cb.setHorizontalAlignment(JCheckBox.LEFT);
-				cb.setFont(borderFont);
-				tool1.add(cb);
-			}
+		for ( Tool t : user.getToolsCheckedOut()) {
+			JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
+			cb.setHorizontalAlignment(JCheckBox.LEFT);
+			cb.setFont(borderFont);
+			tool2.add(cb);
 		}
 	}
 
