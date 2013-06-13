@@ -160,10 +160,8 @@ public class LockUsersPanel extends ContentPanel {
 						if ( cb.isSelected() ) {
 							for ( User u : resultsList ) {
 								String s = cb.getText();
-								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-								String CWID = u.getCWID();
-								if ( s.equals(CWID) ) {
-									locked.add(u.getFirstName() + " " + u.getLastName() + " [" + CWID + "]");
+								if ( s.equals(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]") ) {
+									locked.add(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 									lockedBoxes.add(cb);
 									admin.lockUser(u);
 								}
