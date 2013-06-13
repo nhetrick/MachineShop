@@ -27,11 +27,11 @@ public class UserGUI extends MainPanel {
 	private JPanel checkedOutToolsPanel;
 	private CheckoutToolsPanel checkoutToolsPanel;
 
-	private JButton logOutButton = new JButton();
-	private JButton checkOutToolsButton = new JButton();
-	private JButton selectMachinesButton = new JButton();
-	private JButton returnToolsButton = new JButton();
-	private JButton doneButton = new JButton();
+	private JButton checkOutToolsButton = new JButton("Check Out Tools");
+	private JButton selectMachinesButton = new JButton("Select Machines");
+	private JButton returnToolsButton = new JButton("Return Tools");
+	private JButton doneButton = new JButton("I'm Finished (Start Working)");
+	private JButton logOutButton = new JButton("Log Out");
 
 	private JScrollPane machinesScroller;
 	private JScrollPane toolsScroller;
@@ -79,12 +79,6 @@ public class UserGUI extends MainPanel {
 
 		contentPanel.add(machinesScroller);		
 		contentPanel.add(toolsScroller);
-
-		selectMachinesButton.setText("Select Machines");
-		checkOutToolsButton.setText("Check Out Tools");
-		returnToolsButton.setText("Return Tools");
-		doneButton.setText("I'm Finished (Start Working)");
-		logOutButton.setText("Log Out");
 
 		buttons.add(selectMachinesButton);
 		buttons.add(checkOutToolsButton);
@@ -157,7 +151,7 @@ public class UserGUI extends MainPanel {
 			m.use();
 		}
 
-		//showMessage(message);
+		showMessage(message);
 
 		displayUserMachinePermissions();
 		resetButtonBackgrounds();

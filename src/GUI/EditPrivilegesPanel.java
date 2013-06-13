@@ -232,6 +232,8 @@ public class EditPrivilegesPanel extends ContentPanel {
 				
 				// sorts the resultslist.
 				Collections.sort(resultsList, new UserComparator());
+				
+				// We don't want the current SystemAdmin to be able to edit their own permissions
 				resultsList.remove(currentUser);
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));
