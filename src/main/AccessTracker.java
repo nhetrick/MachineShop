@@ -422,6 +422,10 @@ public class AccessTracker {
 	public ArrayList<User> getCurrentUsers() {
 		return currentUsers;
 	}
+	
+	public void setCurrentUsers(ArrayList<User> currentUsers) {
+		this.currentUsers = currentUsers;
+	}
 
 	public ArrayList<Machine> getMachines() {
 		return machines;

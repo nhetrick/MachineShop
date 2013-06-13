@@ -42,7 +42,7 @@ public class ViewActiveUsersPanel extends JPanel{
 		if (size > 0) {
 			for (int i=0; i<size; i++) {
 				User u = activeUsers.get(i);
-				data[i][0] = u.getFirstName() + " " + u.getLastName();
+				data[i][0] = u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]";
 				data[i][1] = u.getCertifiedMachines().toString();
 				if (currentUsers.contains(u)) {
 					u = currentUsers.get(currentUsers.indexOf(u));

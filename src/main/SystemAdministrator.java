@@ -202,13 +202,19 @@ public class SystemAdministrator extends Administrator {
 		}
 	}
 	
-	
 	// logs out all the users currently logged in
 	public void logOutAllUsers() {
 		ArrayList<User> currentUsers = tracker.getCurrentUsers();
 		for (User u : currentUsers) {
-			if (!u.getCWID().equals(tracker.getCurrentUser().getCWID()))
+			if ( !u.equals(tracker.getCurrentUser()) ) {
 				u.getCurrentEntry().adminFinishEntry();
+			}
 		}
+		
+		currentUsers = new ArrayList<User>();
+		currentUsers.add(tracker.getCurrentUser());
+		
+		tracker.setCurrentUsers(currentUsers);
+		
 	}
 }

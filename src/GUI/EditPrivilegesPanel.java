@@ -236,7 +236,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));
 
-					JLabel userName = new JLabel(u.getFirstName() + " " + u.getLastName() + " [" + u.getCWID() + "]");
+					JLabel userName = new JLabel(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					JCheckBox isAdmin = new JCheckBox("Administrator");
 					JCheckBox isSystemAdmin = new JCheckBox("System Administrator");
 

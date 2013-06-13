@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.SystemAdministrator;
 import main.User;
 import main.UserComparator;
@@ -161,7 +162,7 @@ public class UnlockUsersPanel extends ContentPanel {
 								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
 								String CWID = u.getCWID();
 								if ( s.equals(CWID) ) {
-									unlocked.add(u.getFirstName() + " " + u.getLastName() + " [" + CWID + "]");
+									unlocked.add(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 									unlockedBoxes.add(cb);
 									admin.unlockUser(u);
 								}
@@ -200,9 +201,14 @@ public class UnlockUsersPanel extends ContentPanel {
 				} else {
 					if ( idSearchField.getText().equals("Search All"))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else
-						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", idSearchField.getText());
-					
+					else {
+						String input = idSearchField.getText();
+						if ( input.length() > 7)
+							input = BlasterCardListener.strip(input);
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", input);
+					}
+					idSearchField.setText("");
+					nameSearchField.setText("");
 				}
 				
 				for ( DBObject u : userList ) {
@@ -217,7 +223,7 @@ public class UnlockUsersPanel extends ContentPanel {
 				// sorts the resultslist
 				Collections.sort(resultsList, new UserComparator());
 				for ( User u : resultsList ) {
-					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getCWID() + "]");
+					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
 					resultsPanel.add(cb);

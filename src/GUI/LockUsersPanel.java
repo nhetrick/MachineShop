@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.SystemAdministrator;
 import main.User;
 import main.UserComparator;
@@ -200,9 +201,14 @@ public class LockUsersPanel extends ContentPanel {
 				} else {
 					if ( idSearchField.getText().equals("Search All"))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else
-						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", idSearchField.getText());
-					
+					else {
+						String input = idSearchField.getText();
+						if ( input.length() > 7)
+							input = BlasterCardListener.strip(input);
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", input);
+					}
+					idSearchField.setText("");
+					nameSearchField.setText("");
 				}
 				
 				for ( DBObject u : userList ) {
@@ -217,7 +223,7 @@ public class LockUsersPanel extends ContentPanel {
 				// sorted the resultslist
 				Collections.sort(resultsList, new UserComparator());
 				for ( User u : resultsList ) {
-					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getCWID() + "]");
+					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
 					resultsPanel.add(cb);
