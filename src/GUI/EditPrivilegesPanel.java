@@ -160,7 +160,6 @@ public class EditPrivilegesPanel extends ContentPanel {
 							JPanel panel = (JPanel) resultsPanel.getComponent(i);
 							JLabel label = (JLabel) panel.getComponent(0);
 							String s = label.getText();
-							s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
 							JCheckBox isAdminBox = (JCheckBox) panel.getComponent(1);
 							JCheckBox isSystemAdminBox = (JCheckBox) panel.getComponent(2);
 
@@ -168,8 +167,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 							boolean isSystemAdmin = isSystemAdminBox.isSelected();
 
 							for ( User u : resultsList ) {
-								String CWID = u.getCWID();
-								if ( s.equals(CWID) ) {
+								if ( s.equals(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]") ) {
 									admin.updatePermissions(u, isAdmin, isSystemAdmin);
 								}
 							}
@@ -232,6 +230,8 @@ public class EditPrivilegesPanel extends ContentPanel {
 				
 				// sorts the resultslist.
 				Collections.sort(resultsList, new UserComparator());
+				
+				// We don't want the current SystemAdmin to be able to edit their own permissions
 				resultsList.remove(currentUser);
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));

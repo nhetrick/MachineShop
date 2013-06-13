@@ -21,10 +21,10 @@ import main.User;
 public class SystemAdminGUI extends MainPanel {
 
 	private JPanel massLogOutPanel;
-	private JButton logOutButton;
-	private JButton dataEntryButton;
-	private JButton basicUserButton;
-	private JButton massLogOutButton;
+	private JButton logOutButton = new JButton("Log Out");
+	private JButton dataEntryButton = new JButton("Administrative Functions");
+	private JButton basicUserButton = new JButton("Basic User Functions");
+	private JButton massLogOutButton = new JButton("Log Out All Users");
 	private JScrollPane scroller;
 
 	public SystemAdminGUI(User user) {
@@ -32,14 +32,6 @@ public class SystemAdminGUI extends MainPanel {
 		super();
 		buttonListener = new ButtonListener();
 		contentPanel = new JPanel(new GridBagLayout());	
-		
-		logOutButton = new JButton();
-		dataEntryButton = new JButton();
-		basicUserButton = new JButton();
-
-		logOutButton.setText("Log Out");
-		dataEntryButton.setText("Data Entry");
-		basicUserButton.setText("Basic User");
 
 		logOutButton.setFont(buttonFont);
 		dataEntryButton.setFont(buttonFont);
@@ -88,8 +80,7 @@ public class SystemAdminGUI extends MainPanel {
 				users.add(label);
 			}
 		}
-
-		massLogOutButton = new JButton("Log Out All Users");
+		
 		massLogOutButton.setFont(buttonFont);
 		massLogOutButton.addActionListener(buttonListener);
 

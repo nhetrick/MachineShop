@@ -159,9 +159,7 @@ public class UnlockUsersPanel extends ContentPanel {
 						if ( cb.isSelected() ) {
 							for ( User u : resultsList ) {
 								String s = cb.getText();
-								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-								String CWID = u.getCWID();
-								if ( s.equals(CWID) ) {
+								if ( s.equals(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]") ) {
 									unlocked.add(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 									unlockedBoxes.add(cb);
 									admin.unlockUser(u);

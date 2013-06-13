@@ -18,17 +18,17 @@ import GUI.GUI.LogOutListener;
 
 public class DataEntryGUI extends MainPanel {
 	
-	private JButton certifications;
-	private JButton users;
-	private JButton tools;
-	private JButton machines;
-	private JButton privileges;
-	private JButton generateReport;
-	private JButton viewActiveUsers;
-	private JButton viewToolsAndMachines;
-	private JButton logInUser;
-	private JButton done;
-	private JButton logOut;
+	private JButton certifications = new JButton("Machine Certifications");
+	private JButton users = new JButton("Edit Users");
+	private JButton tools = new JButton("Edit Tools");
+	private JButton machines = new JButton("Edit Machines");
+	private JButton privileges = new JButton("User Privileges");
+	private JButton generateReport = new JButton("Generate Report");
+	private JButton viewActiveUsers = new JButton("View Active Users");
+	private JButton viewToolsAndMachines = new JButton("View Tools/Machines");
+	private JButton logInUser = new JButton("Log In Another User");
+	private JButton done = new JButton("Finish");
+	private JButton logOut = new JButton("Log Out");
 	
 	public DataEntryGUI() {
 		
@@ -36,30 +36,6 @@ public class DataEntryGUI extends MainPanel {
 		contentPanel = new JPanel(new BorderLayout());
 		buttonListener = new ButtonListener();
 		setLayout(new GridBagLayout());
-		
-		certifications = new JButton();
-		users = new JButton();
-		tools = new JButton();
-		machines = new JButton();
-		privileges = new JButton();
-		generateReport = new JButton();
-		viewActiveUsers = new JButton();
-		viewToolsAndMachines = new JButton();
-		logInUser = new JButton();
-		done = new JButton();
-		logOut = new JButton();
-		
-		certifications.setText("Machine Certifications");
-		users.setText("Edit Users");
-		tools.setText("Edit Tools");
-		machines.setText("Edit Machines");
-		privileges.setText("User Privileges");
-		generateReport.setText("Generate Report");
-		viewActiveUsers.setText("View Active Users");
-		viewToolsAndMachines.setText("View Tools/Machines");
-		logInUser.setText("Log In Another User");
-		done.setText("Done");
-		logOut.setText("Log Out");
 		
 		buttons.add(certifications);
 		buttons.add(users);
