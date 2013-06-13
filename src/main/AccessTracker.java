@@ -215,9 +215,9 @@ public class AccessTracker {
 					String message = "You have been locked out of the system.\n" +
 							"You must talk to a shop supervisor to get unlocked";
 					JOptionPane.showMessageDialog(Driver.getMainGui(), message);
-					currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
-					Log.startEntry(currentUser);
-					Log.finishEntry(currentUser.getCurrentEntry());
+					User lockedUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
+					Log.startEntry(lockedUser);
+					Log.finishEntry(lockedUser.getCurrentEntry());
 					removeUser(currentUser);
 					return null;
 				}
