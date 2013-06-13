@@ -53,15 +53,17 @@ public class SystemAdministrator extends Administrator {
 			user.setCertifiedMachines(machines);
 		}
 	}
-	
+
 	// TODO used only in test. remove this and change test
 	public void removeUsers(ArrayList<User> userList) {
+		System.out.println("Removing users...");
 		for (User u : userList) {
 			DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 			if (!(cursor == null)) {
 				users.remove(cursor.next());
 				tracker.removeUser(u);
 			}
+			u.returnTools(u.getToolsCheckedOut());
 		}
 	}
 	
@@ -150,22 +152,15 @@ public class SystemAdministrator extends Administrator {
 	
 	// removes the user from database
 	public void removeUser(String cwid) {
+		System.out.println("Removing user...");
 		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
 		User u = new User("", "", "", "", "");
-		ArrayList<String> tools = new ArrayList<String>();
 		if (!(cursor == null)) {
 			DBObject obj = cursor.next();
 			u = new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID"), (String) obj.get("email"), (String) obj.get("department"));
-			tools = (ArrayList<String>) obj.get("toolsCheckedOut");
+			u.returnTools(u.getToolsCheckedOut());
 			users.remove(obj);
 			tracker.removeUser(u);
-		}
-		if (tools != null && !tools.isEmpty()) {
-			ArrayList<Tool> ts = new ArrayList<Tool>();
-			for (String t : tools) {
-				ts.add(Driver.getAccessTracker().getToolByUPC(t));
-			}
-			u.returnTools(ts);
 		}
 	}
 	
