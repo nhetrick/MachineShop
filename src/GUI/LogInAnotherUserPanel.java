@@ -255,7 +255,6 @@ public class LogInAnotherUserPanel extends ContentPanel {
 				if (user != null)  {
 					Driver.getAccessTracker().processLogOut(user.getCWID());
 					clearFields();
-					System.out.println(Driver.getAccessTracker().getCurrentUsers());
 				}
 			}
 		}

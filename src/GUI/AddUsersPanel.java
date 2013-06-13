@@ -62,7 +62,7 @@ public class AddUsersPanel extends ContentPanel {
 		JLabel lastNameLabel = new JLabel("Last Name:");
 		JLabel userIDLabel = new JLabel("User CWID:");
 		JLabel emailLabel = new JLabel("Mines Email:");
-		JLabel departLabel = new JLabel("Dept. (i.e. EECS)");
+		JLabel departLabel = new JLabel("Dept. (i.e. EECS):");
 
 		firstNameLabel.setFont(buttonFont);
 		lastNameLabel.setFont(buttonFont);
