@@ -311,11 +311,7 @@ public class MainGUI extends JFrame {
 	}
 
 	public void login(String CWID){
-		if (Driver.getAccessTracker().getCurrentUsers().contains(new User("", "", CWID, "", ""))) {
-			currentUser = Driver.getAccessTracker().getUser(CWID);
-		} else {
-			currentUser = tracker.processLogIn(CWID);
-		}
+		currentUser = tracker.processLogIn(CWID);
 		if ( currentUser != null ) {
 			remove(mainPanel);
 			processHomeScreen(currentUser);
