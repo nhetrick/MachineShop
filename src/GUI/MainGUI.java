@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import main.*;
@@ -51,6 +52,7 @@ public class MainGUI extends JFrame {
 	private JButton close;
 	private JFrame frame;
 	private ButtonListener buttonListener;
+	private final String backButtonPath = "/Images/backButton.jpg";
 	private final String mPath = "/Images/minesM.jpg";
 	private final String bannerPath = "/Images/banner.jpg";
 	private JLabel minesMlabel;
@@ -74,15 +76,16 @@ public class MainGUI extends JFrame {
 		setLayout(new GridBagLayout());
 		setup();
 
-	// = new Stack<JPanel>();
-
 		ImageIcon mIcon = GUI.createImageIcon(mPath);
 		minesMlabel = new JLabel(mIcon);
 
 		ImageIcon bannerIcon = GUI.createImageIcon(bannerPath);
 		bannerLabel = new JLabel(bannerIcon);
-
-		backButton = new JButton("\u22b2Prev");
+		
+		ImageIcon backButtonIcon = GUI.createImageIcon(backButtonPath);
+		backButton = new JButton(backButtonIcon);
+		backButton.setBackground(null);
+		backButton.setBorder(new LineBorder(Color.white, 4));
         
 		backButton.addActionListener(buttonListener);
 
@@ -157,7 +160,7 @@ public class MainGUI extends JFrame {
 		footerBar = new JPanel(new GridBagLayout());
 		footerBar.setBackground(Color.white);
 		footerBar.setBorder(new LineBorder(borderColor, 4));
-		//footerBar.add(bannerLabel);
+
 		JPanel helpButtons = new JPanel();
 		helpButtons.setBackground(Color.WHITE);
 		helpButtons.add(aboutButton);
@@ -180,7 +183,7 @@ public class MainGUI extends JFrame {
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
-		// Add the user's name and the clock		
+		// Add the user's name and the clock
 		JLabel nameLabel = new JLabel(userName);
 		nameLabel.setBackground(Color.white);
 		time = new Clock(headerFont);
@@ -194,29 +197,30 @@ public class MainGUI extends JFrame {
 		leftPanel.setBackground(Color.white);
 		
 		// Set up the constraints to format everything correctly
+		c.ipadx = 5;
 		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		leftPanel.add(backButton, c);
+		
+		c.gridx = 1;
 		c.gridy = 0;
 		c.weightx = 0.2;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.NONE;
 		leftPanel.add(minesMlabel, c);
-
-		c.gridx = 1;
-		c.gridy = 0;
-		c.weightx = 0.2;
-		c.fill = GridBagConstraints.HORIZONTAL;
- 
-		leftPanel.add(backButton, c);
 		
 		c.gridx = 2;
 		c.gridy = 0;
-		c.weightx = 0.6;
+		c.weightx = 0.7;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(nameLabel, c);
 
 		headerBar.add(leftPanel);
 		headerBar.add(time);
-
+		
+		c.ipadx = 0;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
