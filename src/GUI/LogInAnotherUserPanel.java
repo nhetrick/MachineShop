@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.Machine;
 import main.SystemAdministrator;
 import main.Tool;
@@ -249,21 +250,10 @@ public class LogInAnotherUserPanel extends ContentPanel {
 				clearFields();
 
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
-				String input = cwidField.getText();
-				if (input.contains(start)) {
-					// if the input starts with ;984000017, strips the next 8 digits, and set it as the input.
-					input = input.split(start)[1].substring(0, 8);
-					cwidField.setText(input);
-				} else if (input.contains(error)) {
-					showMessage("Card read error. Please try again.");
-					cwidField.setText("");
-					return;
-				} else if (input.length() != 8){
-					showMessage("Please enter an 8-digit CWID.");
-					cwidField.setText("");
-					return;
-				}
-
+				String input = BlasterCardListener.strip(cwidField.getText());
+				
+				cwidField.setText("");
+				
 				user = Driver.getAccessTracker().processLogIn(input);
 				cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
