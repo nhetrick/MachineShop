@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.ExcelExporter;
 import main.Log;
 import main.LogEntry;
@@ -47,11 +48,11 @@ public class GenerateReportPanel extends ContentPanel {
 	private JTable generalStatsTable;
 	private JTable logTable;
 	
-	JTextField startField;
-	JTextField endField;
-	JTextField cwidField;
-	JTextField toolNameField;
-	JTextField machineNameField;
+	private JTextField startField;
+	private JTextField endField;
+	private JTextField cwidField;
+	private JTextField toolNameField;
+	private JTextField machineNameField;
 	
 	Calendar start;
 	Calendar end;
@@ -162,8 +163,8 @@ public class GenerateReportPanel extends ContentPanel {
 		add(new JPanel(), c);
 	}
 	
-	private void addTabs(){
-		if (tabs.getTabCount() > 0){
+	private void addTabs() {
+		if (tabs.getTabCount() > 0) {
 			tabs.removeAll();
 		}
 		tabs.addTab("General Statistics", statsScroller);
@@ -415,16 +416,18 @@ public class GenerateReportPanel extends ContentPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addTabs();
-			if (e.getSource() == generateButton) {
+			if (e.getSource() == generateButton | e.getSource() == cwidField | e.getSource() == toolNameField | e.getSource() == machineNameField ) {
 				haveGeneratedReport = true;
 				
 				if (currentParameter.equals("User")) {
 					resultsPanel.removeAll();
 					setDates();
-					String cwid = cwidField.getText();
-					Log.extractLog(start.getTime(), end.getTime(), true);
-					Log.extractResultsByUser(cwid);
-					showReport();
+					String cwid = BlasterCardListener.strip(cwidField.getText());
+					if ( !cwid.equals("") ) {
+						Log.extractLog(start.getTime(), end.getTime(), true);
+						Log.extractResultsByUser(cwid);
+						showReport();
+					}
 				} else if (currentParameter.equals("Date")) {
 					resultsPanel.removeAll();		
 					setDates();
@@ -611,6 +614,7 @@ public class GenerateReportPanel extends ContentPanel {
 			cwidField = new JTextField();
 			cwidLabel.setFont(buttonFont);
 			cwidField.setFont(textFont);
+			cwidField.addActionListener(buttonListener);
 			
 			cwid.add(cwidLabel);
 			cwid.add(cwidField);
@@ -645,6 +649,7 @@ public class GenerateReportPanel extends ContentPanel {
 			toolNameField = new JTextField();
 			toolNameLabel.setFont(buttonFont);
 			toolNameField.setFont(textFont);
+			toolNameField.addActionListener(buttonListener);
 			
 			tool.add(toolNameLabel);
 			tool.add(toolNameField);
@@ -679,6 +684,7 @@ public class GenerateReportPanel extends ContentPanel {
 			machineNameField = new JTextField();
 			machineNameLabel.setFont(buttonFont);
 			machineNameField.setFont(textFont);
+			machineNameField.addActionListener(buttonListener);
 			
 			machine.add(machineNameLabel);
 			machine.add(machineNameField);
