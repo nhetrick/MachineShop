@@ -32,7 +32,7 @@ public class MainPanel extends GUI {
 	protected void switchPanels(JPanel panel) {
 		removeAll();
 		add(panel, BorderLayout.CENTER);
-//		repaint();
+		repaint();
 	}
 	
 	protected void switchContentPanel(JPanel panel) {
