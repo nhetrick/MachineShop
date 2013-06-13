@@ -82,8 +82,6 @@ public class AccessTracker {
 	public User loadUser(String CWID) {
 		if (currentUsers.contains(new User("", "", CWID, "", ""))) {
 			currentUser = getUser(CWID);
-			System.out.println("Already a user LU");
-			System.out.println(currentUser.getCurrentEntry());
 		} else {
 			currentUser = findUserByCWID(CWID);
 			if ( currentUser == null ) {
@@ -204,8 +202,6 @@ public class AccessTracker {
 	public User processLogIn(String CWID) {
 		if (currentUsers.contains(new User("", "", CWID, "", ""))) {
 			currentUser = getUser(CWID);
-			System.out.println("Already a user PLI");
-			System.out.println(currentUser.getCurrentEntry());
 		} else {
 			currentUser = loadUser(CWID);
 		
