@@ -160,7 +160,7 @@ public class SystemAdministrator extends Administrator {
 			users.remove(obj);
 			tracker.removeUser(u);
 		}
-		if (!tools.isEmpty()) {
+		if (tools != null) {
 			ArrayList<Tool> ts = new ArrayList<Tool>();
 			for (String t : tools) {
 				ts.add(Driver.getAccessTracker().getToolByUPC(t));
