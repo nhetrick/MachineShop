@@ -82,6 +82,8 @@ public class AccessTracker {
 	public User loadUser(String CWID) {
 		if (currentUsers.contains(new User("", "", CWID, "", ""))) {
 			currentUser = getUser(CWID);
+			System.out.println("Already a user LU");
+			System.out.println(currentUser.getCurrentEntry());
 		} else {
 			currentUser = findUserByCWID(CWID);
 			if ( currentUser == null ) {
@@ -100,8 +102,9 @@ public class AccessTracker {
 					e.printStackTrace();
 				}
 			}
+			currentUsers.add(currentUser);
 		}
-		currentUsers.add(currentUser);
+		
 		return currentUser;
 	}
 
@@ -198,31 +201,35 @@ public class AccessTracker {
 
 	// Loads the user with this CWID to list of current users
 	// Adds entry to log
-	public User processLogIn(String CWID) {		
-		currentUser = loadUser(CWID);
+	public User processLogIn(String CWID) {
+		if (currentUsers.contains(new User("", "", CWID, "", ""))) {
+			currentUser = getUser(CWID);
+			System.out.println("Already a user PLI");
+			System.out.println(currentUser.getCurrentEntry());
+		} else {
+			currentUser = loadUser(CWID);
 		
-		if ( currentUser != null ) {
-			
-			// IF the user with this CWID is locked (boolean locked)
-			// THEN display some error message, and make a note somewhere
-			// (log this attempt for admin to view later)
-			
-			if ( currentUser.isLocked() ) {
-				String message = "You have been locked out of the system.\n" +
-								 "You must talk to a shop supervisor to get unlocked";
-				JOptionPane.showMessageDialog(Driver.getMainGui(), message);
-				currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
-				Log.startEntry(currentUser);
-				processLogOut(currentUser.getCWID());
-				return null;
-			}
-			
-			Log.startEntry(currentUser);
-			Driver.isLogInScreen = false;
-			return currentUser;
-		}
-		return null;
+			if ( currentUser != null ) {
 
+				// IF the user with this CWID is locked (boolean locked)
+				// THEN display some error message, and make a note somewhere
+				// (log this attempt for admin to view later)
+
+				if ( currentUser.isLocked() ) {
+					String message = "You have been locked out of the system.\n" +
+							"You must talk to a shop supervisor to get unlocked";
+					JOptionPane.showMessageDialog(Driver.getMainGui(), message);
+					currentUser = new User(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getCWID() + " [LOCKED]", currentUser.getEmail(), currentUser.getDepartment());
+					Log.startEntry(currentUser);
+					processLogOut(currentUser.getCWID());
+					return null;
+				}
+
+				Log.startEntry(currentUser);
+			}
+		}
+		Driver.isLogInScreen = false;
+		return currentUser;
 	}
 
 	// Removes the user with this CWID from the list
