@@ -260,6 +260,8 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					System.out.println(Driver.getAccessTracker().getCurrentUsers());
 				}
 			}
+			
+			Driver.getAccessTracker().setCurrentUser(current);
 		}
 	}
 
@@ -270,5 +272,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		machines.removeAll();
 		availableTools.removeAll();
 		checkedOutTools.removeAll();
+		
+		Driver.getAccessTracker().setCurrentUser(current);
 	}
 }
