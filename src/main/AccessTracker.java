@@ -224,7 +224,7 @@ public class AccessTracker {
 			}
 		}
 		Driver.isLogInScreen = false;
-		GUI
+//		GUI
 		return currentUser;
 	}
 
