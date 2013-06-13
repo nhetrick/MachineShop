@@ -233,13 +233,18 @@ public class EditPrivilegesPanel extends ContentPanel {
 				
 				// We don't want the current SystemAdmin to be able to edit their own permissions
 				resultsList.remove(currentUser);
+				int row = 0;
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));
-
+					if ( (row % 2) == 0 ) {
+						userPanel.setBackground(coolGray);
+					}
+					++row;
+					
 					JLabel userName = new JLabel(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					JCheckBox isAdmin = new JCheckBox("Administrator");
 					JCheckBox isSystemAdmin = new JCheckBox("System Administrator");
-
+					
 					if ( u.isAdmin() ) {
 						isAdmin.setSelected(true);
 						if ( u.isSystemAdmin() ) {

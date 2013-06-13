@@ -70,12 +70,12 @@ public class AdminGUI extends MainPanel {
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
 
-		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
 		TitledBorder machineBorder = new TitledBorder("My Machines");
 		machineBorder.setTitleFont(borderFont);
 		machinesScroller.setBorder(machineBorder);
 
-		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
 		TitledBorder toolBorder = new TitledBorder("Checked out Tools");
 		toolBorder.setTitleFont(borderFont);
 		toolsScroller.setBorder(toolBorder);
@@ -113,7 +113,7 @@ public class AdminGUI extends MainPanel {
 			String name = m.getName() + " [" + m.getID() + "]";
 			JCheckBox machineBox = new JCheckBox(name);
 			machineBox.setName(m.getID());
-			machineBox.setFont(buttonFont);
+			machineBox.setFont(resultsFont);
 			if (selectedMachines.contains(m) || oldMachines.contains(m)){
 				machineBox.setEnabled(false);
 			}
@@ -131,7 +131,7 @@ public class AdminGUI extends MainPanel {
 			String name = t.getName() + " [" + t.getUPC() + "]";
 			JCheckBox toolBox = new JCheckBox(name);
 			toolBox.setName(t.getUPC());
-			toolBox.setFont(buttonFont);
+			toolBox.setFont(resultsFont);
 			toolBox.addItemListener(toolCheckBoxListener);
 			checkedOutToolsPanel.add(toolBox);
 		}

@@ -60,7 +60,7 @@ public class MainGUI extends JFrame {
 	
 	
 	private Color borderColor = Color.black;
-	private Font miniFont = new Font("SansSerif", Font.BOLD, 12);
+	private Font miniFont = new Font("SansSerif", Font.BOLD, 18);
 
 	public MainGUI() {
 		
@@ -153,33 +153,25 @@ public class MainGUI extends JFrame {
 		
 		// Create header and footer bars
 		headerFont = new Font("SansSerif", Font.BOLD, 42);
-		headerBar = new JPanel(new GridLayout(1, 2));
+		headerBar = new JPanel(new GridLayout(1, 3));
 		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
 		
-		footerBar = new JPanel(new GridBagLayout());
+		footerBar = new JPanel(new GridLayout(1, 3));
 		footerBar.setBackground(Color.white);
 		footerBar.setBorder(new LineBorder(borderColor, 4));
+		
+		JPanel aboutButtonPanel = new JPanel(new GridBagLayout());
+		aboutButtonPanel.setBackground(Color.WHITE);
+		aboutButtonPanel.add(aboutButton);
+		
+		JPanel helpButtonPanel = new JPanel(new GridBagLayout());
+		helpButtonPanel.setBackground(Color.WHITE);
+		helpButtonPanel.add(helpButton);
 
-		JPanel helpButtons = new JPanel();
-		helpButtons.setBackground(Color.WHITE);
-		helpButtons.add(aboutButton);
-		helpButtons.add(helpButton);
-		footerBar.setLayout(new GridBagLayout());
-		
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0.9;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		footerBar.add(bannerLabel, c);
-		
-		c.gridx = 2;
-		c.gridy = 0;
-		c.weightx = 0.1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		footerBar.add(helpButtons, c);
+		footerBar.add(aboutButtonPanel);
+		footerBar.add(bannerLabel);
+		footerBar.add(helpButtonPanel);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
@@ -200,24 +192,18 @@ public class MainGUI extends JFrame {
 		c.ipadx = 5;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 0.1;
+		c.weightx = 0.2;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(backButton, c);
 		
-		c.gridx = 1;
-		c.gridy = 0;
-		c.weightx = 0.2;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		leftPanel.add(minesMlabel, c);
-		
 		c.gridx = 2;
 		c.gridy = 0;
-		c.weightx = 0.7;
+		c.weightx = 0.8;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(nameLabel, c);
 
 		headerBar.add(leftPanel);
+		headerBar.add(minesMlabel);
 		headerBar.add(time);
 		
 		c.ipadx = 0;
@@ -254,7 +240,8 @@ public class MainGUI extends JFrame {
 		c.weighty = 0.9;
 		c.fill = GridBagConstraints.BOTH;
 		add(mainContentPanel, c);
-
+		
+		c.ipady = 20;
 		c.gridx = 0;
 		c.gridy = 2;
 		c.weighty = 0.05;
@@ -262,6 +249,7 @@ public class MainGUI extends JFrame {
 		add(footerBar, c);
 
 		setVisible(true);
+		c.ipady = 0;
 
 	}
 

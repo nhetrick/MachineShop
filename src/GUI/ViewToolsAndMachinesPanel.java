@@ -70,7 +70,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		
 		for (Machine m : sortedMachine) {
 			JLabel l = new JLabel(m.getName() + " [" + m.getID() + "] " + "(" + m.getNumUsers() + " Users)");
-			l.setFont(resultsFont);
+			l.setFont(smallFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
 			if (m.getNumUsers() > 0) {
 				l.setEnabled(false);
@@ -104,7 +104,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		
 		for (Tool t : sortedTools) {
 			JLabel l = new JLabel(t.getName() + " [" + t.getUPC() + "]");
-			l.setFont(resultsFont);
+			l.setFont(smallFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
 			if (t.isCheckedOut()) {
 				l.setEnabled(false);
