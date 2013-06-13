@@ -45,11 +45,9 @@ public class AddUsersPanel extends ContentPanel {
 	public AddUsersPanel() {
 
 		super("Add a New User");
-		// Tries to connect to the Oracle database that contains student
-		// information.
-		// The Oracle database is a dummy one for now, and will be needed to
-		// change
-		// the actual Mines database.
+		// Tries to connect to the Oracle database that contains student information.
+		// The Oracle database is a dummy one for now, and will need to
+		// change to the actual Mines database.
 		try {
 			connection = new OracleConnection();
 			connection.getConnection();
@@ -242,11 +240,7 @@ public class AddUsersPanel extends ContentPanel {
 					+ firstName + " " + lastName
 					+ " to the database?\n\nThis action is highly discouraged.";
 
-			if (JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION) {
-				// TODO for now, if the user is not in Oracle database, email
-				// and department code are blank strings.
-				// If we manually type email and department code, this will have
-				// that instead.
+			if (confirm(message)) {
 				addedUser = new User(firstName, lastName, cwid, email, department);
 				if (admin.addUser(addedUser)) {
 					admin.updateCertifications(addedUser, machines);
@@ -266,8 +260,7 @@ public class AddUsersPanel extends ContentPanel {
 				}
 			} else {
 				// If the name in Oracle database is different from what was
-				// entered,
-				// ask the System Administrator if this is the person he/she
+				// entered, ask the System Administrator if this is the person he/she
 				// wants to add.
 				String message = "Our records show that the name associated with this CWID is "
 						+ addedUser.getFirstName()
@@ -276,7 +269,7 @@ public class AddUsersPanel extends ContentPanel {
 						+ ".\n"
 						+ "Is this the user you meant to add?\n\nClick Yes to add this user "
 						+ "to the database, or No/Cancel to go back.";
-				if (JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION) {
+				if (confirm(message)) {
 					if (admin.addUser(addedUser)) {
 						admin.updateCertifications(addedUser, machines);
 						return true;
@@ -304,20 +297,16 @@ public class AddUsersPanel extends ContentPanel {
 	}
 	
 	public boolean validFields() {
-		if (firstNameField.getText().equals("")
-				|| userIDField.getText().equals("")
-				|| lastNameField.getText().equals("") 
-				|| emailField.getText().equals("")
-				|| departField.getText().equals("")) {
-			showMessage("Please fill in all five fields.");
+		if (firstNameField.getText().equals("")	|| userIDField.getText().equals("")	|| lastNameField.getText().equals("") ) {
+			showMessage("Please fill in the user's name and CWID.");
 			return false;
 		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
 			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID.");
 			return false;
-		} else if (!(Validator.isValidEmail(emailField.getText()))) {
+		} else if ( !(Validator.isValidEmail(emailField.getText()) || emailField.getText().equals("")) ) {
 			showMessage("Please enter a valid email address");
 			return false;
-		} else if (!(Validator.isValidDeptCode(departField.getText()))) {
+		} else if ( !(Validator.isValidDeptCode(departField.getText()) || departField.getText().equals("")) ) {
 			showMessage("Please enter a department code of length " + Validator.DEPT_CODE_LENGTH );
 			return false;
 		}
@@ -337,20 +326,6 @@ public class AddUsersPanel extends ContentPanel {
 			}
 		}
 	}
-	
-	public boolean ensureASelectedPermission() {
-		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
-			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
-			if (cb.isSelected()) {
-				return true;
-			}
-		}
-		
-		// When adding a user from this screen, the admin must add
-		// some machine permissions.
-		showMessage("Please select at least one machine for which this user is certified.");
-		return false;
-	}
 
 	public void save() {
 		
@@ -358,8 +333,7 @@ public class AddUsersPanel extends ContentPanel {
 		ArrayList<Machine> machines = new ArrayList<Machine>();
 
 		// Adding new user requires first name, last name, and CWID.
-		// TODO if we decide to manually enter email and department
-		if ((!validFields()) || (!ensureASelectedPermission())) {
+		if ( !validFields() ) {
 			return;
 		}
 		

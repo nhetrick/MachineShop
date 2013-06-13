@@ -195,8 +195,8 @@ public class EditCertificationsPanel extends ContentPanel {
 					user = Driver.getAccessTracker().findUserByCWID(input);
 					if ( user != null ) {
 
-						idSearchField.setText(user.getFirstName() + " " + user.getLastName());
-						nameSearchField.setText(user.getFirstName() + " " + user.getLastName());
+						idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+						nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
 						for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 							JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
@@ -235,8 +235,8 @@ public class EditCertificationsPanel extends ContentPanel {
 							showMessage(message);
 						} else {
 
-							idSearchField.setText(user.getFirstName() + " " + user.getLastName());
-							nameSearchField.setText(user.getFirstName() + " " + user.getLastName());
+							idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+							nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
 							for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 								JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);

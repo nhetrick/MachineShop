@@ -161,6 +161,7 @@ public class RemoveUsersPanel extends ContentPanel {
 				// First check that they actually want to remove the users.
 				if ( !noBoxesChecked && confirm(question)) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
+					System.out.println(Driver.getAccessTracker().getCurrentUser());
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 					boolean duplicates = false;
 
@@ -185,7 +186,7 @@ public class RemoveUsersPanel extends ContentPanel {
 							if ((u.getFirstName() + " " + u.getLastName()).equals(r)) {
 								dupCounter++;
 								if (dupCounter > 1) {
-									showMessage("There are multiple users with the same name.\nPlease search by CWID to remove you want.");
+									showMessage("There are multiple users with the same name.\nPlease search by CWID to find the user you want to remove.");
 									duplicates = true;
 									break;
 								}
@@ -254,8 +255,8 @@ public class RemoveUsersPanel extends ContentPanel {
 
 				// sorts the resultslist
 				Collections.sort(resultsList, new UserComparator());
-				for ( User m : resultsList ) {
-					JCheckBox cb = new JCheckBox(m.getFirstName() + " " + m.getLastName());
+				for ( User u : resultsList ) {
+					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
 					resultsPanel.add(cb);
