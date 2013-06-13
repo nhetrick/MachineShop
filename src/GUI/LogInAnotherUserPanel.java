@@ -238,19 +238,23 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					user.returnTools(checkedOutToolsSelected);
 					user.getCurrentEntry().addToolsReturned(checkedOutToolsSelected);
 				}
-				
+
 				clearFields();
-				
+
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
-				String input = BlasterCardListener.strip(cwidField.getText());
+				if (cwidField.getText().equals("")) {
+					showMessage("Please enter 8-digit CWID");
+				}
+				else {
+					String input = BlasterCardListener.strip(cwidField.getText());
 
-				user = Driver.getAccessTracker().processLogIn(input);
-				cwidField.setText(user.getFirstName() + " " + user.getLastName());
+					user = Driver.getAccessTracker().processLogIn(input);
+					cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
-				showMachines();
-				showaAvailableTools();
-				showCheckedOutTools();
-				
+					showMachines();
+					showaAvailableTools();
+					showCheckedOutTools();
+				}
 			} else if ( e.getSource() == logOutUser) {
 				if (user != null)  {
 					Driver.getAccessTracker().processLogOut(user.getCWID());
