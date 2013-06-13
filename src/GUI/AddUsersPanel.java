@@ -83,6 +83,7 @@ public class AddUsersPanel extends ContentPanel {
 		departField.setFont(textFont);
 
 		departField.addActionListener(buttonListener);
+		userIDField.addActionListener(buttonListener);
 
 		selectAllBox = new JCheckBox("Select All");
 		selectAllBox.setFont(textFont);
@@ -90,8 +91,6 @@ public class AddUsersPanel extends ContentPanel {
 		selectAllBox.addActionListener(buttonListener);
 
 		permissionsPanel = new JPanel(new GridLayout(0, 2));
-
-		// Displays all the machines.
 		
 		// sorts the machines list
 		ArrayList<Machine> sorted = new ArrayList<Machine>();
@@ -372,7 +371,7 @@ public class AddUsersPanel extends ContentPanel {
 			// selected/deselected.
 			if (e.getSource() == selectAllBox) {
 				toggleAll();
-			} else if (e.getSource() == saveButton || e.getSource() == departField) {
+			} else if (e.getSource() == saveButton || e.getSource() == departField || e.getSource() == userIDField) {
 				save();
 			}
 		}
