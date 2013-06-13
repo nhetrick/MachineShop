@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.BlasterCardListener;
 import main.SystemAdministrator;
 import main.User;
 import main.UserComparator;
@@ -140,19 +141,6 @@ public class EditPrivilegesPanel extends ContentPanel {
 
 	}
 
-	public boolean confirmSubmission() {
-		if ( confirm("Are you sure you want to change the permissions for these users?") ) {
-			for (int i = 0; i < resultsPanel.getComponentCount(); i++) {
-				JPanel panel = (JPanel) resultsPanel.getComponent(i);
-				if(((JCheckBox) panel.getComponent(2)).isSelected()) 
-					return true;
-			}
-			showMessage("NO SYSTEM ADMINISTRATOR SELECTED.\nPlease select at least one System Administrator.");
-			return false;
-		}
-		return false;
-	}
-
 	// Clears all the text fields.
 	public void clearFields() {
 		resultsPanel.removeAll();
@@ -166,7 +154,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 			if (e.getSource() == saveButton) {
 				if ( !resultsList.isEmpty() ) {
 					// First check that they actually want to change the permissions.
-					if ( confirmSubmission()) {
+					if ( confirm("Are you sure you want to change the permissions for these users?") ) {
 						SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 						for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 							JPanel panel = (JPanel) resultsPanel.getComponent(i);
@@ -211,9 +199,14 @@ public class EditPrivilegesPanel extends ContentPanel {
 					// e.getSource() == idSearchField 
 					if ( idSearchField.getText().equals("Search All"))
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else
+					else {
+						String input = idSearchField.getText();
+						if ( input.length() > 7)
+							input = BlasterCardListener.strip(input);
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", idSearchField.getText());
-
+					}
+					idSearchField.setText("");
+					nameSearchField.setText("");
 				}
 
 				for ( DBObject u : userList ) {
@@ -239,6 +232,7 @@ public class EditPrivilegesPanel extends ContentPanel {
 				
 				// sorts the resultslist.
 				Collections.sort(resultsList, new UserComparator());
+				resultsList.remove(currentUser);
 				for ( User u : resultsList ) {
 					JPanel userPanel = new JPanel(new GridLayout(1, 3));
 

@@ -33,9 +33,9 @@ public class Log {
 		numEntries = (int) database.getCollection("LogEntries").count();
 	}
 	
-	private static boolean containsIgnoreCase(String str1, String str2){
-		try{
-			boolean found = Pattern.compile(str2, Pattern.CASE_INSENSITIVE + Pattern.LITERAL).matcher(str1).find();
+	private static boolean containsIgnoreCase(String str1, String str2) {
+		try {
+			boolean found = Pattern.compile(str1, Pattern.CASE_INSENSITIVE).matcher(str2).find();
 			return found;
 		}catch (Exception e){
 			return false;
