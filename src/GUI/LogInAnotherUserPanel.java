@@ -237,13 +237,10 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					user.getCurrentEntry().addToolsCheckedOut(availableToolsSelected);
 					user.returnTools(checkedOutToolsSelected);
 					user.getCurrentEntry().addToolsReturned(checkedOutToolsSelected);
-
-					Driver.getAccessTracker().setCurrentUser(current);
-
 				}
+				
 				clearFields();
-				System.out.println(Driver.getAccessTracker().getCurrentUsers());
-
+				
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
 				String input = BlasterCardListener.strip(cwidField.getText());
 
@@ -253,6 +250,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 				showMachines();
 				showaAvailableTools();
 				showCheckedOutTools();
+				
 			} else if ( e.getSource() == logOutUser) {
 				if (user != null)  {
 					Driver.getAccessTracker().processLogOut(user.getCWID());
@@ -270,5 +268,6 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		machines.removeAll();
 		availableTools.removeAll();
 		checkedOutTools.removeAll();
+		Driver.getAccessTracker().setCurrentUser(current);
 	}
 }
