@@ -183,7 +183,7 @@ public class RemoveUsersPanel extends ContentPanel {
 					for (String r : removed) {
 						int dupCounter = 0;
 						for (User u : resultsList) {
-							if ((u.getFirstName() + " " + u.getLastName()).equals(r)) {
+							if ((u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]").equals(r) ) {
 								dupCounter++;
 								if (dupCounter > 1) {
 									showMessage("There are multiple users with the same name.\nPlease search by CWID to find the user you want to remove.");

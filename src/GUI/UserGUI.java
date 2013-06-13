@@ -144,6 +144,8 @@ public class UserGUI extends MainPanel {
 		}
 
 		currentUser.getCurrentEntry().addMachinesUsed(selectedMachines);
+		System.out.println(currentUser.getCurrentEntry().getMachinesUsed());
+		System.out.println(oldMachines);
 
 		String message = "You are using:\n\n";
 
