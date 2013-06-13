@@ -232,8 +232,6 @@ public class AccessTracker {
 	// of current users.
 	// Also finishes the log entry for this user.
 	public void processLogOut(String CWID) {
-		System.out.println(getUser(CWID));
-		System.out.println(getUser(CWID).getCurrentEntry());
 		Log.finishEntry(getUser(CWID).getCurrentEntry());
 		removeUser(getUser(CWID));
 	}
