@@ -24,7 +24,7 @@ public class GUI extends JPanel {
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 20);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 16);
 	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 30);
-	static final JPanel cards = new JPanel(new CardLayout());
+	private static final JPanel cards = new JPanel(new CardLayout());
 
 	protected ActionListener buttonListener;
 
@@ -71,6 +71,10 @@ public class GUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			Driver.getMainGui().restart();
 		}
+	}
+	
+	public static JPanel getCards() {
+		return cards;
 	}
 
 }
