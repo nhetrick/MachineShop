@@ -92,11 +92,19 @@ public class AccessTracker {
 						JOptionPane.showMessageDialog(Driver.getMainGui(),
 								"Sorry, our records show you are not a registered Mines student." +
 								"\nIf you believe this is an error, please visit the registrar." +
-								"\n\nTo use the machine shop, you must talk to the attendant on duty."
+								"\n\nTo use the machine shop, you must talk to the shop supervisor."
 								);
 						return null;
 					} else {
-						
+						JOptionPane.showMessageDialog(Driver.getMainGui(),
+								"Our records show you are a new machine shop user.\n" +
+								"Adding " + currentUser.getFirstName() + " " + currentUser.getLastName() + " " +
+								"to the shop database.\n" +
+								"To use the machine shop, you must talk to the shop supervisor."
+								);
+						currentUsers.add(currentUser);
+						Log.startEntry(currentUser);
+						return null;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
