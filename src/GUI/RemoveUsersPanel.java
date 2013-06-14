@@ -243,7 +243,7 @@ public class RemoveUsersPanel extends ContentPanel {
 				for ( DBObject u : userList ) {
 										
 					//User user = Driver.getAccessTracker().findUserByCWID((String) u.get("CWID"));
-					User user = new User((String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), "", "");
+					User user = new User((String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 					resultsList.add(user);
 				}
 
