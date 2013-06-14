@@ -197,10 +197,10 @@ public class AccessTracker {
 	}
 
 	public void removeUser(User u) {
-		currentUsers.remove(u);
 		if (u.getToolsCheckedOut().isEmpty()) {
 			usersWithTools.remove(u);
 		}
+		currentUsers.remove(u);
 	}
 
 	public void clearUsers(ArrayList<User> users) {

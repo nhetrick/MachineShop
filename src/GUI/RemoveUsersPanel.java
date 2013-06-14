@@ -12,7 +12,6 @@ import java.util.Collections;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -35,6 +34,7 @@ public class RemoveUsersPanel extends ContentPanel {
 	private JTextField idSearchField;
 	private JPanel resultsPanel;
 	private JScrollPane scroller;
+	ArrayList<DBObject> userList = new ArrayList<DBObject>();
 
 	// Holds the list of users to potentially be deleted (searched by the admin)
 	private ArrayList<User> resultsList; 
@@ -173,7 +173,7 @@ public class RemoveUsersPanel extends ContentPanel {
 									String CWID = u.getCWID();
 									removed.add(s);
 									removedBoxes.add(cb);
-									usersInQuestion.add(u);
+									usersInQuestion.add(Driver.getAccessTracker().findUserByCWID(CWID));
 								}
 							}
 						}
@@ -186,61 +186,55 @@ public class RemoveUsersPanel extends ContentPanel {
 								dupCounter++;
 								if (dupCounter > 1) {
 									showMessage("There are multiple users with the same name and same department.\nPlease search by CWID to find the user you want to remove.");
-									duplicates = true;
-									break;
+									return;
 								}
 							}
 						}
-						
-						if (duplicates)
-							break;
 					}
 
-					if (!duplicates) {
-						for (User u : usersInQuestion) {
-							resultsList.remove(u);
-							admin.removeUser(u.getCWID());
-						}
-
-						for ( JCheckBox cb : removedBoxes ) {
-							resultsPanel.remove(cb);
-						}
-						
-						// Lists all the users that are removed.
-						String message = "You Removed:\n\n";
-						for ( String s : removed ) {
-							message += s + "\n";
-						}
-						if ( !removed.isEmpty() ) {
-							showMessage(message);
-						}
+					for (User u : usersInQuestion) {
+						admin.removeUser(u);
+						resultsList.remove(u);
 					}
-
-					repaint();
-					duplicates = false;
+	
+					for ( JCheckBox cb : removedBoxes ) {
+						resultsPanel.remove(cb);
+					}
+					
+					// Lists all the users that are removed.
+					String message = "You Removed:\n\n";
+					for ( String s : removed ) {
+						message += s + "\n";
+					}
+					if ( !removed.isEmpty() ) {
+						showMessage(message);
+					}
 				}
+
 			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |
 					e.getSource() == nameSearchField || e.getSource() == idSearchField ) {
 
 				resultsPanel.removeAll();
 				resultsList.clear();
 				repaint();
-				ArrayList<DBObject> userList = new ArrayList<DBObject>();
+				
 
 				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
 
-					if ( nameSearchField.getText().equals("Search All") || nameSearchField.getText().equals(""))
+					if ( nameSearchField.getText().equals("Search All") || nameSearchField.getText().equals("")){
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else						
+					} else {				
 						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
+					}
 
 				} else {
-					if ( idSearchField.getText().equals("Search All") || idSearchField.getText().equals(""))
-						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else {
+					if ( idSearchField.getText().equals("Search All") || idSearchField.getText().equals("")) {
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", ""); 
+					} else {
 						String input = idSearchField.getText();
-						if ( input.length() > 7)
+						if ( input.length() > 7) {
 							input = BlasterCardListener.strip(input);
+						}
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", input);
 					}
 					idSearchField.setText("");
@@ -248,7 +242,9 @@ public class RemoveUsersPanel extends ContentPanel {
 				}
 
 				for ( DBObject u : userList ) {
-					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
+										
+					//User user = Driver.getAccessTracker().findUserByCWID((String) u.get("CWID"));
+					User user = new User((String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), "", "");
 					resultsList.add(user);
 				}
 
