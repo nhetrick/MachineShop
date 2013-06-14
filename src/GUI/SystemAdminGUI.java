@@ -39,7 +39,7 @@ public class SystemAdminGUI extends MainPanel {
 
 		dataEntryButton.addActionListener(buttonListener);
 		basicUserButton.addActionListener(buttonListener);
-		logOutButton.addActionListener(new GUI.LogOutListener());
+		logOutButton.addActionListener(new GUI.SysAdminLogOutListener());
 
 		buttonPanel.add(dataEntryButton);
 		buttonPanel.add(basicUserButton);

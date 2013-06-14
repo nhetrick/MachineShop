@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Closeable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -63,9 +64,23 @@ public class GUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String message = "Are you sure you want to log out?" + 
-							 "\nTo stay in the machine shop, click 'Start Working'." +
-							 "\nSelect Yes to leave the machine shop. Select No/Cancel to go back.";
+					"\nTo stay in the machine shop, click 'Start Working'." +
+					"\nSelect Yes to leave the machine shop. Select No/Cancel to go back.";
 			if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
+				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
+				Driver.getMainGui().restart();
+			}
+		}
+	}
+
+	public static class SysAdminLogOutListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String message = "Do you want to close this program?";
+			if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
+				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
+				Driver.getMainGui().restart();
+				Driver.exit();
+			} else {
 				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
 				Driver.getMainGui().restart();
 			}
@@ -78,13 +93,12 @@ public class GUI extends JPanel {
 			Driver.getMainGui().restart();
 		}
 	}
-	
+
 	public static JPanel getCards() {
 		return cards;
 	}
-	
+
 	public static void clearCards() {
 		cards = new JPanel(new CardLayout());
 	}
-
 }
