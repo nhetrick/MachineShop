@@ -60,7 +60,7 @@ public class AccessTracker {
 		try {
 			MongoClient client = new MongoClient(hostName, port);
 			database = client.getDB(dbName);
-			//database.authenticate(username, password.toCharArray());			
+			database.authenticate(username, password.toCharArray());			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

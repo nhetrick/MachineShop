@@ -32,7 +32,7 @@ public class InputReader implements KeyListener {
 			CWID = input.split(start)[1].substring(0, 8);
 		} else if ( input.equals(" ") ) {
 			// TODO FOR NOW DELETE BEFORE THE RELEASE!!!!
-			CWID = "22222222";
+			CWID = "10265366";
 		} else if ( input.equals("1234") ) {
 			errorCount = 999;
 			throw new InputReaderException("");
