@@ -27,8 +27,8 @@ public class DataEntryGUI extends MainPanel {
 	private JButton viewActiveUsers = new JButton("View Active Users");
 	private JButton viewToolsAndMachines = new JButton("View Tools/Machines");
 	private JButton logInUser = new JButton("Log In Another User");
-	private JButton done = new JButton("Finish");
-	private JButton logOut = new JButton("Log Out");
+	private JButton done = new JButton(" Finish");
+	private JButton logOut = new JButton("Sign Out");
 	
 	public DataEntryGUI() {
 		
@@ -52,7 +52,7 @@ public class DataEntryGUI extends MainPanel {
 		formatAndAddButtons();
 		
 		logOut.removeActionListener(buttonListener);
-		logOut.addActionListener(new GUI.LogOutListener());
+		logOut.addActionListener(new GUI.SysAdminLogOutListener());
 		
 		done.removeActionListener(buttonListener);
 		done.addActionListener(new GUI.DoneListener());

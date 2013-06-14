@@ -18,6 +18,10 @@ public class Driver {
 		tracker = new AccessTracker();
 		mainGui = new MainGUI();
 	}
+	
+	public static void exit() {
+		System.exit(1);
+	}
 
 	public static MainGUI getMainGui() {
 		return mainGui;

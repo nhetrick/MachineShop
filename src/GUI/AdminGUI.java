@@ -34,7 +34,7 @@ public class AdminGUI extends MainPanel {
 	private JButton viewActiveUsers = new JButton("View Active Users");
 	private JButton viewToolsAndMachines = new JButton("View Tools/Machines");
 	private JButton doneButton = new JButton("Start Working");
-	private JButton logOutButton = new JButton("Log Out");
+	private JButton logOutButton = new JButton("Sign Out");
 
 	private JScrollPane machinesScroller;
 	private JScrollPane toolsScroller;

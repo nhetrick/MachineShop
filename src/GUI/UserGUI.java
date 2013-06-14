@@ -31,7 +31,7 @@ public class UserGUI extends MainPanel {
 	private JButton selectMachinesButton = new JButton("Select Machines");
 	private JButton returnToolsButton = new JButton("Return Tools");
 	private JButton doneButton = new JButton("Start Working");
-	private JButton logOutButton = new JButton("Log Out");
+	private JButton logOutButton = new JButton("Sign Out");
 
 	private JScrollPane machinesScroller;
 	private JScrollPane toolsScroller;
@@ -94,7 +94,7 @@ public class UserGUI extends MainPanel {
 		logOutButton.removeActionListener(buttonListener);
 		doneButton.removeActionListener(buttonListener);
 		logOutButton.addActionListener(new GUI.LogOutListener());
-		doneButton.addActionListener(new GUI.DoneListener());
+		doneButton.addActionListener(buttonListener);
 
 	}
 
@@ -188,22 +188,7 @@ public class UserGUI extends MainPanel {
 				isCheckingOutTools = true;
 				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
-				if ( !isCheckingOutTools ) {
-					boolean noBoxesSelected = true;
-					for ( int i = 0; i < machinesPanel.getComponentCount(); ++i ) {
-						JCheckBox cb = (JCheckBox) machinesPanel.getComponent(i);
-						if ( cb.isSelected() ) {
-							noBoxesSelected = false;
-						}
-					}
-					if ( !noBoxesSelected ) {
-						selectMachines();
-						current.setBackground(orange);
-					}
-				} else {
-					isCheckingOutTools = false;
-					switchPanels(new UserGUI(currentUser));
-				}
+				useMachines(current);
 			} else if ( e.getSource() == returnToolsButton ) {
 				if ( !isCheckingOutTools ) {
 					returnTools();
@@ -212,7 +197,29 @@ public class UserGUI extends MainPanel {
 					isCheckingOutTools = false;
 					switchPanels(new UserGUI(currentUser));
 				}
+			} else if ( e.getSource() == doneButton ) {
+				useMachines(current);
+				Driver.getMainGui().restart();
 			}
+		}
+	}
+	
+	public void useMachines(JButton current) {
+		if ( !isCheckingOutTools ) {
+			boolean noBoxesSelected = true;
+			for ( int i = 0; i < machinesPanel.getComponentCount(); ++i ) {
+				JCheckBox cb = (JCheckBox) machinesPanel.getComponent(i);
+				if ( cb.isSelected() ) {
+					noBoxesSelected = false;
+				}
+			}
+			if ( !noBoxesSelected ) {
+				selectMachines();
+				current.setBackground(orange);
+			}
+		} else {
+			isCheckingOutTools = false;
+			switchPanels(new UserGUI(currentUser));
 		}
 	}
 
