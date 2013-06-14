@@ -100,7 +100,7 @@ public class AdminGUI extends MainPanel {
 		logOutButton.removeActionListener(buttonListener);
 		doneButton.removeActionListener(buttonListener);
 		logOutButton.addActionListener(new GUI.LogOutListener());
-		doneButton.addActionListener(new GUI.DoneListener());
+		doneButton.addActionListener(buttonListener);
 
 	}
 
@@ -152,15 +152,15 @@ public class AdminGUI extends MainPanel {
 		for ( Machine m : selectedMachines ) {
 			message += m + "\n";
 		}
-
+		
 		for (Machine m : currentUser.getCurrentEntry().getMachinesUsed()) {
 			m.use();
 		}
-
+		
 		showMessage(message);
-
 		displayUserMachinePermissions();
 		resetButtonBackgrounds();
+		selectedMachines.clear();
 		repaint();
 
 	}
@@ -183,6 +183,25 @@ public class AdminGUI extends MainPanel {
 		}
 		resetButtonBackgrounds();
 	}
+	
+	public void useMachines(JButton current) {
+		if ( !isCheckingOutTools ) {
+			boolean noBoxesSelected = true;
+			for ( int i = 0; i < machinesPanel.getComponentCount(); ++i ) {
+				JCheckBox cb = (JCheckBox) machinesPanel.getComponent(i);
+				if ( cb.isSelected() ) {
+					noBoxesSelected = false;
+				}
+			}
+			if ( !noBoxesSelected ) {
+				selectMachines();
+				current.setBackground(orange);
+			}
+		} else {
+			isCheckingOutTools = false;
+			switchPanels(new UserGUI(currentUser));
+		}
+	}
 
 	private class ButtonListener implements ActionListener {
 
@@ -194,22 +213,10 @@ public class AdminGUI extends MainPanel {
 				isCheckingOutTools = true;
 				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
-				if ( !isCheckingOutTools ) {
-					boolean noBoxesSelected = true;
-					for ( int i = 0; i < machinesPanel.getComponentCount(); ++i ) {
-						JCheckBox cb = (JCheckBox) machinesPanel.getComponent(i);
-						if ( cb.isSelected() ) {
-							noBoxesSelected = false;
-						}
-					}
-					if ( !noBoxesSelected ) {
-						selectMachines();
-						current.setBackground(orange);
-					}
-				} else {
-					isCheckingOutTools = false;
-					switchPanels(new AdminGUI(currentUser));
-				}
+				useMachines(current);
+			} else if ( e.getSource() == doneButton ) {
+				useMachines(current);
+				Driver.getMainGui().restart();
 			} else if ( e.getSource() == returnToolsButton ) {
 				if ( !isCheckingOutTools ) {
 					returnTools();

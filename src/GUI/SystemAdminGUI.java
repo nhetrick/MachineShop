@@ -44,16 +44,16 @@ public class SystemAdminGUI extends MainPanel {
 		buttonPanel.add(dataEntryButton);
 		buttonPanel.add(basicUserButton);
 		buttonPanel.add(logOutButton);
-		
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0.7;
 		c.weighty = 1;
-		
+
 		contentPanel.add(buttonPanel, c);
 		createMassLogOutPanel();
-		
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 1;
 		c.gridy = 0;
@@ -61,9 +61,9 @@ public class SystemAdminGUI extends MainPanel {
 		c.weighty = 1;
 
 		contentPanel.add(massLogOutPanel, c);
-		
+
 		add(contentPanel, BorderLayout.CENTER);
-		
+
 	}
 
 	private void createMassLogOutPanel() {
@@ -80,7 +80,7 @@ public class SystemAdminGUI extends MainPanel {
 				users.add(label);
 			}
 		}
-		
+
 		massLogOutButton.setFont(buttonFont);
 		massLogOutButton.addActionListener(buttonListener);
 
@@ -88,23 +88,23 @@ public class SystemAdminGUI extends MainPanel {
 		TitledBorder border = new TitledBorder("Current Users");
 		border.setTitleFont(borderFont);
 		scroller.setBorder(border);
-		
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 0.8;
-		
+
 		massLogOutPanel.add(scroller, c);
-		
+
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 0.2;
-		
+
 		massLogOutPanel.add(massLogOutButton, c);
 
 	}
-	
+
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -113,10 +113,12 @@ public class SystemAdminGUI extends MainPanel {
 			} else if ( e.getSource() == basicUserButton ) {
 				switchPanels(new UserGUI(currentUser));
 			} else if ( e.getSource() == massLogOutButton ) {
-				if ( confirm("Are you sure you want to sign out all current users?")) {
-					((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
-					scroller.removeAll();
-					repaint();
+				if ( Driver.getAccessTracker().getCurrentUsers().size() > 1 ) {
+					if ( confirm("Are you sure you want to sign out all current users?")) {
+						((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
+						scroller.removeAll();
+						repaint();
+					}
 				}
 			}
 		}

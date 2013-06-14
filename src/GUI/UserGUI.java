@@ -146,15 +146,15 @@ public class UserGUI extends MainPanel {
 		for ( Machine m : selectedMachines ) {
 			message += m + "\n";
 		}
-
+		
 		for (Machine m : currentUser.getCurrentEntry().getMachinesUsed()) {
 			m.use();
 		}
-
+		
 		showMessage(message);
-
 		displayUserMachinePermissions();
 		resetButtonBackgrounds();
+		selectedMachines.clear();
 		repaint();
 
 	}

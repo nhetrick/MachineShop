@@ -95,6 +95,8 @@ public class AccessTracker {
 								"\n\nTo use the machine shop, you must talk to the attendant on duty."
 								);
 						return null;
+					} else {
+						
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
