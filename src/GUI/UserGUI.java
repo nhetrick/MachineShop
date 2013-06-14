@@ -67,12 +67,12 @@ public class UserGUI extends MainPanel {
 		displayUserMachinePermissions();
 		displayUserCheckedOutTools();
 
-		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
+		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		TitledBorder machineBorder = new TitledBorder("My Machines");
 		machineBorder.setTitleFont(borderFont);
 		machinesScroller.setBorder(machineBorder);
 
-		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
+		toolsScroller = new JScrollPane(checkedOutToolsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		TitledBorder toolBorder = new TitledBorder("Checked out Tools");
 		toolBorder.setTitleFont(borderFont);
 		toolsScroller.setBorder(toolBorder);
