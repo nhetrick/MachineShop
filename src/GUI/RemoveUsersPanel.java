@@ -35,6 +35,7 @@ public class RemoveUsersPanel extends ContentPanel {
 	private JTextField idSearchField;
 	private JPanel resultsPanel;
 	private JScrollPane scroller;
+	ArrayList<DBObject> userList = new ArrayList<DBObject>();
 
 	// Holds the list of users to potentially be deleted (searched by the admin)
 	private ArrayList<User> resultsList; 
@@ -173,7 +174,7 @@ public class RemoveUsersPanel extends ContentPanel {
 									String CWID = u.getCWID();
 									removed.add(s);
 									removedBoxes.add(cb);
-									usersInQuestion.add(u);
+									usersInQuestion.add(Driver.getAccessTracker().findUserByCWID(CWID));
 								}
 							}
 						}
@@ -225,7 +226,7 @@ public class RemoveUsersPanel extends ContentPanel {
 				resultsPanel.removeAll();
 				resultsList.clear();
 				repaint();
-				ArrayList<DBObject> userList = new ArrayList<DBObject>();
+				
 
 				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
 
@@ -251,7 +252,8 @@ public class RemoveUsersPanel extends ContentPanel {
 
 				for ( DBObject u : userList ) {
 										
-					User user = Driver.getAccessTracker().findUserByCWID((String) u.get("CWID"));
+					//User user = Driver.getAccessTracker().findUserByCWID((String) u.get("CWID"));
+					User user = new User((String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), "", "");
 					resultsList.add(user);
 				}
 
