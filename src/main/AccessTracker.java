@@ -32,8 +32,8 @@ public class AccessTracker {
 	private ArrayList<User> currentUsers;
 	private ArrayList<User> usersWithTools;
 	private static DB database;
-	private final String hostName = "localhost";
-	private final int port = 27017;
+	private final String hostName = "dharma.mongohq.com";
+	private final int port = 10096;
 	private final String dbName = "CSM_Machine_Shop";
 	private final String username = "csm";
 	private final String password = "machineshop";
