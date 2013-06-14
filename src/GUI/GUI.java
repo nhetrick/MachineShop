@@ -25,7 +25,6 @@ public class GUI extends JPanel {
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 22);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 20);
 	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 26);
-	protected static JPanel cards = new JPanel(new CardLayout());
 
 	protected ActionListener buttonListener;
 
@@ -63,7 +62,7 @@ public class GUI extends JPanel {
 	public static class LogOutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String message = "Are you sure you want to log out?" + 
+			String message = "Are you sure you want to sign out?" + 
 					"\nTo stay in the machine shop, click 'Start Working'." +
 					"\nSelect Yes to leave the machine shop. Select No/Cancel to go back.";
 			if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
@@ -75,14 +74,16 @@ public class GUI extends JPanel {
 
 	public static class SysAdminLogOutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String message = "Do you want to close this program?";
+			String message = "Are you sure you want to sign out?";
 			if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
-				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
-				Driver.getMainGui().restart();
-				Driver.exit();
-			} else {
-				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
-				Driver.getMainGui().restart();
+				message = "Do you want to completely close the program for the day?";
+				if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
+					Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
+					Driver.exit();
+				} else {
+					Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
+					Driver.getMainGui().restart();
+				}
 			}
 		}
 	}
@@ -94,11 +95,4 @@ public class GUI extends JPanel {
 		}
 	}
 
-	public static JPanel getCards() {
-		return cards;
-	}
-
-	public static void clearCards() {
-		cards = new JPanel(new CardLayout());
-	}
 }

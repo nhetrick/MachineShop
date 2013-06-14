@@ -46,13 +46,13 @@ public class MainGUI extends JFrame {
 	private Font headerFont;
 	private GridBagConstraints c = new GridBagConstraints();
 	private static int MAX_ERROR_COUNT = 3;
-	private JButton backButton;
+	private JButton homeButton;
 	private JButton helpButton;
 	private JButton aboutButton;
 	private JButton close;
 	private JFrame frame;
 	private ButtonListener buttonListener;
-	private final String backButtonPath = "/Images/backButton.jpg";
+	private final String homeButtonPath = "/Images/homeButton.jpg";
 	private final String mPath = "/Images/minesM.jpg";
 	private final String bannerPath = "/Images/banner.jpg";
 	private JLabel minesMlabel;
@@ -82,12 +82,12 @@ public class MainGUI extends JFrame {
 		ImageIcon bannerIcon = GUI.createImageIcon(bannerPath);
 		bannerLabel = new JLabel(bannerIcon);
 		
-		ImageIcon backButtonIcon = GUI.createImageIcon(backButtonPath);
-		backButton = new JButton(backButtonIcon);
-		backButton.setBackground(null);
-		backButton.setBorder(new LineBorder(Color.white, 4));
+		ImageIcon homeButtonIcon = GUI.createImageIcon(homeButtonPath);
+		homeButton = new JButton(homeButtonIcon);
+		homeButton.setBackground(null);
+		homeButton.setBorder(new LineBorder(Color.white, 4));
         
-		backButton.addActionListener(buttonListener);
+		homeButton.addActionListener(buttonListener);
 
 		helpButton = new JButton("Help");
 		helpButton.addActionListener(buttonListener);
@@ -102,13 +102,13 @@ public class MainGUI extends JFrame {
 	}
 
 	public void setup() {
-		//sets the cursor to invisible (For touch-screen purposes)
-		//		tk = Toolkit.getDefaultToolkit();
-		//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
-
-		//sets the screen to full screen
 		
+//		sets the cursor to invisible (For touch-screen purposes)
+//		tk = Toolkit.getDefaultToolkit();
+//		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
+
+		//sets the screen to full screen		
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
@@ -118,8 +118,9 @@ public class MainGUI extends JFrame {
 			setResizable(false);
 		}
 
-		//disable Alt+F4
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//disable Alt+F4
+		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		// Set up the look and feel of the frame/panels
 		try {
@@ -202,7 +203,7 @@ public class MainGUI extends JFrame {
 		c.gridy = 0;
 		c.weightx = 0.2;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		leftPanel.add(backButton, c);
+		leftPanel.add(homeButton, c);
 		
 		c.gridx = 2;
 		c.gridy = 0;
@@ -240,8 +241,6 @@ public class MainGUI extends JFrame {
 		}
 		
 		mainContentPanel.setBorder(new LineBorder(borderColor, 4));
-		
-		//cards.add(mainContentPanel);
 		
 		c.gridx = 0;
 		c.gridy = 1;
@@ -384,9 +383,24 @@ public class MainGUI extends JFrame {
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ( e.getSource() == backButton ) {
-				CardLayout cl = (CardLayout) GUI.getCards().getLayout();
-                cl.previous(GUI.getCards());
+			if ( e.getSource() == homeButton ) {
+				remove(mainContentPanel);
+				if ( currentUser.isAdmin() ) {
+					if ( ((Administrator) currentUser).isSystemAdmin() ) {
+						mainContentPanel = new SystemAdminGUI(currentUser);
+					} else {
+						mainContentPanel = new AdminGUI(currentUser);
+					}
+				} 	else {
+					mainContentPanel = new UserGUI(currentUser);
+				}
+				mainContentPanel.setBorder(new LineBorder(borderColor, 4));
+				c.gridx = 0;
+				c.gridy = 1;
+				c.weighty = 0.9;
+				c.fill = GridBagConstraints.BOTH;
+				add(mainContentPanel, c);
+				
 			} else if (e.getSource() == helpButton) {
 				displayTextFile("Help", "help.txt");
 			} else if (e.getSource() == aboutButton) {

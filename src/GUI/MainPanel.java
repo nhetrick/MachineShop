@@ -39,10 +39,7 @@ public class MainPanel extends GUI {
 		resetButtonBackgrounds();
 		contentPanel.removeAll();
 		contentPanel.setLayout(new BorderLayout());
-		cards.add(panel);
-		CardLayout cl = (CardLayout) cards.getLayout();
-        cl.last(cards);
-		contentPanel.add(cards, BorderLayout.CENTER);
+		contentPanel.add(panel, BorderLayout.CENTER);
 	}
 	
 	public void resetButtonBackgrounds() {

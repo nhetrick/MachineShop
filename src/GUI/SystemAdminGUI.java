@@ -21,10 +21,10 @@ import main.User;
 public class SystemAdminGUI extends MainPanel {
 
 	private JPanel massLogOutPanel;
-	private JButton logOutButton = new JButton("Log Out");
+	private JButton logOutButton = new JButton("Sign Out");
 	private JButton dataEntryButton = new JButton("Administrative Functions");
 	private JButton basicUserButton = new JButton("Basic User Functions");
-	private JButton massLogOutButton = new JButton("Log Out All Users");
+	private JButton massLogOutButton = new JButton("Sign Out All Users");
 	private JScrollPane scroller;
 
 	public SystemAdminGUI(User user) {
@@ -113,7 +113,7 @@ public class SystemAdminGUI extends MainPanel {
 			} else if ( e.getSource() == basicUserButton ) {
 				switchPanels(new UserGUI(currentUser));
 			} else if ( e.getSource() == massLogOutButton ) {
-				if ( confirm("Are you sure you want to log out all current users?")) {
+				if ( confirm("Are you sure you want to sign out all current users?")) {
 					((SystemAdministrator) Driver.getAccessTracker().getCurrentUser()).logOutAllUsers();
 					scroller.removeAll();
 					repaint();

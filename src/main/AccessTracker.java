@@ -223,8 +223,6 @@ public class AccessTracker {
 				}
 				
 				Driver.isLogInScreen = false;
-				GUI.clearCards();
-
 				Log.startEntry(currentUser);
 			}
 		}

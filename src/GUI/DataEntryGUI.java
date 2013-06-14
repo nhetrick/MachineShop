@@ -26,7 +26,7 @@ public class DataEntryGUI extends MainPanel {
 	private JButton generateReport = new JButton("Generate Report");
 	private JButton viewActiveUsers = new JButton("View Active Users");
 	private JButton viewToolsAndMachines = new JButton("View Tools/Machines");
-	private JButton logInUser = new JButton("Log In Another User");
+	private JButton logInUser = new JButton("Sign In Another User");
 	private JButton done = new JButton(" Finish");
 	private JButton logOut = new JButton("Sign Out");
 	

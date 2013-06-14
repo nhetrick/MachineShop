@@ -221,12 +221,15 @@ public class AdminGUI extends MainPanel {
 			} else if ( e.getSource() == viewToolsAndMachines ) {
 				switchContentPanel(new ViewToolsAndMachinesPanel());
 				current.setBackground(orange);
+				isCheckingOutTools = false;
 			} else if ( e.getSource() == generateReport ) {
 				switchContentPanel(new GenerateReportPanel());
 				current.setBackground(orange);
+				isCheckingOutTools = false;
 			} else if ( e.getSource() == viewActiveUsers ) {
 				switchContentPanel(new ViewActiveUsersPanel());
 				current.setBackground(orange);
+				isCheckingOutTools = false;
 			}
 		}
 	}
