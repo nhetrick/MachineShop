@@ -103,6 +103,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		Collections.sort(sortedTools, new ToolComparator());
 		
 		for (Tool t : sortedTools) {
+			System.out.println(t.isCheckedOut());
 			JLabel l = new JLabel(t.getName() + " [" + t.getUPC() + "]");
 			l.setFont(smallFont);
 			l.setHorizontalAlignment(JLabel.CENTER);
@@ -182,5 +183,6 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.weighty = 0.1;
 		c.gridy = 5;
 		add(new JPanel(), c);
+		
 	}
 }
