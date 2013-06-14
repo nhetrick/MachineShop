@@ -162,7 +162,6 @@ public class RemoveUsersPanel extends ContentPanel {
 				if ( !noBoxesChecked && confirm(question)) {
 					ArrayList<JCheckBox> removedBoxes = new ArrayList<JCheckBox>();
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
-					boolean duplicates = false;
 
 					for ( int i = 0; i < resultsPanel.getComponentCount(); ++i ) {
 						JCheckBox cb = (JCheckBox) resultsPanel.getComponent(i);
