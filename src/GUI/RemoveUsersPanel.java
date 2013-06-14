@@ -198,8 +198,8 @@ public class RemoveUsersPanel extends ContentPanel {
 
 					if (!duplicates) {
 						for (User u : usersInQuestion) {
+							admin.removeUser(u);
 							resultsList.remove(u);
-							admin.removeUser(u.getCWID());
 						}
 
 						for ( JCheckBox cb : removedBoxes ) {
@@ -229,18 +229,20 @@ public class RemoveUsersPanel extends ContentPanel {
 
 				if ( e.getSource() == nameSearchGoButton || e.getSource() == nameSearchField ) {
 
-					if ( nameSearchField.getText().equals("Search All") || nameSearchField.getText().equals(""))
+					if ( nameSearchField.getText().equals("Search All") || nameSearchField.getText().equals("")){
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else						
+					} else {				
 						userList = Driver.getAccessTracker().searchDatabaseForUser(nameSearchField.getText());
+					}
 
 				} else {
-					if ( idSearchField.getText().equals("Search All") || idSearchField.getText().equals(""))
-						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", "");
-					else {
+					if ( idSearchField.getText().equals("Search All") || idSearchField.getText().equals("")) {
+						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", ""); 
+					} else {
 						String input = idSearchField.getText();
-						if ( input.length() > 7)
+						if ( input.length() > 7) {
 							input = BlasterCardListener.strip(input);
+						}
 						userList = Driver.getAccessTracker().searchDatabase("Users", "CWID", input);
 					}
 					idSearchField.setText("");
@@ -248,7 +250,8 @@ public class RemoveUsersPanel extends ContentPanel {
 				}
 
 				for ( DBObject u : userList ) {
-					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
+										
+					User user = Driver.getAccessTracker().findUserByCWID((String) u.get("CWID"));
 					resultsList.add(user);
 				}
 

@@ -153,17 +153,16 @@ public class SystemAdministrator extends Administrator {
 	}
 	
 	// removes the user from database
-	public void removeUser(String cwid) {
-		System.out.println("Removing user...");
-		DBCursor cursor = users.find(new BasicDBObject("CWID", cwid));
-		User u = new User("", "", "", "", "");
-		if (!(cursor == null)) {
-			DBObject obj = cursor.next();
-			u = new User((String) obj.get("firstName"), (String) obj.get("lastName"), (String) obj.get("CWID"), (String) obj.get("email"), (String) obj.get("department"));
-			u.returnTools(u.getToolsCheckedOut());
-			users.remove(obj);
-			tracker.removeUser(u);
+	public void removeUser(User user) {
+		
+		DBObject obj = users.findOne(new BasicDBObject("CWID", user.getCWID()));
+		
+		if (user.getToolsCheckedOut().size() > 0){
+			ArrayList<Tool> tools = user.getToolsCheckedOut();
+			user.returnTools(tools);
 		}
+		users.remove(obj);
+		tracker.removeUser(user);
 	}
 	
 	// loads new user from Oracel database
