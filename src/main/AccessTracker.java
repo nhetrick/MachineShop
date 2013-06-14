@@ -221,12 +221,13 @@ public class AccessTracker {
 					removeUser(currentUser);
 					return null;
 				}
+				
+				Driver.isLogInScreen = false;
+				GUI.clearCards();
 
 				Log.startEntry(currentUser);
 			}
 		}
-		Driver.isLogInScreen = false;
-		GUI.clearCards();
 		return currentUser;
 	}
 

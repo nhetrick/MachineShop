@@ -62,8 +62,13 @@ public class GUI extends JPanel {
 	public static class LogOutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
-			Driver.getMainGui().restart();
+			String message = "Are you sure you want to log out?" + 
+							 "\nTo stay in the machine shop, click 'Start Working'." +
+							 "\nSelect Yes to leave the machine shop. Select No/Cancel to go back.";
+			if (JOptionPane.showConfirmDialog(Driver.getMainGui(), message) == JOptionPane.YES_OPTION) {
+				Driver.getAccessTracker().processLogOut(Driver.getAccessTracker().getCurrentUser().getCWID());
+				Driver.getMainGui().restart();
+			}
 		}
 	}
 

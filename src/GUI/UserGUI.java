@@ -30,7 +30,7 @@ public class UserGUI extends MainPanel {
 	private JButton checkOutToolsButton = new JButton("Check Out Tools");
 	private JButton selectMachinesButton = new JButton("Select Machines");
 	private JButton returnToolsButton = new JButton("Return Tools");
-	private JButton doneButton = new JButton("I'm Finished (Start Working)");
+	private JButton doneButton = new JButton("Start Working");
 	private JButton logOutButton = new JButton("Log Out");
 
 	private JScrollPane machinesScroller;
