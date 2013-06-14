@@ -144,6 +144,9 @@ public class LogInAnotherUserPanel extends ContentPanel {
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
 			cb.setFont(borderFont);
 			machines.add(cb);
+			if (user.getCurrentEntry().getMachinesUsed().contains(m)){
+				cb.setEnabled(false);
+			}
 		}
 	}
 
