@@ -56,10 +56,23 @@ public class User {
 
 	public void returnTools(ArrayList<Tool> tools) {
 		System.out.println(tools);
-		for (Tool tool : tools){
-			tool.returnTool();
-			tool.updateCheckoutStatus(this);
-			toolsCheckedOut.remove(tool);
+		
+		for (int i=0; i< tools.size(); ++i){
+			Tool tool = tools.get(i);
+			//tool.returnTool();
+			//tool.updateCheckoutStatus(this);
+			
+//			
+//			for (Tool t: Driver.getAccessTracker().getTools()){
+//				if (t.equals(tool)){
+//					t.returnTool();
+//				}
+//			}
+			
+			Tool to = Driver.getAccessTracker().getToolByUPC(tool.getUPC());
+			to.returnTool();
+			to.updateCheckoutStatus(this);
+			//toolsCheckedOut.remove(tool);
 		}
 		
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");

@@ -1,4 +1,5 @@
 package main;
+import java.awt.Font;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import GUI.Driver;
 import GUI.GUI;
@@ -96,6 +98,7 @@ public class AccessTracker {
 								);
 						return null;
 					}
+					return null;
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
@@ -166,8 +169,6 @@ public class AccessTracker {
 
 		users.insert(document);
 
-		currentUsers.add(newUser);
-
 		return newUser;
 	}
 
@@ -179,17 +180,27 @@ public class AccessTracker {
 		oracleConnection.close();
 
 		if ( results.size() != 0 ) {
-			return createUser(results.get(1), results.get(2), CWID, results.get(3), results.get(4));
+			String message = "Welcome to the Machine Shop. According to our system, this is your first time here!" + 
+					"\nPlease see the shop supervisor BEFORE proceeding and using any tools or machines." +
+					"\nReturn to this machine to sign out when you leave the machine shop." +
+					"\nThank you!";
+		
+			JOptionPane.showMessageDialog(null, message);
+			
+			User u = createUser(results.get(1), results.get(2), CWID, results.get(3), results.get(4));
+			currentUsers.add(u);
+			
+			return u;
 		} else {
 			return null;
 		}
 	}
 
 	public void removeUser(User u) {
-		currentUsers.remove(u);
 		if (u.getToolsCheckedOut().isEmpty()) {
 			usersWithTools.remove(u);
 		}
+		currentUsers.remove(u);
 	}
 
 	public void clearUsers(ArrayList<User> users) {

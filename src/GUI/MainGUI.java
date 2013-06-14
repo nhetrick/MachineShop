@@ -133,6 +133,14 @@ public class MainGUI extends JFrame {
 			// use default look and feel
 		}
 	}
+	
+	public void dispose() {
+		this.dispose();
+	}
+	
+	public void close() {
+		this.close();
+	}
 
 	// Returns the user to the "Swipe Blastercard" screen
 	public void restart() {
