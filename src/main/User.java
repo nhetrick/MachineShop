@@ -60,9 +60,11 @@ public class User {
 			Tool tool = tools.get(i);
 			
 			Tool to = Driver.getAccessTracker().getToolByUPC(tool.getUPC());
-			to.returnTool();
-			to.updateCheckoutStatus(this);
-			toolsCheckedOut.remove(tool);
+			if (to != null) {
+				to.returnTool();
+				to.updateCheckoutStatus(this);
+			}
+			//toolsCheckedOut.remove(tool);
 		}
 		
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
