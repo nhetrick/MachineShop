@@ -33,7 +33,7 @@ public class InputReader implements KeyListener {
 		} else if ( input.equals(" ") ) {
 			// TODO FOR NOW DELETE BEFORE THE RELEASE!!!!
 			CWID = "10265366";
-		} else if ( input.equals("1234") ) {
+		} else if ( input.equals(Driver.getPassword()) ) {
 			errorCount = 999;
 			throw new InputReaderException("");
 		}
