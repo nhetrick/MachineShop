@@ -27,7 +27,6 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 	
 	public ViewToolsAndMachinesPanel() {
 		// All the fonts are in ContetnPanel.
-		// TODO decide which one should be black and gray.
 		super("View Tools and Machines");
 		
 		inUseLabel = new JLabel("In Use");

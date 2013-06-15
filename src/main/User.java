@@ -66,7 +66,7 @@ public class User {
 			}
 			toolsCheckedOut.remove(tool);
 		}
-//		
+		
 		if (toolsCheckedOut.size() > 0){
 		
 			DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
