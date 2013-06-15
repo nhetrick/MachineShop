@@ -7,11 +7,11 @@ import main.AccessTracker;
 
 public class Driver {
 	
-	private static AccessTracker tracker;
+	private static AccessTracker tracker = new AccessTracker();
 	private static MainGUI mainGui;
 	private static Process dbServer;
 	public static boolean isLogInScreen = false;
-	
+
 	public Driver() {
 		tracker = new AccessTracker();
 	}
@@ -35,4 +35,5 @@ public class Driver {
 	public static AccessTracker getAccessTracker() {
 		return tracker;
 	}
+	
 }
