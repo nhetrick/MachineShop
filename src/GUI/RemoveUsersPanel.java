@@ -250,6 +250,7 @@ public class RemoveUsersPanel extends ContentPanel {
 				// sorts the resultslist
 				Collections.sort(resultsList, new UserComparator());
 				for ( User u : resultsList ) {
+					if (u.equals(currentUser)) continue;
 					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);
