@@ -119,13 +119,6 @@ public class AccessTrackerTests {
 	}
 	
 	@Test
-	public void loadNameTest() {
-		// CAN'T DO YET BECAUSE WE DON'T HAVE ACCESS
-		// TO THE BLASTERCARD DATABASE
-		fail("Not yet implemented");
-	}
-	
-	@Test
 	public void updateToolsTest() {
 		
 		Tool testTool1 = new Tool("Test Tool 1", "818");

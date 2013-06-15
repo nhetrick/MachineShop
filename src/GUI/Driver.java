@@ -8,7 +8,6 @@ public class Driver {
 	
 	private static AccessTracker tracker = new AccessTracker();
 	private static MainGUI mainGui;
-	private static String password = "1234";
 	public static boolean isLogInScreen = false;
 	
 	public static void main(String[] args) {
@@ -26,10 +25,6 @@ public class Driver {
 	
 	public static AccessTracker getAccessTracker() {
 		return tracker;
-	}
-	
-	public static String getPassword() {
-		return password;
 	}
 	
 }

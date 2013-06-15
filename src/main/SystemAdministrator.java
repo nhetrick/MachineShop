@@ -56,11 +56,11 @@ public class SystemAdministrator extends Administrator {
 
 	// TODO used only in test. remove this and change test
 	public void removeUsers(ArrayList<User> userList) {
-		System.out.println("Removing users...");
+//		System.out.println("Removing users...");
 		for (User u : userList) {
 			DBCursor cursor = users.find(new BasicDBObject("CWID", u.getCWID()));
 			if (!(cursor == null)) {
-				System.out.println(u.getToolsCheckedOut());
+				//System.out.println(u.getToolsCheckedOut());
 				u.returnTools(u.getToolsCheckedOut());
 				users.remove(cursor.next());
 				tracker.removeUser(u);

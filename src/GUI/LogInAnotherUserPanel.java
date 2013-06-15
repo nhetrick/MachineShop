@@ -238,8 +238,10 @@ public class LogInAnotherUserPanel extends ContentPanel {
 						user.checkoutTool(t);
 					}
 					user.getCurrentEntry().addToolsCheckedOut(availableToolsSelected);
-					user.returnTools(checkedOutToolsSelected);
-					user.getCurrentEntry().addToolsReturned(checkedOutToolsSelected);
+					if (checkedOutToolsSelected.size() > 0){
+						user.returnTools(checkedOutToolsSelected);
+						user.getCurrentEntry().addToolsReturned(checkedOutToolsSelected);
+					}
 				}
 
 				clearFields();

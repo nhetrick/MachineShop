@@ -103,8 +103,8 @@ public class MainGUI extends JFrame {
 
 	public void setup() {
 		
-//		sets the cursor to invisible (For touch-screen purposes)
-//		tk = Toolkit.getDefaultToolkit();
+//		TODO sets the cursor to invisible (For touch-screen purposes)
+//		Toolkit tk = Toolkit.getDefaultToolkit();
 //		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 //		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
@@ -119,7 +119,7 @@ public class MainGUI extends JFrame {
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//disable Alt+F4
+		// TODO disable Alt+F4
 		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		// Set up the look and feel of the frame/panels
@@ -161,12 +161,12 @@ public class MainGUI extends JFrame {
 	public void processHomeScreen(User currentUser) {
 		
 		// Create header and footer bars
-		headerFont = new Font("SansSerif", Font.BOLD, 42);
+		headerFont = new Font("SansSerif", Font.BOLD, 34);
 		headerBar = new JPanel(new GridLayout(1, 3));
 		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
 		
-		footerBar = new JPanel(new GridLayout(1, 3));
+		footerBar = new JPanel(new GridBagLayout());
 		footerBar.setBackground(Color.white);
 		footerBar.setBorder(new LineBorder(borderColor, 4));
 		
@@ -178,9 +178,23 @@ public class MainGUI extends JFrame {
 		helpButtonPanel.setBackground(Color.WHITE);
 		helpButtonPanel.add(helpButton);
 
-		footerBar.add(aboutButtonPanel);
-		footerBar.add(bannerLabel);
-		footerBar.add(helpButtonPanel);
+		GridBagConstraints footerC = new GridBagConstraints();
+		
+		footerC.fill = GridBagConstraints.NONE;
+		footerC.gridx = 0;
+		footerC.gridy = 0;
+		footerC.weightx = 0.05;
+		footerBar.add(aboutButtonPanel, footerC);
+		
+		footerC.fill = GridBagConstraints.HORIZONTAL;
+		footerC.gridx = 1;
+		footerC.weightx = 0.9;
+		footerBar.add(bannerLabel, footerC);
+		
+		footerC.fill = GridBagConstraints.NONE;
+		footerC.gridx = 2;
+		footerC.weightx = 0.05;
+		footerBar.add(helpButtonPanel, footerC);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
@@ -326,6 +340,8 @@ public class MainGUI extends JFrame {
 	}
 
 	private void displayTextFile(String title, String file) {
+		if (frame != null) 
+			frame.dispose();
 		frame = new JFrame();
 		frame.setUndecorated(true);
 		frame.setTitle(title);

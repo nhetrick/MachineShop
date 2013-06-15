@@ -117,7 +117,6 @@ public class AddUsersPanel extends ContentPanel {
 		JPanel userIDPanel = new JPanel(new GridLayout(1, 2));
 
 		// Manually type the email and department.
-		// TODO figure out if we want this or not
 		JPanel emailPanel = new JPanel(new GridLayout(1, 2));
 		JPanel departmentPanel = new JPanel(new GridLayout(1, 2));
 
@@ -156,7 +155,6 @@ public class AddUsersPanel extends ContentPanel {
 		c.gridy = 2;
 		dataPanel.add(userIDPanel, c);
 
-		// TODO email and department panels go here if we want them
 		c.gridy = 3;
 		dataPanel.add(emailPanel, c);
 
