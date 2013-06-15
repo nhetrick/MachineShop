@@ -2,19 +2,12 @@ package main;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
 import GUI.Driver;
-import GUI.GUI;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -70,7 +63,7 @@ public class AccessTracker {
 		DBCursor cursor = users.find();
 		while(cursor.hasNext()) {
 			DBObject current = cursor.next();
-			if (current.get("checkedOutTools") != null && !((ArrayList) current.get("checkedOutTools")).isEmpty()) {
+			if (current.get("checkedOutTools") != null && !((ArrayList<DBObject>) current.get("checkedOutTools")).isEmpty()) {
 				usersWithTools.add(findUserByCWID(current.get("CWID").toString()));
 			}
 		}
@@ -478,7 +471,7 @@ public class AccessTracker {
 		return availableTools;
 	}
 
-	public static DB getDatabase() {
+	public DB getDatabase() {
 		return database;
 	}
 

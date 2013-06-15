@@ -48,8 +48,6 @@ public class GenerateReportPanel extends ContentPanel {
 	private JTable generalStatsTable;
 	private JTable logTable;
 	
-	private JTextField startField;
-	private JTextField endField;
 	private JTextField cwidField;
 	private JTextField toolNameField;
 	private JTextField machineNameField;
@@ -68,17 +66,11 @@ public class GenerateReportPanel extends ContentPanel {
 	
 	private String currentParameter;
 	SimpleDateFormat dateFileFormat;
-	private boolean haveGeneratedReport;
-	
-	
-	
 	public GenerateReportPanel() {
 
 		super("Generate Reports & Statistics");
 		buttonListener = new ButtonListener();
 		comboBoxListener = new ComboBoxListener();
-		
-		haveGeneratedReport = false;
 		
 		parameters = new JComboBox<String>();
 		JLabel parameterLabel = new JLabel("Report Parameter:");
@@ -417,8 +409,6 @@ public class GenerateReportPanel extends ContentPanel {
 		public void actionPerformed(ActionEvent e) {
 			addTabs();
 			if (e.getSource() == generateButton | e.getSource() == cwidField | e.getSource() == toolNameField | e.getSource() == machineNameField ) {
-				haveGeneratedReport = true;
-				
 				if (currentParameter.equals("User")) {
 					resultsPanel.removeAll();
 					setDates();

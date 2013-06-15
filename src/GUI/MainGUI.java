@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -10,15 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Scanner;
-import java.util.Stack;
-
-import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import main.*;

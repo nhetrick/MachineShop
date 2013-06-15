@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.util.Calendar;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class Clock extends JLabel implements Runnable {
 	

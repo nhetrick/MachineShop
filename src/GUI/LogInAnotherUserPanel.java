@@ -17,7 +17,6 @@ import javax.swing.border.TitledBorder;
 
 import main.BlasterCardListener;
 import main.Machine;
-import main.SystemAdministrator;
 import main.Tool;
 import main.User;
 
@@ -28,8 +27,6 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	private JButton logOutUser;
 	private ButtonListener buttonListener;
 	private JTextField cwidField;
-	private String start = ";984000017";
-	private String error = "E?";
 
 	private JScrollPane scroller;
 	private JPanel selectionPanel;

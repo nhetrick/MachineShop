@@ -1,14 +1,11 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
-
-import main.User;
 
 public class MainPanel extends GUI {
 	

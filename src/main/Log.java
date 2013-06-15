@@ -19,14 +19,13 @@ import com.mongodb.DBObject;
 
 public class Log {
 	private static ArrayList<LogEntry> results;
-	private static Date lastUpdate;
 	private static DB database;
 	
 	private static int numEntries;
 	
 	public static void setup() {
 		results = new ArrayList<LogEntry>();
-		lastUpdate = new Date();
+		new Date();
 		// set numEntries to the number of log entries in
 		// the database.
 		database = Driver.getAccessTracker().getDatabase();
@@ -178,6 +177,9 @@ public class Log {
 			//get timeIn
 			Date timeIn = (Date) result.get("timeIn");
 			
+			//get department
+			String department = (String) result.get("department");
+			
 			//get machinesUsed
 			ArrayList<Machine> machinesUsed = new ArrayList<Machine>();
 			ArrayList<BasicDBObject> machines = (ArrayList<BasicDBObject>) result.get("machinesUsed");
@@ -220,7 +222,7 @@ public class Log {
 				} 
 			}
 			
-			LogEntry entry = new LogEntry(id, (String) result.get("userCWID"), (String) result.get("department"), machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
+			LogEntry entry = new LogEntry(id, cwid, department, machinesUsed, toolsCheckedOut, timeOut, timeIn, toolsReturned);
 			results.add(entry);
 		}
 	}

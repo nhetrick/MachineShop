@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Comparator;
-
 public class Machine {
 	String name;
 	String ID;

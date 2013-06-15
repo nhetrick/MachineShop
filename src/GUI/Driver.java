@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.Font;
-
 import main.AccessTracker;
 
 public class Driver {

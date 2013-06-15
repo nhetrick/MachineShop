@@ -1,20 +1,12 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import GUI.GUI.LogOutListener;
 
 public class DataEntryGUI extends MainPanel {
 	
