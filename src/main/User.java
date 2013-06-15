@@ -64,7 +64,7 @@ public class User {
 				to.returnTool();
 				to.updateCheckoutStatus(this);
 			}
-			//toolsCheckedOut.remove(tool);
+			toolsCheckedOut.remove(tool);
 		}
 //		
 //		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
