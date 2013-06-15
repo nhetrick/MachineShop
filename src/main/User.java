@@ -67,17 +67,20 @@ public class User {
 			toolsCheckedOut.remove(tool);
 		}
 //		
-		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
-		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
-		if (cursor.hasNext()) {
-			DBObject result = cursor.next();
-			BasicDBList checkedoutTools = new BasicDBList();
-			for (Tool t:toolsCheckedOut) {
-				checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
+		if (toolsCheckedOut.size() > 0){
+		
+			DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
+			DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
+			if (cursor.hasNext()) {
+				DBObject result = cursor.next();
+				BasicDBList checkedoutTools = new BasicDBList();
+				for (Tool t:toolsCheckedOut) {
+					checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
+				}
+				result.put("checkedOutTools", checkedoutTools);
+	
+				usersCollection.update(new BasicDBObject("CWID", CWID), result);
 			}
-			result.put("checkedOutTools", checkedoutTools);
-
-			usersCollection.update(new BasicDBObject("CWID", CWID), result);
 		}
 	}
 	
