@@ -326,6 +326,8 @@ public class MainGUI extends JFrame {
 	}
 
 	private void displayTextFile(String title, String file) {
+		if (frame != null) 
+			frame.dispose();
 		frame = new JFrame();
 		frame.setUndecorated(true);
 		frame.setTitle(title);
