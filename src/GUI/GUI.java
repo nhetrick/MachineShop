@@ -14,8 +14,6 @@ import javax.swing.JPanel;
 
 import main.User;
 
-// TODO make other buttons to this if needed.
-
 public class GUI extends JPanel {
 
 	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);

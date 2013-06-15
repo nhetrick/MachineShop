@@ -103,8 +103,8 @@ public class MainGUI extends JFrame {
 
 	public void setup() {
 		
-//		sets the cursor to invisible (For touch-screen purposes)
-//		tk = Toolkit.getDefaultToolkit();
+//		TODO sets the cursor to invisible (For touch-screen purposes)
+//		Toolkit tk = Toolkit.getDefaultToolkit();
 //		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 //		setCursor(tk.createCustomCursor(image, new Point(0,0), "blank"));
 
@@ -119,7 +119,7 @@ public class MainGUI extends JFrame {
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//disable Alt+F4
+		// TODO disable Alt+F4
 		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		// Set up the look and feel of the frame/panels

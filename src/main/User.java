@@ -66,7 +66,7 @@ public class User {
 			}
 			toolsCheckedOut.remove(tool);
 		}
-//		
+
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
 		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
 		if (cursor.hasNext()) {

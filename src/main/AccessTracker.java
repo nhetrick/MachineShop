@@ -407,18 +407,6 @@ public class AccessTracker {
 		}
 	}
 	
-	// check if email follows the pattern.
-	public boolean checkValidEmail(String email){
-		String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-		try {
-			Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-			Matcher matcher = pattern.matcher(email);
-			return matcher.matches();
-		}catch(Exception e) {
-			return false;
-		}
-	}
-
 	/********************************** GETTERS AND SETTERS *******************************************/
 
 	public User getUser(String cwid) {
