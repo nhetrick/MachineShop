@@ -19,13 +19,11 @@ import com.mongodb.DBObject;
 
 public class Log {
 	private static ArrayList<LogEntry> results;
-//	private DB database;
 	
-	private static int numEntries
-	;
+	private static int numEntries;
+	
 	public static void setup() {
 		results = new ArrayList<LogEntry>();
-		new Date();
 		// set numEntries to the number of log entries in
 		// the database.
 		numEntries = (int) Driver.getAccessTracker().getDatabase().getCollection("LogEntries").count();
