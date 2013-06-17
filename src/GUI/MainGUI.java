@@ -153,7 +153,7 @@ public class MainGUI extends JFrame {
 		
 		// Create header and footer bars
 		headerFont = new Font("SansSerif", Font.BOLD, 34);
-		headerBar = new JPanel(new GridBagLayout());
+		headerBar = new JPanel(new GridLayout(1, 3));
 		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
 		
@@ -192,6 +192,7 @@ public class MainGUI extends JFrame {
 		// Add the user's name and the clock
 		JLabel nameLabel = new JLabel(userName);
 		nameLabel.setBackground(Color.white);
+		
 		time = new Clock(headerFont);
 
 		nameLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -216,21 +217,9 @@ public class MainGUI extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(nameLabel, c);
 
-		GridBagConstraints headerC = new GridBagConstraints();
-		
-		headerC.fill = GridBagConstraints.HORIZONTAL;
-		headerC.gridx = 0;
-		headerC.gridy = 0;
-		headerC.weightx = 0.45;
-		headerBar.add(leftPanel, headerC);
-		
-		headerC.gridx = 1;
-		headerC.weightx = 0.1;
-		headerBar.add(minesMlabel, headerC);
-		
-		headerC.gridx = 2;
-		headerC.weightx = 0.45;
-		headerBar.add(time, headerC);
+		headerBar.add(leftPanel);
+		headerBar.add(minesMlabel);
+		headerBar.add(time);
 		
 		c.ipadx = 0;
 		c.gridx = 0;
