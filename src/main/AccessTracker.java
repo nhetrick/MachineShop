@@ -97,7 +97,7 @@ public class AccessTracker {
 								);
 						currentUsers.add(currentUser);
 						Log.startEntry(currentUser);
-						return null;
+						return currentUser;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
