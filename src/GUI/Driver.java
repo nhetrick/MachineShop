@@ -1,5 +1,4 @@
 package GUI;
-import java.awt.Font;
 import java.io.IOException;
 
 import main.AccessTracker;
@@ -16,14 +15,15 @@ public class Driver {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Runtime r = Runtime.getRuntime();
-		dbServer = r.exec("C:/mongodb/bin/mongod.exe --dbpath C:/data/bin");
-		tracker = new AccessTracker();
+		Driver driver = new Driver();
+		//TODO run this 
+		//Runtime r = Runtime.getRuntime();
+		//dbServer = r.exec("C:/mongodb/bin/mongod.exe --dbpath C:/data/bin");
 		mainGui = new MainGUI();
 	}
 	
 	public static void exit() {
-		dbServer.destroy();
+	//	dbServer.destroy();
 		System.exit(1);
 	}
 

@@ -471,7 +471,7 @@ public class AccessTracker {
 		return availableTools;
 	}
 
-	public DB getDatabase() {
+	public static DB getDatabase() {
 		return database;
 	}
 
