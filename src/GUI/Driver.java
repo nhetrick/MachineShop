@@ -10,15 +10,10 @@ public class Driver {
 	private static MainGUI mainGui;
 	private static Process dbServer;
 	public static boolean isLogInScreen = false;
-
-	public Driver() {
-		tracker = new AccessTracker();
-	}
 	
 	public static void main(String[] args) throws IOException {
-		Runtime r = Runtime.getRuntime();
-		dbServer = r.exec("C:/mongodb/bin/mongod.exe --dbpath C:/data/bin");
-		tracker = new AccessTracker();
+		//Runtime r = Runtime.getRuntime();
+		//dbServer = r.exec("C:/mongodb/bin/mongod.exe --dbpath C:/data/bin");
 		mainGui = new MainGUI();
 	}
 	
