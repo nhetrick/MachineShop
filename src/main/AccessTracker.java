@@ -83,7 +83,7 @@ public class AccessTracker {
 					currentUser = createUser(CWID);
 					if ( currentUser == null ) {
 						JOptionPane.showMessageDialog(Driver.getMainGui(),
-								"Sorry, our records show you are not a registered Mines student." +
+								"Sorry, our records show you are not a registered Mines member." +
 								"\nIf you believe this is an error, please visit the registrar." +
 								"\n\nTo use the machine shop, you must talk to the shop supervisor."
 								);
@@ -97,7 +97,7 @@ public class AccessTracker {
 								);
 						currentUsers.add(currentUser);
 						Log.startEntry(currentUser);
-						return null;
+						return currentUser;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());

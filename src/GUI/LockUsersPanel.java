@@ -212,14 +212,15 @@ public class LockUsersPanel extends ContentPanel {
 					User user = new User( (String) u.get("firstName"), (String) u.get("lastName"), (String) u.get("CWID"), (String) u.get("email"), (String) u.get("department"));
 					boolean locked = false;
 					if (u.get("locked") != null)
-							locked = (boolean) u.get("locked");
+						locked = (boolean) u.get("locked");
 					if (!locked)
 						resultsList.add(user);
 				}
-				
+
 				// sorted the resultslist
 				Collections.sort(resultsList, new UserComparator());
 				for ( User u : resultsList ) {
+					if (u.equals(currentUser)) continue;
 					JCheckBox cb = new JCheckBox(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 					cb.setHorizontalAlignment(JCheckBox.LEFT);
 					cb.setFont(buttonFont);

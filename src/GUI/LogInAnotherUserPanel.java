@@ -251,6 +251,9 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					String input = BlasterCardListener.strip(cwidField.getText());
 
 					user = Driver.getAccessTracker().processLogIn(input);
+					Driver.getAccessTracker().setCurrentUser(current);
+					
+					System.out.println(user);
 					cwidField.setText(user.getFirstName() + " " + user.getLastName());
 
 					showMachines();
