@@ -344,7 +344,7 @@ public class MainGUI extends JFrame {
 		all.setBorder(new LineBorder(borderColor, 4));
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
-		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		Scanner in;
 		try {
 			in = new Scanner(new FileReader(file));
@@ -410,7 +410,12 @@ public class MainGUI extends JFrame {
 				add(mainContentPanel, c);
 				
 			} else if (e.getSource() == helpButton) {
-				displayTextFile("Help", "help.txt");
+				if (currentUser.isSystemAdmin())
+					displayTextFile("Help", "sysAdminHelp.txt");
+				else if (currentUser.isAdmin())
+					displayTextFile("Help", "adminHelp.txt");
+				else
+					displayTextFile("Help", "basicUserHelp.txt");
 			} else if (e.getSource() == aboutButton) {
 				displayTextFile("About", "about.txt");
 			} else if (e.getSource() == close) {
