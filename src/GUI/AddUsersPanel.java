@@ -297,7 +297,7 @@ public class AddUsersPanel extends ContentPanel {
 			showMessage("Please fill in the user's name and CWID.");
 			return false;
 		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
-			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID.");
+			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
 			return false;
 		} else if ( !(Validator.isValidEmail(emailField.getText()) || emailField.getText().equals("")) ) {
 			showMessage("Please enter a valid email address");
