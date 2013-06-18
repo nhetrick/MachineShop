@@ -46,6 +46,8 @@ public class AddToolsPanel extends ContentPanel {
 		toolIDPanel.add(toolIDLabel);
 		toolIDPanel.add(toolIDField);
 		
+		toolIDField.addActionListener(buttonListener);
+		
 		saveButton = new JButton("Save");
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);
