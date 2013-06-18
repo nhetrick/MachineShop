@@ -1,8 +1,10 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -49,9 +51,11 @@ public class MainGUI extends JFrame {
 	private JLabel minesMlabel;
 	private JLabel bannerLabel;
 	
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private double constant = screenSize.getWidth()/1600.0;
 	
 	private Color borderColor = Color.black;
-	private Font miniFont = new Font("SansSerif", Font.BOLD, 18);
+	private Font miniFont = new Font("SansSerif", Font.BOLD, (int) (constant*18));
 
 	public MainGUI() {
 		
@@ -152,7 +156,7 @@ public class MainGUI extends JFrame {
 	public void processHomeScreen(User currentUser) {
 		
 		// Create header and footer bars
-		headerFont = new Font("SansSerif", Font.BOLD, 34);
+		headerFont = new Font("SansSerif", Font.BOLD, (int) (constant*42));
 		headerBar = new JPanel(new GridBagLayout());
 		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
