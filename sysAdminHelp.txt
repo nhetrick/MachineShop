@@ -1,0 +1,180 @@
+HELP (with Version 1.0)
+
+Using the Software:
+
+System Administrator:
+    Basic User Functions:
+        Available Functions: 
+            > Select Machines (select machines that the user will use during a given sign in period)
+                - From the home screen: In the section titled "My Machines", select the machines that are going to be used during
+                  the sign in session. Once chosen, click the button "Select Machines" in the right hand button panel. A message will
+                  display providing a list of machines selected. A machine cannot be unselected once the "Select Machines" button has
+                  been clicked.
+                - If at any point you do not see the "My Machines" section but wish to select machines either click "Select Machines"
+                  or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                                                            	                                                                        				
+            > Checkout Tools (check out a tool, meaning the user is leaving the machine shop with the tool)
+                - Click the "Check Out Tools" button in the right hand side button panel. Either search by name or search by ID,
+                  and click "Go" respectively. From the results, select the tool(s) you wish to check out and click "Check Out". 
+                  Follow Machine Shop procedures for finding the tools you selected. 
+                                                                          											  
+            > Return Tools (return a tool that was previously checked out, it must be physically returned to the machine shop)
+                - From the home screen: In the section titled "Checked Out Tools", select the tools that are going to be returned during
+                  the sign in session. Once chosen, click the button "Return Tools" in the right hand button panel. 
+                  The tool(s) will be removed from the checked out tools list and cannot be "un-returned" once the "Return Tools" button 
+                  has been clicked.
+                - If at any point you do not see the "Checked Out Tools" section but wish to return tools either click "Return Tools"
+                  or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                           
+            > Start Working (keeps a user signed in, assuming he/she is still in the machine shop)
+                - Click this button if you are done using the sign in machine but are not signing out. This means you are NOT leaving
+                  the machine shop.
+                                          
+            > Sign Out (signs a user out, meaning the user has finished using the machine shop for the time being and he/she is leaving)
+                - Click this button if you are completely done using the sign in machine as well as the machine shop. This means you
+                  ARE leaving the machine shop for the time being. 
+                                          									  
+    Administrative Functions:
+        Available Functions:
+            > Machine Certifications (manage machine certifications for a given user)
+                - Click the "Machine Certifications" button in the right hand side button panel. Either search by name or search by
+                  cwid and click "Go". Select the certifications the user has gained, unselect ones they have lost. Click "Save"
+                  once all changes have been made.
+                                        
+            > Edit Users (add, remove, lock, or unlock a user)
+                - Click the "Edit Users" button in the right hand side button panel.
+                    If you want to add a user, click "Add User": 
+                        - fill in the necessary fields, select any certifications the user already has and then click "Save".
+                    If you want to remove a user, click "Remove User":
+                        - search for the user by name or cwid, select the user(s) from the results and then click "Remove Users".
+                    If you want to lock a user, click "Lock User":
+                        - search for the user by name or cwid, select the user(s) from the results and then click "Lock Users".
+                    If you want to unlock a user, click "Unlock User":
+                        - search for the user by name or cwid, select the user(s) from the results and then click "Unlock Users".
+                    
+            > Edit Tools (add or remove a tool)
+                - Click the "Edit Tools" button in the right hand side button panel.
+                    If you want to add a tool, click "Add Tool": 
+                        - fill in the necessary fields, then click "Save".
+                    If you want to remove a tool, click "Remove Tool":
+                        - search for the tool by name or ID, select the tool(s) from the results and then click "Remove Tools".
+                                        
+            > Edit Machines (add or remove a machine)
+                - Click the "Edit Machine" button in the right hand side button panel.
+                    If you want to add a machine, click "Add Machine": 
+                        - fill in the necessary fields, then click "Save".
+                    If you want to remove a machine, click "Remove Machine":
+                        - search for the machine by name or ID, select the machine(s) from the results and then click "Remove Machines".
+                                                  
+            > User Privileges (manages user permission levels in the system, options: basic user, administrator, system administrator)
+                                        
+            > Generate Reports (query the log by date, user, tool, or machine)
+                - Click the "Generate Report" button in the right hand side button panel. Select one of the parameters (date, user, 
+                  tool, machine). Fill in the necessary parameters, such as user cwid, tool name, machine name, and/or date.
+                  If you do not select a date range, the default is the start and end of current day. Then click "Generate".
+                  You may now view the statistics of the your result set (the first 4 tabs) and the log (the final tab). 
+                  You may now export the report by clicking "Save to Excel File". This will be saved to [softwareLocation]/ReportExports/
+                                        
+            > View Active Users (view all users currently signed in and those who currently have tools checked out)
+                - Click the "View Active Users" button in the right hand side button panel. The table will show both current users in
+                  the machine shop and those who are not currently signed in but do have tools checked out. The columns can be resized
+                  by dragging (like one would do in excel) if all data is not visible.
+                                        
+            > View Tools / Machines (view the current status of a tool or machine) 	
+                - Click the "View Tools / Machines" button in the right hand side button panel. The top section shows machines 
+                  in use (and how many users are currently in the shop to use it) and machines not in use. The bottom section shows
+                  tools checked out and tools not checked out. Use the scroll bars to see all the tools and machines. 
+                                          
+            > Sign In Another User (provides same functionality as the basic user home screen)
+                - Click "Sign In Another User" any time you wish you stay on the machine but someone needs to sign in. You remain as 
+                  the current user but can perform all the functions the a basic user needs for them. This could be useful for a
+                  student worker. 
+                                        
+            > Finish (user has finished data entry / management and he/she is going to remain in the machine shop)
+                - Click this button if you are done using the sign in machine but are not signing out. This means you are NOT leaving
+                  the machine shop.
+                                        
+            > Sign Out (signs a user out, meaning the user has finished in the machine shop for the time being and he/she is leaving)
+                - Click this button if you are completely done using the sign in machine as well as the machine shop. This means you
+                  ARE leaving the machine shop for the time being. 
+                                        
+**See Below for Basic User and Administrator Functions
+	
+Basic User:
+    Available Functions: 
+        > Select Machines (select machines that the user will use during a given sign in period)
+            - From the home screen: In the section titled "My Machines", select the machines that are going to be used during
+              the sign in session. Once chosen, click the button "Select Machines" in the right hand button panel. A message will
+              display providing a list of machines selected. A machine cannot be unselected once the "Select Machines" button has
+              been clicked.
+            - If at any point you do not see the "My Machines" section but wish to select machines either click "Select Machines"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                
+        > Checkout Tools (check out a tool, meaning the user is leaving the machine shop with the tool)
+            - Click the "Check Out Tools" button in the right hand side button panel. Either search by name or search by ID,
+              and click "Go" respectively. From the results, select the tool(s) you wish to check out and click "Check Out". 
+              Follow Machine Shop procedures for finding the tools you selected. 
+																											  
+        > Return Tools (return a tool that was previously checked out, it must be physically returned to the machine shop)
+            - From the home screen: In the section titled "Checked Out Tools", select the tools that are going to be returned during
+              the sign in session. Once chosen, click the button "Return Tools" in the right hand button panel. 
+              The tool(s) will be removed from the checked out tools list and cannot be "un-returned" once the "Return Tools" button 
+              has been clicked.
+            - If at any point you do not see the "Checked Out Tools" section but wish to return tools either click "Return Tools"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+								   
+        > Start Working (keeps a user signed in, assuming he/she is still in the machine shop)
+            - Click this button if you are done using the sign in machine but are not signing out. This means you are NOT leaving
+              the machine shop.
+								  
+        > Sign Out (signs a user out, meaning the user has finished using the machine shop for the time being and he/she is leaving)
+            - Click this button if you are completely done using the sign in machine as well as the machine shop. This means you
+              ARE leaving the machine shop for the time being. 
+                                          
+Administrator:
+    Available Functions: 
+        > Select Machines (select machines that a user will use during a given sign in period)
+            - From the home screen: In the section titled "My Machines", select the machines that are going to be used during
+              the sign in session. Once chosen, click the button "Select Machines" in the right hand button panel. A message will
+              display providing a list of machines selected. A machine cannot be unselected once the "Select Machines" button has
+              been clicked.
+            - If at any point you do not see the "My Machines" section but wish to select machines either click "Select Machines"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                
+        > Checkout Tools (check out a tool, meaning the user is leaving the machine shop with the tool)
+            - Click the "Check Out Tools" button in the right hand side button panel. Either search by name or search by ID,
+              and click "Go" respectively. From the results, select the tool(s) you wish to check out and click "Check Out". 
+              Follow Machine Shop procedures for finding the tools you selected. 
+				                                		        
+        > Return Tools (return a tool that was previously checked out, it must be physically returned to the machine shop)
+            - From the home screen: In the section titled "Checked Out Tools", select the tools that are going to be returned during
+              the sign in session. Once chosen, click the button "Return Tools" in the right hand button panel. 
+              The tool(s) will be removed from the checked out tools list and cannot be "un-returned" once the "Return Tools" button 
+              has been clicked.
+            - If at any point you do not see the "Checked Out Tools" section but wish to return tools either click "Return Tools"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                
+        > Generate Reports (query the log by date, user, tool, or machine)
+            - Click the "Generate Report" button in the right hand side button panel. Select one of the parameters (date, user, 
+              tool, machine). Fill in the necessary parameters, such as user cwid, tool name, machine name, and/or date.
+              If you do not select a date range, the default is the start and end of current day. Then click "Generate".
+              You may now view the statistics of the your result set (the first 4 tabs) and the log (the final tab). 
+              You may now export the report by clicking "Save to Excel File". This will be saved to [softwareLocation]/ReportExports/
+                                
+        > View Active Users (view all users currently signed in and those who currently have tools checked out)
+            - Click the "View Active Users" button in the right hand side button panel. The table will show both current users in
+              the machine shop and those who are not currently signed in but do have tools checked out. The columns can be resized
+              by dragging (like one would do in excel) if all data is not visible.
+                                
+        > View Tools / Machines (view the current status of a tool or machine) 
+            - Click the "View Tools / Machines" button in the right hand side button panel. The top section shows machines 
+              in use (and how many users are currently in the shop to use it) and machines not in use. The bottom section shows
+              tools checked out and tools not checked out. Use the scroll bars to see all the tools and machines. 
+                                
+        > Start Working (keeps a user signed in, assuming he/she is still in the machine shop)
+            - Click this button if you are done using the sign in machine but are not signing out. This means you are NOT leaving
+              the machine shop.
+                                
+        > Sign Out (signs a user out, meaning the user has finished using the machine shop for the time being and he/she is leaving)	
+            - Click this button if you are completely done using the sign in machine as well as the machine shop. This means you
+              ARE leaving the machine shop for the time being. 					

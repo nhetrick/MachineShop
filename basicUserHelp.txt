@@ -1,0 +1,34 @@
+HELP (with Version 1.0)
+
+Using the Software:
+	
+Basic User:
+    Available Functions: 
+        > Select Machines (select machines that the user will use during a given sign in period)
+            - From the home screen: In the section titled "My Machines", select the machines that are going to be used during
+              the sign in session. Once chosen, click the button "Select Machines" in the right hand button panel. A message will
+              display providing a list of machines selected. A machine cannot be unselected once the "Select Machines" button has
+              been clicked.
+            - If at any point you do not see the "My Machines" section but wish to select machines either click "Select Machines"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+                                
+        > Checkout Tools (check out a tool, meaning the user is leaving the machine shop with the tool)
+            - Click the "Check Out Tools" button in the right hand side button panel. Either search by name or search by ID,
+              and click "Go" respectively. From the results, select the tool(s) you wish to check out and click "Check Out". 
+              Follow Machine Shop procedures for finding the tools you selected. 
+																											  
+        > Return Tools (return a tool that was previously checked out, it must be physically returned to the machine shop)
+            - From the home screen: In the section titled "Checked Out Tools", select the tools that are going to be returned during
+              the sign in session. Once chosen, click the button "Return Tools" in the right hand button panel. 
+              The tool(s) will be removed from the checked out tools list and cannot be "un-returned" once the "Return Tools" button 
+              has been clicked.
+            - If at any point you do not see the "Checked Out Tools" section but wish to return tools either click "Return Tools"
+              or the home button in the top left hand corner. Once back to the user home screen, follow the instructions above.
+								   
+        > Start Working (keeps a user signed in, assuming he/she is still in the machine shop)
+            - Click this button if you are done using the sign in machine but are not signing out. This means you are NOT leaving
+              the machine shop.
+								  
+        > Sign Out (signs a user out, meaning the user has finished using the machine shop for the time being and he/she is leaving)
+            - Click this button if you are completely done using the sign in machine as well as the machine shop. This means you
+              ARE leaving the machine shop for the time being. 
