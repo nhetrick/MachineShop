@@ -46,6 +46,8 @@ public class AddMachinesPanel extends ContentPanel {
 		machineIDPanel.add(machineIDLabel);
 		machineIDPanel.add(machineIDField);
 		
+		machineIDField.addActionListener(buttonListener);
+		
 		saveButton = new JButton("Save");
 		saveButton.setFont(buttonFont);
 		saveButton.addActionListener(buttonListener);

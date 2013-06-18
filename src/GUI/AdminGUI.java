@@ -31,18 +31,21 @@ public class AdminGUI extends UserGUI {
 		
 		super(user);
 		
+		for ( JButton b : buttons ) {
+			b.removeActionListener(buttonListener);
+		}
+		buttons.clear();
+		
 		buttonListener = new ButtonListener();
 		
-		buttons.remove(logOutButton);
-		buttons.remove(doneButton);
-		
+		buttons.add(selectMachinesButton);
+		buttons.add(checkOutToolsButton);
+		buttons.add(returnToolsButton);
 		buttons.add(generateReport);
 		buttons.add(viewActiveUsers);
 		buttons.add(viewToolsAndMachines);
-
 		buttons.add(doneButton);
 		buttons.add(logOutButton);
-
 		
 		formatAndAddButtons();
 
@@ -58,15 +61,19 @@ public class AdminGUI extends UserGUI {
 				isCheckingOutTools = true;
 				current.setBackground(orange);
 			} else if ( e.getSource() == selectMachinesButton ) {
-				if ( !isCheckingOutTools )
+				if ( !isCheckingOutTools ) {
 					useMachines(current);
+				} else {
+					isCheckingOutTools = false;
+					switchPanels(new AdminGUI(currentUser));
+				}
 			} else if ( e.getSource() == returnToolsButton ) {
 				if ( !isCheckingOutTools ) {
 					returnTools();
 					current.setBackground(orange);
 				} else {
-					isCheckingOutTools = false;
 					switchPanels(new AdminGUI(currentUser));
+					isCheckingOutTools = false;
 				}
 			} else if ( e.getSource() == doneButton ) {
 				useMachines(current);
