@@ -18,8 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-
-import main.BlasterCardListener;
 import main.Machine;
 import main.MachineComparator;
 import main.OracleConnection;
@@ -294,13 +292,11 @@ public class AddUsersPanel extends ContentPanel {
 	}
 
 	public boolean validFields() {
-		String strippedCWID = BlasterCardListener.strip(userIDField.getText());
 		if (firstNameField.getText().equals("")	|| userIDField.getText().equals("")	|| lastNameField.getText().equals("") ) {
 			showMessage("Please fill in the user's name and CWID.");
 			return false;
-		} else if (!(Validator.isValidCWID(strippedCWID))) {
-			if (strippedCWID.length() == Validator.CWID_LENGTH)
-				showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
+		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
+			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
 			return false;
 		} else if ( !(Validator.isValidEmail(emailField.getText()) || emailField.getText().equals("")) ) {
 			showMessage("Please enter a valid email address");
