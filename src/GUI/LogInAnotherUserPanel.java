@@ -245,6 +245,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
 				if (cwidField.getText().equals("")) {
 					showMessage("Please enter 8-digit CWID");
+					clearFields();
 				} else {
 					String input = BlasterCardListener.strip(cwidField.getText());
 
