@@ -67,6 +67,8 @@ System Administrator:
                         - search for the machine by name or ID, select the machine(s) from the results and then click "Remove Machines".
                                                   
             > User Privileges (manages user permission levels in the system, options: basic user, administrator, system administrator)
+		        - Click the "User Privileges" button in the right hand side button panel. Either search for a specific user or
+		          search all to find the user you want to change. Check the box accordingly. No checked box means basic user. 
                                         
             > Generate Reports (query the log by date, user, tool, or machine)
                 - Click the "Generate Report" button in the right hand side button panel. Select one of the parameters (date, user, 
