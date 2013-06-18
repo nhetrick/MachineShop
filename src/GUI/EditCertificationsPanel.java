@@ -186,7 +186,58 @@ public class EditCertificationsPanel extends ContentPanel {
 
 					String input = BlasterCardListener.strip(idSearchField.getText());
 					user = Driver.getAccessTracker().findUserByCWID(input);
-					if ( user != null ) {
+					
+					// fail fast for null user
+					if (user == null){
+						showMessage(idSearchField.getText() + " was not found");
+						nameSearchField.setText("");
+						return;
+					}
+					
+					idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+					nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+
+					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
+						JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
+						String s = cb.getText();
+						s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
+						if (user.getCertifiedMachines().isEmpty())
+							cb.setSelected(false);
+						else {
+							for ( Machine m : user.getCertifiedMachines() ) {
+								if ( m.getID().equals(s) ) {
+									cb.setSelected(true);
+									break;
+								} else {
+									cb.setSelected(false);
+								}
+							}
+						}
+					}
+				} else {
+					String input = nameSearchField.getText();
+					ArrayList<DBObject> users = Driver.getAccessTracker().searchDatabaseForUser(input);
+					user = null;
+					ArrayList<User> usersFound = new ArrayList<User>();
+					for ( DBObject dbo : users ) {
+						if ( ((String) dbo.get("firstName") + " " + (String) dbo.get("lastName")).equalsIgnoreCase(input) ) {
+							user = Driver.getAccessTracker().findUserByCWID((String) dbo.get("CWID"));
+							usersFound.add(user);
+						}
+					}
+					
+					//fail fast for null user
+					if (user == null){
+						showMessage(nameSearchField.getText() + " was not found");
+						idSearchField.setText("");
+						return;
+					}
+					
+					if ( usersFound.size() > 1) {
+						String message = "There were " + usersFound.size() + " users found with this name.\n" +
+								         "Please search the user by CWID to find the one you want to edit.";
+						showMessage(message);
+					} else {
 
 						idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 						nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
@@ -204,47 +255,6 @@ public class EditCertificationsPanel extends ContentPanel {
 										break;
 									} else {
 										cb.setSelected(false);
-									}
-								}
-							}
-						}
-					}
-				} else {
-					String input = nameSearchField.getText();
-					ArrayList<DBObject> users = Driver.getAccessTracker().searchDatabaseForUser(input);
-					user = null;
-					ArrayList<User> usersFound = new ArrayList<User>();
-					for ( DBObject dbo : users ) {
-						if ( ((String) dbo.get("firstName") + " " + (String) dbo.get("lastName")).equalsIgnoreCase(input) ) {
-							user = Driver.getAccessTracker().findUserByCWID((String) dbo.get("CWID"));
-							usersFound.add(user);
-						}
-					}
-					if ( user != null ) {
-
-						if ( usersFound.size() > 1) {
-							String message = "There were " + usersFound.size() + " users found with this name.\n" +
-									         "Please search the user by CWID to find the one you want to edit.";
-							showMessage(message);
-						} else {
-
-							idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
-							nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
-
-							for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
-								JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
-								String s = cb.getText();
-								s = s.substring(s.indexOf('[') + 1, s.indexOf(']'));
-								if (user.getCertifiedMachines().isEmpty())
-									cb.setSelected(false);
-								else {
-									for ( Machine m : user.getCertifiedMachines() ) {
-										if ( m.getID().equals(s) ) {
-											cb.setSelected(true);
-											break;
-										} else {
-											cb.setSelected(false);
-										}
 									}
 								}
 							}
