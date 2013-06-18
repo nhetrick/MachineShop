@@ -20,7 +20,7 @@ public class User {
 	protected boolean isSystemAdmin = false;
 	private String email;
 	private String department;
-		
+
 	public User(String firstName, String lastName, String CWID, String email, String department) {
 		// needs to be extracted from data base
 		certifiedMachines = new ArrayList<Machine>();
@@ -32,12 +32,12 @@ public class User {
 		this.department = department;
 		locked = false;
 	}
-	
+
 	public void checkoutTool(Tool tool) {
 		tool.checkoutTool();
 		tool.updateCheckoutStatus(this);
 		toolsCheckedOut.add(tool);
-		
+
 		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
 		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
 		if (cursor.hasNext()) {
@@ -53,10 +53,10 @@ public class User {
 	}
 
 	public void returnTools(ArrayList<Tool> tools) {
-		
+
 		for (int i=0; i < tools.size(); ++i) {
 			Tool tool = tools.get(i);
-			
+
 			Tool to = Driver.getAccessTracker().getToolByUPC(tool.getUPC());
 			if (to != null) {
 				to.returnTool();
@@ -64,28 +64,26 @@ public class User {
 			}
 			toolsCheckedOut.remove(tool);
 		}
-		
-		if (toolsCheckedOut.size() > 0){
-		
-			DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
-			DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
-			if (cursor.hasNext()) {
-				DBObject result = cursor.next();
-				BasicDBList checkedoutTools = new BasicDBList();
-				for (Tool t:toolsCheckedOut) {
-					checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
-				}
-				result.put("checkedOutTools", checkedoutTools);
-	
-				usersCollection.update(new BasicDBObject("CWID", CWID), result);
+
+
+		DBCollection usersCollection = Driver.getAccessTracker().getDatabase().getCollection("Users");
+		DBCursor cursor = usersCollection.find(new BasicDBObject("CWID", CWID));
+		if (cursor.hasNext()) {
+			DBObject result = cursor.next();
+			BasicDBList checkedoutTools = new BasicDBList();
+			for (Tool t:toolsCheckedOut) {
+				checkedoutTools.add(new BasicDBObject("upc", t.getUPC()));
 			}
+			result.put("checkedOutTools", checkedoutTools);
+
+			usersCollection.update(new BasicDBObject("CWID", CWID), result);
 		}
 	}
-	
+
 	public void useMachine(Machine m) {
 		m.use();
 	}
-	
+
 	public void stopUsingMachine(Machine m) {
 		m.stopUsing();
 	}
@@ -93,11 +91,11 @@ public class User {
 	public String getCWID() {
 		return CWID;
 	}
-	
+
 	public boolean isLocked() {
 		return locked;
 	}
-	
+
 	public void setLockedStatus(boolean lock) {
 		locked = lock;
 	}
@@ -105,39 +103,39 @@ public class User {
 	public ArrayList<Machine> getCertifiedMachines() {
 		return certifiedMachines;
 	}
-	
+
 	public void setCertifiedMachines(ArrayList<Machine> machines) {
 		certifiedMachines = machines;
 	}
-	
+
 	public ArrayList<Tool> getToolsCheckedOut() {
 		return toolsCheckedOut;
 	}
-	
+
 	public void loadCheckedOutTools(ArrayList<Tool> tools) {
 		toolsCheckedOut = tools;
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
-	
+
 	public String getLastName() {
 		return lastName;
 	}
-	
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
-	
+
 	public boolean isSystemAdmin() {
 		return isSystemAdmin;
 	}
-	
+
 	public void setAdmin(boolean b) {
 		isAdmin = b;
 	}
-	
+
 	public void setSystemAdmin(boolean b) {
 		isSystemAdmin = b;
 	}
@@ -155,15 +153,15 @@ public class User {
 	public boolean equals(Object o) {
 		if (!(o instanceof User))
 			return false;
-		
+
 		User obj = (User) o;
 		return (this.CWID.equals(obj.getCWID()));
 	}
-	
+
 	public String toString() {
 		return firstName + " " + lastName;
 	}
-	
+
 	public LogEntry getCurrentEntry() {
 		return currentEntry;
 	}

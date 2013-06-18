@@ -66,7 +66,7 @@ public class EditCertificationsPanel extends ContentPanel {
 			permissionsPanel.add(cb);
 		}
 
-		scroller = new JScrollPane(permissionsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller = new JScrollPane(permissionsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		TitledBorder border = new TitledBorder("User Certifications");
 		border.setTitleFont(borderFont);
 		scroller.setBorder(border);

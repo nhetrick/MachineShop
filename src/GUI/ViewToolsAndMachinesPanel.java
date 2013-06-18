@@ -143,7 +143,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		c.gridy = 0;
 		toolsPanel.add(notCheckedOutLabel, c);
 
-		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		machinesScroller = new JScrollPane(machinesPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		machinesScroller.setPreferredSize(new Dimension(machinesScroller.getWidth(), machinesScroller.getHeight()));
 		machinesScroller.setMaximumSize(machinesScroller.getPreferredSize());
 		machinesScroller.getVerticalScrollBar().setUnitIncrement(13);
@@ -152,7 +152,7 @@ public class ViewToolsAndMachinesPanel extends ContentPanel {
 		machinesBorder.setTitleFont(borderFont);
 		machinesScroller.setBorder(machinesBorder);
 		
-		toolsScroller = new JScrollPane(toolsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		toolsScroller = new JScrollPane(toolsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		toolsScroller.setPreferredSize(new Dimension(toolsScroller.getWidth(), toolsScroller.getHeight()));
 		toolsScroller.setMaximumSize(toolsScroller.getPreferredSize());
 		toolsScroller.getVerticalScrollBar().setUnitIncrement(13);

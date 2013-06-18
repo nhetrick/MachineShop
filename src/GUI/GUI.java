@@ -12,13 +12,14 @@ import javax.swing.JPanel;
 import main.User;
 
 public class GUI extends JPanel {
-
+	
 	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
 	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-	protected Font textFont = new Font("SansSerif", Font.BOLD, 28);
+	protected Font textFont = new Font("SansSerif", Font.BOLD, 24);
 	protected Font resultsFont = new Font("SansSerif", Font.BOLD, 24);
 	protected Font borderFont = new Font("SansSerif", Font.BOLD, 22);
 	protected Font smallFont = new Font("SansSerif", Font.BOLD, 20);
+	protected Font checkBoxFont = new Font("SansSerif", Font.BOLD, 18);
 	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 26);
 
 	protected ActionListener buttonListener;

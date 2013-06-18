@@ -97,7 +97,7 @@ public class RemoveUsersPanel extends ContentPanel {
 
 		resultsPanel = new JPanel(new GridLayout(0, 1));
 
-		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		scroller = new JScrollPane(resultsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		scroller.setPreferredSize(new Dimension(scroller.getWidth(), scroller.getHeight()));
 		scroller.setMaximumSize(scroller.getPreferredSize());
 		scroller.getVerticalScrollBar().setUnitIncrement(13);
@@ -192,6 +192,25 @@ public class RemoveUsersPanel extends ContentPanel {
 					}
 
 					for (User u : usersInQuestion) {
+						if (u.getToolsCheckedOut().size() > 0) {
+							showMessage("The user " + u + " has at least one tool checked out." +
+										"\nPlease wait until they return tools." +
+										"\nIf the tools is lost, return it using Sign In Another User button.");
+							String nameAndDepartment = u.getFirstName() + " " + u.getLastName() + " [" +u.getDepartment() + "]";
+							removed.remove(nameAndDepartment);
+							
+							JCheckBox noRemoved = new JCheckBox();
+							for (JCheckBox cb : removedBoxes) {
+								if (cb.getText().equals(nameAndDepartment)) {
+									noRemoved = cb;
+									cb.setSelected(false);
+									break;
+								}
+							}
+							removedBoxes.remove(noRemoved);
+							continue;
+						}
+						
 						admin.removeUser(u);
 						resultsList.remove(u);
 					}
