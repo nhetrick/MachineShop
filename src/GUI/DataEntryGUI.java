@@ -56,7 +56,7 @@ public class DataEntryGUI extends MainPanel {
 		c.weightx = 0.5;
 		c.anchor = GridBagConstraints.LINE_START;
 		
-		contentPanel = new ViewToolsAndMachinesPanel();
+		contentPanel = new ViewActiveUsersPanel();
 		
 		add(contentPanel, c);
 		
