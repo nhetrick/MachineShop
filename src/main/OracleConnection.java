@@ -38,13 +38,13 @@ public class OracleConnection {
 		connection.close();
 	}
 	
-	public ArrayList<String> select(String searchStr) throws SQLException {
+	public ArrayList<String> select(String userCWID) throws SQLException {
 		
 		ArrayList<String> results = new ArrayList<String>();
 		
 		String sql = "SELECT " + cwidColumn + ", " + firstNameColumn + ", " + lastNameColumn + ", " +
 				emailColumn + ", " + departmentCodeColumn + " FROM " + tableName + " WHERE " + 
-				cwidColumn + "=" + searchStr;
+				cwidColumn + "=" + userCWID;
 		Statement statement = connection.createStatement();
 		ResultSet rows = statement.executeQuery(sql);
 
@@ -61,10 +61,7 @@ public class OracleConnection {
 			results.add(email);
 			results.add(departmentCode);
 			
-			System.out.println("CWID: " + cwid);
 		}
-		
-		System.out.println(results);
 		
 		return results;
 	}
