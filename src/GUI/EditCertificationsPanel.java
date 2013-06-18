@@ -185,11 +185,14 @@ public class EditCertificationsPanel extends ContentPanel {
 				if ( e.getSource() == idSearchGoButton || e.getSource() == idSearchField ) {
 
 					String input = BlasterCardListener.strip(idSearchField.getText());
+					
 					user = Driver.getAccessTracker().findUserByCWID(input);
 					
 					// fail fast for null user
 					if (user == null){
-						showMessage(idSearchField.getText() + " was not found");
+						if (input != ""){
+							showMessage(idSearchField.getText() + " was not found");
+						}
 						nameSearchField.setText("");
 						return;
 					}

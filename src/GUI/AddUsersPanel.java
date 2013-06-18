@@ -41,7 +41,6 @@ public class AddUsersPanel extends ContentPanel {
 	private User addedUser;
 	private OracleConnection connection;
 	private JCheckBox selectAllBox;
-	private boolean invalidCWIDFlag;
 
 	public AddUsersPanel() {
 
@@ -92,12 +91,12 @@ public class AddUsersPanel extends ContentPanel {
 		selectAllBox.addActionListener(buttonListener);
 
 		permissionsPanel = new JPanel(new GridLayout(0, 2));
-		
+
 		// sorts the machines list
 		ArrayList<Machine> sorted = new ArrayList<Machine>();
 		sorted = Driver.getAccessTracker().getMachines();
 		Collections.sort(sorted, new MachineComparator());
-				
+
 		for (Machine m : sorted) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
@@ -129,12 +128,12 @@ public class AddUsersPanel extends ContentPanel {
 
 		userIDPanel.add(userIDLabel);
 		userIDPanel.add(userIDField);
-		
-	    emailPanel.add(emailLabel);
-	    emailPanel.add(emailField);
 
-	    departmentPanel.add(departLabel);
-	    departmentPanel.add(departField);
+		emailPanel.add(emailLabel);
+		emailPanel.add(emailField);
+
+		departmentPanel.add(departLabel);
+		departmentPanel.add(departField);
 
 		JPanel dataPanel = new JPanel(new GridBagLayout());
 
@@ -293,15 +292,15 @@ public class AddUsersPanel extends ContentPanel {
 			((JCheckBox) permissionsPanel.getComponent(i)).setSelected(false);
 		}
 	}
-	
+
 	public boolean validFields() {
 		String strippedCWID = BlasterCardListener.strip(userIDField.getText());
 		if (firstNameField.getText().equals("")	|| userIDField.getText().equals("")	|| lastNameField.getText().equals("") ) {
-			if (firstNameField.getText().equals("") || lastNameField.getText().equals(""))
-				showMessage("Please fill in the user's name and CWID.");
+			showMessage("Please fill in the user's name and CWID.");
 			return false;
 		} else if (!(Validator.isValidCWID(strippedCWID))) {
-			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
+			if (strippedCWID.length() == Validator.CWID_LENGTH)
+				showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
 			return false;
 		} else if ( !(Validator.isValidEmail(emailField.getText()) || emailField.getText().equals("")) ) {
 			showMessage("Please enter a valid email address");
@@ -312,7 +311,7 @@ public class AddUsersPanel extends ContentPanel {
 		}
 		return true;
 	}
-	
+
 	public void toggleAll() {
 		if (selectAllBox.isSelected()) {
 			for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
@@ -328,7 +327,7 @@ public class AddUsersPanel extends ContentPanel {
 	}
 
 	public void save() {
-		
+
 		ArrayList<String> added = new ArrayList<String>();
 		ArrayList<Machine> machines = new ArrayList<Machine>();
 
@@ -336,7 +335,7 @@ public class AddUsersPanel extends ContentPanel {
 		if ( !validFields() ) {
 			return;
 		}
-		
+
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i) {
 			JCheckBox cb = (JCheckBox) permissionsPanel.getComponent(i);
 			if (cb.isSelected()) {
@@ -351,7 +350,7 @@ public class AddUsersPanel extends ContentPanel {
 				}
 			}
 		}
-		
+
 		String list = "";
 		for (String s : added) {
 			list += s + "\n";
@@ -359,12 +358,12 @@ public class AddUsersPanel extends ContentPanel {
 		String message = "Are you sure you want to give "
 				+ firstNameField.getText() + " " + lastNameField.getText()
 				+ " " + "these permissions?\n\n" + list;
-		
+
 		if (confirm(message) && saveUser(machines)) {
 			clearFields();
 		}
 	}
-	
+
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
