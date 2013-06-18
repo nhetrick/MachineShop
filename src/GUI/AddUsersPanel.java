@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 
+import main.BlasterCardListener;
 import main.Machine;
 import main.MachineComparator;
 import main.OracleConnection;
@@ -40,6 +41,7 @@ public class AddUsersPanel extends ContentPanel {
 	private User addedUser;
 	private OracleConnection connection;
 	private JCheckBox selectAllBox;
+	private boolean invalidCWIDFlag;
 
 	public AddUsersPanel() {
 
@@ -293,10 +295,12 @@ public class AddUsersPanel extends ContentPanel {
 	}
 	
 	public boolean validFields() {
+		String strippedCWID = BlasterCardListener.strip(userIDField.getText());
 		if (firstNameField.getText().equals("")	|| userIDField.getText().equals("")	|| lastNameField.getText().equals("") ) {
-			showMessage("Please fill in the user's name and CWID.");
+			if (firstNameField.getText().equals("") || lastNameField.getText().equals(""))
+				showMessage("Please fill in the user's name and CWID.");
 			return false;
-		} else if (!(Validator.isValidCWID(userIDField.getText()))) {
+		} else if (!(Validator.isValidCWID(strippedCWID))) {
 			showMessage("Please enter an " + Validator.CWID_LENGTH + "-digit CWID, numbers only.");
 			return false;
 		} else if ( !(Validator.isValidEmail(emailField.getText()) || emailField.getText().equals("")) ) {
