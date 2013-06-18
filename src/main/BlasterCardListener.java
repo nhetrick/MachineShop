@@ -16,7 +16,7 @@ public class BlasterCardListener {
 			MainGUI.showMessage("Card read error. Please try again.");
 			return "";
 		} else if (input.length() != 8){
-			MainGUI.showMessage("Please enter an 8-digit CWID.");
+			MainGUI.showMessage("Please enter an 8-digit CWID, numbers only.");
 			return "";
 		} else {
 			return input;

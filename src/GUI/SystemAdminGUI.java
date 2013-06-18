@@ -19,9 +19,10 @@ import main.User;
 public class SystemAdminGUI extends MainPanel {
 
 	private JPanel massLogOutPanel;
-	private JButton logOutButton = new JButton("Sign Out");
 	private JButton dataEntryButton = new JButton("Administrative Functions");
 	private JButton basicUserButton = new JButton("Basic User Functions");
+	private JButton finishButton = new JButton("Finish");
+	private JButton logOutButton = new JButton("Sign Out");
 	private JButton massLogOutButton = new JButton("Sign Out All Users");
 	private JScrollPane scroller;
 
@@ -30,17 +31,20 @@ public class SystemAdminGUI extends MainPanel {
 		super();
 		buttonListener = new ButtonListener();
 		contentPanel = new JPanel(new GridBagLayout());	
-
-		logOutButton.setFont(buttonFont);
+		
 		dataEntryButton.setFont(buttonFont);
 		basicUserButton.setFont(buttonFont);
+		finishButton.setFont(buttonFont);
+		logOutButton.setFont(buttonFont);
 
 		dataEntryButton.addActionListener(buttonListener);
 		basicUserButton.addActionListener(buttonListener);
+		finishButton.addActionListener(new GUI.DoneListener());
 		logOutButton.addActionListener(new GUI.SysAdminLogOutListener());
 
 		buttonPanel.add(dataEntryButton);
 		buttonPanel.add(basicUserButton);
+		buttonPanel.add(finishButton);
 		buttonPanel.add(logOutButton);
 
 		c.fill = GridBagConstraints.BOTH;

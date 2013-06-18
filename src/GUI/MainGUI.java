@@ -316,8 +316,8 @@ public class MainGUI extends JFrame {
 
 			int tries = 0;
 			while (!Validator.isValidCWID(input) && tries < MAX_ERROR_COUNT) {
-				input = JOptionPane.showInputDialog("Not a valid CWID. Please try again. ");
-				if (input == null){
+				input = JOptionPane.showInputDialog("Not a valid CWID. Please try again.");
+				if (input == null) {
 					InputReader.resetErrorCount();
 					return;
 				}
