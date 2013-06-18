@@ -215,7 +215,7 @@ public class EditCertificationsPanel extends ContentPanel {
 					user = null;
 					ArrayList<User> usersFound = new ArrayList<User>();
 					for ( DBObject dbo : users ) {
-						if ( ((String) dbo.get("firstName") + " " + (String) dbo.get("lastName")).equals(input) ) {
+						if ( ((String) dbo.get("firstName") + " " + (String) dbo.get("lastName")).equalsIgnoreCase(input) ) {
 							user = Driver.getAccessTracker().findUserByCWID((String) dbo.get("CWID"));
 							usersFound.add(user);
 						}
