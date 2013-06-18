@@ -38,7 +38,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 
 	public LogInAnotherUserPanel() {
 		// All the fonts are in ContentPanel.
-		super("Log In Another User");
+		super("Sign In Another User");
 
 		current = Driver.getAccessTracker().getCurrentUser();
 
@@ -74,7 +74,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		selectionPanel.add(availableTools);
 		selectionPanel.add(checkedOutTools);
 
-		logOutUser = new JButton("Log User Out");
+		logOutUser = new JButton("Sign Out User");
 		logOutUser.setFont(buttonFont);
 		logOutUser.addActionListener(buttonListener);
 
@@ -139,7 +139,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		for ( Machine m : user.getCertifiedMachines() ) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
-			cb.setFont(borderFont);
+			cb.setFont(checkBoxFont);
 			machines.add(cb);
 			if (user.getCurrentEntry().getMachinesUsed().contains(m)){
 				cb.setEnabled(false);
@@ -152,7 +152,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		for ( Tool t : Driver.getAccessTracker().getTools()) {
 			JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
-			cb.setFont(borderFont);
+			cb.setFont(checkBoxFont);
 			if (!user.getToolsCheckedOut().contains(t))
 				availableTools.add(cb);
 			if (t.isCheckedOut()) {
@@ -166,7 +166,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		for ( Tool t : user.getToolsCheckedOut()) {
 			JCheckBox cb = new JCheckBox(t.getName() + " [" + t.getUPC() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
-			cb.setFont(borderFont);
+			cb.setFont(checkBoxFont);
 			checkedOutTools.add(cb);
 		}
 	}

@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,9 +19,12 @@ public class Validator {
 		}
 	}
 	
-	public static boolean isValidCWID(String cwid){
-		if (cwid.length() == CWID_LENGTH){
-			return true;
+	public static boolean isValidCWID(String cwid) {
+		String numberPattern = "\\d{" + CWID_LENGTH + "}";
+		Pattern numPattern = Pattern.compile(numberPattern);
+		if (cwid.length() == CWID_LENGTH) {
+			Matcher matcher = numPattern.matcher(cwid);
+			return matcher.matches();
 		}
 		return false;
 	}

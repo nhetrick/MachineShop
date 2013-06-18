@@ -37,8 +37,7 @@ public class InputReader implements KeyListener {
 		} else if ( input.equals("1234") ) {
 			errorCount = 999;
 			throw new InputReaderException("");
-		}
-		else if (input.contains(error)) {
+		} else if (input.contains(error)) {
 			++errorCount;
 			throw new InputReaderException("Card read error. Please try again.");
 		} else if ( input.length() < 10 ) {
@@ -47,7 +46,7 @@ public class InputReader implements KeyListener {
 			throw new InputReaderException("The card is not a blastercard.");
 	}
 	
-	public String getCWID(){
+	public String getCWID() {
 		return CWID;
 	}
 	
