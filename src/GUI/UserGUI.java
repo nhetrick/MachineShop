@@ -23,31 +23,32 @@ import main.User;
 
 public class UserGUI extends MainPanel {
 
-	private JPanel machinesPanel;
-	private JPanel checkedOutToolsPanel;
-	private CheckoutToolsPanel checkoutToolsPanel;
+	protected JPanel machinesPanel;
+	protected JPanel checkedOutToolsPanel;
+	protected CheckoutToolsPanel checkoutToolsPanel;
 
-	private JButton checkOutToolsButton = new JButton("Check Out Tools");
-	private JButton selectMachinesButton = new JButton("Select Machines");
-	private JButton returnToolsButton = new JButton("Return Tools");
-	private JButton doneButton = new JButton("Start Working");
-	private JButton logOutButton = new JButton("Sign Out");
+	protected JButton checkOutToolsButton = new JButton("Check Out Tools");
+	protected JButton selectMachinesButton = new JButton("Select Machines");
+	protected JButton returnToolsButton = new JButton("Return Tools");
+	protected JButton doneButton = new JButton("Start Working");
+	protected JButton logOutButton = new JButton("Sign Out");
 
-	private JScrollPane machinesScroller;
-	private JScrollPane toolsScroller;
+	protected JScrollPane machinesScroller;
+	protected JScrollPane toolsScroller;
 
-	private ArrayList<Machine> oldMachines;
-	private ArrayList<Machine> selectedMachines;
-	private ArrayList<Tool> toolsToReturn;
+	protected ArrayList<Machine> oldMachines;
+	protected ArrayList<Machine> selectedMachines;
+	protected ArrayList<Tool> toolsToReturn;
 
-	private MachineCheckBoxListener machineCheckBoxListener;
-	private ToolCheckBoxListener toolCheckBoxListener;
+	protected MachineCheckBoxListener machineCheckBoxListener;
+	protected ToolCheckBoxListener toolCheckBoxListener;
 
-	private boolean isCheckingOutTools = false;
+	protected boolean isCheckingOutTools = false;
 
 	public UserGUI(User user) {
 		
 		super();
+		
 		buttonListener = new ButtonListener();
 		machineCheckBoxListener = new MachineCheckBoxListener();
 		toolCheckBoxListener = new ToolCheckBoxListener();
@@ -223,7 +224,7 @@ public class UserGUI extends MainPanel {
 		}
 	}
 
-	public class MachineCheckBoxListener implements ItemListener {
+	protected class MachineCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();
@@ -244,7 +245,7 @@ public class UserGUI extends MainPanel {
 		}
 	}
 
-	public class ToolCheckBoxListener implements ItemListener {
+	protected class ToolCheckBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			JCheckBox check = (JCheckBox) e.getSource();
