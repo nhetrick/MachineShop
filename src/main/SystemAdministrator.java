@@ -157,10 +157,10 @@ public class SystemAdministrator extends Administrator {
 		
 		DBObject obj = users.findOne(new BasicDBObject("CWID", user.getCWID()));
 		
-		if (user.getToolsCheckedOut().size() > 0){
-			ArrayList<Tool> tools = user.getToolsCheckedOut();
-			user.returnTools(tools);
-		}
+//		if (user.getToolsCheckedOut().size() > 0){
+//			ArrayList<Tool> tools = user.getToolsCheckedOut();
+//			user.returnTools(tools);
+//		}
 		users.remove(obj);
 		tracker.removeUser(user);
 	}

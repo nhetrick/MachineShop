@@ -192,6 +192,25 @@ public class RemoveUsersPanel extends ContentPanel {
 					}
 
 					for (User u : usersInQuestion) {
+						if (u.getToolsCheckedOut().size() > 0) {
+							showMessage("The user " + u + " has at least one tool checked out." +
+										"\nPlease wait until they return tools." +
+										"\nIf the tools is lost, return it using Sign In Another User button.");
+							String nameAndDepartment = u.getFirstName() + " " + u.getLastName() + " [" +u.getDepartment() + "]";
+							removed.remove(nameAndDepartment);
+							
+							JCheckBox noRemoved = new JCheckBox();
+							for (JCheckBox cb : removedBoxes) {
+								if (cb.getText().equals(nameAndDepartment)) {
+									noRemoved = cb;
+									cb.setSelected(false);
+									break;
+								}
+							}
+							removedBoxes.remove(noRemoved);
+							continue;
+						}
+						
 						admin.removeUser(u);
 						resultsList.remove(u);
 					}
