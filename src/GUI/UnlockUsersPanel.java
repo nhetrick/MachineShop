@@ -149,6 +149,8 @@ public class UnlockUsersPanel extends ContentPanel {
 					}
 				}
 				ArrayList<String> unlocked = new ArrayList<String>();
+				ArrayList<User> usersInQuestion = new ArrayList<User>();
+				
 				// First check that they actually want to unlock the users.
 				if ( !noBoxesChecked && confirm("Are you sure you want to unlock these users?")) {
 					ArrayList<JCheckBox> unlockedBoxes = new ArrayList<JCheckBox>();
@@ -159,15 +161,34 @@ public class UnlockUsersPanel extends ContentPanel {
 							for ( User u : resultsList ) {
 								String s = cb.getText();
 								if ( s.equals(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]") ) {
+									String CWID = u.getCWID();
 									unlocked.add(u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]");
 									unlockedBoxes.add(cb);
-									admin.unlockUser(u);
+									usersInQuestion.add(Driver.getAccessTracker().findUserByCWID(CWID));
 								}
 							}
 						}
 					}
 					
-					resultsList.clear();
+					for (String r : unlocked) {
+						int dupCounter = 0;
+						for (User u : resultsList) {
+							if ((u.getFirstName() + " " + u.getLastName() + " [" + u.getDepartment() + "]").equals(r) ) {
+								dupCounter++;
+								if (dupCounter > 1) {
+									showMessage("There are multiple users with the same name and same department.\nPlease search by CWID to find the user you want to unlock.");
+									return;
+								}
+							}
+						}
+					}
+					
+					for (User u : usersInQuestion) {
+						
+						admin.unlockUser(u);
+						resultsList.remove(u);
+					}
+					
 					for ( JCheckBox cb : unlockedBoxes ) {
 						resultsPanel.remove(cb);
 					}
