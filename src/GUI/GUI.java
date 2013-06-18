@@ -15,25 +15,17 @@ import main.User;
 
 public class GUI extends JPanel {
 	
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	protected double constant = screenSize.getWidth()/1600.0;
 	
-	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-	protected Font textFont = new Font("SansSerif", Font.BOLD, 24);
-	protected Font resultsFont = new Font("SansSerif", Font.BOLD, 24);
-	protected Font borderFont = new Font("SansSerif", Font.BOLD, 22);
-	protected Font smallFont = new Font("SansSerif", Font.BOLD, 20);
-	protected Font checkBoxFont = new Font("SansSerif", Font.BOLD, 18);
-	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 26);
-	
-//	protected Font buttonFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.02)); //28
-//	protected Font titleFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.03)); //38
-//	protected Font textFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.02)); //24
-//	protected Font resultsFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.017)); //24
-//	protected Font borderFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.017)); //22
-//	protected Font smallFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.01)); //20
-//	protected Font checkBoxFont = new Font("SansSerif", Font.BOLD, 18); //18
-//	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.018)); //26
+	protected Font buttonFont = new Font("SansSerif", Font.BOLD, (int) (constant*28 )); //28
+	protected Font titleFont = new Font("SansSerif", Font.BOLD, (int) (constant*38)); //38
+	protected Font textFont = new Font("SansSerif", Font.BOLD, (int) (constant*26)); //24
+	protected Font resultsFont = new Font("SansSerif", Font.BOLD, (int) (constant*24)); //24
+	protected Font borderFont = new Font("SansSerif", Font.BOLD, (int) (constant*22)); //22
+	protected Font smallFont = new Font("SansSerif", Font.BOLD, (int) (constant*20)); //20
+	protected Font checkBoxFont = new Font("SansSerif", Font.BOLD, (int) (constant*18)); //18
+	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, (int) (constant*26)); //26
 
 	protected ActionListener buttonListener;
 

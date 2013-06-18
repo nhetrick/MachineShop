@@ -474,16 +474,14 @@ public class GenerateReportPanel extends ContentPanel {
 					exp.exportTable(logTable, logFile);
 					exp.exportTables(tables, statsFile);
 					
-					showMessage("saved to ReportExports");
+					showMessage("Report Saved to ReportExports");
 				} catch (Exception e1) {
 					showMessage("Export failed!");
 					e1.printStackTrace();
 					return;
 				}
-				
 			}
 		}
-
 	}
 	
 	private class DatePanel extends JPanel {
