@@ -1,8 +1,10 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -13,13 +15,16 @@ import main.User;
 
 public class GUI extends JPanel {
 
-	protected Font buttonFont = new Font("SansSerif", Font.BOLD, 28);
-	protected Font titleFont = new Font("SansSerif", Font.BOLD, 38);
-	protected Font textFont = new Font("SansSerif", Font.BOLD, 28);
-	protected Font resultsFont = new Font("SansSerif", Font.BOLD, 24);
-	protected Font borderFont = new Font("SansSerif", Font.BOLD, 22);
-	protected Font smallFont = new Font("SansSerif", Font.BOLD, 20);
-	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, 26);
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
+
+	protected Font buttonFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.02)); //28
+	protected Font titleFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.03)); //38
+	protected Font textFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.02)); //24
+	protected Font resultsFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.017)); //24
+	protected Font borderFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.017)); //22
+	protected Font smallFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.01)); //20
+	protected Font titleInPanelFont = new Font("SansSerif", Font.BOLD, (int) (screenSize.getWidth() * 0.018)); //26
 
 	protected ActionListener buttonListener;
 
@@ -53,7 +58,7 @@ public class GUI extends JPanel {
 			return new ImageIcon(imageURL);
 		}
 	}
-
+   
 	public static class LogOutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
