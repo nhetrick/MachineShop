@@ -50,7 +50,10 @@ public class SystemAdministrator extends Administrator {
 			result.put("certifiedMachines", machinePermissions);
 			
 			users.update(new BasicDBObject("CWID", user.getCWID()), result);
-			user.setCertifiedMachines(machines);
+			ArrayList<User> currentUsers = Driver.getAccessTracker().getCurrentUsers();
+			if (currentUsers.contains(user)) {
+				currentUsers.get(currentUsers.indexOf(user)).setCertifiedMachines(machines);
+			}
 		}
 	}
 
