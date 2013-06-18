@@ -345,7 +345,7 @@ public class AccessTracker {
 	}
 
 	public ArrayList<DBObject> searchDatabase(String collectionName, String searchFieldName, String searchFieldValue) {
-
+		searchFieldValue = searchFieldValue.replaceAll("\\*", "\\\\*");
 		DBCollection collection = database.getCollection(collectionName);
 		Pattern p = Pattern.compile(searchFieldValue, Pattern.CASE_INSENSITIVE);
 		DBCursor cursor = collection.find(new BasicDBObject(searchFieldName, p));
@@ -359,6 +359,8 @@ public class AccessTracker {
 	}
 	
 	public ArrayList<DBObject> searchDatabaseForUser(String userName) {
+		
+		userName = userName.replaceAll("\\*", "\\\\*");
 		
 		String firstName = "";
 		String lastName = "";
