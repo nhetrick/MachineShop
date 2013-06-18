@@ -70,7 +70,6 @@ public class ViewActiveUsersPanel extends JPanel{
 		c.gridy = 0;
 		c.weighty = 0.1;
 		c.weightx = 1;
-		
 		add(title, c);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -78,7 +77,6 @@ public class ViewActiveUsersPanel extends JPanel{
 		c.gridy = 1;
 		c.weighty = 0.9;
 		c.weightx = 1;
-		
 		add(scroller, c);
 	}
 

@@ -348,18 +348,19 @@ public class MainGUI extends JFrame {
 	}
 
 	private void displayTextFile(String title, String file) {
+		
 		if (frame != null) 
 			frame.dispose();
 		frame = new JFrame();
 		frame.setUndecorated(true);
 		frame.setTitle(title);
-		frame.setSize(getMinimumSize());
-		frame.setLocationRelativeTo(null);
+		frame.setLocation((int) (screenSize.getWidth()*.125), (int) (screenSize.getHeight()*.125));
 		JPanel all = new JPanel();
 		all.setLayout(new GridBagLayout());
 		all.setBorder(new LineBorder(borderColor, 4));
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
+		frame.setSize((int) (screenSize.getWidth()*.75), (int) (screenSize.getHeight()*.75));
 		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		Scanner in;
 		try {
@@ -371,7 +372,7 @@ public class MainGUI extends JFrame {
 				panel.add(label);
 			}			
 		} catch (FileNotFoundException e) {
-			System.out.println("Documentation Could Not Be Found");
+			showMessage("Documentation Could Not Be Found");
 		}
 		c.gridx = 0;
 		c.gridy = 0;

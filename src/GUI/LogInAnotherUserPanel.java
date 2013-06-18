@@ -254,7 +254,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 					Driver.getAccessTracker().setCurrentUser(current);
 					
 					System.out.println(user);
-					cwidField.setText(user.getFirstName() + " " + user.getLastName());
+					cwidField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
 					showMachines();
 					showaAvailableTools();
