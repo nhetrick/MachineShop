@@ -153,7 +153,7 @@ public class MainGUI extends JFrame {
 		
 		// Create header and footer bars
 		headerFont = new Font("SansSerif", Font.BOLD, 34);
-		headerBar = new JPanel(new GridLayout(1, 3));
+		headerBar = new JPanel(new GridBagLayout());
 		headerBar.setBorder(new LineBorder(borderColor, 4));
 		headerBar.setBackground(Color.white);
 		
@@ -168,24 +168,22 @@ public class MainGUI extends JFrame {
 		JPanel helpButtonPanel = new JPanel(new GridBagLayout());
 		helpButtonPanel.setBackground(Color.WHITE);
 		helpButtonPanel.add(helpButton);
-
-		GridBagConstraints footerC = new GridBagConstraints();
 		
-		footerC.fill = GridBagConstraints.NONE;
-		footerC.gridx = 0;
-		footerC.gridy = 0;
-		footerC.weightx = 0.05;
-		footerBar.add(aboutButtonPanel, footerC);
+		c.fill = GridBagConstraints.NONE;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.05;
+		footerBar.add(aboutButtonPanel, c);
 		
-		footerC.fill = GridBagConstraints.HORIZONTAL;
-		footerC.gridx = 1;
-		footerC.weightx = 0.9;
-		footerBar.add(bannerLabel, footerC);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.weightx = 0.9;
+		footerBar.add(bannerLabel, c);
 		
-		footerC.fill = GridBagConstraints.NONE;
-		footerC.gridx = 2;
-		footerC.weightx = 0.05;
-		footerBar.add(helpButtonPanel, footerC);
+		c.fill = GridBagConstraints.NONE;
+		c.gridx = 2;
+		c.weightx = 0.05;
+		footerBar.add(helpButtonPanel, c);
 		
 		String userName = currentUser.getFirstName() + " " + currentUser.getLastName();
 		
@@ -202,7 +200,7 @@ public class MainGUI extends JFrame {
 
 		JPanel leftPanel = new JPanel(new GridBagLayout());
 		leftPanel.setBackground(Color.white);
-		
+			
 		// Set up the constraints to format everything correctly
 		c.ipadx = 5;
 		c.gridx = 0;
@@ -211,15 +209,29 @@ public class MainGUI extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(homeButton, c);
 		
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 0;
 		c.weightx = 0.8;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		leftPanel.add(nameLabel, c);
-
-		headerBar.add(leftPanel);
-		headerBar.add(minesMlabel);
-		headerBar.add(time);
+		
+		c.gridx = 0;
+		c.weightx = 0.4;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		headerBar.add(leftPanel, c);
+		
+		c.gridx = 1;
+		c.weightx = 0.2;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		headerBar.add(minesMlabel, c);
+		
+		c.gridx = 2;
+		c.weightx = 0.4;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		headerBar.add(time, c);
 		
 		c.ipadx = 0;
 		c.gridx = 0;
@@ -344,7 +356,7 @@ public class MainGUI extends JFrame {
 		all.setBorder(new LineBorder(borderColor, 4));
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
-		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scroller = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		Scanner in;
 		try {
 			in = new Scanner(new FileReader(file));

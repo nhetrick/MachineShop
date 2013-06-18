@@ -78,7 +78,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		logOutUser.setFont(buttonFont);
 		logOutUser.addActionListener(buttonListener);
 
-		scroller = new JScrollPane(selectionPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroller = new JScrollPane(selectionPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		TitledBorder border = new TitledBorder("Selection Options");
 		border.setTitleFont(borderFont);

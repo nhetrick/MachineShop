@@ -61,8 +61,9 @@ public class ViewActiveUsersPanel extends JPanel{
 				}
 			}
 		}
+		
 		table = new JTable(data, columns);
-		scroller = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroller = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;

@@ -63,11 +63,11 @@ public class AddUsersPanel extends ContentPanel {
 		JLabel emailLabel = new JLabel("Mines Email:");
 		JLabel departLabel = new JLabel("Dept. (i.e. EECS):");
 
-		firstNameLabel.setFont(buttonFont);
-		lastNameLabel.setFont(buttonFont);
-		userIDLabel.setFont(buttonFont);
-		emailLabel.setFont(buttonFont);
-		departLabel.setFont(buttonFont);
+		firstNameLabel.setFont(textFont);
+		lastNameLabel.setFont(textFont);
+		userIDLabel.setFont(textFont);
+		emailLabel.setFont(textFont);
+		departLabel.setFont(textFont);
 
 		firstNameField = new JTextField();
 		lastNameField = new JTextField();
@@ -99,13 +99,13 @@ public class AddUsersPanel extends ContentPanel {
 		for (Machine m : sorted) {
 			JCheckBox cb = new JCheckBox(m.getName() + " [" + m.getID() + "]");
 			cb.setHorizontalAlignment(JCheckBox.LEFT);
-			cb.setFont(borderFont);
+			cb.setFont(checkBoxFont);
 			permissionsPanel.add(cb);
 		}
 
 		scroller = new JScrollPane(permissionsPanel,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		TitledBorder border = new TitledBorder("Add Certifications");
 		border.setTitleFont(borderFont);
@@ -173,7 +173,7 @@ public class AddUsersPanel extends ContentPanel {
 		 **********************************/
 		// ///////////////////////////////////////////////////////////////////////////////////////////////
 
-		c.fill = GridBagConstraints.BOTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.25;
 		c.gridx = 1;
 		c.gridy = 1;
@@ -192,7 +192,7 @@ public class AddUsersPanel extends ContentPanel {
 		add(selectAllBox, c);
 
 		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 0.15;
+		c.weighty = 0.05;
 		c.gridx = 1;
 		c.gridy = 4;
 		c.gridwidth = 1;
