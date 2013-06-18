@@ -28,7 +28,9 @@ public class LogInAnotherUserPanel extends ContentPanel {
 	private ButtonListener buttonListener;
 	private JTextField cwidField;
 
-	private JScrollPane scroller;
+	private JScrollPane scroller1;
+	private JScrollPane scroller2;
+	private JScrollPane scroller3;
 	private JPanel selectionPanel;
 	private JPanel machines;
 	private JPanel availableTools;
@@ -43,6 +45,8 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		current = Driver.getAccessTracker().getCurrentUser();
 
 		buttonListener = new ButtonListener();
+		
+		selectionPanel = new JPanel(new GridLayout(1, 3));
 
 		JLabel cwidLabel = new JLabel("Enter CWID:");
 		cwidField = new JTextField();
@@ -56,8 +60,6 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		goButton.setFont(buttonFont);
 		goButton.addActionListener(buttonListener);
 
-		selectionPanel = new JPanel(new GridLayout(1, 3));
-
 		machines = new JPanel();
 		availableTools = new JPanel();
 		checkedOutTools = new JPanel();
@@ -66,23 +68,21 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		availableTools.setLayout(new GridLayout(0, 1));
 		checkedOutTools.setLayout(new GridLayout(0, 1));
 
-		machines.setBorder(new TitledBorder("Select Machines"));
-		availableTools.setBorder(new TitledBorder("Check Out Tools"));
-		checkedOutTools.setBorder(new TitledBorder("Return Tools"));
+		scroller1 = new JScrollPane(machines, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller2 = new JScrollPane(availableTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller3 = new JScrollPane(checkedOutTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-		selectionPanel.add(machines);
-		selectionPanel.add(availableTools);
-		selectionPanel.add(checkedOutTools);
-
+		scroller1.setBorder(new TitledBorder("Select Machines"));
+		scroller2.setBorder(new TitledBorder("Check Out Tools"));
+		scroller3.setBorder(new TitledBorder("Return Tools"));
+		
+		selectionPanel.add(scroller1);
+		selectionPanel.add(scroller2);
+		selectionPanel.add(scroller3);
+		
 		logOutUser = new JButton("Log User Out");
 		logOutUser.setFont(buttonFont);
 		logOutUser.addActionListener(buttonListener);
-
-		scroller = new JScrollPane(selectionPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-		TitledBorder border = new TitledBorder("Selection Options");
-		border.setTitleFont(borderFont);
-		scroller.setBorder(border);
 
 		JPanel cwidPanel = new JPanel(new GridLayout(1, 3));
 
@@ -110,13 +110,13 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		add(logOutUser, c);
 
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0.0;
+		c.weightx = 0.3;
 		c.weighty = 0.5;
 		c.gridwidth = 1;
 		c.gridx = 1;
 		c.gridy = 3;
-		add(scroller, c);
-
+		add(selectionPanel, c);
+	
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.0;
 		c.weighty = 0.1;
@@ -177,8 +177,7 @@ public class LogInAnotherUserPanel extends ContentPanel {
 			if ( e.getSource() == saveButton) {
 				if ( user == null ) {
 					showMessage("Please enter the user's CWID.");
-				}
-				else {
+				} else {
 					ArrayList<Machine> machinesSelected = new ArrayList<Machine>();
 
 					for ( int i = 0; i < machines.getComponentCount(); ++i ) {
@@ -246,19 +245,24 @@ public class LogInAnotherUserPanel extends ContentPanel {
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
 				if (cwidField.getText().equals("")) {
 					showMessage("Please enter 8-digit CWID");
-				}
-				else {
+				} else {
 					String input = BlasterCardListener.strip(cwidField.getText());
 
-					user = Driver.getAccessTracker().processLogIn(input);
-					Driver.getAccessTracker().setCurrentUser(current);
-					
-					System.out.println(user);
-					cwidField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+					if (!input.equals(current.getCWID())) {
+						user = Driver.getAccessTracker().processLogIn(input);
+						Driver.getAccessTracker().setCurrentUser(current);
 
-					showMachines();
-					showaAvailableTools();
-					showCheckedOutTools();
+						System.out.println(user);
+						cwidField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+
+
+						showMachines();
+						showaAvailableTools();
+						showCheckedOutTools();
+					} else {
+						cwidField.setText("");
+						showMessage("You can't sign yourself in again. Sorry");
+					}
 				}
 			} else if ( e.getSource() == logOutUser) {
 				if (user != null)  {
