@@ -71,10 +71,18 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		scroller1 = new JScrollPane(machines, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller2 = new JScrollPane(availableTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller3 = new JScrollPane(checkedOutTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-		scroller1.setBorder(new TitledBorder("Select Machines"));
-		scroller2.setBorder(new TitledBorder("Check Out Tools"));
-		scroller3.setBorder(new TitledBorder("Return Tools"));
+		
+		TitledBorder border1 = new TitledBorder("Select Machines");
+		TitledBorder border2 = new TitledBorder("Check Out Tools");
+		TitledBorder border3 = new TitledBorder("Return Tools");
+		
+		border1.setTitleFont(borderFont);
+		border2.setTitleFont(borderFont);
+		border3.setTitleFont(borderFont);
+		
+		scroller1.setBorder(border1);
+		scroller2.setBorder(border2);
+		scroller3.setBorder(border3);
 		
 		selectionPanel.add(scroller1);
 		selectionPanel.add(scroller2);
