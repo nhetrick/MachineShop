@@ -208,6 +208,7 @@ public class RemoveUsersPanel extends ContentPanel {
 					if ( !removed.isEmpty() ) {
 						showMessage(message);
 					}
+					repaint();
 				}
 
 			} else if (e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton |

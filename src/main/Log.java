@@ -19,17 +19,14 @@ import com.mongodb.DBObject;
 
 public class Log {
 	private static ArrayList<LogEntry> results;
-	private static DB database;
 	
 	private static int numEntries;
 	
 	public static void setup() {
 		results = new ArrayList<LogEntry>();
-		new Date();
 		// set numEntries to the number of log entries in
 		// the database.
-		database = Driver.getAccessTracker().getDatabase();
-		numEntries = (int) database.getCollection("LogEntries").count();
+		numEntries = (int) Driver.getAccessTracker().getDatabase().getCollection("LogEntries").count();
 	}
 	
 	private static boolean containsIgnoreCase(String findIn, String toFind) {
@@ -61,7 +58,7 @@ public class Log {
 	public static void extractLog(Date startDate, Date endDate, boolean clear) {
 		if (clear)
 			results.clear();
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		BasicDBObject dateRange = new BasicDBObject ("$gte",startDate);
 		dateRange.put("$lte", endDate);
 		BasicDBObject query = new BasicDBObject("timeIn", dateRange);
@@ -111,7 +108,7 @@ public class Log {
 	public static void extractLog(User user, boolean clear) {
 		if (clear)
 			results.clear();
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("userCWID", user.getCWID()));
 		retrieveEntryData(cursor);
 	}
@@ -119,7 +116,7 @@ public class Log {
 	public static void extractLogCheckedOutTool(Tool checkedOutTool, boolean clear) {
 		if (clear)
 			results.clear();
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsCheckedOut", new BasicDBObject("upc", checkedOutTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
@@ -127,7 +124,7 @@ public class Log {
 	public static void extractLogReturnedTool(Tool returnedTool, boolean clear) {
 		if (clear)
 			results.clear();
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("toolsReturned", new BasicDBObject("upc", returnedTool.getUPC())));
 		retrieveEntryData(cursor);
 	}
@@ -135,7 +132,7 @@ public class Log {
 	public static void extractLog(Machine machine, boolean clear) {
 		if (clear)
 			results.clear();
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		DBCursor cursor = logEntries.find(new BasicDBObject("machinesUsed", new BasicDBObject("id", machine.getID())));
 		retrieveEntryData(cursor);
 	}
@@ -245,7 +242,7 @@ public class Log {
 	}
 	
 	public static void deleteEntry(int id) {
-		DBCollection logEntries = database.getCollection("LogEntries");
+		DBCollection logEntries = Driver.getAccessTracker().getDatabase().getCollection("LogEntries");
 		DBCursor result = logEntries.find(new BasicDBObject("ID", id));
 		if (!(result == null)) {
 			logEntries.remove(result.next());

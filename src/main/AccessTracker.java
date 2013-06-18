@@ -97,7 +97,7 @@ public class AccessTracker {
 								);
 						currentUsers.add(currentUser);
 						Log.startEntry(currentUser);
-						return null;
+						return currentUser;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -471,7 +471,7 @@ public class AccessTracker {
 		return availableTools;
 	}
 
-	public DB getDatabase() {
+	public static DB getDatabase() {
 		return database;
 	}
 

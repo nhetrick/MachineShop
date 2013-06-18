@@ -192,6 +192,7 @@ public class MainGUI extends JFrame {
 		// Add the user's name and the clock
 		JLabel nameLabel = new JLabel(userName);
 		nameLabel.setBackground(Color.white);
+		
 		time = new Clock(headerFont);
 
 		nameLabel.setHorizontalAlignment(JLabel.LEFT);
