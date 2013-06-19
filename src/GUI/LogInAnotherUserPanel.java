@@ -19,6 +19,7 @@ import main.BlasterCardListener;
 import main.Machine;
 import main.Tool;
 import main.User;
+import main.Validator;
 
 public class LogInAnotherUserPanel extends ContentPanel {
 
@@ -249,6 +250,13 @@ public class LogInAnotherUserPanel extends ContentPanel {
 				} else {
 					String input = BlasterCardListener.strip(cwidField.getText());
 
+					if (!Validator.isValidCWID(input)) {
+						if (input.length() == 8)
+							showMessage("Please enter 8-digit CWID, numbers only.");
+						clearFields();
+						return;
+					}
+					
 					if (!input.equals(current.getCWID())) {
 						user = Driver.getAccessTracker().processLogIn(input);
 						Driver.getAccessTracker().setCurrentUser(current);
