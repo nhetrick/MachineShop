@@ -143,9 +143,11 @@ public class EditCertificationsPanel extends ContentPanel {
 	}
 
 	// Clears all the text fields.
-	private void clearFields() {
+	private void clearFields(boolean clearName) {
 		idSearchField.setText("");
-		nameSearchField.setText("");
+		if (clearName){
+			nameSearchField.setText("");
+		}
 		for (int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
 			( (JCheckBox) permissionsPanel.getComponent(i) ).setSelected(false);
 		}
@@ -177,7 +179,7 @@ public class EditCertificationsPanel extends ContentPanel {
 					SystemAdministrator admin = (SystemAdministrator) Driver.getAccessTracker().getCurrentUser();
 					admin.updateCertifications(user, machines);
 				}
-				clearFields();
+				clearFields(true);
 
 			} else if ( e.getSource() == nameSearchGoButton || e.getSource() == idSearchGoButton ||
 					e.getSource() == nameSearchField    || e.getSource() == idSearchField) {
@@ -193,7 +195,7 @@ public class EditCertificationsPanel extends ContentPanel {
 						if (input != ""){
 							showMessage(idSearchField.getText() + " was not found");
 						}
-						nameSearchField.setText("");
+						clearFields(true);
 						return;
 					}
 					
@@ -232,7 +234,7 @@ public class EditCertificationsPanel extends ContentPanel {
 					//fail fast for null user
 					if (user == null){
 						showMessage(nameSearchField.getText() + " was not found");
-						idSearchField.setText("");
+						clearFields(false);
 						return;
 					}
 					
