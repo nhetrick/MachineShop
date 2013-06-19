@@ -199,7 +199,7 @@ public class EditCertificationsPanel extends ContentPanel {
 						return;
 					}
 					
-					idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+					idSearchField.setText("");
 					nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
 					for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
@@ -233,7 +233,9 @@ public class EditCertificationsPanel extends ContentPanel {
 					
 					//fail fast for null user
 					if (user == null){
-						showMessage(nameSearchField.getText() + " was not found");
+						if (!nameSearchField.getText().equals("")){
+							showMessage(nameSearchField.getText() + " was not found");
+						}
 						clearFields(false);
 						return;
 					}
@@ -244,7 +246,7 @@ public class EditCertificationsPanel extends ContentPanel {
 						showMessage(message);
 					} else {
 
-						idSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
+						idSearchField.setText("");
 						nameSearchField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
 						for ( int i = 0; i < permissionsPanel.getComponentCount(); ++i ) {
