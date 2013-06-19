@@ -72,18 +72,10 @@ public class LogInAnotherUserPanel extends ContentPanel {
 		scroller1 = new JScrollPane(machines, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller2 = new JScrollPane(availableTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller3 = new JScrollPane(checkedOutTools, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		TitledBorder border1 = new TitledBorder("Select Machines");
-		TitledBorder border2 = new TitledBorder("Check Out Tools");
-		TitledBorder border3 = new TitledBorder("Return Tools");
-		
-		border1.setTitleFont(borderFont);
-		border2.setTitleFont(borderFont);
-		border3.setTitleFont(borderFont);
-		
-		scroller1.setBorder(border1);
-		scroller2.setBorder(border2);
-		scroller3.setBorder(border3);
+
+		scroller1.setBorder(new TitledBorder("Select Machines"));
+		scroller2.setBorder(new TitledBorder("Check Out Tools"));
+		scroller3.setBorder(new TitledBorder("Return Tools"));
 		
 		selectionPanel.add(scroller1);
 		selectionPanel.add(scroller2);
@@ -253,13 +245,18 @@ public class LogInAnotherUserPanel extends ContentPanel {
 
 			} else if ( e.getSource() == goButton || e.getSource() == cwidField ) {
 				if (cwidField.getText().equals("")) {
-					showMessage("Please enter 8-digit CWID, numbers only.");
+					showMessage("Please enter 8-digit CWID");
 					clearFields();
 				} else {
 					String input = BlasterCardListener.strip(cwidField.getText());
+
 					if (!Validator.isValidCWID(input)) {
+						if (input.length() == 8)
+							showMessage("Please enter 8-digit CWID, numbers only.");
+						clearFields();
 						return;
 					}
+					
 					if (!input.equals(current.getCWID())) {
 						user = Driver.getAccessTracker().processLogIn(input);
 						Driver.getAccessTracker().setCurrentUser(current);
@@ -267,13 +264,13 @@ public class LogInAnotherUserPanel extends ContentPanel {
 						System.out.println(user);
 						cwidField.setText(user.getFirstName() + " " + user.getLastName() + " [" + user.getDepartment() + "]");
 
-
 						showMachines();
 						showaAvailableTools();
 						showCheckedOutTools();
 					} else {
 						cwidField.setText("");
 						showMessage("You can't sign yourself in again. Sorry");
+						
 					}
 				}
 			} else if ( e.getSource() == logOutUser) {
